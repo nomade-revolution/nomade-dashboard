@@ -8,18 +8,25 @@
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "test": "npx jest",
+    "test:dev": "npx jest --watchAll",
+    "test:coverage": "npx jest --coverage --watchAll=false"
   },
   "dependencies": {
+    "@fontsource/roboto": "^5.0.8",
+    "formik": "^2.4.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "styled-components": "^6.1.6"
+    "styled-components": "^6.1.6",
+    "yup": "^1.3.3"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.23.7",
     "@babel/preset-react": "^7.23.3",
     "@testing-library/jest-dom": "^6.2.0",
     "@testing-library/react": "^14.1.2",
+    "@testing-library/user-event": "^14.5.2",
     "@types/jest": "^29.5.11",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
