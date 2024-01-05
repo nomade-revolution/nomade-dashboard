@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+. "$(dirname "$0")/_/husky.sh"
+
+#execute tests
+npm run test
+
+#run build 
+npm run build
+
+

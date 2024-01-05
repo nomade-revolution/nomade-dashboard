@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-. "$(dirname "$0")/_/husky.sh"
+. "$(dirname -- "$0")/_/husky.sh"
 
 while read line; do
     # Skip comments
@@ -11,5 +11,3 @@ while read line; do
         exit 1
     fi
 done < "${1}"
-
-exit 0
