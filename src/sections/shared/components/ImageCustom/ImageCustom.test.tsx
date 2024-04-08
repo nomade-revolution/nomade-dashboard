@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
+import { describe, expect } from "vitest";
 import ImageCustom from "./ImageCustom";
-import "@testing-library/jest-dom";
 
 describe("Given an ImageCustom component", () => {
   describe("When it is rendered", () => {

@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 import LoginForm from "./LoginForm";
-import renderWithProviders from "../../../shared/utils/testUtils/testUtils";
+import { renderWithProviders } from "../../../shared/utils/testUtils/testUtils";
 import "@testing-library/jest-dom";
 
 describe("Given a LoginForm component", () => {

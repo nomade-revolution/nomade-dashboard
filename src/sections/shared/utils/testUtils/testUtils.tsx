@@ -4,11 +4,13 @@ import { render } from "@testing-library/react";
 import { UserContextProvider } from "../../../user/UserContext/UserContext";
 import theme from "../../../../assets/styles/theme";
 import GlobalStyles from "../../../../assets/styles/GlobalStyles";
-import { loginUserLocalStorageUserRepository } from "../../../../modules/user/infrastructure/LocalStorageUserRepository";
+import { getComponentRouter, router } from "../../../../router/router";
+import { RouterProvider } from "react-router-dom";
+import { userRepository } from "../../../../modules/user/infrastructure/userRepository";
 
-const renderWithProviders = (ui: React.ReactElement) => {
+export const renderWithProviders = (ui: React.ReactElement) => {
   const Wrapper = ({ children }: PropsWithChildren) => {
-    const repository = loginUserLocalStorageUserRepository();
+    const repository = userRepository();
     return (
       <ThemeProvider theme={theme}>
         <UserContextProvider repository={repository}>
@@ -22,4 +24,10 @@ const renderWithProviders = (ui: React.ReactElement) => {
   return render(ui, { wrapper: Wrapper });
 };
 
-export default renderWithProviders;
+export const renderRouterWithProviders = (ui?: React.ReactElement) => {
+  const routerWithProvider = ui ? getComponentRouter(ui) : router;
+
+  return renderWithProviders(
+    <RouterProvider router={routerWithProvider}></RouterProvider>,
+  );
+};

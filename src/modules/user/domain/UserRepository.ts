@@ -1,5 +1,9 @@
-import { User } from "./User";
+import { UserLogin, UserLoginApiResponse } from "./User";
 
 export interface UserRepository {
-  login: (user: User) => void;
+  login: (user: UserLogin) => Promise<{
+    data?: UserLoginApiResponse;
+    success?: boolean;
+    error?: string;
+  }>;
 }

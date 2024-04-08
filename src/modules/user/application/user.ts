@@ -1,6 +1,13 @@
-import { User } from "../domain/User";
+import { UserLogin, UserLoginApiResponse } from "../domain/User";
 import { UserRepository } from "../domain/UserRepository";
 
-export const loginUser = (user: User, userRepository: UserRepository): void => {
-  userRepository.login(user);
+export const loginUser = (
+  user: UserLogin,
+  userRepository: UserRepository,
+): Promise<{
+  data?: UserLoginApiResponse;
+  success?: boolean;
+  error?: string;
+}> => {
+  return userRepository.login(user);
 };

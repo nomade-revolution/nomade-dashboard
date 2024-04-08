@@ -1,4 +1,4 @@
-import ImageCustom from "../../shared/ImageCustom/ImageCustom";
+import ImageCustom from "../../shared/components/ImageCustom/ImageCustom";
 import LoginForm from "../components/LoginForm/LoginForm";
 import LoginPageStyled from "./LoginPageStyled";
 
