@@ -1,7 +1,7 @@
-import { User } from "./User";
+import { UserCredentials } from "./User";
 
 export interface UserLocalStorageRepository {
-  login: (user: User) => void;
-  getFromLocalStorage: () => User;
+  login: (user: UserCredentials) => void;
+  getFromLocalStorage: () => UserCredentials;
   logout: () => void;
 }

@@ -1,8 +1,8 @@
-import { User } from "../domain/User";
+import { UserCredentials } from "../domain/User";
 import { UserLocalStorageRepository } from "../domain/UserLocalStorageRepository";
 
 export const loginUser = (
-  user: User,
+  user: UserCredentials,
   userRepository: UserLocalStorageRepository,
 ): void => {
   userRepository.login(user);
@@ -14,6 +14,8 @@ export const logoutUser = (
   userRepository.logout();
 };
 
-export const getUser = (userRepository: UserLocalStorageRepository): User => {
+export const getUser = (
+  userRepository: UserLocalStorageRepository,
+): UserCredentials => {
   return userRepository.getFromLocalStorage();
 };
