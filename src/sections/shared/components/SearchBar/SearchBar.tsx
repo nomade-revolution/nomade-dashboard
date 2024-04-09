@@ -9,7 +9,7 @@ interface SearchBarProps {
   searchText: string;
   setSearchText: (value: string | null) => void;
   onSearchSubmit: () => void;
-  setFilters: (value: null) => void;
+  setFilters?: (value: null) => void;
 }
 
 const SearchBar = ({
@@ -39,7 +39,7 @@ const SearchBar = ({
 
   const handleClear = () => {
     setSearchText(null);
-    setFilters(null);
+    setFilters!(null);
 
     navigate(`/${pageName}/page/1`);
   };

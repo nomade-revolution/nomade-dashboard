@@ -28,7 +28,7 @@ const SideBarStyled = styled.div`
     display: flex;
     flex-direction: column;
     gap: 20px;
-    padding-bottom: 120px;
+    padding-bottom: 50px;
 
     &__section,
     &__section--active {
