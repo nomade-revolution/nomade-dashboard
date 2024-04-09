@@ -1,11 +1,11 @@
 import { ErrorMessage, Field, Formik, FormikHelpers } from "formik";
 import { loginScheme } from "./validations/validations";
 import LoginFormStyled from "./LoginFormStyled";
-import { User } from "../../../../modules/user/domain/User";
+import { UserCredentials } from "../../../../modules/user/domain/User";
 import { useLoginForm } from "../../hooks/useLoginForm";
 import { useNavigate } from "react-router-dom";
 
-const initialState: User = {
+const initialState: UserCredentials = {
   email: "",
   password: "",
 };
@@ -15,8 +15,8 @@ const LoginForm = (): React.ReactElement => {
   const navigate = useNavigate();
 
   const handleSubmitForm = (
-    values: User,
-    { setSubmitting }: FormikHelpers<User>,
+    values: UserCredentials,
+    { setSubmitting }: FormikHelpers<UserCredentials>,
   ) => {
     submitForm(values);
     setSubmitting(false);

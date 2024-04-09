@@ -3,7 +3,7 @@ import App from "../App";
 import ProtectedRoute from "../sections/shared/components/ProtectedRoute/ProtectedRoute";
 import NotFound from "../sections/shared/pages/NotFound/NotFound";
 import { appPaths } from "../sections/shared/utils/appPaths/appPaths";
-import LoginPage from "../sections/user/pages/LoginPage";
+import LoginPage from "../sections/user/pages/LoginPage/LoginPage";
 
 const routes: RouteObject[] = [
   {
