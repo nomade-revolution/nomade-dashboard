@@ -1,12 +1,18 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useState } from "react";
 
-import { UserRepository } from "../../../modules/user/domain/UserRepository";
 import { User } from "../../../modules/user/domain/User";
-import { loginUser } from "../../../modules/user/application/user";
+import {
+  getUser,
+  loginUser,
+  logoutUser,
+} from "../../../modules/user/application/userLocalStorage";
+import { UserLocalStorageRepository } from "../../../modules/user/domain/UserLocalStorageRepository";
 
 export interface ContextState {
   user: User;
-  loginUser: (user: { email: string; password: string }) => void;
+  loginUser: (user: User) => void;
+  logoutUser: () => void;
+  getUserLogged: () => User;
 }
 
 export const UserContext = createContext({} as ContextState);
@@ -14,23 +20,35 @@ export const UserContext = createContext({} as ContextState);
 export const UserContextProvider = ({
   children,
   repository,
-}: React.PropsWithChildren<{ repository: UserRepository }>) => {
+}: React.PropsWithChildren<{ repository: UserLocalStorageRepository }>) => {
   const [user, setUser] = useState<User>({ email: "", password: "" });
 
   function login(user: { email: string; password: string }) {
     loginUser(user, repository);
+
+    setUser({ email: user.email, password: user.password });
   }
 
-  function getUser() {
+  function logout() {
+    logoutUser(repository);
     setUser({ email: "", password: "" });
   }
 
-  useEffect(() => {
-    getUser();
-  }, []);
+  function getUserLogged() {
+    const user: User = getUser(repository);
+
+    return user;
+  }
 
   return (
-    <UserContext.Provider value={{ user, loginUser: login }}>
+    <UserContext.Provider
+      value={{
+        user,
+        loginUser: login,
+        logoutUser: logout,
+        getUserLogged,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );
