@@ -1,0 +1,75 @@
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
+import Loader from "../../../shared/components/Loader/Loader";
+import NoDataHandler from "../../../shared/components/NoDataHandler/NoDataHandler";
+import DashboardTable from "../../../shared/components/DashboardTable/DashboardTable";
+
+import DashboardCardListMobile from "../../../shared/components/DashboardCardListMobile/DashboardCardListMobile";
+import PaginationComponent from "../../../shared/components/Pagination/PaginationComponent";
+import SearchBar from "../../../shared/components/SearchBar/SearchBar";
+import { IoAddCircle } from "react-icons/io5";
+import UserPageStyled from "./UsersPageStyled";
+import { mockUsers } from "../../../../mocks/userMocks";
+import { SectionTypes } from "../../../shared/interfaces/interfaces";
+import { usersTableHeaderSections } from "../../utils/userTableSections";
+
+const UsersPage = (): React.ReactElement => {
+  const [searchText, setSearchText] = useState<string | null>(null);
+
+  const { search } = useLocation();
+
+  const searchParams = search.split("?").join("");
+
+  const isLoading = false;
+
+  return (
+    <>
+      {isLoading ? (
+        <Loader width="50px" height="50px" />
+      ) : !isLoading && mockUsers.length !== 0 ? (
+        <UserPageStyled className="dashboard">
+          <div className="dashboard__search">
+            <button className="dashboard__create">
+              <IoAddCircle className="dashboard__create--icon" />
+              Crear usuario
+            </button>
+            <SearchBar
+              pageName={SectionTypes.users}
+              pageTypes={SectionTypes.users}
+              searchText={searchText!}
+              setSearchText={setSearchText}
+              onSearchSubmit={() => {}}
+            />
+          </div>
+          <div className="dashboard__orders-table">
+            <DashboardTable
+              bodySections={mockUsers}
+              headerSections={usersTableHeaderSections}
+              pageName={SectionTypes.users}
+            />
+          </div>
+          <div className="dashboard__mobile">
+            <h3>Usuarios</h3>
+            <DashboardCardListMobile
+              bodySections={mockUsers}
+              headerSections={usersTableHeaderSections}
+            />
+          </div>
+          <PaginationComponent
+            current_page={1}
+            last_page={1}
+            per_page={12}
+            pageName={SectionTypes.users}
+            filterParams={searchParams}
+          />
+        </UserPageStyled>
+      ) : mockUsers.length === 0 ? (
+        <NoDataHandler pageName={SectionTypes.users} search={searchText!} />
+      ) : (
+        <></>
+      )}
+    </>
+  );
+};
+
+export default UsersPage;

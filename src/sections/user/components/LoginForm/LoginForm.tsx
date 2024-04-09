@@ -20,7 +20,7 @@ const LoginForm = (): React.ReactElement => {
   ) => {
     submitForm(values);
     setSubmitting(false);
-    navigate("/clientes");
+    navigate("/usuarios");
   };
 
   return (
