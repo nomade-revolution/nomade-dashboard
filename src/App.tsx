@@ -1,14 +1,7 @@
-import { userRepository } from "./modules/user/infrastructure/userRepository";
-import { UserContextProvider } from "./sections/user/UserContext/UserContext";
-import LoginPage from "./sections/user/pages/LoginPage";
+import Layout from "./sections/shared/components/Layout/Layout";
 
 function App() {
-  const repository = userRepository();
-  return (
-    <UserContextProvider repository={repository}>
-      <LoginPage />
-    </UserContextProvider>
-  );
+  return <Layout />;
 }
 
 export default App;

@@ -1,6 +1,6 @@
 const theme = {
   colors: {
-    mainColor: "#B78D00",
+    mainColor: "#8C9B6E",
     secondaryColor: "#ECEDE6",
     tertiaryColor: "#FEDA94",
     inputsBorderColors: "#E7E6E6",
@@ -21,7 +21,7 @@ const theme = {
     light: "#fff",
     dark: "#000",
     lightGrey: "#ABABB4",
-    corporativeColor: "#B78D00",
+    corporativeColor: "#8C9B6E",
     error: "#E02020",
     darkBlue: "#125AA9",
     dashBoard: "#273241",
