@@ -3,6 +3,7 @@ import { loginScheme } from "./validations/validations";
 import LoginFormStyled from "./LoginFormStyled";
 import { User } from "../../../../modules/user/domain/User";
 import { useLoginForm } from "../../hooks/useLoginForm";
+import { useNavigate } from "react-router-dom";
 
 const initialState: User = {
   email: "",
@@ -11,6 +12,7 @@ const initialState: User = {
 
 const LoginForm = (): React.ReactElement => {
   const { submitForm } = useLoginForm();
+  const navigate = useNavigate();
 
   const handleSubmitForm = (
     values: User,
@@ -18,6 +20,7 @@ const LoginForm = (): React.ReactElement => {
   ) => {
     submitForm(values);
     setSubmitting(false);
+    navigate("/clientes");
   };
 
   return (

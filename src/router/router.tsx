@@ -2,6 +2,8 @@ import { createBrowserRouter, RouteObject } from "react-router-dom";
 import App from "../App";
 import ProtectedRoute from "../sections/shared/components/ProtectedRoute/ProtectedRoute";
 import NotFound from "../sections/shared/pages/NotFound/NotFound";
+import { appPaths } from "../sections/shared/utils/appPaths/appPaths";
+import LoginPage from "../sections/user/pages/LoginPage";
 
 const routes: RouteObject[] = [
   {
@@ -9,10 +11,10 @@ const routes: RouteObject[] = [
     element: <ProtectedRoute element={<App />} />,
     errorElement: <NotFound />,
     children: [
-      // {
-      //   path: appPaths.orders,
-      //   element: <OrdersPage />,
-      // },
+      {
+        path: appPaths.login,
+        element: <LoginPage />,
+      },
     ],
   },
 ];
