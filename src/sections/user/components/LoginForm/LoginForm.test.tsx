@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
 import LoginForm from "./LoginForm";
-import { renderWithProviders } from "../../../shared/utils/testUtils/testUtils";
+import { renderRouterWithProviders } from "../../../shared/utils/testUtils/testUtils";
 import "@testing-library/jest-dom";
 
 describe("Given a LoginForm component", () => {
@@ -8,7 +8,7 @@ describe("Given a LoginForm component", () => {
     test("Then it should show a button with the text 'Iniciar sesión'", () => {
       const buttonText = "Iniciar sesión";
 
-      renderWithProviders(<LoginForm />);
+      renderRouterWithProviders(<LoginForm />);
 
       const expectedButton = screen.getByRole("button", { name: buttonText });
 
@@ -18,7 +18,7 @@ describe("Given a LoginForm component", () => {
     test("Then it should show a label with the text 'Contraseña'", () => {
       const labelText = "Contraseña";
 
-      renderWithProviders(<LoginForm />);
+      renderRouterWithProviders(<LoginForm />);
 
       const expectedLabel = screen.getByLabelText(labelText);
 
@@ -28,7 +28,7 @@ describe("Given a LoginForm component", () => {
     test("Then it should show a link with the text 'Registrate aquí'", () => {
       const linkText = "Registrate aquí";
 
-      renderWithProviders(<LoginForm />);
+      renderRouterWithProviders(<LoginForm />);
 
       const expectedLink = screen.getByRole("link", { name: linkText });
 

@@ -6,7 +6,7 @@ export const appPaths = {
   clients: "/clientes/page/:page",
   client: "/clientes/:id",
   clientOrders: "/clientes/pedidos/:id/page/:page",
-  users: "/usuarios/page/:page",
+  users: "/usuarios",
   settings: "/configuración",
   account: "/mi-cuenta",
   place_order: "/realizar-pedido",

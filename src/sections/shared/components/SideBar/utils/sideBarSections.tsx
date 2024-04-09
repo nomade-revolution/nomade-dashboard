@@ -1,9 +1,12 @@
 import { IoIosListBox, IoIosSettings } from "react-icons/io";
-import { FaUserTie, FaUserGroup } from "react-icons/fa6";
-import { TbClockHour12 } from "react-icons/tb";
+import { FaUserTie, FaUserGroup, FaTags } from "react-icons/fa6";
 import { CiLogout } from "react-icons/ci";
-import { FaCartPlus } from "react-icons/fa6";
 import { appPaths } from "../../../utils/appPaths/appPaths";
+import { PiUsersThreeFill } from "react-icons/pi";
+import { BiSolidOffer, BiSolidCategory } from "react-icons/bi";
+import { SlLocationPin } from "react-icons/sl";
+import { BsFilterSquare } from "react-icons/bs";
+import { MdCategory } from "react-icons/md";
 
 export const getSideBarUpperSections = (
   ordersQuantity: number,
@@ -12,36 +15,71 @@ export const getSideBarUpperSections = (
   const sideBarUpperSections = [
     {
       id: 1,
-      icon: <IoIosListBox />,
-      name: "Pedidos",
+      icon: <FaUserGroup />,
+      name: "Usuarios",
       quantity: ordersQuantity,
-      path: `/pedidos/page/1`,
+      path: `/usuarios`,
     },
     {
       id: 2,
+      icon: <PiUsersThreeFill />,
+      name: "Usuarios (App)",
+      quantity: pendingCustomers,
+      path: `/usuarios-app`,
+    },
+    {
+      id: 3,
+      icon: <IoIosListBox />,
+      name: "Reservas",
+      quantity: pendingCustomers,
+      path: `/reservas`,
+    },
+    {
+      id: 4,
       icon: <FaUserTie />,
       name: "Clientes",
       quantity: pendingCustomers,
       path: `/clientes/page/1`,
     },
     {
-      id: 3,
-      icon: <FaUserGroup />,
-      name: "Usuarios",
+      id: 5,
+      icon: <BiSolidOffer />,
+      name: "Ofertas",
       quantity: 0,
-      path: "/usuarios/page/1",
+      path: "/ofertas",
     },
     {
-      id: 4,
-      icon: <FaCartPlus />,
-      name: "Realizar pedido",
+      id: 6,
+      icon: <SlLocationPin />,
+      name: "Áreas",
       quantity: 0,
       path: appPaths.place_order,
     },
     {
-      id: 5,
-      icon: <TbClockHour12 />,
-      name: "Configuración de avisos",
+      id: 7,
+      icon: <FaTags />,
+      name: "Etiquetas",
+      quantity: 0,
+      path: appPaths.settings,
+    },
+    {
+      id: 8,
+      icon: <BiSolidCategory />,
+      name: "Categorías",
+      quantity: 0,
+      path: appPaths.settings,
+    },
+    {
+      id: 9,
+      icon: <BsFilterSquare />,
+      name: "Filtros",
+      quantity: 0,
+      path: appPaths.settings,
+    },
+    {
+      id: 10,
+      icon: <MdCategory />,
+      name: "Subcategorías",
       quantity: 0,
       path: appPaths.settings,
     },

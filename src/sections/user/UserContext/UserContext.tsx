@@ -1,18 +1,18 @@
 import React, { createContext, useState } from "react";
 
-import { User } from "../../../modules/user/domain/User";
 import {
   getUser,
   loginUser,
   logoutUser,
 } from "../../../modules/user/application/userLocalStorage";
 import { UserLocalStorageRepository } from "../../../modules/user/domain/UserLocalStorageRepository";
+import { UserLogin } from "../../../modules/user/domain/User";
 
 export interface ContextState {
-  user: User;
-  loginUser: (user: User) => void;
+  user: UserLogin;
+  loginUser: (user: UserLogin) => void;
   logoutUser: () => void;
-  getUserLogged: () => User;
+  getUserLogged: () => UserLogin;
 }
 
 export const UserContext = createContext({} as ContextState);
@@ -21,7 +21,10 @@ export const UserContextProvider = ({
   children,
   repository,
 }: React.PropsWithChildren<{ repository: UserLocalStorageRepository }>) => {
-  const [user, setUser] = useState<User>({ email: "", password: "" });
+  const [user, setUser] = useState<UserLogin>({
+    email: "",
+    password: "",
+  });
 
   function login(user: { email: string; password: string }) {
     loginUser(user, repository);
@@ -35,7 +38,7 @@ export const UserContextProvider = ({
   }
 
   function getUserLogged() {
-    const user: User = getUser(repository);
+    const user: UserLogin = getUser(repository);
 
     return user;
   }

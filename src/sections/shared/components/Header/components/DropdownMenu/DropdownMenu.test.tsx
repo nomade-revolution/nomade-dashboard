@@ -8,7 +8,7 @@ const mockedHandleFunction = vi.fn();
 describe("Given a DropdownMenu component", () => {
   describe("When it is rendered", () => {
     test("Then it should show a list of user actions", () => {
-      const ordersText = "Pedidos";
+      const ordersText = "Clientes";
 
       renderRouterWithProviders(
         <DropdownMenu

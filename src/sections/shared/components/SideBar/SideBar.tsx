@@ -1,4 +1,3 @@
-import ImageCustom from "../ImageCustom/ImageCustom";
 import { getSideBarUpperSections } from "./utils/sideBarSections";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { IoIosSettings } from "react-icons/io";
@@ -30,13 +29,14 @@ const SideBar = ({
 
   return (
     <SideBarStyled className="side-bar">
-      <ImageCustom
+      {/* <ImageCustom
         alt="Fresatitan logo"
         className="side-bar__image"
         height={30}
         width={200}
         image="/Fresatitan-Logo.png"
-      />
+      /> */}
+      <h1>Nomade</h1>
       <div className="side-bar__actions actions">
         {sideBarUpperSections.map((section) => (
           <Link to={section.path} key={section.id}>

@@ -14,7 +14,7 @@ const NoDataHandler = ({
   const navigate = useNavigate();
 
   const handleNotFoundButton = () => {
-    navigate(`/${pageName}/page/1`);
+    navigate(`/${pageName}`);
   };
 
   return (

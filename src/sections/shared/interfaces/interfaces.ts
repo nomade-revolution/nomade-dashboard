@@ -10,3 +10,8 @@ export interface PaginationStucture {
   last_page: number;
   per_page: number;
 }
+
+export enum SectionTypes {
+  clients = "clientes",
+  users = "usuarios",
+}
