@@ -1,6 +1,6 @@
 import { User } from "../modules/user/domain/User";
 
-export const users: User[] = [
+export const mockUsers: User[] = [
   {
     id: 1,
     name: "John Doe",
