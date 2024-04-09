@@ -6,11 +6,11 @@ import theme from "../../../../assets/styles/theme";
 import GlobalStyles from "../../../../assets/styles/GlobalStyles";
 import { getComponentRouter, router } from "../../../../router/router";
 import { RouterProvider } from "react-router-dom";
-import { userRepository } from "../../../../modules/user/infrastructure/userRepository";
+import { loginUserLocalStorageUserRepository } from "../../../../modules/user/infrastructure/localStorageRepo";
 
 export const renderWithProviders = (ui: React.ReactElement) => {
   const Wrapper = ({ children }: PropsWithChildren) => {
-    const repository = userRepository();
+    const repository = loginUserLocalStorageUserRepository();
     return (
       <ThemeProvider theme={theme}>
         <UserContextProvider repository={repository}>
