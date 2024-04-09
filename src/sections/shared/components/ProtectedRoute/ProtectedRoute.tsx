@@ -1,17 +1,19 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { appPaths } from "../../utils/appPaths/appPaths";
+import { useUserContext } from "../../../user/UserContext/useUserContext";
 
 interface ProtectedRouteProps {
   element: JSX.Element;
 }
 
 const ProtectedRoute = ({ element }: ProtectedRouteProps): JSX.Element => {
-  // const { token } = useUserContext();
-  const token = "aaaa";
+  const { getUserLogged } = useUserContext();
+
+  const user = getUserLogged();
 
   const location = useLocation();
 
-  if (token) {
+  if (user) {
     if (
       location.pathname === appPaths.login ||
       location.pathname === appPaths.register ||
