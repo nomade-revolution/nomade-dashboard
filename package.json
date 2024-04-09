@@ -9,8 +9,8 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "prepare": "husky install",
-    "test": "vitest",
-    "test:dev": "vitest --watchAll",
+    "test": "vitest --watch=false",
+    "test:dev": "vitest",
     "test:coverage": "vitest run --coverage --watchAll=false"
   },
   "dependencies": {
