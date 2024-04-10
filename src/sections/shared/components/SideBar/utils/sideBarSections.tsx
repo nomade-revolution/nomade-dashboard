@@ -39,7 +39,7 @@ export const getSideBarUpperSections = (
       icon: <FaUserTie />,
       name: "Clientes",
       quantity: pendingCustomers,
-      path: `/clientes/page/1`,
+      path: `/clientes`,
     },
     {
       id: 5,

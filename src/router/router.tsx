@@ -5,6 +5,7 @@ import NotFound from "../sections/shared/pages/NotFound/NotFound";
 import { appPaths } from "../sections/shared/utils/appPaths/appPaths";
 import LoginPage from "../sections/user/pages/LoginPage/LoginPage";
 import UsersPage from "../sections/user/pages/UsersPage/UsersPage";
+import CustomersPage from "../sections/customers/pages/CustomersPage/CustomersPage";
 
 const routes: RouteObject[] = [
   {
@@ -19,6 +20,10 @@ const routes: RouteObject[] = [
       {
         path: appPaths.users,
         element: <UsersPage />,
+      },
+      {
+        path: appPaths.clients,
+        element: <CustomersPage />,
       },
     ],
   },
