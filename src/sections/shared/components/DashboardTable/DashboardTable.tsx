@@ -9,6 +9,7 @@ import DashboardContentSections from "../DashboardContentSections/DashboardConte
 
 import DashboardStyled from "./DashboardTableStyled";
 import { HeaderSection } from "../../interfaces/interfaces";
+import { Customer } from "../../../../modules/customers/domain/Customers";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -95,7 +96,7 @@ const DashboardTable = <Type,>({
                 <StyledTableCell align="center" key={headerSection.id}>
                   <DashboardContentSections
                     headerSection={headerSection}
-                    section={section as never} // Añadir tipados específicos de los modulos
+                    section={section as Customer} // Añadir tipados específicos de los modulos
                     // type={type}
                   />
                 </StyledTableCell>
