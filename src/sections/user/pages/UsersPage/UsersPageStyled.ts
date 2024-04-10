@@ -36,25 +36,11 @@ const UserPageStyled = styled.main`
       gap: 10px;
       width: 100%;
 
-      @media (min-width: 1000px) and (max-width: 1200px) {
+      @media (min-width: 1000px) {
         flex-direction: row;
         align-items: flex-end;
         justify-content: space-between;
-        width: 85%;
-      }
-
-      @media (min-width: 1200px) and (max-width: 1600px) {
-        flex-direction: row;
-        align-items: flex-end;
-        justify-content: space-between;
-        width: 70%;
-      }
-
-      @media (min-width: 1600px) {
-        flex-direction: row;
-        align-items: flex-end;
-        justify-content: space-between;
-        width: 53%;
+        width: 80%;
       }
     }
 

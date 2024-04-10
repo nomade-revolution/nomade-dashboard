@@ -1,5 +1,4 @@
 import { screen } from "@testing-library/react";
-import "@testing-library/jest-dom";
 import { renderRouterWithProviders } from "../../../shared/utils/testUtils/testUtils";
 import UsersPage from "./UsersPage";
 
