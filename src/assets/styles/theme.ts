@@ -13,6 +13,8 @@ const theme = {
     lightGrey: "#F6F6F6",
     darkBlue: "#002949",
     grey: "#CECECE",
+    tagsBlue: "#2196F3",
+    darkRed: "#AD6975",
   },
   fonts: {
     primaryFont: "Roboto",
