@@ -12,6 +12,6 @@ export interface PaginationStucture {
 }
 
 export enum SectionTypes {
-  clients = "clientes",
+  customers = "clientes",
   users = "usuarios",
 }
