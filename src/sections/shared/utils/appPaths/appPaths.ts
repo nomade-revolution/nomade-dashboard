@@ -1,8 +1,7 @@
 export const appPaths = {
   login: "/login",
   register: "/registro",
-  orders: "/pedidos/page/:page",
-  order: "/pedidos/:id",
+  offers: "/ofertas",
   clients: "/clientes",
   client: "/clientes/:id",
   clientOrders: "/clientes/pedidos/:id/page/:page",
