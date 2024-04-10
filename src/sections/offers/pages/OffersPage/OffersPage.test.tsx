@@ -1,11 +1,11 @@
 import { screen } from "@testing-library/react";
 import { renderRouterWithProviders } from "../../../shared/utils/testUtils/testUtils";
-import CustomersPage from "./CustomersPage";
+import OffersPage from "./OffersPage";
 
-describe("Given a CustomersPage component", () => {
+describe("Given a OffersPage component", () => {
   describe("When it is rendered", () => {
     test("Then it should show a table of customers", () => {
-      renderRouterWithProviders(<CustomersPage />);
+      renderRouterWithProviders(<OffersPage />);
 
       const expectedLabel = screen.getByLabelText("dashboard table");
 

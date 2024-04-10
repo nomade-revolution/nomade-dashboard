@@ -2,12 +2,15 @@ import { Link } from "react-router-dom";
 import { Customer } from "../../../../modules/customers/domain/Customers";
 import { HeaderSection } from "../../interfaces/interfaces";
 import ImageCustom from "../ImageCustom/ImageCustom";
-import { FaEye } from "react-icons/fa";
+import { FaEye, FaCheckCircle } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
+import { Offer } from "../../../../modules/offers/domain/Offer";
+import { offersTimetable } from "../../../offers/utils/offersTimetable";
+import { GoXCircleFill } from "react-icons/go";
 
 interface DashboardTableCellContentProps {
   headerSection: HeaderSection;
-  section: object | Customer;
+  section: object | Customer | Offer;
 }
 
 const DashboardContentSections = ({
@@ -26,6 +29,7 @@ const DashboardContentSections = ({
           width={80}
         />
       );
+
     case "description":
       return (
         <div className="dashboard__description">
@@ -66,6 +70,39 @@ const DashboardContentSections = ({
             </span>
           ))}
         </div>
+      );
+
+    case "time":
+      return (
+        <div className="dashboard__time">
+          <span>{(section as Offer).time}</span>
+          <ul className="dashboard__time-list">
+            {offersTimetable.map((time) => (
+              <li key={time.id} className="dashboard__time-listItem">
+                {time.tag}
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+
+    case "reservations":
+      return (
+        <Link to="" className="dashboard__reservations">
+          <FaEye />
+          Reservas ({(section as Offer).reservations})
+        </Link>
+      );
+
+    case "state":
+      return (
+        <>
+          {(section as Offer).state === "active" ? (
+            <FaCheckCircle className="dashboard__state-active" />
+          ) : (
+            <GoXCircleFill className="dashboard__state-inactive" />
+          )}
+        </>
       );
 
     default:

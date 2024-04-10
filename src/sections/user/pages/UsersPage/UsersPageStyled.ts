@@ -70,6 +70,14 @@ const UserPageStyled = styled.main`
         font-size: large;
       }
     }
+
+    &__state-active {
+      color: ${(props) => props.theme.fontsColors.corporativeColor};
+    }
+
+    &__state-inactive {
+      color: ${(props) => props.theme.fontsColors.lightGrey};
+    }
   }
 `;
 
