@@ -29,6 +29,7 @@ const DashboardContentSections = ({
           width={80}
         />
       );
+
     case "description":
       return (
         <div className="dashboard__description">
