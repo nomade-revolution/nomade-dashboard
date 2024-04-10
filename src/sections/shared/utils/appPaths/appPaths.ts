@@ -3,7 +3,7 @@ export const appPaths = {
   register: "/registro",
   orders: "/pedidos/page/:page",
   order: "/pedidos/:id",
-  clients: "/clientes/page/:page",
+  clients: "/clientes",
   client: "/clientes/:id",
   clientOrders: "/clientes/pedidos/:id/page/:page",
   users: "/usuarios",
