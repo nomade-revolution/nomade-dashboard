@@ -16,3 +16,9 @@ export enum SectionTypes {
   users = "usuarios",
   offers = "ofertas",
 }
+
+export interface OptionsStructure {
+  id: number;
+  value: string | number;
+  name: string;
+}
