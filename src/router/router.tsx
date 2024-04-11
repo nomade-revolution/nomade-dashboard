@@ -7,6 +7,7 @@ import LoginPage from "../sections/user/pages/LoginPage/LoginPage";
 import UsersPage from "../sections/user/pages/UsersPage/UsersPage";
 import CustomersPage from "../sections/customers/pages/CustomersPage/CustomersPage";
 import OffersPage from "../sections/offers/pages/OffersPage/OffersPage";
+import MyAccountPage from "../sections/user/pages/MyAccountPage/MyAccountPage";
 
 const routes: RouteObject[] = [
   {
@@ -29,6 +30,10 @@ const routes: RouteObject[] = [
       {
         path: appPaths.offers,
         element: <OffersPage />,
+      },
+      {
+        path: appPaths.account,
+        element: <MyAccountPage />,
       },
     ],
   },
