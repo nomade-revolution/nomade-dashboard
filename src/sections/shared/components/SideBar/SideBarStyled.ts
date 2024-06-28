@@ -28,7 +28,6 @@ const SideBarStyled = styled.div`
     display: flex;
     flex-direction: column;
     gap: 20px;
-    padding-bottom: 50px;
 
     &__section,
     &__section--active {
@@ -78,7 +77,7 @@ const SideBarStyled = styled.div`
   }
 
   .user-actions {
-    padding-top: 40px;
+    padding-top: 20px;
     border-top: 1px solid ${(props) => props.theme.borders.lightGrey};
     display: flex;
     flex-direction: column;

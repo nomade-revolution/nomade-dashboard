@@ -1,5 +1,10 @@
 import { IoIosListBox, IoIosSettings } from "react-icons/io";
-import { FaUserTie, FaUserGroup, FaTags } from "react-icons/fa6";
+import {
+  FaUserTie,
+  FaUserGroup,
+  FaTags,
+  FaPeopleArrows,
+} from "react-icons/fa6";
 import { CiLogout } from "react-icons/ci";
 import { appPaths } from "../../../utils/appPaths/appPaths";
 import { PiUsersThreeFill } from "react-icons/pi";
@@ -80,6 +85,13 @@ export const getSideBarUpperSections = (
       id: 10,
       icon: <MdCategory />,
       name: "Subcategorías",
+      quantity: 0,
+      path: appPaths.settings,
+    },
+    {
+      id: 10,
+      icon: <FaPeopleArrows />,
+      name: "Collabs",
       quantity: 0,
       path: appPaths.settings,
     },
