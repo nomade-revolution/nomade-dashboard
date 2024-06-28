@@ -15,7 +15,16 @@ const Layout = (): React.ReactElement => {
 
   return (
     <LayoutStyled>
-      <div className={location.pathname !== appPaths.login ? "layout" : ""}>
+      <div
+        className={
+          location.pathname !== appPaths.login &&
+          location.pathname !== appPaths.register &&
+          location.pathname !== appPaths.recovery_password &&
+          location.pathname !== appPaths.reset_password
+            ? "layout"
+            : ""
+        }
+      >
         <section
           className={
             location.pathname === appPaths.login ||
@@ -30,14 +39,23 @@ const Layout = (): React.ReactElement => {
             location.pathname !== appPaths.register &&
             location.pathname !== appPaths.recovery_password &&
             location.pathname !== appPaths.reset_password && (
-              <SideBar pendingOrders={4} pendingCustomers={3} />
+              <SideBar pendingOrders={5} pendingCustomers={10} />
             )}
         </section>
         <div className="layout__header">
-          <Header pendingOrders={3} pendingCustomers={2} />
+          <Header pendingOrders={5} pendingCustomers={10} />
         </div>
 
-        <main className="layout__pages">
+        <main
+          className={
+            location.pathname == appPaths.login ||
+            location.pathname === appPaths.register ||
+            location.pathname === appPaths.recovery_password ||
+            location.pathname === appPaths.reset_password
+              ? "layout__sidebar-hidden"
+              : "layout__pages"
+          }
+        >
           <Outlet />
         </main>
       </div>
