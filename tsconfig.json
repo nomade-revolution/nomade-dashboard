@@ -18,7 +18,35 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true,
+
+    "baseUrl": "./src",
+
+    "paths": {
+      "@core": ["modules/core/index"],
+      "@core/*": ["modules/core/*"],
+
+      "@auth": ["modules/auth/index"],
+      "@auth/*": ["modules/auth/*"],
+
+      "@influencer": ["modules/influencer/index"],
+      "@influencer/*": ["modules/influencer/*"],
+
+      "@country": ["modules/country/index"],
+      "@country/*": ["modules/country/*"],
+
+      "@city": ["modules/city/index"],
+      "@city/*": ["modules/city/*"],
+
+      "@socialMedia": ["modules/socialMedia/index"],
+      "@socialMedia/*": ["modules/socialMedia/*"],
+
+      "@company": ["modules/company/index"],
+      "@company/*": ["modules/company/*"],
+
+      "@environments": ["sections/shared/utils/environments/environments"]
+    }
   },
   "include": ["src", "setupTests.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
