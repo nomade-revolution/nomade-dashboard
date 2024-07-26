@@ -1,5 +1,5 @@
-import { HttpResponseType } from "@core";
+import { HttpResponseInterface } from "@core";
 
 export interface SignInInterface<T, I> {
-  signIn(data: T): Promise<HttpResponseType<I>>;
+  signIn(data: T): Promise<HttpResponseInterface<I>>;
 }
