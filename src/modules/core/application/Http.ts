@@ -1,9 +1,9 @@
 import {
   HttpErrorResponseInterface,
-  HttpImplementation,
   HttpInterface,
   HttpResponseInterface,
-} from "@core";
+} from "@core/domain";
+import { HttpImplementation } from "@core/infrastructure";
 
 export class Http implements HttpInterface {
   private static instance: Http;
