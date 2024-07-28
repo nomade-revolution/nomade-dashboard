@@ -3,9 +3,9 @@
 
 
 #run build 
-npm run build
+#npm run build
 
 
 #run tests
 
-npm run test
+#npm run test

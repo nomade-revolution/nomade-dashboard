@@ -7,13 +7,11 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({ element }: ProtectedRouteProps): JSX.Element => {
-  const { getUserLogged } = useUserContext();
-
-  const user = getUserLogged();
+  const { token } = useUserContext();
 
   const location = useLocation();
 
-  if (user) {
+  if (token) {
     if (
       location.pathname === appPaths.login ||
       location.pathname === appPaths.register ||
@@ -21,7 +19,7 @@ const ProtectedRoute = ({ element }: ProtectedRouteProps): JSX.Element => {
       location.pathname === appPaths.recovery_password ||
       location.pathname === appPaths.reset_password
     ) {
-      return <Navigate to={"/usuarios"} replace={true} />;
+      return <Navigate to={appPaths.users} replace={true} />;
     }
   } else {
     if (
