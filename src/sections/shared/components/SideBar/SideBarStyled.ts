@@ -13,6 +13,7 @@ const SideBarStyled = styled.div`
     background: white;
     z-index: 1;
     color: ${(props) => props.theme.fontsColors.dashBoard};
+    overflow-y: scroll;
   }
 
   .side-bar {
