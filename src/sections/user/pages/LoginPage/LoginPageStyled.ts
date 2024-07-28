@@ -54,15 +54,16 @@ const LoginPageStyled = styled.main`
       left: 20%;
 
       @media (max-width: 1600px) {
-        width: 22rem;
-        height: 22rem;
+        width: 20rem;
+        height: 20rem;
         left: 12%;
+        top: 0;
       }
     }
 
     &__small-circle {
-      width: 16rem;
-      height: 16rem;
+      width: 14rem;
+      height: 14rem;
       top: 57%;
       left: 52%;
       z-index: 1;

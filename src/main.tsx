@@ -8,13 +8,11 @@ import { ThemeProvider } from "styled-components";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./router/router.tsx";
 import { UserContextProvider } from "./sections/user/UserContext/UserContext.tsx";
-import { loginUserLocalStorageUserRepository } from "./modules/user/infrastructure/localStorageRepo.ts";
-
-const repository = loginUserLocalStorageUserRepository();
+import { repositories } from "sections/shared/utils/repositories/repositories.ts";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <UserContextProvider repository={repository}>
+    <UserContextProvider repository={repositories.user}>
       <ThemeProvider theme={theme}>
         <GlobalStyles />
         <RouterProvider router={router} />

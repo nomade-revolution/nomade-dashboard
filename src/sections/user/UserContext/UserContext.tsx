@@ -1,18 +1,18 @@
 import React, { createContext, useState } from "react";
-
-import {
-  getUser,
-  loginUser,
-  logoutUser,
-} from "../../../modules/user/application/userLocalStorage";
-import { UserLocalStorageRepository } from "../../../modules/user/domain/UserLocalStorageRepository";
 import { UserLogin } from "../../../modules/user/domain/User";
+import { AuthRepository } from "@auth/domain/AuthRepository";
+import {
+  AuthLoginInterface,
+  AuthRegisterInterface,
+  SessionInterface,
+} from "@auth";
+import { authLogin } from "@auth/application/auth";
+import { isHttpSuccessResponse } from "../../shared/utils/typeGuards/typeGuardsFunctions";
 
 export interface ContextState {
-  user: UserLogin;
+  token: string;
   loginUser: (user: UserLogin) => void;
   logoutUser: () => void;
-  getUserLogged: () => UserLogin;
 }
 
 export const UserContext = createContext({} as ContextState);
@@ -20,36 +20,31 @@ export const UserContext = createContext({} as ContextState);
 export const UserContextProvider = ({
   children,
   repository,
-}: React.PropsWithChildren<{ repository: UserLocalStorageRepository }>) => {
-  const [user, setUser] = useState<UserLogin>({
-    email: "",
-    password: "",
-  });
+}: React.PropsWithChildren<{
+  repository: AuthRepository<
+    AuthLoginInterface | AuthRegisterInterface,
+    SessionInterface
+  >;
+}>) => {
+  const [token, setToken] = useState<string>("");
 
-  function login(user: { email: string; password: string }) {
-    loginUser(user, repository);
-
-    setUser({ email: user.email, password: user.password });
-  }
+  const login = async (user: AuthLoginInterface) => {
+    const response = await authLogin(user, repository);
+    if (isHttpSuccessResponse(response)) {
+      setToken(response.data.access_token);
+    }
+  };
 
   function logout() {
-    logoutUser(repository);
-    setUser({ email: "", password: "" });
-  }
-
-  function getUserLogged() {
-    const user: UserLogin = getUser(repository);
-
-    return user;
+    setToken("");
   }
 
   return (
     <UserContext.Provider
       value={{
-        user,
+        token,
         loginUser: login,
         logoutUser: logout,
-        getUserLogged,
       }}
     >
       {children}
