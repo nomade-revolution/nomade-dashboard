@@ -5,12 +5,20 @@ import DashboardTable from "../../../shared/components/DashboardTable/DashboardT
 import { mockClients } from "../../../../mocks/clientsMocks";
 import PaginationComponent from "../../../shared/components/Pagination/PaginationComponent";
 import DashboardCardListMobile from "../../../shared/components/DashboardCardListMobile/DashboardCardListMobile";
-import { mockOffers } from "../../../../mocks/offersMocks";
 import { offersHeaderSections } from "../../utils/offersSections";
 import OffersPageStyled from "./OffersPageStyled";
+import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
+import { useEffect } from "react";
 
 const OffersPage = (): React.ReactElement => {
   const isLoading = false;
+
+  const { getAllOffers, offers } = useOffersContext();
+
+  useEffect(() => {
+    getAllOffers(1, 12);
+  }, [getAllOffers]);
+
   return (
     <>
       {isLoading ? (
@@ -20,17 +28,17 @@ const OffersPage = (): React.ReactElement => {
           <div className="dashboard__table">
             <div className="dashboard__searchContainer"></div>
             <DashboardTable
-              bodySections={mockOffers}
+              bodySections={offers}
               headerSections={offersHeaderSections}
               pageName={SectionTypes.offers}
             />
           </div>
           <div className="dashboard__mobile">
             <div className="dashboard__searchContainer">
-              <h3 className="dashboard__title">Clientes</h3>
+              <h3 className="dashboard__title">Ofertas</h3>
             </div>
             <DashboardCardListMobile
-              bodySections={mockOffers}
+              bodySections={offers}
               headerSections={offersHeaderSections}
             />
           </div>
