@@ -9,14 +9,17 @@ import { RouterProvider } from "react-router-dom";
 import { router } from "./router/router.tsx";
 import { UserContextProvider } from "./sections/user/UserContext/UserContext.tsx";
 import { repositories } from "sections/shared/utils/repositories/repositories.ts";
+import { OffersContextProvider } from "sections/offers/OffersContext/OffersContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <UserContextProvider repository={repositories.user}>
-      <ThemeProvider theme={theme}>
-        <GlobalStyles />
-        <RouterProvider router={router} />
-      </ThemeProvider>
+      <OffersContextProvider repository={repositories.offers}>
+        <ThemeProvider theme={theme}>
+          <GlobalStyles />
+          <RouterProvider router={router} />
+        </ThemeProvider>
+      </OffersContextProvider>
     </UserContextProvider>
   </React.StrictMode>,
 );

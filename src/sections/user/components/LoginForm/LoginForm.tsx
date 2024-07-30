@@ -4,6 +4,9 @@ import LoginFormStyled from "./LoginFormStyled";
 import { useLoginForm } from "../../hooks/useLoginForm";
 import { useNavigate } from "react-router-dom";
 import { UserLogin } from "../../../../modules/user/domain/User";
+import { useUserContext } from "sections/user/UserContext/useUserContext";
+import { useState } from "react";
+import { appPaths } from "sections/shared/utils/appPaths/appPaths";
 
 const initialState: UserLogin = {
   email: "",
@@ -11,16 +14,19 @@ const initialState: UserLogin = {
 };
 
 const LoginForm = (): React.ReactElement => {
+  const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const { submitForm } = useLoginForm();
+  const { isSuccess } = useUserContext();
   const navigate = useNavigate();
 
-  const handleSubmitForm = (
+  const handleSubmitForm = async (
     values: UserLogin,
     { setSubmitting }: FormikHelpers<UserLogin>,
   ) => {
     submitForm(values);
     setSubmitting(false);
-    navigate("/usuarios");
+    setIsFormSubmitted(true);
+    navigate(appPaths.users);
   };
 
   return (
@@ -88,6 +94,11 @@ const LoginForm = (): React.ReactElement => {
               Registrate aquí
             </a>
           </span>
+          {!isSuccess && isFormSubmitted && (
+            <span className="login-form__error-message">
+              Credenciales inválidas
+            </span>
+          )}
         </LoginFormStyled>
       )}
     </Formik>

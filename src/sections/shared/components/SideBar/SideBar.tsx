@@ -5,6 +5,7 @@ import { CiLogout } from "react-icons/ci";
 
 import SideBarStyled from "./SideBarStyled";
 import { appPaths } from "../../utils/appPaths/appPaths";
+import { useUserContext } from "sections/user/UserContext/useUserContext";
 
 interface SideBarProps {
   pendingOrders: number;
@@ -18,6 +19,7 @@ const SideBar = ({
   const location = useLocation();
   const navigate = useNavigate();
 
+  const { logoutUser } = useUserContext();
   const sideBarUpperSections = getSideBarUpperSections(
     pendingOrders,
     pendingCustomers,
@@ -25,6 +27,7 @@ const SideBar = ({
 
   const handleLogout = () => {
     navigate(0);
+    logoutUser();
   };
 
   return (
