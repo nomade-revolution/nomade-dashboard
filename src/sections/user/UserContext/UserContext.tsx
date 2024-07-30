@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useCallback, useState } from "react";
 import { UserLogin } from "../../../modules/user/domain/User";
 import { AuthRepository } from "@auth/domain/AuthRepository";
 import {
@@ -50,9 +50,9 @@ export const UserContextProvider = ({
     cookies.remove(environments.cookies!);
   }
 
-  async function getSessionToken() {
-    return await cookies.get(environments.cookies!);
-  }
+  const getSessionToken = useCallback(() => {
+    return cookies?.get(environments.cookies!) || "";
+  }, [cookies]);
 
   setTimeout(() => setIsSuccess(false), 2000);
 
