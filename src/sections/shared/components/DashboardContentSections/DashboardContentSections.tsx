@@ -2,11 +2,11 @@ import { Link } from "react-router-dom";
 import { Customer } from "../../../../modules/customers/domain/Customers";
 import { HeaderSection } from "../../interfaces/interfaces";
 import ImageCustom from "../ImageCustom/ImageCustom";
-import { FaEye, FaCheckCircle } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
-import { Offer } from "../../../../modules/offers/domain/Offer";
-import { offersTimetable } from "../../../offers/utils/offersTimetable";
-import { GoXCircleFill } from "react-icons/go";
+import { FullOffer, Offer } from "../../../../modules/offers/domain/Offer";
+import { Switch } from "@mui/material";
+import { TimeSlot } from "modules/offers/domain/OfferCalendar";
 
 interface DashboardTableCellContentProps {
   headerSection: HeaderSection;
@@ -17,8 +17,20 @@ const DashboardContentSections = ({
   headerSection,
   section,
 }: DashboardTableCellContentProps) => {
+  const calendar = (section as FullOffer).calendar;
+  const daysSet = new Set<string>();
+
   switch (headerSection.property) {
     case "images":
+      return (
+        <ImageCustom
+          image={(section as FullOffer).images[0].url}
+          alt={(section as FullOffer).images[0].alt}
+          className="dashboard__image"
+          height={80}
+          width={80}
+        />
+      );
     case "image":
       return (
         <ImageCustom
@@ -72,38 +84,49 @@ const DashboardContentSections = ({
         </div>
       );
 
-    case "time":
+    case "calendar":
+      if (!calendar || !Array.isArray(calendar)) {
+        return <></>;
+      }
+
       return (
         <div className="dashboard__time">
-          <span>{(section as Offer).time}</span>
           <ul className="dashboard__time-list">
-            {offersTimetable.map((time) => (
-              <li key={time.id} className="dashboard__time-listItem">
-                {time.tag}
+            {calendar.map((time) => (
+              <li key={time.address_id}>
+                {time.week?.map(
+                  (day) =>
+                    day?.map((slot: TimeSlot) => {
+                      const dayInitial = slot.day_name.charAt(0);
+                      if (!daysSet.has(dayInitial)) {
+                        daysSet.add(dayInitial);
+                        return (
+                          <span
+                            key={`${slot.day_of_week}-${slot.day_name}`}
+                            className="dashboard__time-listItem"
+                          >
+                            {dayInitial}
+                          </span>
+                        );
+                      }
+                      return null; // No renderizar si el día ya está en el set
+                    }),
+                )}
               </li>
             ))}
           </ul>
         </div>
       );
-
     case "reservations":
       return (
         <Link to="" className="dashboard__reservations">
           <FaEye />
-          Reservas ({(section as Offer).reservations})
+          Reservas (3)
         </Link>
       );
 
     case "state":
-      return (
-        <>
-          {(section as Offer).state === "active" ? (
-            <FaCheckCircle className="dashboard__state-active" />
-          ) : (
-            <GoXCircleFill className="dashboard__state-inactive" />
-          )}
-        </>
-      );
+      return <Switch />;
 
     default:
       return (
