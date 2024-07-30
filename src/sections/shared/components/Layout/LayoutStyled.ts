@@ -49,11 +49,11 @@ const LayoutStyled = styled.div`
       overflow-y: auto;
 
       @media (min-width: 1000px) and (max-width: 1600px) {
-        padding-left: 19.5rem;
+        padding-left: 16rem;
       }
 
       @media (min-width: 1600px) {
-        padding-left: 370px;
+        padding-left: 23.5rem;
       }
     }
 
