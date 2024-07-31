@@ -1,3 +1,4 @@
+import ImageCustom from "sections/shared/components/ImageCustom/ImageCustom";
 import LoginForm from "../../components/LoginForm/LoginForm";
 import LoginPageStyled from "./LoginPageStyled";
 
@@ -5,14 +6,13 @@ const LoginPage = (): React.ReactElement => {
   return (
     <LoginPageStyled className="login-page">
       <div className="login-page__company">
-        {/* <ImageCustom
+        <ImageCustom
           alt="Fresatitan logo"
-          className=""
-          height={60}
-          width={400}
-          image="/Fresatitan-Logo.png"
-        /> */}
-        <h1 style={{ fontSize: "40px" }}>Nomade</h1>
+          className="side-bar__image"
+          height={70}
+          width={250}
+          image="/main_logo.png"
+        />
         <span className="login-page__slogan">
           Area de Clientes y Gestión de pedidos
         </span>
