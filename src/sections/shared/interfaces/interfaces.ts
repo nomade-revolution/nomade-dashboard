@@ -22,3 +22,5 @@ export interface OptionsStructure {
   value: string | number;
   name: string;
 }
+
+export type FilterParams = { [key: string]: unknown };
