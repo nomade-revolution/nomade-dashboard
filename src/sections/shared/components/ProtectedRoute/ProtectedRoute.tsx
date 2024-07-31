@@ -1,6 +1,5 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { appPaths } from "../../utils/appPaths/appPaths";
-import { useEffect, useState } from "react";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 
 interface ProtectedRouteProps {
@@ -8,20 +7,11 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({ element }: ProtectedRouteProps): JSX.Element => {
-  const [token, setToken] = useState<string>("");
-
   const { getSessionToken } = useAuthContext();
-
-  useEffect(() => {
-    (async () => {
-      const token = await getSessionToken();
-      setToken(token!);
-    })();
-  }, [getSessionToken]);
 
   const location = useLocation();
 
-  if (token) {
+  if (getSessionToken()) {
     if (
       location.pathname === appPaths.login ||
       location.pathname === appPaths.register ||

@@ -9,13 +9,14 @@ import { authLogin } from "@auth/application/auth";
 import { isHttpSuccessResponse } from "../../shared/utils/typeGuards/typeGuardsFunctions";
 import { AsyncCookiesImplementation } from "@core";
 import environments from "@environments";
+import Cookies from "js-cookie";
 
 export interface ContextState {
   token: string;
   isSuccess: boolean;
   loginUser: (user: AuthLoginInterface) => void;
   logoutUser: () => void;
-  getSessionToken: () => Promise<string | undefined>;
+  getSessionToken: () => string;
 }
 
 export const AuthContext = createContext({} as ContextState);
@@ -50,8 +51,8 @@ export const AuthContextProvider = ({
   }
 
   const getSessionToken = useCallback(() => {
-    return cookies?.get(environments.cookies!) || "";
-  }, [cookies]);
+    return Cookies?.get(environments.cookies!) || "";
+  }, []);
 
   setTimeout(() => setIsSuccess(false), 2000);
 
