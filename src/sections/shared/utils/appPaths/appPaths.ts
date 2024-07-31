@@ -11,4 +11,5 @@ export const appPaths = {
   place_order: "/realizar-pedido",
   recovery_password: "/recovery-password",
   reset_password: "/reset-password",
+  collabs: "/collabs",
 };

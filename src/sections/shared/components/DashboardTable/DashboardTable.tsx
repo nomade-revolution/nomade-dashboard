@@ -53,7 +53,10 @@ const DashboardTable = <Type,>({
   return (
     <TableContainer
       component={Paper}
-      sx={{ boxShadow: "0px 0px 20px 0.2em rgba(0, 0, 0, 0.1)", width: "100%" }}
+      sx={{
+        boxShadow: "0px 0px 20px 0.2em rgba(0, 0, 0, 0.1)",
+        width: "fit-content",
+      }}
     >
       <DashboardStyled
         className="table"
