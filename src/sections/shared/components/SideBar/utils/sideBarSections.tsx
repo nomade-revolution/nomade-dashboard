@@ -1,17 +1,9 @@
 import { IoIosListBox, IoIosSettings } from "react-icons/io";
-import {
-  FaUserTie,
-  FaUserGroup,
-  FaTags,
-  FaPeopleArrows,
-} from "react-icons/fa6";
+import { FaUserTie, FaUserGroup, FaPeopleArrows } from "react-icons/fa6";
 import { CiLogout } from "react-icons/ci";
 import { appPaths } from "../../../utils/appPaths/appPaths";
 import { PiUsersThreeFill } from "react-icons/pi";
 import { BiSolidOffer, BiSolidCategory } from "react-icons/bi";
-import { SlLocationPin } from "react-icons/sl";
-import { BsFilterSquare } from "react-icons/bs";
-import { MdCategory } from "react-icons/md";
 
 export const getSideBarUpperSections = (
   ordersQuantity: number,
@@ -55,45 +47,17 @@ export const getSideBarUpperSections = (
     },
     {
       id: 6,
-      icon: <SlLocationPin />,
-      name: "Áreas",
-      quantity: 0,
-      path: appPaths.place_order,
-    },
-    {
-      id: 7,
-      icon: <FaTags />,
-      name: "Etiquetas",
-      quantity: 0,
-      path: appPaths.settings,
-    },
-    {
-      id: 8,
-      icon: <BiSolidCategory />,
-      name: "Categorías",
-      quantity: 0,
-      path: appPaths.settings,
-    },
-    {
-      id: 9,
-      icon: <BsFilterSquare />,
-      name: "Filtros",
-      quantity: 0,
-      path: appPaths.settings,
-    },
-    {
-      id: 10,
-      icon: <MdCategory />,
-      name: "Subcategorías",
-      quantity: 0,
-      path: appPaths.settings,
-    },
-    {
-      id: 10,
       icon: <FaPeopleArrows />,
       name: "Collabs",
       quantity: 0,
       path: appPaths.collabs,
+    },
+    {
+      id: 7,
+      icon: <BiSolidCategory />,
+      name: "Categorías",
+      quantity: 0,
+      path: appPaths.settings,
     },
   ];
 
