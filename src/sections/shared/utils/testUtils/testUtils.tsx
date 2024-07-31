@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
 import { ThemeProvider } from "styled-components";
 import { render } from "@testing-library/react";
-import { UserContextProvider } from "../../../user/UserContext/UserContext";
+import { AuthContextProvider } from "../../../auth/AuthContext/AuthContext";
 import theme from "../../../../assets/styles/theme";
 import GlobalStyles from "../../../../assets/styles/GlobalStyles";
 import { getComponentRouter, router } from "../../../../router/router";
@@ -13,10 +13,10 @@ export const renderWithProviders = (ui: React.ReactElement) => {
     const repository = loginUserLocalStorageUserRepository();
     return (
       <ThemeProvider theme={theme}>
-        <UserContextProvider repository={repository}>
+        <AuthContextProvider repository={repository}>
           {children}
           <GlobalStyles />
-        </UserContextProvider>
+        </AuthContextProvider>
       </ThemeProvider>
     );
   };
