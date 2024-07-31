@@ -1,6 +1,5 @@
 import { useState } from "react";
-
-import { useUserContext } from "../UserContext/useUserContext";
+import { useAuthContext } from "../AuthContext/useAuthContext";
 
 export const enum FormStatus {
   Loading,
@@ -15,7 +14,7 @@ export function useLoginForm(): {
   resetFormStatus: () => void;
 } {
   const [formStatus, setFormStatus] = useState(FormStatus.Initial);
-  const { loginUser } = useUserContext();
+  const { loginUser } = useAuthContext();
 
   function submitForm({
     email,

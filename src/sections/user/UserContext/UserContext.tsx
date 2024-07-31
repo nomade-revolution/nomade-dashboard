@@ -1,69 +1,58 @@
 import React, { createContext, useCallback, useState } from "react";
-import { UserLogin } from "../../../modules/user/domain/User";
-import { AuthRepository } from "@auth/domain/AuthRepository";
-import {
-  AuthLoginInterface,
-  AuthRegisterInterface,
-  SessionInterface,
-} from "@auth";
-import { authLogin } from "@auth/application/auth";
 import { isHttpSuccessResponse } from "../../shared/utils/typeGuards/typeGuardsFunctions";
-import { AsyncCookiesImplementation } from "@core";
-import environments from "@environments";
+import { UserRepository } from "modules/user/domain/UserRepository";
+import { User, UserApiResponse } from "modules/user/domain/User";
+import { FilterParams } from "sections/shared/interfaces/interfaces";
+import { getUsersFiltered } from "modules/user/application/user";
 
-export interface ContextState {
-  token: string;
-  isSuccess: boolean;
-  loginUser: (user: UserLogin) => void;
-  logoutUser: () => void;
-  getSessionToken: () => Promise<string | undefined>;
+interface ContextState {
+  users_nomade: User[];
+  loading: boolean;
+  error: string | null;
+  getUsers: (
+    page: number,
+    per_page: number,
+    filterParams: FilterParams,
+  ) => void;
 }
 
-export const UserContext = createContext({} as ContextState);
+export const UserContext = createContext<ContextState>({} as ContextState);
 
 export const UserContextProvider = ({
   children,
   repository,
 }: React.PropsWithChildren<{
-  repository: AuthRepository<
-    AuthLoginInterface | AuthRegisterInterface,
-    SessionInterface
-  >;
+  repository: UserRepository<UserApiResponse>;
 }>) => {
-  const cookies = new AsyncCookiesImplementation();
-  const [token, setToken] = useState<string>("");
-  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [users_nomade, setUsersNomade] = useState<User[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const login = async (user: AuthLoginInterface) => {
-    const response = await authLogin(user, repository);
+  const getUsers = useCallback(
+    async (page: number, per_page: number, filterParams: FilterParams) => {
+      setLoading(true);
+      setError(null);
 
-    if (isHttpSuccessResponse(response)) {
-      setToken(response.data.access_token);
-      cookies.set(environments.cookies!, response.data.access_token);
-    }
-
-    setIsSuccess(response.success);
-  };
-
-  function logout() {
-    setToken("");
-    cookies.remove(environments.cookies!);
-  }
-
-  const getSessionToken = useCallback(() => {
-    return cookies?.get(environments.cookies!) || "";
-  }, [cookies]);
-
-  setTimeout(() => setIsSuccess(false), 2000);
+      const response = await getUsersFiltered(
+        repository,
+        page,
+        per_page,
+        filterParams,
+      );
+      if (isHttpSuccessResponse(response)) {
+        setUsersNomade(response.data.users);
+      }
+    },
+    [repository],
+  );
 
   return (
     <UserContext.Provider
       value={{
-        token,
-        isSuccess,
-        loginUser: login,
-        logoutUser: logout,
-        getSessionToken,
+        users_nomade,
+        loading,
+        error,
+        getUsers,
       }}
     >
       {children}

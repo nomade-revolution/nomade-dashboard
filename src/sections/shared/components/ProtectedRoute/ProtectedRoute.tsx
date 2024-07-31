@@ -1,27 +1,17 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { appPaths } from "../../utils/appPaths/appPaths";
-import { useEffect, useState } from "react";
-import { useUserContext } from "sections/user/UserContext/useUserContext";
+import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 
 interface ProtectedRouteProps {
   element: JSX.Element;
 }
 
 const ProtectedRoute = ({ element }: ProtectedRouteProps): JSX.Element => {
-  const [token, setToken] = useState<string>("");
-
-  const { getSessionToken } = useUserContext();
-
-  useEffect(() => {
-    (async () => {
-      const token = await getSessionToken();
-      setToken(token!);
-    })();
-  }, [getSessionToken]);
+  const { getSessionToken } = useAuthContext();
 
   const location = useLocation();
 
-  if (token) {
+  if (getSessionToken()) {
     if (
       location.pathname === appPaths.login ||
       location.pathname === appPaths.register ||

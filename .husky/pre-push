@@ -2,10 +2,11 @@
 . "$(dirname "$0")/_/husky.sh"
 
 
-#run build 
-#npm run build
+# # run build
+
+# npm run build
 
 
-#run tests
+# # run tests
 
-#npm run test
+# npm run test

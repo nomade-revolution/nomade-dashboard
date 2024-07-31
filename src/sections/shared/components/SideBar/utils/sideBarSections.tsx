@@ -1,4 +1,4 @@
-import { IoIosListBox, IoIosSettings } from "react-icons/io";
+import { IoIosSettings } from "react-icons/io";
 import { FaUserTie, FaUserGroup, FaPeopleArrows } from "react-icons/fa6";
 import { CiLogout } from "react-icons/ci";
 import { appPaths } from "../../../utils/appPaths/appPaths";
@@ -23,13 +23,6 @@ export const getSideBarUpperSections = (
       name: "Usuarios (App)",
       quantity: pendingCustomers,
       path: `/usuarios-app`,
-    },
-    {
-      id: 3,
-      icon: <IoIosListBox />,
-      name: "Reservas",
-      quantity: pendingCustomers,
-      path: `/reservas`,
     },
     {
       id: 4,

@@ -1,30 +1,28 @@
-import endpoints from "../../../sections/shared/utils/api/endpoints";
-import customAxios from "../../../sections/shared/utils/customAxios/customAxios";
+import { Http } from "@core/application";
+import { HttpResponseInterface } from "@core/domain";
+import { UserApiResponse } from "../domain/User";
+import { GET_USERS } from "../application/routes";
+import { FilterParams } from "sections/shared/interfaces/interfaces";
 
-import { UserLogin, UserLoginApiResponse } from "../domain/User";
+export class UsersRepository {
+  private readonly http: Http = Http.getInstance();
 
-import { UserRepository } from "../domain/UserRepository";
-
-export const userRepository = (): UserRepository => {
-  return {
-    login,
-  };
-};
-
-export const login = async (
-  user: UserLogin,
-): Promise<{
-  data?: UserLoginApiResponse;
-  success?: boolean;
-  error?: string;
-}> => {
-  const { data, success, error } = await customAxios("POST", endpoints.login, {
-    data: user,
-  });
-
-  if (!success) {
-    return { success, error };
+  public async getUsers(
+    page: number,
+    per_page: number,
+    filterParams: FilterParams,
+  ): Promise<HttpResponseInterface<UserApiResponse>> {
+    try {
+      const resp = await this.http.get<UserApiResponse>(
+        GET_USERS(page, per_page, filterParams),
+        {
+          page,
+          per_page,
+        },
+      );
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
   }
-
-  return { data: data as UserLoginApiResponse };
-};
+}
