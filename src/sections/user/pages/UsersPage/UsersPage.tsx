@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Loader from "../../../shared/components/Loader/Loader";
 import NoDataHandler from "../../../shared/components/NoDataHandler/NoDataHandler";
@@ -10,17 +10,30 @@ import SearchBar from "../../../shared/components/SearchBar/SearchBar";
 import { IoAddCircle } from "react-icons/io5";
 import UserPageStyled from "./UsersPageStyled";
 import { mockUsers } from "../../../../mocks/userMocks";
-import { SectionTypes } from "../../../shared/interfaces/interfaces";
+import {
+  FilterParams,
+  SectionTypes,
+} from "../../../shared/interfaces/interfaces";
 import { usersTableHeaderSections } from "../../utils/userTableSections";
+import { useUserContext } from "sections/user/UserContext/useUserContext";
 
 const UsersPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string | null>(null);
 
   const { search } = useLocation();
+  const { getUsers, users_nomade } = useUserContext();
 
   const searchParams = search.split("?").join("");
 
   const isLoading = false;
+
+  useEffect(() => {
+    const filters: FilterParams = {
+      types: `%5B%22Nomade%22%5D`,
+    };
+
+    getUsers(1, 12, filters);
+  }, [getUsers]);
 
   return (
     <>
@@ -43,7 +56,7 @@ const UsersPage = (): React.ReactElement => {
           </div>
           <div className="dashboard__orders-table">
             <DashboardTable
-              bodySections={mockUsers}
+              bodySections={users_nomade}
               headerSections={usersTableHeaderSections}
               pageName={SectionTypes.users}
             />
