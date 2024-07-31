@@ -6,6 +6,7 @@ import { CiLogout } from "react-icons/ci";
 import SideBarStyled from "./SideBarStyled";
 import { appPaths } from "../../utils/appPaths/appPaths";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
+import ImageCustom from "../ImageCustom/ImageCustom";
 
 interface SideBarProps {
   pendingOrders: number;
@@ -32,14 +33,13 @@ const SideBar = ({
 
   return (
     <SideBarStyled className="side-bar">
-      {/* <ImageCustom
+      <ImageCustom
         alt="Fresatitan logo"
         className="side-bar__image"
-        height={30}
+        height={50}
         width={200}
-        image="/Fresatitan-Logo.png"
-      /> */}
-      <h1>Nomade</h1>
+        image="/main_logo.png"
+      />
       <div className="side-bar__actions actions">
         {sideBarUpperSections.map((section) => (
           <Link to={section.path} key={section.id}>
