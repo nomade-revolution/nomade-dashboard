@@ -1,9 +1,10 @@
-import { UserLogin, UserLoginApiResponse } from "./User";
+import { HttpResponseInterface } from "@core";
+import { FilterParams } from "sections/shared/interfaces/interfaces";
 
-export interface UserRepository {
-  login: (user: UserLogin) => Promise<{
-    data?: UserLoginApiResponse;
-    success?: boolean;
-    error?: string;
-  }>;
+export interface UserRepository<I> {
+  getUsers(
+    page: number,
+    per_page: number,
+    filterParams: FilterParams,
+  ): Promise<HttpResponseInterface<I>>;
 }
