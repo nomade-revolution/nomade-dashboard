@@ -1,8 +1,7 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { appPaths } from "../../utils/appPaths/appPaths";
-import { AsyncCookiesImplementation } from "@core";
-import environments from "@environments";
 import { useEffect, useState } from "react";
+import { useUserContext } from "sections/user/UserContext/useUserContext";
 
 interface ProtectedRouteProps {
   element: JSX.Element;
@@ -11,13 +10,14 @@ interface ProtectedRouteProps {
 const ProtectedRoute = ({ element }: ProtectedRouteProps): JSX.Element => {
   const [token, setToken] = useState<string>("");
 
+  const { getSessionToken } = useUserContext();
+
   useEffect(() => {
     (async () => {
-      const cookies = new AsyncCookiesImplementation();
-      const token = await cookies.get(environments.cookies!);
+      const token = await getSessionToken();
       setToken(token!);
     })();
-  }, []);
+  }, [getSessionToken]);
 
   const location = useLocation();
 

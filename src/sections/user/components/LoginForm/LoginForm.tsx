@@ -16,7 +16,7 @@ const initialState: UserLogin = {
 const LoginForm = (): React.ReactElement => {
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const { submitForm } = useLoginForm();
-  const { isSuccess } = useUserContext();
+  const { isSuccess, getSessionToken } = useUserContext();
   const navigate = useNavigate();
 
   const handleSubmitForm = async (
@@ -26,6 +26,11 @@ const LoginForm = (): React.ReactElement => {
     submitForm(values);
     setSubmitting(false);
     setIsFormSubmitted(true);
+
+    setTimeout(
+      async () => (await getSessionToken()) && navigate(appPaths.users),
+      2000,
+    );
     navigate(appPaths.users);
   };
 

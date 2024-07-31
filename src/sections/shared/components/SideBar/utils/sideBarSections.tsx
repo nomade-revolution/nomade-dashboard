@@ -93,7 +93,7 @@ export const getSideBarUpperSections = (
       icon: <FaPeopleArrows />,
       name: "Collabs",
       quantity: 0,
-      path: appPaths.settings,
+      path: appPaths.collabs,
     },
   ];
 
