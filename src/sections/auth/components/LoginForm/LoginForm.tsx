@@ -1,14 +1,15 @@
 import { ErrorMessage, Field, Formik, FormikHelpers } from "formik";
-import { loginScheme } from "./validations/validations";
+import { loginScheme } from "../validations/validations";
 import LoginFormStyled from "./LoginFormStyled";
 import { useLoginForm } from "../../hooks/useLoginForm";
 import { useNavigate } from "react-router-dom";
-import { UserLogin } from "../../../../modules/user/domain/User";
-import { useUserContext } from "sections/user/UserContext/useUserContext";
+
 import { useState } from "react";
 import { appPaths } from "sections/shared/utils/appPaths/appPaths";
+import { AuthLoginInterface } from "@auth";
+import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 
-const initialState: UserLogin = {
+const initialState: AuthLoginInterface = {
   email: "",
   password: "",
 };
@@ -16,12 +17,12 @@ const initialState: UserLogin = {
 const LoginForm = (): React.ReactElement => {
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const { submitForm } = useLoginForm();
-  const { isSuccess, getSessionToken } = useUserContext();
+  const { isSuccess, getSessionToken } = useAuthContext();
   const navigate = useNavigate();
 
   const handleSubmitForm = async (
-    values: UserLogin,
-    { setSubmitting }: FormikHelpers<UserLogin>,
+    values: AuthLoginInterface,
+    { setSubmitting }: FormikHelpers<AuthLoginInterface>,
   ) => {
     submitForm(values);
     setSubmitting(false);

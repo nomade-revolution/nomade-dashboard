@@ -5,8 +5,8 @@ import { CiLogout } from "react-icons/ci";
 
 import SideBarStyled from "./SideBarStyled";
 import { appPaths } from "../../utils/appPaths/appPaths";
-import { useUserContext } from "sections/user/UserContext/useUserContext";
 import ImageCustom from "../ImageCustom/ImageCustom";
+import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 
 interface SideBarProps {
   pendingOrders: number;
@@ -20,7 +20,7 @@ const SideBar = ({
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { logoutUser } = useUserContext();
+  const { logoutUser } = useAuthContext();
   const sideBarUpperSections = getSideBarUpperSections(
     pendingOrders,
     pendingCustomers,

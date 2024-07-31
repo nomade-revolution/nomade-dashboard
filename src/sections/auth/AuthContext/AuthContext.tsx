@@ -1,5 +1,4 @@
 import React, { createContext, useCallback, useState } from "react";
-import { UserLogin } from "../../../modules/user/domain/User";
 import { AuthRepository } from "@auth/domain/AuthRepository";
 import {
   AuthLoginInterface,
@@ -14,14 +13,14 @@ import environments from "@environments";
 export interface ContextState {
   token: string;
   isSuccess: boolean;
-  loginUser: (user: UserLogin) => void;
+  loginUser: (user: AuthLoginInterface) => void;
   logoutUser: () => void;
   getSessionToken: () => Promise<string | undefined>;
 }
 
-export const UserContext = createContext({} as ContextState);
+export const AuthContext = createContext({} as ContextState);
 
-export const UserContextProvider = ({
+export const AuthContextProvider = ({
   children,
   repository,
 }: React.PropsWithChildren<{
@@ -57,7 +56,7 @@ export const UserContextProvider = ({
   setTimeout(() => setIsSuccess(false), 2000);
 
   return (
-    <UserContext.Provider
+    <AuthContext.Provider
       value={{
         token,
         isSuccess,
@@ -67,6 +66,6 @@ export const UserContextProvider = ({
       }}
     >
       {children}
-    </UserContext.Provider>
+    </AuthContext.Provider>
   );
 };
