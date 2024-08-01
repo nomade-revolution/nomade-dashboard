@@ -1,3 +1,5 @@
+import { PaginationStucture } from "sections/shared/interfaces/interfaces";
+
 export interface User {
   id: number;
   name: string;
@@ -91,4 +93,5 @@ export enum UserTypes {
 
 export interface UserApiResponse {
   users: User[] | Influencer[] | Company[];
+  pagination: PaginationStucture;
 }

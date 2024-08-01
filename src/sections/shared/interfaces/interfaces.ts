@@ -15,6 +15,8 @@ export enum SectionTypes {
   customers = "clientes",
   users = "usuarios",
   offers = "ofertas",
+  influencers = "influencers",
+  collabs = "collabs",
 }
 
 export interface OptionsStructure {

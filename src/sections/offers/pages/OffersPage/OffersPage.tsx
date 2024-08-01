@@ -9,15 +9,17 @@ import { offersHeaderSections } from "../../utils/offersSections";
 import OffersPageStyled from "./OffersPageStyled";
 import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
 import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 const OffersPage = (): React.ReactElement => {
   const isLoading = false;
 
-  const { getAllOffers, offers } = useOffersContext();
+  const { getAllOffers, offers, pagination } = useOffersContext();
+  const { page } = useParams();
 
   useEffect(() => {
-    getAllOffers(1, 12);
-  }, [getAllOffers]);
+    getAllOffers(+page!, 12);
+  }, [getAllOffers, page]);
 
   return (
     <>
@@ -43,9 +45,9 @@ const OffersPage = (): React.ReactElement => {
             />
           </div>
           <PaginationComponent
-            current_page={1}
-            last_page={1}
-            per_page={12}
+            current_page={pagination.current_page}
+            last_page={pagination.last_page}
+            per_page={pagination.per_page}
             pageName={SectionTypes.offers}
             filterParams=""
           />

@@ -8,7 +8,10 @@ import {
   UserApiResponse,
   UserTypes,
 } from "modules/user/domain/User";
-import { FilterParams } from "sections/shared/interfaces/interfaces";
+import {
+  FilterParams,
+  PaginationStucture,
+} from "sections/shared/interfaces/interfaces";
 import { getUsersFiltered } from "modules/user/application/user";
 
 interface ContextState {
@@ -17,6 +20,7 @@ interface ContextState {
   users_company: Company[];
   loading: boolean;
   error: string | null;
+  pagination: PaginationStucture;
   getUsers: (
     page: number,
     per_page: number,
@@ -38,6 +42,9 @@ export const UserContextProvider = ({
   const [users_company, setUsersCompany] = useState<Company[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [pagination, setPagination] = useState<PaginationStucture>(
+    {} as PaginationStucture,
+  );
 
   const getUsers = useCallback(
     async (
@@ -56,9 +63,12 @@ export const UserContextProvider = ({
         filterParams,
       );
       if (isHttpSuccessResponse(response)) {
+        setPagination(response.data.pagination);
+        setLoading(false);
         switch (type) {
           case UserTypes.nomade:
             setUsersNomade(response.data.users);
+
             break;
           case UserTypes.influencer:
             setUsersInfluencer(response.data.users as Influencer[]);
@@ -80,6 +90,7 @@ export const UserContextProvider = ({
         users_influencer,
         loading,
         error,
+        pagination,
         getUsers,
       }}
     >

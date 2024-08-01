@@ -4,11 +4,13 @@ import { FullOffer } from "modules/offers/domain/Offer";
 import { CollabsRepository } from "modules/collabs/domain/CollabsRepository";
 import { collabsGetAll } from "modules/collabs/application/collabs";
 import { FullCollab } from "modules/collabs/domain/Collabs";
+import { PaginationStucture } from "sections/shared/interfaces/interfaces";
 
 interface ContextState {
   collabs: FullCollab[];
   loading: boolean;
   error: string | null;
+  pagination: PaginationStucture;
   getAllCollabs: (page: number, per_page: number) => void;
 }
 
@@ -21,6 +23,9 @@ export const CollabsContextProvider = ({
   const [collabs, setCollabs] = useState<FullCollab[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [pagination, setPagination] = useState<PaginationStucture>(
+    {} as PaginationStucture,
+  );
 
   const getAllCollabs = useCallback(
     async (page: number, per_page: number) => {
@@ -29,7 +34,9 @@ export const CollabsContextProvider = ({
 
       const response = await collabsGetAll(repository, page, per_page);
       if (isHttpSuccessResponse(response)) {
+        setLoading(false);
         setCollabs(response.data.colabs);
+        setPagination(response.data.pagination);
       }
     },
     [repository],
@@ -41,6 +48,7 @@ export const CollabsContextProvider = ({
         collabs,
         loading,
         error,
+        pagination,
         getAllCollabs,
       }}
     >

@@ -9,15 +9,17 @@ import { SectionTypes } from "sections/shared/interfaces/interfaces";
 import CollabsPageStyled from "./CollabsStyled";
 import { useCollabsContext } from "../CollabsContext/useCollabsContext";
 import { collabsHeaderSections } from "../utils/collabsSections";
+import { useParams } from "react-router-dom";
 
 const CollabsPage = (): React.ReactElement => {
   const isLoading = false;
 
-  const { getAllCollabs, collabs } = useCollabsContext();
+  const { getAllCollabs, collabs, pagination } = useCollabsContext();
+  const { page } = useParams();
 
   useEffect(() => {
-    getAllCollabs(1, 12);
-  }, [getAllCollabs]);
+    getAllCollabs(+page!, 12);
+  }, [getAllCollabs, page]);
 
   return (
     <>
@@ -30,7 +32,7 @@ const CollabsPage = (): React.ReactElement => {
             <DashboardTable
               bodySections={collabs}
               headerSections={collabsHeaderSections}
-              pageName={SectionTypes.offers}
+              pageName={SectionTypes.collabs}
             />
           </div>
           <div className="dashboard__mobile">
@@ -43,15 +45,15 @@ const CollabsPage = (): React.ReactElement => {
             />
           </div>
           <PaginationComponent
-            current_page={1}
-            last_page={1}
-            per_page={12}
-            pageName={SectionTypes.offers}
+            current_page={pagination.current_page}
+            last_page={pagination.last_page}
+            per_page={pagination.per_page}
+            pageName={SectionTypes.collabs}
             filterParams=""
           />
         </CollabsPageStyled>
       ) : mockClients.length === 0 ? (
-        <NoDataHandler pageName={SectionTypes.offers} search={""} />
+        <NoDataHandler pageName={SectionTypes.collabs} search={""} />
       ) : (
         <></>
       )}
