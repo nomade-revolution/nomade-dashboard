@@ -21,12 +21,10 @@ const CompaniesPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string | null>(null);
 
   const { search } = useLocation();
-  const { getUsers, users_company, pagination } = useUserContext();
+  const { getUsers, users_company, pagination, loading } = useUserContext();
   const { page } = useParams();
 
   const searchParams = search.split("?").join("");
-
-  const isLoading = false;
 
   useEffect(() => {
     const filters: FilterParams = {
@@ -38,9 +36,9 @@ const CompaniesPage = (): React.ReactElement => {
 
   return (
     <>
-      {isLoading ? (
-        <Loader width="50px" height="50px" />
-      ) : !isLoading && mockUsers.length !== 0 ? (
+      {loading ? (
+        <Loader width="40px" height="40px" />
+      ) : !loading && mockUsers.length !== 0 ? (
         <ReusablePageStyled className="dashboard">
           <div className="dashboard__search">
             <SearchBar

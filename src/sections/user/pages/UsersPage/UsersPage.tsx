@@ -23,11 +23,9 @@ const UsersPage = (): React.ReactElement => {
 
   const { search } = useLocation();
   const { page } = useParams();
-  const { getUsers, users_nomade, pagination } = useUserContext();
+  const { getUsers, users_nomade, pagination, loading } = useUserContext();
 
   const searchParams = search.split("?").join("");
-
-  const isLoading = false;
 
   useEffect(() => {
     const filters: FilterParams = {
@@ -39,9 +37,9 @@ const UsersPage = (): React.ReactElement => {
 
   return (
     <>
-      {isLoading ? (
-        <Loader width="50px" height="50px" />
-      ) : !isLoading && mockUsers.length !== 0 ? (
+      {loading ? (
+        <Loader width="40px" height="40px" />
+      ) : !loading && mockUsers.length !== 0 ? (
         <UserPageStyled className="dashboard">
           <div className="dashboard__search">
             <button className="dashboard__create">
