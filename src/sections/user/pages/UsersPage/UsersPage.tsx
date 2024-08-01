@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import Loader from "../../../shared/components/Loader/Loader";
 import NoDataHandler from "../../../shared/components/NoDataHandler/NoDataHandler";
 import DashboardTable from "../../../shared/components/DashboardTable/DashboardTable";
@@ -22,7 +22,8 @@ const UsersPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string | null>(null);
 
   const { search } = useLocation();
-  const { getUsers, users_nomade } = useUserContext();
+  const { page } = useParams();
+  const { getUsers, users_nomade, pagination } = useUserContext();
 
   const searchParams = search.split("?").join("");
 
@@ -33,8 +34,8 @@ const UsersPage = (): React.ReactElement => {
       types: ["Nomade"],
     };
 
-    getUsers(1, 12, filters, UserTypes.nomade);
-  }, [getUsers]);
+    getUsers(+page!, 12, filters, UserTypes.nomade);
+  }, [getUsers, page]);
 
   return (
     <>
@@ -70,9 +71,9 @@ const UsersPage = (): React.ReactElement => {
             />
           </div>
           <PaginationComponent
-            current_page={1}
-            last_page={1}
-            per_page={12}
+            current_page={pagination.current_page}
+            last_page={pagination.last_page}
+            per_page={pagination.per_page}
             pageName={SectionTypes.users}
             filterParams={searchParams}
           />
