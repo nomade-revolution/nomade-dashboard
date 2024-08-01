@@ -2,7 +2,7 @@ import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 import { mockUsers } from "mocks/userMocks";
 import { UserTypes } from "modules/user/domain/User";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import DashboardCardListMobile from "sections/shared/components/DashboardCardListMobile/DashboardCardListMobile";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
 import Loader from "sections/shared/components/Loader/Loader";
@@ -21,7 +21,8 @@ const CompaniesPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string | null>(null);
 
   const { search } = useLocation();
-  const { getUsers, users_company } = useUserContext();
+  const { getUsers, users_company, pagination } = useUserContext();
+  const { page } = useParams();
 
   const searchParams = search.split("?").join("");
 
@@ -32,8 +33,8 @@ const CompaniesPage = (): React.ReactElement => {
       types: ["Company"],
     };
 
-    getUsers(1, 12, filters, UserTypes.company);
-  }, [getUsers]);
+    getUsers(+page!, 12, filters, UserTypes.company);
+  }, [getUsers, page]);
 
   return (
     <>
@@ -43,8 +44,8 @@ const CompaniesPage = (): React.ReactElement => {
         <ReusablePageStyled className="dashboard">
           <div className="dashboard__search">
             <SearchBar
-              pageName={SectionTypes.users}
-              pageTypes={SectionTypes.users}
+              pageName={SectionTypes.customers}
+              pageTypes={SectionTypes.customers}
               searchText={searchText!}
               setSearchText={setSearchText}
               onSearchSubmit={() => {}}
@@ -54,7 +55,7 @@ const CompaniesPage = (): React.ReactElement => {
             <DashboardTable
               bodySections={users_company}
               headerSections={companyTableHeaderSections}
-              pageName={SectionTypes.users}
+              pageName={SectionTypes.customers}
             />
           </div>
           <div className="dashboard__mobile">
@@ -65,15 +66,15 @@ const CompaniesPage = (): React.ReactElement => {
             />
           </div>
           <PaginationComponent
-            current_page={1}
-            last_page={1}
-            per_page={12}
-            pageName={SectionTypes.users}
+            current_page={pagination.current_page}
+            last_page={pagination.last_page}
+            per_page={pagination.per_page}
+            pageName={SectionTypes.customers}
             filterParams={searchParams}
           />
         </ReusablePageStyled>
       ) : mockUsers.length === 0 ? (
-        <NoDataHandler pageName={SectionTypes.users} search={searchText!} />
+        <NoDataHandler pageName={SectionTypes.customers} search={searchText!} />
       ) : (
         <></>
       )}
