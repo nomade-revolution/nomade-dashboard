@@ -3,11 +3,13 @@ import { isHttpSuccessResponse } from "../../shared/utils/typeGuards/typeGuardsF
 import { offersGetAll } from "modules/offers/application/offers";
 import { FullOffer } from "modules/offers/domain/Offer";
 import { OffersRepository } from "modules/offers/domain/OffersRepository";
+import { PaginationStucture } from "sections/shared/interfaces/interfaces";
 
 interface ContextState {
   offers: FullOffer[];
   loading: boolean;
   error: string | null;
+  pagination: PaginationStucture;
   getAllOffers: (page: number, per_page: number) => void;
 }
 
@@ -20,6 +22,9 @@ export const OffersContextProvider = ({
   const [offers, setOffers] = useState<FullOffer[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [pagination, setPagination] = useState<PaginationStucture>(
+    {} as PaginationStucture,
+  );
 
   const getAllOffers = useCallback(
     async (page: number, per_page: number) => {
@@ -29,6 +34,8 @@ export const OffersContextProvider = ({
       const response = await offersGetAll(repository, page, per_page);
       if (isHttpSuccessResponse(response)) {
         setOffers(response.data.offers);
+        setPagination(response.data.pagination);
+        setLoading(false);
       }
     },
     [repository],
@@ -40,6 +47,7 @@ export const OffersContextProvider = ({
         offers,
         loading,
         error,
+        pagination,
         getAllOffers,
       }}
     >
