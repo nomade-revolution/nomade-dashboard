@@ -177,7 +177,8 @@ const ReusablePageStyled = styled.main`
     }
 
     &__web,
-    &__country {
+    &__country,
+    &__influencer {
       font-weight: bold;
     }
   }

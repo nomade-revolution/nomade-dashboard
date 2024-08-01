@@ -45,7 +45,8 @@ const SideBar = ({
           <Link to={section.path} key={section.id}>
             <div
               className={
-                location.pathname.includes(section.path)
+                location.pathname.includes(section.path) ||
+                location.pathname.includes(section.pathname!)
                   ? "actions__section--active"
                   : "actions__section"
               }
@@ -53,14 +54,24 @@ const SideBar = ({
               <div className="actions__subsection">
                 <span
                   className={
-                    location.pathname.includes(section.path)
+                    location.pathname.includes(section.path) ||
+                    location.pathname.includes(section.pathname!)
                       ? "actions__icon--selected"
                       : "actions__icon"
                   }
                 >
                   {section.icon}
                 </span>
-                <span className="actions__name">{section.name}</span>
+                <span
+                  className={
+                    location.pathname.includes(section.path) ||
+                    location.pathname.includes(section.pathname!)
+                      ? "actions__name--selected"
+                      : "actions__name"
+                  }
+                >
+                  {section.name}
+                </span>
               </div>
               {section.quantity > 0 && (
                 <span className="actions__quantity">{section.quantity}</span>

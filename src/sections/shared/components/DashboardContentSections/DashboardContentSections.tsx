@@ -8,6 +8,7 @@ import { FullOffer, Offer } from "../../../../modules/offers/domain/Offer";
 import { Switch } from "@mui/material";
 import { TimeSlot } from "modules/offers/domain/OfferCalendar";
 import { Company, Influencer, User, UserTypes } from "modules/user/domain/User";
+import { FullCollab } from "modules/collabs/domain/Collabs";
 
 interface DashboardTableCellContentProps {
   headerSection: HeaderSection;
@@ -169,6 +170,13 @@ const DashboardContentSections = ({
         >
           {(section as Company).web}
         </Link>
+      );
+
+    case "influencer_name":
+      return (
+        <span className="dashboard__influencer">
+          {(section as FullCollab).influencer_name}
+        </span>
       );
 
     default:
