@@ -29,6 +29,7 @@ const UserPageStyled = styled.main`
         align-items: flex-start;
       }
     }
+
     &__search {
       display: flex;
       flex-direction: column-reverse;
@@ -39,7 +40,22 @@ const UserPageStyled = styled.main`
       @media (min-width: 1000px) {
         flex-direction: row;
         align-items: flex-end;
-        justify-content: space-between;
+        justify-content: flex-end;
+        width: 80%;
+      }
+    }
+
+    &__search-user {
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: flex-end;
+      gap: 10px;
+      width: 100%;
+
+      @media (min-width: 1000px) {
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: flex-end;
         width: 80%;
       }
     }

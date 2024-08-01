@@ -8,7 +8,6 @@ import DashboardCardListMobile from "../../../shared/components/DashboardCardLis
 import PaginationComponent from "../../../shared/components/Pagination/PaginationComponent";
 import SearchBar from "../../../shared/components/SearchBar/SearchBar";
 import { IoAddCircle } from "react-icons/io5";
-import UserPageStyled from "./UsersPageStyled";
 import { mockUsers } from "../../../../mocks/userMocks";
 import {
   FilterParams,
@@ -17,6 +16,7 @@ import {
 import { usersTableHeaderSections } from "../../utils/userTableSections";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
 import { UserTypes } from "modules/user/domain/User";
+import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 
 const UsersPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string | null>(null);
@@ -40,8 +40,8 @@ const UsersPage = (): React.ReactElement => {
       {loading ? (
         <Loader width="40px" height="40px" />
       ) : !loading && mockUsers.length !== 0 ? (
-        <UserPageStyled className="dashboard">
-          <div className="dashboard__search">
+        <ReusablePageStyled className="dashboard">
+          <div className="dashboard__search-user">
             <button className="dashboard__create">
               <IoAddCircle className="dashboard__create--icon" />
               Crear usuario
@@ -75,7 +75,7 @@ const UsersPage = (): React.ReactElement => {
             pageName={SectionTypes.users}
             filterParams={searchParams}
           />
-        </UserPageStyled>
+        </ReusablePageStyled>
       ) : mockUsers.length === 0 ? (
         <NoDataHandler pageName={SectionTypes.users} search={searchText!} />
       ) : (
