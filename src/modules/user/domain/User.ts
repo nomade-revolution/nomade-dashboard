@@ -86,6 +86,7 @@ export interface Influencer extends User {
 export enum UserTypes {
   influencer = "Influencer",
   company = "Company",
+  nomade = "Nomade",
 }
 
 export interface UserApiResponse {

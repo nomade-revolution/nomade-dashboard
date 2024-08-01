@@ -16,6 +16,7 @@ import {
 } from "../../../shared/interfaces/interfaces";
 import { usersTableHeaderSections } from "../../utils/userTableSections";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
+import { UserTypes } from "modules/user/domain/User";
 
 const UsersPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string | null>(null);
@@ -29,10 +30,10 @@ const UsersPage = (): React.ReactElement => {
 
   useEffect(() => {
     const filters: FilterParams = {
-      types: `%5B%22Nomade%22%5D`,
+      types: ["Nomade"],
     };
 
-    getUsers(1, 12, filters);
+    getUsers(1, 12, filters, UserTypes.nomade);
   }, [getUsers]);
 
   return (
@@ -64,7 +65,7 @@ const UsersPage = (): React.ReactElement => {
           <div className="dashboard__mobile">
             <h3>Usuarios</h3>
             <DashboardCardListMobile
-              bodySections={mockUsers}
+              bodySections={users_nomade}
               headerSections={usersTableHeaderSections}
             />
           </div>
