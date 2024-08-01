@@ -1,1 +1,1 @@
-export * from "./InfluencerInterface.ts";
+export * from "./Influencer.ts";
