@@ -7,6 +7,7 @@ import { FaLocationDot } from "react-icons/fa6";
 import { FullOffer, Offer } from "../../../../modules/offers/domain/Offer";
 import { Switch } from "@mui/material";
 import { TimeSlot } from "modules/offers/domain/OfferCalendar";
+import { Influencer } from "modules/user/domain/User";
 
 interface DashboardTableCellContentProps {
   headerSection: HeaderSection;
@@ -109,7 +110,7 @@ const DashboardContentSections = ({
                           </span>
                         );
                       }
-                      return null; // No renderizar si el día ya está en el set
+                      return null;
                     }),
                 )}
               </li>
@@ -127,6 +128,12 @@ const DashboardContentSections = ({
 
     case "state":
       return <Switch />;
+
+    case "from_country":
+      return <span>{(section as Influencer).from_country?.name}</span>;
+
+    case "living_country":
+      return <span>{(section as Influencer).living_country?.name}</span>;
 
     default:
       return (
