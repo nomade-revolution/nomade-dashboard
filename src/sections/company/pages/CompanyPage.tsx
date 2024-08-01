@@ -1,28 +1,27 @@
+import ReusablePageStyled from "assets/styles/ReusablePageStyled";
+import { mockUsers } from "mocks/userMocks";
+import { UserTypes } from "modules/user/domain/User";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import Loader from "../../../shared/components/Loader/Loader";
-import NoDataHandler from "../../../shared/components/NoDataHandler/NoDataHandler";
-import DashboardTable from "../../../shared/components/DashboardTable/DashboardTable";
-
-import DashboardCardListMobile from "../../../shared/components/DashboardCardListMobile/DashboardCardListMobile";
-import PaginationComponent from "../../../shared/components/Pagination/PaginationComponent";
-import SearchBar from "../../../shared/components/SearchBar/SearchBar";
-import { IoAddCircle } from "react-icons/io5";
-import UserPageStyled from "./UsersPageStyled";
-import { mockUsers } from "../../../../mocks/userMocks";
+import DashboardCardListMobile from "sections/shared/components/DashboardCardListMobile/DashboardCardListMobile";
+import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
+import Loader from "sections/shared/components/Loader/Loader";
+import NoDataHandler from "sections/shared/components/NoDataHandler/NoDataHandler";
+import PaginationComponent from "sections/shared/components/Pagination/PaginationComponent";
+import SearchBar from "sections/shared/components/SearchBar/SearchBar";
 import {
   FilterParams,
   SectionTypes,
-} from "../../../shared/interfaces/interfaces";
-import { usersTableHeaderSections } from "../../utils/userTableSections";
-import { useUserContext } from "sections/user/UserContext/useUserContext";
-import { UserTypes } from "modules/user/domain/User";
+} from "sections/shared/interfaces/interfaces";
 
-const UsersPage = (): React.ReactElement => {
+import { useUserContext } from "sections/user/UserContext/useUserContext";
+import { companyTableHeaderSections } from "../utils/companySections";
+
+const CompaniesPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string | null>(null);
 
   const { search } = useLocation();
-  const { getUsers, users_nomade } = useUserContext();
+  const { getUsers, users_company } = useUserContext();
 
   const searchParams = search.split("?").join("");
 
@@ -30,10 +29,10 @@ const UsersPage = (): React.ReactElement => {
 
   useEffect(() => {
     const filters: FilterParams = {
-      types: ["Nomade"],
+      types: ["Company"],
     };
 
-    getUsers(1, 12, filters, UserTypes.nomade);
+    getUsers(1, 12, filters, UserTypes.company);
   }, [getUsers]);
 
   return (
@@ -41,12 +40,8 @@ const UsersPage = (): React.ReactElement => {
       {isLoading ? (
         <Loader width="50px" height="50px" />
       ) : !isLoading && mockUsers.length !== 0 ? (
-        <UserPageStyled className="dashboard">
+        <ReusablePageStyled className="dashboard">
           <div className="dashboard__search">
-            <button className="dashboard__create">
-              <IoAddCircle className="dashboard__create--icon" />
-              Crear usuario
-            </button>
             <SearchBar
               pageName={SectionTypes.users}
               pageTypes={SectionTypes.users}
@@ -57,16 +52,16 @@ const UsersPage = (): React.ReactElement => {
           </div>
           <div className="dashboard__orders-table">
             <DashboardTable
-              bodySections={users_nomade}
-              headerSections={usersTableHeaderSections}
+              bodySections={users_company}
+              headerSections={companyTableHeaderSections}
               pageName={SectionTypes.users}
             />
           </div>
           <div className="dashboard__mobile">
-            <h3>Usuarios</h3>
+            <h3>Influencers</h3>
             <DashboardCardListMobile
-              bodySections={users_nomade}
-              headerSections={usersTableHeaderSections}
+              bodySections={users_company}
+              headerSections={companyTableHeaderSections}
             />
           </div>
           <PaginationComponent
@@ -76,7 +71,7 @@ const UsersPage = (): React.ReactElement => {
             pageName={SectionTypes.users}
             filterParams={searchParams}
           />
-        </UserPageStyled>
+        </ReusablePageStyled>
       ) : mockUsers.length === 0 ? (
         <NoDataHandler pageName={SectionTypes.users} search={searchText!} />
       ) : (
@@ -86,4 +81,4 @@ const UsersPage = (): React.ReactElement => {
   );
 };
 
-export default UsersPage;
+export default CompaniesPage;

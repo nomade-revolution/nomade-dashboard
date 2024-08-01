@@ -12,4 +12,5 @@ export const appPaths = {
   recovery_password: "/recovery-password",
   reset_password: "/reset-password",
   collabs: "/collabs",
+  influencers: "/influencers",
 };

@@ -9,6 +9,8 @@ import CustomersPage from "../sections/customers/pages/CustomersPage/CustomersPa
 import OffersPage from "../sections/offers/pages/OffersPage/OffersPage";
 import MyAccountPage from "../sections/user/pages/MyAccountPage/MyAccountPage";
 import CollabsPage from "sections/collabs/pages/CollabsPage";
+import InfluencersPage from "sections/influencer/pages/InfluencerPage";
+import CompaniesPage from "sections/company/pages/CompanyPage";
 
 const routes: RouteObject[] = [
   {
@@ -23,6 +25,14 @@ const routes: RouteObject[] = [
       {
         path: appPaths.users,
         element: <UsersPage />,
+      },
+      {
+        path: appPaths.influencers,
+        element: <InfluencersPage />,
+      },
+      {
+        path: appPaths.clients,
+        element: <CompaniesPage />,
       },
       {
         path: appPaths.clients,

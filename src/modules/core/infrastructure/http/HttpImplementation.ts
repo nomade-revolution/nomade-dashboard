@@ -9,6 +9,7 @@ import {
   AsyncCookiesImplementation,
   //AsyncStorageImplementation
 } from "@core/infrastructure";
+import environments from "@environments";
 
 export type Method = "get" | "delete" | "post" | "put" | "patch";
 
@@ -132,10 +133,10 @@ export class HttpImplementation implements HttpInterface {
 
   private async buildHeaders(): Promise<void> {
     try {
-      this.token = undefined;
+      this.token = "";
       if (!this.token) {
-        //this.token = await this.storage.get("token");
-        this.token = await this.cookies.get("user-token");
+        this.token = await this.cookies.get(environments.cookies!);
+        this.setHeader("Authorization", "Bearer " + this.token!);
       }
       if (this.token) {
         this.setHeader("Authorization", "Bearer " + this.token!);

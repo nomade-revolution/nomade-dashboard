@@ -1,18 +1,27 @@
 import React, { createContext, useCallback, useState } from "react";
 import { isHttpSuccessResponse } from "../../shared/utils/typeGuards/typeGuardsFunctions";
 import { UserRepository } from "modules/user/domain/UserRepository";
-import { User, UserApiResponse } from "modules/user/domain/User";
+import {
+  Company,
+  Influencer,
+  User,
+  UserApiResponse,
+  UserTypes,
+} from "modules/user/domain/User";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
 import { getUsersFiltered } from "modules/user/application/user";
 
 interface ContextState {
   users_nomade: User[];
+  users_influencer: Influencer[];
+  users_company: Company[];
   loading: boolean;
   error: string | null;
   getUsers: (
     page: number,
     per_page: number,
     filterParams: FilterParams,
+    type: string,
   ) => void;
 }
 
@@ -25,11 +34,18 @@ export const UserContextProvider = ({
   repository: UserRepository<UserApiResponse>;
 }>) => {
   const [users_nomade, setUsersNomade] = useState<User[]>([]);
+  const [users_influencer, setUsersInfluencer] = useState<Influencer[]>([]);
+  const [users_company, setUsersCompany] = useState<Company[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const getUsers = useCallback(
-    async (page: number, per_page: number, filterParams: FilterParams) => {
+    async (
+      page: number,
+      per_page: number,
+      filterParams: FilterParams,
+      type: string,
+    ) => {
       setLoading(true);
       setError(null);
 
@@ -40,7 +56,17 @@ export const UserContextProvider = ({
         filterParams,
       );
       if (isHttpSuccessResponse(response)) {
-        setUsersNomade(response.data.users);
+        switch (type) {
+          case UserTypes.nomade:
+            setUsersNomade(response.data.users);
+            break;
+          case UserTypes.influencer:
+            setUsersInfluencer(response.data.users as Influencer[]);
+            break;
+          case UserTypes.company:
+            setUsersCompany(response.data.users as Company[]);
+            break;
+        }
       }
     },
     [repository],
@@ -50,6 +76,8 @@ export const UserContextProvider = ({
     <UserContext.Provider
       value={{
         users_nomade,
+        users_company,
+        users_influencer,
         loading,
         error,
         getUsers,

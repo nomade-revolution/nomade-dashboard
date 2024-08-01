@@ -22,7 +22,7 @@ export const getSideBarUpperSections = (
       icon: <PiUsersThreeFill />,
       name: "Usuarios (App)",
       quantity: pendingCustomers,
-      path: `/usuarios-app`,
+      path: appPaths.influencers,
     },
     {
       id: 4,

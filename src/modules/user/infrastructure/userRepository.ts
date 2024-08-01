@@ -13,13 +13,11 @@ export class UsersRepository {
     filterParams: FilterParams,
   ): Promise<HttpResponseInterface<UserApiResponse>> {
     try {
-      const resp = await this.http.get<UserApiResponse>(
-        GET_USERS(page, per_page, filterParams),
-        {
-          page,
-          per_page,
-        },
-      );
+      const resp = await this.http.get<UserApiResponse>(GET_USERS, {
+        page,
+        per_page,
+        filters: { ...filterParams },
+      });
       return resp;
     } catch (error) {
       return Promise.reject(error);
