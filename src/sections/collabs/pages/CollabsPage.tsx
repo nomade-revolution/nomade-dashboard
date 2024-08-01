@@ -12,9 +12,7 @@ import { collabsHeaderSections } from "../utils/collabsSections";
 import { useParams } from "react-router-dom";
 
 const CollabsPage = (): React.ReactElement => {
-  const isLoading = false;
-
-  const { getAllCollabs, collabs, pagination } = useCollabsContext();
+  const { getAllCollabs, collabs, pagination, loading } = useCollabsContext();
   const { page } = useParams();
 
   useEffect(() => {
@@ -23,9 +21,9 @@ const CollabsPage = (): React.ReactElement => {
 
   return (
     <>
-      {isLoading ? (
-        <Loader width="50px" height="50px" />
-      ) : !isLoading && mockClients.length !== 0 ? (
+      {loading ? (
+        <Loader width="40px" height="40px" />
+      ) : !loading && mockClients.length !== 0 ? (
         <CollabsPageStyled>
           <div className="dashboard__table">
             <div className="dashboard__searchContainer"></div>
