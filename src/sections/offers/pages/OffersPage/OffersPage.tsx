@@ -12,9 +12,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 const OffersPage = (): React.ReactElement => {
-  const isLoading = false;
-
-  const { getAllOffers, offers, pagination } = useOffersContext();
+  const { getAllOffers, offers, pagination, loading } = useOffersContext();
   const { page } = useParams();
 
   useEffect(() => {
@@ -23,9 +21,9 @@ const OffersPage = (): React.ReactElement => {
 
   return (
     <>
-      {isLoading ? (
-        <Loader width="50px" height="50px" />
-      ) : !isLoading && mockClients.length !== 0 ? (
+      {loading ? (
+        <Loader width="40px" height="40px" />
+      ) : !loading && mockClients.length !== 0 ? (
         <OffersPageStyled>
           <div className="dashboard__table">
             <div className="dashboard__searchContainer"></div>
