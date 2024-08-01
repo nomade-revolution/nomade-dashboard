@@ -7,7 +7,8 @@ import { FaLocationDot } from "react-icons/fa6";
 import { FullOffer, Offer } from "../../../../modules/offers/domain/Offer";
 import { Switch } from "@mui/material";
 import { TimeSlot } from "modules/offers/domain/OfferCalendar";
-import { Influencer } from "modules/user/domain/User";
+import { Company, Influencer, User, UserTypes } from "modules/user/domain/User";
+import { FullCollab } from "modules/collabs/domain/Collabs";
 
 interface DashboardTableCellContentProps {
   headerSection: HeaderSection;
@@ -130,10 +131,53 @@ const DashboardContentSections = ({
       return <Switch />;
 
     case "from_country":
-      return <span>{(section as Influencer).from_country?.name}</span>;
+      return (
+        <span className="dashboard__country">
+          {(section as Influencer).from_country?.name}
+        </span>
+      );
 
     case "living_country":
-      return <span>{(section as Influencer).living_country?.name}</span>;
+      return (
+        <span className="dashboard__country">
+          {(section as Influencer).living_country?.name}
+        </span>
+      );
+
+    case "type":
+      return (
+        <span
+          className={`dashboard__type-section ${
+            (section as User).type === UserTypes.influencer
+              ? "dashboard__type-section--influencer"
+              : (section as User).type === UserTypes.nomade
+                ? "dashboard__type-section--nomade"
+                : (section as User).type === UserTypes.company
+                  ? "dashboard__type-section--company"
+                  : ""
+          }`}
+        >
+          {(section as User).type}
+        </span>
+      );
+
+    case "web":
+      return (
+        <Link
+          to={(section as Company).web}
+          target="_blank"
+          className="dashboard__web"
+        >
+          {(section as Company).web}
+        </Link>
+      );
+
+    case "influencer_name":
+      return (
+        <span className="dashboard__influencer">
+          {(section as FullCollab).influencer_name}
+        </span>
+      );
 
     default:
       return (

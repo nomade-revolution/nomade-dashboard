@@ -104,6 +104,83 @@ const ReusablePageStyled = styled.main`
       border-radius: ${(props) => props.theme.borderRadius.inputs};
       font-size: small;
     }
+
+    &__type-section {
+      font-weight: bold;
+
+      &--influencer {
+        color: ${(props) => props.theme.colors.orange};
+      }
+
+      &--nomade {
+        color: ${(props) => props.theme.colors.mainColor};
+      }
+
+      &--company {
+        color: ${(props) => props.theme.colors.purple};
+      }
+    }
+
+    &__create {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px;
+      font-weight: 700;
+      background: ${(props) => props.theme.colors.darkBlue};
+      color: ${(props) => props.theme.fontsColors.light};
+      border-radius: ${(props) => props.theme.borderRadius.badges};
+      width: fit-content;
+
+      &--icon {
+        font-size: large;
+      }
+    }
+
+    &__state-active {
+      color: ${(props) => props.theme.fontsColors.corporativeColor};
+    }
+
+    &__state-inactive {
+      color: ${(props) => props.theme.fontsColors.lightGrey};
+    }
+
+    &__search {
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: flex-end;
+      gap: 10px;
+      width: 100%;
+
+      @media (min-width: 1000px) {
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: flex-end;
+        width: 100%;
+        gap: 100px;
+      }
+    }
+
+    &__search-user {
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: flex-end;
+      gap: 10px;
+      width: 100%;
+
+      @media (min-width: 1000px) {
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: space-between;
+        width: 84%;
+      }
+    }
+
+    &__web,
+    &__country,
+    &__influencer {
+      font-weight: bold;
+    }
   }
 `;
 

@@ -15,6 +15,7 @@ const theme = {
     grey: "#CECECE",
     tagsBlue: "#2196F3",
     darkRed: "#AD6975",
+    purple: "#7D26CD",
   },
   fonts: {
     primaryFont: "Roboto",
