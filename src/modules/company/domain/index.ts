@@ -1,1 +1,1 @@
-export * from "./CompanyInterface.ts";
+export * from "./Company.ts";
