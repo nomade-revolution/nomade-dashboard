@@ -7,34 +7,34 @@ definitions:
   caches:
     sonar: ~/.sonar/cache
 
-pipelines:
-  branches:
-    dev:
-      - step:
-          name: Install and Run Tests
-          caches:
-            - node
-            - gradle
-          script:
-            - npm install
-            - npm test
-    dev1/dev1:
-      - step:
-          name: Install and Run Tests
-          caches:
-            - node
-            - gradle
-          script:
-            - npm install
-            - npm test
-    main:
-      - step:
-          name: Install and Run Tests
-          caches:
-            - node
-            - gradle
-            - sonar
-          script:
-            - npm install
-            - npm test
+#pipelines:
+#  branches:
+#    dev:
+#      - step:
+#          name: Install and Run Tests
+#          caches:
+#            - node
+#            - gradle
+#          script:
+#            - npm install
+#            - npm test
+#    dev1/dev1:
+#      - step:
+#          name: Install and Run Tests
+#          caches:
+#            - node
+#            - gradle
+#          script:
+#            - npm install
+#            - npm test
+#    main:
+#      - step:
+#          name: Install and Run Tests
+#          caches:
+#            - node
+#            - gradle
+#            - sonar
+#          script:
+#            - npm install
+#            - npm test
 
