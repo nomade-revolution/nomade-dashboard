@@ -12,7 +12,7 @@ import { repositories } from "sections/shared/utils/repositories/repositories.ts
 import { OffersContextProvider } from "sections/offers/OffersContext/OffersContext.tsx";
 import { CollabsContextProvider } from "sections/collabs/CollabsContext/CollabsContext.tsx";
 import { UserContextProvider } from "sections/user/UserContext/UserContext.tsx";
-
+// TEST
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <AuthContextProvider repository={repositories.user}>
