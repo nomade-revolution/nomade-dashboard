@@ -19,7 +19,7 @@ const ProtectedRoute = ({ element }: ProtectedRouteProps): JSX.Element => {
       location.pathname === appPaths.recovery_password ||
       location.pathname === appPaths.reset_password
     ) {
-      return <Navigate to={appPaths.users} replace={true} />;
+      return <Navigate to={"/usuarios/page/1"} replace={true} />;
     }
   } else {
     if (
