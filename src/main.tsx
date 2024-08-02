@@ -12,6 +12,7 @@ import { repositories } from "sections/shared/utils/repositories/repositories.ts
 import { OffersContextProvider } from "sections/offers/OffersContext/OffersContext.tsx";
 import { CollabsContextProvider } from "sections/collabs/CollabsContext/CollabsContext.tsx";
 import { UserContextProvider } from "sections/user/UserContext/UserContext.tsx";
+import { InfluencerContextProvider } from "sections/influencer/InfluencerContext/InfluencerContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -19,10 +20,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <OffersContextProvider repository={repositories.offers}>
         <CollabsContextProvider repository={repositories.collabs}>
           <UserContextProvider repository={repositories.users}>
-            <ThemeProvider theme={theme}>
-              <GlobalStyles />
-              <RouterProvider router={router} />
-            </ThemeProvider>
+            <InfluencerContextProvider repository={repositories.influencers}>
+              <ThemeProvider theme={theme}>
+                <GlobalStyles />
+                <RouterProvider router={router} />
+              </ThemeProvider>
+            </InfluencerContextProvider>
           </UserContextProvider>
         </CollabsContextProvider>
       </OffersContextProvider>

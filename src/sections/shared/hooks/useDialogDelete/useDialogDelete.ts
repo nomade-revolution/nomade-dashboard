@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useInfluencerContext } from "sections/influencer/InfluencerContext/useInfluencerContext";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
 
 const useDialogDelete = () => {
   const navigate = useNavigate();
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const { deleteUserById } = useUserContext();
+  const { deleteInfluencerById } = useInfluencerContext();
 
   const handleDeleteUsers = async (sectionId: number) => {
     const response = await deleteUserById(sectionId!);
@@ -13,11 +15,10 @@ const useDialogDelete = () => {
     setTimeout(() => navigate(0), 1500);
   };
 
-  const handleProductToDeleteCollection = () => {
-    // const product = findProductInCollectionToDelete(sectionId);
-    // const newProducts = deleteProductFromCollection(product!);
-    // const finalProductsToAdd = getCurrentProductsToAdd(newProducts);
-    // handleUpdateCollectionProducts(finalProductsToAdd);
+  const handleDeleteInfluencer = async (sectionId: number) => {
+    const response = await deleteInfluencerById(sectionId!);
+    setIsSuccess(response!);
+    setTimeout(() => navigate(0), 1500);
   };
 
   const handleDeleteStaticPage = async () => {
@@ -40,7 +41,7 @@ const useDialogDelete = () => {
 
   return {
     handleDeleteUsers,
-    handleProductToDeleteCollection,
+    handleDeleteInfluencer,
     handleDeleteStaticPage,
     handleDeleteBanner,
     handleDeleteCollection,
