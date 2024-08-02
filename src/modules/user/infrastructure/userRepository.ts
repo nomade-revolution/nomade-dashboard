@@ -23,4 +23,17 @@ export class UsersRepository {
       return Promise.reject(error);
     }
   }
+
+  public async deleteUser(
+    user_id: number,
+  ): Promise<HttpResponseInterface<{ success: boolean }>> {
+    try {
+      const resp = await this.http.delete<UserApiResponse>(
+        `${GET_USERS}/${user_id}`,
+      );
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 }
