@@ -7,17 +7,21 @@ import { FaLocationDot } from "react-icons/fa6";
 import { FullOffer, Offer } from "../../../../modules/offers/domain/Offer";
 import { Switch } from "@mui/material";
 import { TimeSlot } from "modules/offers/domain/OfferCalendar";
-import { Company, Influencer, User, UserTypes } from "modules/user/domain/User";
+import { Company, Influencer, User } from "modules/user/domain/User";
 import { FullCollab } from "modules/collabs/domain/Collabs";
+import { getTypesClassNames } from "./utils/getClassNames/getClassNames";
+import Actions from "../Actions/Actions";
 
 interface DashboardTableCellContentProps {
   headerSection: HeaderSection;
-  section: object | Customer | Offer;
+  section: object | Customer | Offer | FullCollab | User | Company;
+  pageName: string;
 }
 
 const DashboardContentSections = ({
   headerSection,
   section,
+  pageName,
 }: DashboardTableCellContentProps) => {
   const calendar = (section as FullOffer).calendar;
   const daysSet = new Set<string>();
@@ -119,6 +123,7 @@ const DashboardContentSections = ({
           </ul>
         </div>
       );
+
     case "reservations":
       return (
         <Link to="" className="dashboard__reservations">
@@ -146,17 +151,7 @@ const DashboardContentSections = ({
 
     case "type":
       return (
-        <span
-          className={`dashboard__type-section ${
-            (section as User).type === UserTypes.influencer
-              ? "dashboard__type-section--influencer"
-              : (section as User).type === UserTypes.nomade
-                ? "dashboard__type-section--nomade"
-                : (section as User).type === UserTypes.company
-                  ? "dashboard__type-section--company"
-                  : ""
-          }`}
-        >
+        <span className={getTypesClassNames(section)}>
           {(section as User).type}
         </span>
       );
@@ -178,6 +173,23 @@ const DashboardContentSections = ({
           {(section as FullCollab).influencer_name}
         </span>
       );
+
+    case "day":
+      return (
+        <span>
+          {(section as FullCollab).day ? (section as FullCollab).day : "-"}
+        </span>
+      );
+
+    case "time":
+      return (
+        <span>
+          {(section as FullCollab).time ? (section as FullCollab).time : "-"}
+        </span>
+      );
+
+    case "actions":
+      return <Actions pageName={pageName} />;
 
     default:
       return (
