@@ -119,6 +119,26 @@ const ReusablePageStyled = styled.main`
       &--company {
         color: ${(props) => props.theme.colors.purple};
       }
+
+      &--restaurant {
+        color: ${(props) => props.theme.colors.darkRed};
+      }
+
+      &--delivery {
+        color: ${(props) => props.theme.colors.softGreen};
+      }
+
+      &--brand {
+        color: ${(props) => props.theme.colors.orange};
+      }
+
+      &--lodging {
+        color: ${(props) => props.theme.colors.tagsBlue};
+      }
+
+      &--activity {
+        color: ${(props) => props.theme.colors.red};
+      }
     }
 
     &__create {
