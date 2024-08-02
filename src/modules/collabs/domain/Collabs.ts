@@ -60,4 +60,7 @@ export interface RejectedCollab {
 export enum CollabTypes {
   restaurant = "Restaurant",
   lodging = "Lodging",
+  brand = "Brand",
+  delivery = "Delivery",
+  activity = "Activity",
 }

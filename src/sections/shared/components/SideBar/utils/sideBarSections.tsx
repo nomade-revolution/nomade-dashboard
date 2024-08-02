@@ -4,6 +4,7 @@ import { CiLogout } from "react-icons/ci";
 import { appPaths } from "../../../utils/appPaths/appPaths";
 import { PiUsersThreeFill } from "react-icons/pi";
 import { BiSolidOffer, BiSolidCategory } from "react-icons/bi";
+import { AiFillFileAdd } from "react-icons/ai";
 
 export const getSideBarUpperSections = (
   ordersQuantity: number,
@@ -55,6 +56,14 @@ export const getSideBarUpperSections = (
       icon: <BiSolidCategory />,
       name: "Categorías",
       pathname: "categorias",
+      quantity: 0,
+      path: appPaths.settings,
+    },
+    {
+      id: 8,
+      icon: <AiFillFileAdd />,
+      name: "Leads",
+      pathname: "leads",
       quantity: 0,
       path: appPaths.settings,
     },

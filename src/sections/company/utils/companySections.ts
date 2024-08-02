@@ -13,4 +13,5 @@ export const companyTableHeaderSections: HeaderSection[] = [
   { id: 5, name: "Porcentaje", property: "percentatge", sortTag: "email" },
   { id: 6, name: "NIF", property: "nif", sortTag: "" },
   { id: 7, name: "Tipo", property: "type", sortTag: "" },
+  { id: 8, name: "Acciones", property: "actions", sortTag: "" },
 ];

@@ -49,6 +49,7 @@ const DashboardTable = <Type,>({
   bodySections,
   headerSections,
   // type,
+  pageName,
 }: DashboardTableProps<Type>): React.ReactElement => {
   return (
     <TableContainer
@@ -101,7 +102,7 @@ const DashboardTable = <Type,>({
                   <DashboardContentSections
                     headerSection={headerSection}
                     section={section as Customer | Offer} // Añadir tipados específicos de los modulos
-                    // type={type}
+                    pageName={pageName}
                   />
                 </StyledTableCell>
               ))}

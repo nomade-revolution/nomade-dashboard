@@ -12,4 +12,5 @@ export const influencersTableHeaderSections: HeaderSection[] = [
     sortTag: "email",
   },
   { id: 6, name: "Tipo", property: "type", sortTag: "" },
+  { id: 7, name: "Acciones", property: "actions", sortTag: "" },
 ];

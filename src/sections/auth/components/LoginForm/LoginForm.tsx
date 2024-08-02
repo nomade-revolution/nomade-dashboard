@@ -2,12 +2,11 @@ import { ErrorMessage, Field, Formik, FormikHelpers } from "formik";
 import { loginScheme } from "../validations/validations";
 import LoginFormStyled from "./LoginFormStyled";
 import { useLoginForm } from "../../hooks/useLoginForm";
-import { useNavigate } from "react-router-dom";
 
 import { useState } from "react";
-import { appPaths } from "sections/shared/utils/appPaths/appPaths";
 import { AuthLoginInterface } from "@auth";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
+import Loader from "sections/shared/components/Loader/Loader";
 
 const initialState: AuthLoginInterface = {
   email: "",
@@ -17,8 +16,7 @@ const initialState: AuthLoginInterface = {
 const LoginForm = (): React.ReactElement => {
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const { submitForm } = useLoginForm();
-  const { isSuccess, getSessionToken } = useAuthContext();
-  const navigate = useNavigate();
+  const { isSuccess } = useAuthContext();
 
   const handleSubmitForm = async (
     values: AuthLoginInterface,
@@ -27,12 +25,6 @@ const LoginForm = (): React.ReactElement => {
     submitForm(values);
     setSubmitting(false);
     setIsFormSubmitted(true);
-
-    setTimeout(
-      async () => (await getSessionToken()) && navigate(appPaths.users),
-      2000,
-    );
-    navigate(appPaths.users);
   };
 
   return (
@@ -100,10 +92,15 @@ const LoginForm = (): React.ReactElement => {
               Registrate aquí
             </a>
           </span>
-          {!isSuccess && isFormSubmitted && (
-            <span className="login-form__error-message">
-              Credenciales inválidas
-            </span>
+          {isSuccess && isFormSubmitted ? (
+            <Loader width="20px" height="20px" />
+          ) : (
+            !isSuccess &&
+            isFormSubmitted && (
+              <span className="login-form__error-message">
+                Credenciales inválidas
+              </span>
+            )
           )}
         </LoginFormStyled>
       )}
