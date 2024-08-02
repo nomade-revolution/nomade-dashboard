@@ -39,6 +39,7 @@ export default function DialogDeleteConfirm({
     handleDeleteUsers,
     handleDeleteInfluencer,
     handleDeleteCollection,
+    handleDeleteCompany,
     isSuccess,
   } = useDialogDelete();
 
@@ -72,7 +73,7 @@ export default function DialogDeleteConfirm({
                 : pageName === SectionTypes.collabs
                   ? handleDeleteCollection()
                   : pageName === SectionTypes.customers
-                    ? handleDeleteUsers(sectionId)
+                    ? handleDeleteCompany(sectionId)
                     : pageName === SectionTypes.influencers
                       ? handleDeleteInfluencer(sectionId)
                       : pageName === SectionTypes.users

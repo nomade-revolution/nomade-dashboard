@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
 import { useInfluencerContext } from "sections/influencer/InfluencerContext/useInfluencerContext";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
 
@@ -8,6 +9,7 @@ const useDialogDelete = () => {
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const { deleteUserById } = useUserContext();
   const { deleteInfluencerById } = useInfluencerContext();
+  const { deleteCompanyById } = useCompanyContext();
 
   const handleDeleteUsers = async (sectionId: number) => {
     const response = await deleteUserById(sectionId!);
@@ -17,6 +19,12 @@ const useDialogDelete = () => {
 
   const handleDeleteInfluencer = async (sectionId: number) => {
     const response = await deleteInfluencerById(sectionId!);
+    setIsSuccess(response!);
+    setTimeout(() => navigate(0), 1500);
+  };
+
+  const handleDeleteCompany = async (sectionId: number) => {
+    const response = await deleteCompanyById(sectionId!);
     setIsSuccess(response!);
     setTimeout(() => navigate(0), 1500);
   };
@@ -42,6 +50,7 @@ const useDialogDelete = () => {
   return {
     handleDeleteUsers,
     handleDeleteInfluencer,
+    handleDeleteCompany,
     handleDeleteStaticPage,
     handleDeleteBanner,
     handleDeleteCollection,
