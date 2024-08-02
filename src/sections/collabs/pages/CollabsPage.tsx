@@ -6,10 +6,10 @@ import Loader from "sections/shared/components/Loader/Loader";
 import NoDataHandler from "sections/shared/components/NoDataHandler/NoDataHandler";
 import PaginationComponent from "sections/shared/components/Pagination/PaginationComponent";
 import { SectionTypes } from "sections/shared/interfaces/interfaces";
-import CollabsPageStyled from "./CollabsStyled";
 import { useCollabsContext } from "../CollabsContext/useCollabsContext";
 import { collabsHeaderSections } from "../utils/collabsSections";
 import { useParams } from "react-router-dom";
+import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 
 const CollabsPage = (): React.ReactElement => {
   const { getAllCollabs, collabs, pagination, loading } = useCollabsContext();
@@ -24,7 +24,7 @@ const CollabsPage = (): React.ReactElement => {
       {loading ? (
         <Loader width="40px" height="40px" />
       ) : !loading && mockClients.length !== 0 ? (
-        <CollabsPageStyled>
+        <ReusablePageStyled>
           <div className="dashboard__table">
             <div className="dashboard__searchContainer"></div>
             <DashboardTable
@@ -49,7 +49,7 @@ const CollabsPage = (): React.ReactElement => {
             pageName={SectionTypes.collabs}
             filterParams=""
           />
-        </CollabsPageStyled>
+        </ReusablePageStyled>
       ) : mockClients.length === 0 ? (
         <NoDataHandler pageName={SectionTypes.collabs} search={""} />
       ) : (
