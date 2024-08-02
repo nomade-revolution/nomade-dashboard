@@ -1,3 +1,4 @@
+/*
 import { FullUser, User } from "../modules/user/domain/User";
 
 export const mockUsers: User[] = [
@@ -96,3 +97,4 @@ export const mockFullUser: FullUser = {
   password: "password123",
   c_password: "password123",
 };
+*/

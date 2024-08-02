@@ -1,3 +1,4 @@
+/*
 import { Offer } from "../modules/offers/domain/Offer";
 
 export const mockOffers: Offer[] = [
@@ -113,3 +114,4 @@ export const mockOffers: Offer[] = [
     state: "active",
   },
 ];
+*/
