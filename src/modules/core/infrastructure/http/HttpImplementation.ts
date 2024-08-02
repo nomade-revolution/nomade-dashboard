@@ -72,7 +72,7 @@ export class HttpImplementation implements HttpInterface {
   ): Promise<AxiosResponse> {
     try {
       await this.buildHeaders();
-      const response = await axios.post(url, body, {
+      const response = await axios.patch(url, body, {
         headers: this.getHeaders(),
         timeout: this.REQUEST_TIMEOUT,
         responseType: responseType as "json",
@@ -90,7 +90,7 @@ export class HttpImplementation implements HttpInterface {
   ): Promise<AxiosResponse> {
     try {
       await this.buildHeaders();
-      const response = await axios.post(url, body, {
+      const response = await axios.put(url, body, {
         headers: this.getHeaders(),
         timeout: this.REQUEST_TIMEOUT,
         responseType: responseType as "json",
@@ -103,12 +103,11 @@ export class HttpImplementation implements HttpInterface {
 
   public async delete(
     url: string,
-    body?: never,
     responseType: string = "json",
   ): Promise<AxiosResponse> {
     try {
       await this.buildHeaders();
-      const response = await axios.post(url, body, {
+      const response = await axios.delete(url, {
         headers: this.getHeaders(),
         timeout: this.REQUEST_TIMEOUT,
         responseType: responseType as "json",

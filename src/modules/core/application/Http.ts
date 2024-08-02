@@ -64,7 +64,7 @@ export class Http implements HttpInterface {
     body?: unknown,
     responseType?: string,
   ): Promise<HttpResponseInterface<T>> {
-    const response = await this.httpInmplementation.post(
+    const response = await this.httpInmplementation.patch(
       url,
       body,
       responseType,
@@ -85,7 +85,7 @@ export class Http implements HttpInterface {
     body?: unknown,
     responseType?: string,
   ): Promise<HttpResponseInterface<T>> {
-    const response = await this.httpInmplementation.post(
+    const response = await this.httpInmplementation.put(
       url,
       body,
       responseType,
@@ -106,7 +106,7 @@ export class Http implements HttpInterface {
     body?: unknown,
     responseType?: string,
   ): Promise<HttpResponseInterface<T>> {
-    const response = await this.httpInmplementation.post(
+    const response = await this.httpInmplementation.delete(
       url,
       body,
       responseType,
