@@ -9,3 +9,10 @@ export const collabsGetAll = (
 ): Promise<HttpResponseInterface<CollabsApiResponse>> => {
   return collabsRepo.getAllCollabs(page, per_page);
 };
+
+export const deleteCollab = (
+  collabsRepo: CollabsRepository<CollabsApiResponse>,
+  collab_id: number,
+): Promise<HttpResponseInterface<{ success: boolean }>> => {
+  return collabsRepo.deleteCollab(collab_id);
+};

@@ -5,6 +5,7 @@ import DashboardCardMobileStyled from "./DashboardCardMobileStyles";
 interface DashboardCardMobileProps {
   bodySection: object; // Canviar tipados
   headerSections: HeaderSection[];
+  pageName: string;
   // type: SectionTypes;
 }
 
@@ -12,6 +13,7 @@ const DashboardCardMobile = ({
   bodySection,
   headerSections,
   // type,
+  pageName,
 }: DashboardCardMobileProps): React.ReactElement => {
   return (
     <DashboardCardMobileStyled className="dashboard-card">
@@ -24,6 +26,8 @@ const DashboardCardMobile = ({
             <DashboardContentSections
               headerSection={headerSection}
               section={bodySection}
+              pageName={pageName}
+              setIsDialogOpen={() => {}}
               // type={type}
             />
           </div>

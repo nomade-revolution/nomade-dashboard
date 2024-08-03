@@ -5,4 +5,5 @@ export interface CollabsRepository<I> {
     page: number,
     per_page: number,
   ): Promise<HttpResponseInterface<I>>;
+  deleteCollab(collab_id: number): Promise<HttpResponseInterface<I>>;
 }

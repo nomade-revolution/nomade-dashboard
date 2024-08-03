@@ -1,100 +1,74 @@
-/*
-import { FullUser, User } from "../modules/user/domain/User";
+import { User, UserApiResponse } from "../modules/user/domain/User";
 
 export const mockUsers: User[] = [
   {
     id: 1,
     name: "John Doe",
-    surname: "Fantasy",
     email: "john@example.com",
-    phone: "123-456-7890",
-    role: "administrador",
-    state: "active",
+    type: "Company",
   },
   {
     id: 2,
     name: "Jane Smith",
-    surname: "Fantasy",
     email: "jane@example.com",
-    phone: "987-654-3210",
-    role: "editor",
-    state: "inactive",
+    type: "Influencer",
   },
   {
     id: 3,
     name: "Alice Johnson",
-    surname: "Fantasy",
     email: "alice@example.com",
-    phone: "555-555-5555",
-    role: "editor",
-    state: "active",
+    type: "Nomade",
   },
   {
     id: 4,
     name: "Michael Brown",
-    surname: "Fantasy",
     email: "michael@example.com",
-    phone: "111-222-3333",
-    role: "gestor",
-    state: "active",
+    type: "Nomade",
   },
   {
     id: 5,
     name: "Emily Davis",
-    surname: "Fantasy",
     email: "emily@example.com",
-    phone: "444-555-6666",
-    role: "administrador",
-    state: "inactive",
+    type: "Company",
   },
   {
     id: 6,
     name: "Daniel Wilson",
-    surname: "Fantasy",
     email: "daniel@example.com",
-    phone: "777-888-9999",
-    role: "editor",
-    state: "active",
+    type: "Nomade",
   },
   {
     id: 7,
     name: "Olivia Martinez",
-    surname: "Fantasy",
     email: "olivia@example.com",
-    phone: "222-333-4444",
-    role: "gestor",
-    state: "active",
+    type: "Nomade",
   },
   {
     id: 8,
     name: "William Taylor",
-    surname: "Fantasy",
     email: "william@example.com",
-    phone: "666-777-8888",
-    role: "administrador",
-    state: "inactive",
+    type: "Nomade",
   },
   {
     id: 9,
     name: "Sophia Anderson",
-    surname: "Fantasy",
     email: "sophia@example.com",
-    phone: "999-000-1111",
-    role: "editor",
-    state: "active",
+    type: "Nomade",
   },
 ];
 
-export const mockFullUser: FullUser = {
+export const mockFullUser: User = {
   id: 1,
-  name: "John",
-  surname: "Doe",
+  name: "John Doe",
   email: "john@example.com",
-  phone: "123-456-7890",
-  role: "admin",
-  state: "active",
-  avatar: "https://example.com/avatar.jpg",
-  password: "password123",
-  c_password: "password123",
+  type: "Company",
 };
-*/
+
+export const mockUserApiResponse: UserApiResponse = {
+  users: mockUsers,
+  pagination: {
+    current_page: 1,
+    per_page: 10,
+    last_page: 1,
+  },
+};

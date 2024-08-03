@@ -1,3 +1,3 @@
 import environments from "@environments";
 
-export const GET_OFFERS = `${environments.API_PUBLIC_URL}/offers`;
+export const OFFERS_BASE = `${environments.API_PUBLIC_URL}/offers`;

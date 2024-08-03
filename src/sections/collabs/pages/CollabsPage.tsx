@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { mockClients } from "mocks/clientsMocks";
 import DashboardCardListMobile from "sections/shared/components/DashboardCardListMobile/DashboardCardListMobile";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
 import Loader from "sections/shared/components/Loader/Loader";
@@ -23,7 +22,7 @@ const CollabsPage = (): React.ReactElement => {
     <>
       {loading ? (
         <Loader width="40px" height="40px" />
-      ) : !loading && mockClients.length !== 0 ? (
+      ) : !loading && collabs.length !== 0 ? (
         <ReusablePageStyled>
           <div className="dashboard__table">
             <div className="dashboard__searchContainer"></div>
@@ -40,6 +39,7 @@ const CollabsPage = (): React.ReactElement => {
             <DashboardCardListMobile
               bodySections={collabs}
               headerSections={collabsHeaderSections}
+              pageName={SectionTypes.collabs}
             />
           </div>
           <PaginationComponent
@@ -50,7 +50,7 @@ const CollabsPage = (): React.ReactElement => {
             filterParams=""
           />
         </ReusablePageStyled>
-      ) : mockClients.length === 0 ? (
+      ) : collabs.length === 0 ? (
         <NoDataHandler pageName={SectionTypes.collabs} search={""} />
       ) : (
         <></>

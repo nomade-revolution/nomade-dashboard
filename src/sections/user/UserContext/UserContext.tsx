@@ -12,7 +12,7 @@ import {
   FilterParams,
   PaginationStucture,
 } from "sections/shared/interfaces/interfaces";
-import { getUsersFiltered } from "modules/user/application/user";
+import { deleteUser, getUsersFiltered } from "modules/user/application/user";
 
 interface ContextState {
   users_nomade: User[];
@@ -20,6 +20,7 @@ interface ContextState {
   users_company: Company[];
   loading: boolean;
   error: string | null;
+  isSuccess: boolean;
   pagination: PaginationStucture;
   getUsers: (
     page: number,
@@ -27,6 +28,7 @@ interface ContextState {
     filterParams: FilterParams,
     type: string,
   ) => void;
+  deleteUserById: (user_id: number) => void;
 }
 
 export const UserContext = createContext<ContextState>({} as ContextState);
@@ -42,6 +44,7 @@ export const UserContextProvider = ({
   const [users_company, setUsersCompany] = useState<Company[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [pagination, setPagination] = useState<PaginationStucture>(
     {} as PaginationStucture,
   );
@@ -82,6 +85,14 @@ export const UserContextProvider = ({
     [repository],
   );
 
+  const deleteUserById = async (user_id: number) => {
+    const response = await deleteUser(repository, user_id);
+
+    setIsSuccess(response.success);
+
+    return response;
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -91,7 +102,9 @@ export const UserContextProvider = ({
         loading,
         error,
         pagination,
+        isSuccess,
         getUsers,
+        deleteUserById,
       }}
     >
       {children}

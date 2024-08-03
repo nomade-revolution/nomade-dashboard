@@ -1,6 +1,7 @@
 import { renderRouterWithProviders } from "../../utils/testUtils/testUtils";
 import { screen } from "@testing-library/react";
 import DashboardTable from "./DashboardTable";
+import { SectionTypes } from "sections/shared/interfaces/interfaces";
 
 describe("Given an OrdersTable component", () => {
   describe("When it is rendered", () => {
@@ -9,7 +10,7 @@ describe("Given an OrdersTable component", () => {
         <DashboardTable
           headerSections={[]}
           bodySections={[]}
-          pageName="pedidos"
+          pageName={SectionTypes.collabs}
         />,
       );
 

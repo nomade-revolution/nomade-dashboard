@@ -6,11 +6,13 @@ interface DashboardCardListMobileProps {
   bodySections: object[];
   headerSections: HeaderSection[];
   // type: SectionTypes;
+  pageName: string;
 }
 
 const DashboardCardListMobile = ({
   bodySections,
   headerSections,
+  pageName,
   // type,
 }: DashboardCardListMobileProps): React.ReactElement => {
   return (
@@ -20,6 +22,7 @@ const DashboardCardListMobile = ({
           <DashboardCardMobile
             bodySection={section}
             headerSections={headerSections}
+            pageName={pageName}
             // type={type}
           />
         </li>

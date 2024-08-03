@@ -12,3 +12,10 @@ export const getUsersFiltered = (
 ): Promise<HttpResponseInterface<UserApiResponse>> => {
   return usersRepo.getUsers(page, per_page, filterParams);
 };
+
+export const deleteUser = (
+  usersRepo: UserRepository<{ succes: boolean }>,
+  user_id: number,
+): Promise<HttpResponseInterface<{ success: boolean }>> => {
+  return usersRepo.deleteUser(user_id);
+};
