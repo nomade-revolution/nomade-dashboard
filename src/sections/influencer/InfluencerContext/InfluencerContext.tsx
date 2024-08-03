@@ -28,6 +28,8 @@ export const InfluencerContextProvider = ({
     setLoading(false);
 
     setIsSuccess(response.success);
+
+    return response;
   };
 
   return (

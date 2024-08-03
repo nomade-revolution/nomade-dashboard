@@ -89,6 +89,8 @@ export const UserContextProvider = ({
     const response = await deleteUser(repository, user_id);
 
     setIsSuccess(response.success);
+
+    return response;
   };
 
   return (

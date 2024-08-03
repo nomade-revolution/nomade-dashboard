@@ -26,6 +26,8 @@ export const CompanyContextProvider = ({
     setLoading(false);
 
     setIsSuccess(response.success);
+
+    return response;
   };
 
   return (
