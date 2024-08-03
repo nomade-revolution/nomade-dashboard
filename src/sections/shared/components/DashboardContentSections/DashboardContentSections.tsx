@@ -16,12 +16,14 @@ interface DashboardTableCellContentProps {
   headerSection: HeaderSection;
   section: object | Customer | Offer | FullCollab | User | Company;
   pageName: string;
+  setIsDialogOpen: (value: boolean) => void;
 }
 
 const DashboardContentSections = ({
   headerSection,
   section,
   pageName,
+  setIsDialogOpen,
 }: DashboardTableCellContentProps) => {
   const calendar = (section as FullOffer).calendar;
   const daysSet = new Set<string>();
@@ -189,7 +191,7 @@ const DashboardContentSections = ({
       );
 
     case "actions":
-      return <Actions pageName={pageName} />;
+      return <Actions pageName={pageName} setIsDialogOpen={setIsDialogOpen} />;
 
     default:
       return (

@@ -1,0 +1,46 @@
+import { Collab } from "modules/collabs/domain/Collabs";
+import { Customer } from "modules/customers/domain/Customers";
+import { Offer } from "modules/offers/domain/Offer";
+import { Influencer, User } from "modules/user/domain/User";
+import { useState } from "react";
+import { HeaderSection } from "sections/shared/interfaces/interfaces";
+import DialogDeleteConfirm from "../DialogDeleteConfirm/DialogDeleteConfirm";
+import DashboardContentSections from "../DashboardContentSections/DashboardContentSections";
+
+interface ReusableTableBodyCellProps {
+  section: Offer | Customer | Collab | User | Influencer;
+  headerSection: HeaderSection;
+  pageName: string;
+}
+
+const DashboardTableCellContent = ({
+  headerSection,
+  section,
+  pageName,
+}: ReusableTableBodyCellProps) => {
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+
+  return (
+    <>
+      {
+        <DashboardContentSections
+          headerSection={headerSection}
+          section={section}
+          setIsDialogOpen={setIsDialogOpen}
+          pageName={pageName}
+        />
+      }
+
+      {isDialogOpen && (
+        <DialogDeleteConfirm
+          handleClose={() => setIsDialogOpen(false)}
+          open={isDialogOpen}
+          sectionId={section.id!}
+          pageName={pageName}
+        />
+      )}
+    </>
+  );
+};
+
+export default DashboardTableCellContent;

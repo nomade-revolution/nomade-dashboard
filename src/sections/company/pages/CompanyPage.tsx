@@ -61,6 +61,7 @@ const CompaniesPage = (): React.ReactElement => {
             <DashboardCardListMobile
               bodySections={users_company}
               headerSections={companyTableHeaderSections}
+              pageName={SectionTypes.customers}
             />
           </div>
           <PaginationComponent

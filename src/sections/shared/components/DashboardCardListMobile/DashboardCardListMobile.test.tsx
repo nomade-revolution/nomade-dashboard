@@ -2,7 +2,7 @@ import { screen } from "@testing-library/react";
 import { renderRouterWithProviders } from "../../../shared/utils/testUtils/testUtils";
 import DashboardCardListMobile from "./DashboardCardListMobile";
 import { mockClients } from "../../../../mocks/clientsMocks";
-import { customersHeaderSections } from "../../../customers/utils/customersSections";
+import { companyTableHeaderSections } from "sections/company/utils/companySections";
 
 describe("Given a DashboardCardListMobile component", () => {
   describe("When it is rendered", () => {
@@ -10,7 +10,8 @@ describe("Given a DashboardCardListMobile component", () => {
       renderRouterWithProviders(
         <DashboardCardListMobile
           bodySections={mockClients}
-          headerSections={customersHeaderSections}
+          headerSections={companyTableHeaderSections}
+          pageName=""
         />,
       );
 

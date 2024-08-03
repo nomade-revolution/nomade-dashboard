@@ -1,7 +1,7 @@
 import { Http } from "@core/application";
 import { HttpResponseInterface } from "@core/domain";
 import { CollabsApiResponse } from "../domain/Collabs";
-import { GET_COLLABS } from "../application/routes";
+import { COLLABS_BASE } from "../application/routes";
 
 export class CollabsRepository {
   private readonly http: Http = Http.getInstance();
@@ -11,10 +11,23 @@ export class CollabsRepository {
     per_page: number,
   ): Promise<HttpResponseInterface<CollabsApiResponse>> {
     try {
-      const resp = await this.http.get<CollabsApiResponse>(GET_COLLABS, {
+      const resp = await this.http.get<CollabsApiResponse>(COLLABS_BASE, {
         page,
         per_page,
       });
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  public async deleteCollab(
+    collab_id: number,
+  ): Promise<HttpResponseInterface<{ success: boolean }>> {
+    try {
+      const resp = await this.http.delete<{ success: boolean }>(
+        `${COLLABS_BASE}/${collab_id}`,
+      );
       return resp;
     } catch (error) {
       return Promise.reject(error);

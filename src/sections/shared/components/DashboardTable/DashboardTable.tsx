@@ -5,12 +5,13 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import DashboardContentSections from "../DashboardContentSections/DashboardContentSections";
-
 import DashboardStyled from "./DashboardTableStyled";
 import { HeaderSection } from "../../interfaces/interfaces";
-import { Customer } from "../../../../modules/customers/domain/Customers";
 import { Offer } from "../../../../modules/offers/domain/Offer";
+
+import { Company, Influencer, User } from "modules/user/domain/User";
+import DashboardTableCellContent from "../DashboardTableCellContent/DashboardTableCellContent";
+import { Collab } from "modules/collabs/domain/Collabs";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -95,13 +96,15 @@ const DashboardTable = <Type,>({
           </TableRow>
         </TableHead>
         <TableBody sx={{ borderCollapse: "collapse" }}>
-          {bodySections.map((section, index) => (
+          {bodySections?.map((section: Type, index) => (
             <StyledTableRow key={index}>
-              {headerSections.map((headerSection) => (
+              {headerSections?.map((headerSection) => (
                 <StyledTableCell align="center" key={headerSection.id}>
-                  <DashboardContentSections
+                  <DashboardTableCellContent
                     headerSection={headerSection}
-                    section={section as Customer | Offer} // Añadir tipados específicos de los modulos
+                    section={
+                      section as Offer | User | Influencer | Company | Collab
+                    }
                     pageName={pageName}
                   />
                 </StyledTableCell>
