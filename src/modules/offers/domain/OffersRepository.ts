@@ -5,4 +5,5 @@ export interface OffersRepository<I> {
     page: number,
     per_page: number,
   ): Promise<HttpResponseInterface<I>>;
+  deleteOffer(offer_id: number): Promise<HttpResponseInterface<I>>;
 }

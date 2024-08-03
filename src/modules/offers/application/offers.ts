@@ -9,3 +9,10 @@ export const offersGetAll = (
 ): Promise<HttpResponseInterface<OffersApiResponse>> => {
   return offersRepo.getAllOffers(page, per_page);
 };
+
+export const deleteOffer = (
+  offersRepo: OffersRepository<OffersApiResponse>,
+  offer_id: number,
+): Promise<HttpResponseInterface<{ success: boolean }>> => {
+  return offersRepo.deleteOffer(offer_id);
+};
