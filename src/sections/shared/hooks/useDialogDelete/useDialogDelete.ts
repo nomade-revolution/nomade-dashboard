@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
 import { useInfluencerContext } from "sections/influencer/InfluencerContext/useInfluencerContext";
+import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
 
 const useDialogDelete = () => {
@@ -10,6 +11,7 @@ const useDialogDelete = () => {
   const { deleteUserById } = useUserContext();
   const { deleteInfluencerById } = useInfluencerContext();
   const { deleteCompanyById } = useCompanyContext();
+  const { deleteOfferById } = useOffersContext();
 
   const handleDeleteUsers = async (sectionId: number) => {
     const response = await deleteUserById(sectionId!);
@@ -25,6 +27,12 @@ const useDialogDelete = () => {
 
   const handleDeleteCompany = async (sectionId: number) => {
     const response = await deleteCompanyById(sectionId!);
+    setIsSuccess(response!);
+    setTimeout(() => navigate(0), 1500);
+  };
+
+  const handleDeleteOffer = async (sectionId: number) => {
+    const response = await deleteOfferById(sectionId!);
     setIsSuccess(response!);
     setTimeout(() => navigate(0), 1500);
   };
@@ -51,6 +59,7 @@ const useDialogDelete = () => {
     handleDeleteUsers,
     handleDeleteInfluencer,
     handleDeleteCompany,
+    handleDeleteOffer,
     handleDeleteStaticPage,
     handleDeleteBanner,
     handleDeleteCollection,

@@ -5,13 +5,13 @@ const getDialogText = (pageName: string) => {
   return pageName === SectionTypes.collabs
     ? dialogTexts.desActivateProductFromDB
     : pageName === SectionTypes.offers
-      ? dialogTexts.deleteProductFromCollection
+      ? dialogTexts.deleteOffer
       : pageName === SectionTypes.users
         ? dialogTexts.deleteNomadeUser
         : pageName === SectionTypes.customers
-          ? dialogTexts.deleteBanner
+          ? dialogTexts.deleteCompany
           : pageName === SectionTypes.influencers
-            ? dialogTexts.deleteCollection
+            ? dialogTexts.deleteInfluencer
             : "";
 };
 

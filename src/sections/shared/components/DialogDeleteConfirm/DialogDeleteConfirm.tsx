@@ -40,6 +40,7 @@ export default function DialogDeleteConfirm({
     handleDeleteInfluencer,
     handleDeleteCollection,
     handleDeleteCompany,
+    handleDeleteOffer,
     isSuccess,
   } = useDialogDelete();
 
@@ -69,7 +70,7 @@ export default function DialogDeleteConfirm({
           <Button
             onClick={() =>
               pageName === SectionTypes.offers
-                ? handleDeleteCollection()
+                ? handleDeleteOffer(sectionId)
                 : pageName === SectionTypes.collabs
                   ? handleDeleteCollection()
                   : pageName === SectionTypes.customers
