@@ -2,7 +2,6 @@ import NoDataHandler from "../../../shared/components/NoDataHandler/NoDataHandle
 import Loader from "../../../shared/components/Loader/Loader";
 import { SectionTypes } from "../../../shared/interfaces/interfaces";
 import DashboardTable from "../../../shared/components/DashboardTable/DashboardTable";
-import { mockClients } from "../../../../mocks/clientsMocks";
 import PaginationComponent from "../../../shared/components/Pagination/PaginationComponent";
 import DashboardCardListMobile from "../../../shared/components/DashboardCardListMobile/DashboardCardListMobile";
 import { offersHeaderSections } from "../../utils/offersSections";
@@ -23,7 +22,7 @@ const OffersPage = (): React.ReactElement => {
     <>
       {loading ? (
         <Loader width="40px" height="40px" />
-      ) : !loading && mockClients.length !== 0 ? (
+      ) : !loading && offers.length !== 0 ? (
         <OffersPageStyled>
           <div className="dashboard__table">
             <div className="dashboard__searchContainer"></div>
@@ -50,7 +49,7 @@ const OffersPage = (): React.ReactElement => {
             filterParams=""
           />
         </OffersPageStyled>
-      ) : mockClients.length === 0 ? (
+      ) : offers.length === 0 ? (
         <NoDataHandler pageName={SectionTypes.offers} search={""} />
       ) : (
         <></>
