@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import { screen } from "@testing-library/react";
-import { renderWithProviders } from "../../../../utils/testUtils";
 import ErrorFeedback from "./ErrorFeedback";
+import { renderWithProviders } from "sections/shared/utils/testUtils/testUtils";
 
 describe("Given an ErrorFeedback component", () => {
   describe("When it is rendered and it receives a text", () => {

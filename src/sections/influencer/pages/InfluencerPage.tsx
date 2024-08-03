@@ -1,5 +1,4 @@
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
-import { mockUsers } from "mocks/userMocks";
 import { UserTypes } from "modules/user/domain/User";
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
@@ -13,7 +12,6 @@ import {
   FilterParams,
   SectionTypes,
 } from "sections/shared/interfaces/interfaces";
-
 import { useUserContext } from "sections/user/UserContext/useUserContext";
 import { influencersTableHeaderSections } from "../utils/influencersSections";
 
@@ -38,7 +36,7 @@ const InfluencersPage = (): React.ReactElement => {
     <>
       {loading ? (
         <Loader width="40px" height="40px" />
-      ) : !loading && mockUsers.length !== 0 ? (
+      ) : !loading && users_influencer.length !== 0 ? (
         <ReusablePageStyled className="dashboard">
           <div className="dashboard__search">
             <SearchBar
@@ -71,7 +69,7 @@ const InfluencersPage = (): React.ReactElement => {
             filterParams={searchParams}
           />
         </ReusablePageStyled>
-      ) : mockUsers.length === 0 ? (
+      ) : users_influencer.length === 0 ? (
         <NoDataHandler
           pageName={SectionTypes.influencers}
           search={searchText!}

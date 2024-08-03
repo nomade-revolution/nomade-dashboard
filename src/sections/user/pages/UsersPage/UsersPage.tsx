@@ -3,12 +3,10 @@ import { useLocation, useParams } from "react-router-dom";
 import Loader from "../../../shared/components/Loader/Loader";
 import NoDataHandler from "../../../shared/components/NoDataHandler/NoDataHandler";
 import DashboardTable from "../../../shared/components/DashboardTable/DashboardTable";
-
 import DashboardCardListMobile from "../../../shared/components/DashboardCardListMobile/DashboardCardListMobile";
 import PaginationComponent from "../../../shared/components/Pagination/PaginationComponent";
 import SearchBar from "../../../shared/components/SearchBar/SearchBar";
 import { IoAddCircle } from "react-icons/io5";
-import { mockUsers } from "../../../../mocks/userMocks";
 import {
   FilterParams,
   SectionTypes,
@@ -39,7 +37,7 @@ const UsersPage = (): React.ReactElement => {
     <>
       {loading ? (
         <Loader width="40px" height="40px" />
-      ) : !loading && mockUsers.length !== 0 ? (
+      ) : !loading && users_nomade.length !== 0 ? (
         <ReusablePageStyled className="dashboard">
           <div className="dashboard__search-user">
             <button className="dashboard__create">
@@ -76,7 +74,7 @@ const UsersPage = (): React.ReactElement => {
             filterParams={searchParams}
           />
         </ReusablePageStyled>
-      ) : mockUsers.length === 0 ? (
+      ) : users_nomade.length === 0 ? (
         <NoDataHandler pageName={SectionTypes.users} search={searchText!} />
       ) : (
         <></>
