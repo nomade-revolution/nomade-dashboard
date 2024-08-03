@@ -10,7 +10,6 @@ import { TransitionProps } from "@mui/material/transitions";
 import { GoAlert } from "react-icons/go";
 import useDialogDelete from "sections/shared/hooks/useDialogDelete/useDialogDelete";
 import getDialogText from "./utils/getDialogText/getDialogText";
-import { SectionTypes } from "sections/shared/interfaces/interfaces";
 import SuccessFeedback from "../Feedbacks/components/SuccessFeedback/SuccessFeedback";
 
 const Transition = React.forwardRef(function Transition(
@@ -35,14 +34,7 @@ export default function DialogDeleteConfirm({
   sectionId,
   pageName,
 }: DialogDeleteConfirmProps) {
-  const {
-    handleDeleteUsers,
-    handleDeleteInfluencer,
-    handleDeleteCollection,
-    handleDeleteCompany,
-    handleDeleteOffer,
-    isSuccess,
-  } = useDialogDelete();
+  const { getFunctionToDelete, isSuccess } = useDialogDelete();
 
   return (
     <div>
@@ -68,19 +60,7 @@ export default function DialogDeleteConfirm({
         </DialogContent>
         <DialogActions>
           <Button
-            onClick={() =>
-              pageName === SectionTypes.offers
-                ? handleDeleteOffer(sectionId)
-                : pageName === SectionTypes.collabs
-                  ? handleDeleteCollection()
-                  : pageName === SectionTypes.customers
-                    ? handleDeleteCompany(sectionId)
-                    : pageName === SectionTypes.influencers
-                      ? handleDeleteInfluencer(sectionId)
-                      : pageName === SectionTypes.users
-                        ? handleDeleteUsers(sectionId)
-                        : null
-            }
+            onClick={() => getFunctionToDelete(sectionId, pageName)}
             sx={{ color: "#000", fontWeight: 700 }}
           >
             {isSuccess ? <SuccessFeedback text="Borrado" /> : "Aceptar"}

@@ -3,7 +3,7 @@ import dialogTexts from "../dialogTexts";
 
 const getDialogText = (pageName: string) => {
   return pageName === SectionTypes.collabs
-    ? dialogTexts.desActivateProductFromDB
+    ? dialogTexts.deleteCollab
     : pageName === SectionTypes.offers
       ? dialogTexts.deleteOffer
       : pageName === SectionTypes.users
