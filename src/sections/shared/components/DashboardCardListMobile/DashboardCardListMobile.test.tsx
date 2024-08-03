@@ -11,6 +11,7 @@ describe("Given a DashboardCardListMobile component", () => {
         <DashboardCardListMobile
           bodySections={mockClients}
           headerSections={companyTableHeaderSections}
+          pageName=""
         />,
       );
 

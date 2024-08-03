@@ -39,6 +39,7 @@ const CollabsPage = (): React.ReactElement => {
             <DashboardCardListMobile
               bodySections={collabs}
               headerSections={collabsHeaderSections}
+              pageName={SectionTypes.collabs}
             />
           </div>
           <PaginationComponent

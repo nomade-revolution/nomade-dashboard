@@ -64,6 +64,7 @@ const UsersPage = (): React.ReactElement => {
             <DashboardCardListMobile
               bodySections={users_nomade}
               headerSections={usersTableHeaderSections}
+              pageName={SectionTypes.users}
             />
           </div>
           <PaginationComponent

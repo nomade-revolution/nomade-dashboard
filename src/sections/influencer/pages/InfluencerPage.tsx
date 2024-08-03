@@ -59,6 +59,7 @@ const InfluencersPage = (): React.ReactElement => {
             <DashboardCardListMobile
               bodySections={users_influencer}
               headerSections={influencersTableHeaderSections}
+              pageName={SectionTypes.influencers}
             />
           </div>
           <PaginationComponent

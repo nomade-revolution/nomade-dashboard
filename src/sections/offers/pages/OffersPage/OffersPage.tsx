@@ -39,6 +39,7 @@ const OffersPage = (): React.ReactElement => {
             <DashboardCardListMobile
               bodySections={offers}
               headerSections={offersHeaderSections}
+              pageName={SectionTypes.offers}
             />
           </div>
           <PaginationComponent
