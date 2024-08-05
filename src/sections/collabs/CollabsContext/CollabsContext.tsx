@@ -15,7 +15,11 @@ interface ContextState {
   error: string | null;
   isSuccess: boolean;
   pagination: PaginationStucture;
-  getAllCollabs: (page: number, per_page: number) => void;
+  getAllCollabs: (
+    page: number,
+    per_page: number,
+    influencer_id?: number,
+  ) => void;
   deleteCollabById: (influencer_id: number) => void;
 }
 
@@ -34,11 +38,16 @@ export const CollabsContextProvider = ({
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
   const getAllCollabs = useCallback(
-    async (page: number, per_page: number) => {
+    async (page: number, per_page: number, influencer_id?: number) => {
       setLoading(true);
       setError(null);
 
-      const response = await collabsGetAll(repository, page, per_page);
+      const response = await collabsGetAll(
+        repository,
+        page,
+        per_page,
+        influencer_id,
+      );
       if (isHttpSuccessResponse(response)) {
         setLoading(false);
         setCollabs(response.data.colabs);
