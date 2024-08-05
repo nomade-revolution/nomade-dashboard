@@ -9,9 +9,10 @@ import DashboardStyled from "./DashboardTableStyled";
 import { HeaderSection } from "../../interfaces/interfaces";
 import { Offer } from "../../../../modules/offers/domain/Offer";
 
-import { Company, Influencer, User } from "modules/user/domain/User";
+import { Company, User } from "modules/user/domain/User";
 import DashboardTableCellContent from "../DashboardTableCellContent/DashboardTableCellContent";
 import { Collab } from "modules/collabs/domain/Collabs";
+import { Influencer } from "@influencer";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
