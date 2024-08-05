@@ -8,8 +8,9 @@ import UsersPage from "../sections/user/pages/UsersPage/UsersPage";
 import OffersPage from "../sections/offers/pages/OffersPage/OffersPage";
 import MyAccountPage from "../sections/user/pages/MyAccountPage/MyAccountPage";
 import CollabsPage from "sections/collabs/pages/CollabsPage";
-import InfluencersPage from "sections/influencer/pages/InfluencerPage";
 import CompaniesPage from "sections/company/pages/CompanyPage";
+import InfluencerDetailPage from "sections/influencer/pages/InfluencerDetailPage/InfluencerDetailPage";
+import InfluencersPage from "sections/influencer/pages/InfluencerPage/InfluencerPage";
 
 const routes: RouteObject[] = [
   {
@@ -28,6 +29,10 @@ const routes: RouteObject[] = [
       {
         path: appPaths.influencers,
         element: <InfluencersPage />,
+      },
+      {
+        path: appPaths.influencer,
+        element: <InfluencerDetailPage />,
       },
       {
         path: appPaths.clients,

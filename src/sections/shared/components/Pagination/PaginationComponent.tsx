@@ -30,9 +30,9 @@ const PaginationComponent = ({
 
   useEffect(() => {
     if (current_page <= last_page) return;
-    navigate(`/${pageName}/page/${last_page}`);
+    pageName !== "" && navigate(`/${pageName}/page/${last_page}`);
 
-    if (!current_page) navigate(`/${pageName}/page/1`);
+    if (!current_page && pageName !== "") navigate(`/${pageName}/page/1`);
   }, [last_page, current_page, navigate, pageName]);
 
   useEffect(() => {
