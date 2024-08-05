@@ -2,6 +2,7 @@ import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 import { UserTypes } from "modules/user/domain/User";
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
+import { influencersTableHeaderSections } from "sections/influencer/utils/influencersSections";
 import DashboardCardListMobile from "sections/shared/components/DashboardCardListMobile/DashboardCardListMobile";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
 import Loader from "sections/shared/components/Loader/Loader";
@@ -13,7 +14,6 @@ import {
   SectionTypes,
 } from "sections/shared/interfaces/interfaces";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
-import { influencersTableHeaderSections } from "../utils/influencersSections";
 
 const InfluencersPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string | null>(null);

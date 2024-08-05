@@ -7,7 +7,6 @@ const UserPageStyled = styled.main`
   gap: 20px;
   padding: 20px 20px;
   color: ${(props) => props.theme.fontsColors.dashBoard};
-  height: 100%;
 
   @media (min-width: 1000px) and (max-width: 1600px) {
     padding: 90px 30px;

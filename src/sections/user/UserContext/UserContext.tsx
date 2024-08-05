@@ -3,7 +3,6 @@ import { isHttpSuccessResponse } from "../../shared/utils/typeGuards/typeGuardsF
 import { UserRepository } from "modules/user/domain/UserRepository";
 import {
   Company,
-  Influencer,
   User,
   UserApiResponse,
   UserTypes,
@@ -13,6 +12,7 @@ import {
   PaginationStucture,
 } from "sections/shared/interfaces/interfaces";
 import { deleteUser, getUsersFiltered } from "modules/user/application/user";
+import { Influencer } from "@influencer";
 
 interface ContextState {
   users_nomade: User[];
@@ -70,7 +70,7 @@ export const UserContextProvider = ({
         setLoading(false);
         switch (type) {
           case UserTypes.nomade:
-            setUsersNomade(response.data.users);
+            setUsersNomade(response.data.users as User[]);
 
             break;
           case UserTypes.influencer:

@@ -32,7 +32,7 @@ export class HttpImplementation implements HttpInterface {
       const response = await axios.get(url, {
         headers: this.getHeaders(),
         timeout: this.REQUEST_TIMEOUT,
-        params: params,
+        params,
         responseType: responseType as "json",
       });
       return response;
@@ -126,7 +126,6 @@ export class HttpImplementation implements HttpInterface {
     const headers: AxiosRequestHeaders = <
       RawAxiosRequestHeaders & AxiosHeaders
     >this.headers;
-    this.headers = {};
     return headers;
   }
 

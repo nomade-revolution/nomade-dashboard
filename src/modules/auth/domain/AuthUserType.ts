@@ -1,4 +1,4 @@
-import { InfluencerInterface } from "@influencer/domain";
+import { Influencer } from "@influencer/domain";
 import { CompanyInterface } from "@company/domain";
 
 export type AuthUserBaseType = {
@@ -7,5 +7,4 @@ export type AuthUserBaseType = {
   email: string;
 };
 
-export type AuthUserType = AuthUserBaseType &
-  (InfluencerInterface | CompanyInterface);
+export type AuthUserType = AuthUserBaseType & (Influencer | CompanyInterface);

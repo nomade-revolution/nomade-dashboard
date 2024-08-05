@@ -5,15 +5,22 @@ import { Link } from "react-router-dom";
 import { SectionTypes } from "sections/shared/interfaces/interfaces";
 import ActionsStyled from "./ActionsStyled";
 import useActions from "sections/shared/hooks/useActions/useActions";
+import { Offer } from "modules/offers/domain/Offer";
+import { FullCollab } from "modules/collabs/domain/Collabs";
+import { Company, User } from "modules/user/domain/User";
+import { Customer } from "modules/customers/domain/Customers";
+import { Influencer } from "@influencer";
 
 interface ActionsProps {
   pageName: string;
   setIsDialogOpen: (value: boolean) => void;
+  section: object | Customer | Offer | FullCollab | User | Company;
 }
 
 const Actions = ({
   pageName,
   setIsDialogOpen,
+  section,
 }: ActionsProps): React.ReactElement => {
   let buttons: React.ReactNode;
   const { handleIsDialogOpen } = useActions();
@@ -64,8 +71,7 @@ const Actions = ({
         <>
           <Tooltip title="Ver detalles">
             <Link
-              to={``}
-              target="_blank"
+              to={`/influencer/${(section as Influencer)?.id}`}
               aria-label="Ver detalles"
               className="link"
             >

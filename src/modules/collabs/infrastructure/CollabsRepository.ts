@@ -9,11 +9,13 @@ export class CollabsRepository {
   public async getAllCollabs(
     page: number,
     per_page: number,
+    influencer_id?: number,
   ): Promise<HttpResponseInterface<CollabsApiResponse>> {
     try {
       const resp = await this.http.get<CollabsApiResponse>(COLLABS_BASE, {
         page,
         per_page,
+        filters: { influencer_id },
       });
       return resp;
     } catch (error) {

@@ -7,10 +7,11 @@ import { FaLocationDot } from "react-icons/fa6";
 import { FullOffer, Offer } from "../../../../modules/offers/domain/Offer";
 import { Switch } from "@mui/material";
 import { TimeSlot } from "modules/offers/domain/OfferCalendar";
-import { Company, Influencer, User } from "modules/user/domain/User";
+import { Company, User } from "modules/user/domain/User";
 import { FullCollab } from "modules/collabs/domain/Collabs";
 import { getTypesClassNames } from "./utils/getClassNames/getClassNames";
 import Actions from "../Actions/Actions";
+import { Influencer } from "@influencer";
 
 interface DashboardTableCellContentProps {
   headerSection: HeaderSection;
@@ -191,7 +192,13 @@ const DashboardContentSections = ({
       );
 
     case "actions":
-      return <Actions pageName={pageName} setIsDialogOpen={setIsDialogOpen} />;
+      return (
+        <Actions
+          pageName={pageName}
+          setIsDialogOpen={setIsDialogOpen}
+          section={section}
+        />
+      );
 
     default:
       return (

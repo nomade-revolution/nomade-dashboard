@@ -4,7 +4,6 @@ export const appPaths = {
   offers: "/ofertas/page/:page",
   clients: "/clientes/page/:page",
   client: "/clientes/:id",
-  clientOrders: "/clientes/pedidos/:id/page/:page",
   users: "/usuarios/page/:page",
   settings: "/configuración",
   account: "/mi-cuenta",
@@ -13,4 +12,5 @@ export const appPaths = {
   reset_password: "/reset-password",
   collabs: "/collabs/page/:page",
   influencers: "/influencers/page/:page",
+  influencer: "/influencer/:id",
 };
