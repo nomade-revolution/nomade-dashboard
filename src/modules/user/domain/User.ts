@@ -1,3 +1,5 @@
+import { Influencer } from "@influencer";
+import { SocialMedia } from "@influencer/domain/InfluencerSocialMedia";
 import { PaginationStucture } from "sections/shared/interfaces/interfaces";
 
 export interface User {
@@ -44,7 +46,7 @@ export interface RegisterInfluencerFormStateStructure {
   LGPD?: boolean;
 }
 
-interface Country {
+export interface Country {
   id: number;
   name: string;
   iso_2: string;
@@ -60,29 +62,6 @@ export interface Category {
   id: number;
   name: string;
   parent_id: number | null;
-}
-
-export interface SocialMedia {
-  id: number;
-  name: string;
-  url: string;
-  account_name: string;
-  followers: number;
-}
-
-export interface Influencer extends User {
-  surnames: string;
-  user_name: string;
-  prefix: string;
-  phone: string;
-  from_country: Country;
-  from_city: City;
-  living_country: Country;
-  living_city: City;
-  categories: Category[];
-  LGPD: number;
-  avatar: string;
-  socialMedia: SocialMedia[];
 }
 
 export enum UserTypes {

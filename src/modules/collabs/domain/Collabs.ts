@@ -1,4 +1,4 @@
-import { InfluencerInterface } from "@influencer";
+import { Influencer } from "@influencer";
 import { PaginationStucture } from "sections/shared/interfaces/interfaces";
 
 export interface Collab {
@@ -14,7 +14,7 @@ export interface Collab {
 }
 
 export interface FullCollab extends Collab {
-  influencer: InfluencerInterface;
+  influencer: Influencer;
   address: string;
   history: State[];
   influencer_name: string;
