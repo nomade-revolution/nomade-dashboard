@@ -1,8 +1,10 @@
 import { CountryInterface } from "@country/domain";
 import { CityInterface } from "@city/domain";
-import { SocialMediaInterface } from "@socialMedia/domain";
+import { SocialMedia } from "./InfluencerSocialMedia";
+import { Category } from "modules/user/domain/User";
 
-export interface InfluencerInterface {
+export interface Influencer {
+  id: number;
   name: string;
   surnames: string;
   user_name: string;
@@ -12,8 +14,10 @@ export interface InfluencerInterface {
   from_city?: CityInterface;
   living_country?: CountryInterface;
   living_city?: string;
-  categories?: string;
+  categories?: Category[];
   LGPD: string;
   avatar: string;
-  socialMedia?: SocialMediaInterface;
+  socialMedia: SocialMedia[];
+  new: boolean;
+  email: string;
 }
