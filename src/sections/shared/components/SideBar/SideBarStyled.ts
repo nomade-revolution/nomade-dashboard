@@ -132,6 +132,29 @@ const SideBarStyled = styled.div`
       letter-spacing: 1px;
     }
   }
+
+  @keyframes fadeInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .subsection {
+    display: flex;
+    justify-content: flex-end;
+    text-transform: capitalize;
+    font-weight: bold;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    border-bottom: 1px solid
+      ${(props) => props.theme.fontsColors.corporativeColor};
+    animation: fadeInLeft 1s ease-in-out;
+  }
 `;
 
 export default SideBarStyled;
