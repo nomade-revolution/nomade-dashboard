@@ -201,6 +201,12 @@ const ReusablePageStyled = styled.main`
     &__influencer {
       font-weight: bold;
     }
+
+    &__table {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
   }
 `;
 

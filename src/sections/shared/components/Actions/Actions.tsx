@@ -1,5 +1,5 @@
 import { Tooltip } from "@mui/material";
-import { FaEye } from "react-icons/fa";
+import { FaCheckCircle, FaEye } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { SectionTypes } from "sections/shared/interfaces/interfaces";
@@ -11,6 +11,7 @@ import { Company, User } from "modules/user/domain/User";
 import { Customer } from "modules/customers/domain/Customers";
 import { Influencer } from "@influencer";
 import { MdVerifiedUser } from "react-icons/md";
+import { BsFillXSquareFill } from "react-icons/bs";
 
 interface ActionsProps {
   pageName: string;
@@ -50,6 +51,24 @@ const Actions = ({
               <RiDeleteBin6Line className={"icon"} color="red" />
             </button>
           </Tooltip>
+          <>
+            <Tooltip title="Aceptar">
+              <button
+                aria-label="Aceptar"
+                onClick={() => handleIsDialogOpen(setIsDialogOpen)}
+              >
+                <FaCheckCircle color="green" className="icon" />
+              </button>
+            </Tooltip>
+            <Tooltip title="Rechazar">
+              <button
+                aria-label="Rechazar"
+                onClick={() => handleIsDialogOpen(setIsDialogOpen)}
+              >
+                <BsFillXSquareFill className="icon" color="#C64B56" />
+              </button>
+            </Tooltip>
+          </>
         </>
       );
       break;
