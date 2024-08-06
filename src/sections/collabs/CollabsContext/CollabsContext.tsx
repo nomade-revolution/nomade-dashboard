@@ -18,7 +18,8 @@ interface ContextState {
   getAllCollabs: (
     page: number,
     per_page: number,
-    influencer_id?: number,
+    influencer_id?: number | undefined,
+    company_id?: number | undefined,
   ) => void;
   deleteCollabById: (influencer_id: number) => void;
 }
@@ -38,7 +39,12 @@ export const CollabsContextProvider = ({
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
   const getAllCollabs = useCallback(
-    async (page: number, per_page: number, influencer_id?: number) => {
+    async (
+      page: number,
+      per_page: number,
+      influencer_id?: number | undefined,
+      company_id?: number | undefined,
+    ) => {
       setLoading(true);
       setError(null);
 
@@ -47,6 +53,7 @@ export const CollabsContextProvider = ({
         page,
         per_page,
         influencer_id,
+        company_id,
       );
       if (isHttpSuccessResponse(response)) {
         setLoading(false);

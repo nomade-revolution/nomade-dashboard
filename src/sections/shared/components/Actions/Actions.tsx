@@ -91,14 +91,25 @@ const Actions = ({
       break;
     case SectionTypes.customers:
       buttons = (
-        <Tooltip title="Borrar cliente">
-          <button
-            aria-label="Borrar cliente"
-            onClick={() => handleIsDialogOpen(setIsDialogOpen)}
-          >
-            <RiDeleteBin6Line className={"icon"} color="red" />
-          </button>
-        </Tooltip>
+        <>
+          <Tooltip title="Ver detalles">
+            <Link
+              to={`/cliente/${(section as Company)?.id}`}
+              aria-label="Ver detalles"
+              className="link"
+            >
+              <FaEye className={"icon"} />
+            </Link>
+          </Tooltip>
+          <Tooltip title="Borrar cliente">
+            <button
+              aria-label="Borrar cliente"
+              onClick={() => handleIsDialogOpen(setIsDialogOpen)}
+            >
+              <RiDeleteBin6Line className={"icon"} color="red" />
+            </button>
+          </Tooltip>
+        </>
       );
       break;
     case SectionTypes.users:

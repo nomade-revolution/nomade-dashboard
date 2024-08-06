@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const InfluencerDetailPageStyled = styled.main`
+const CompanyDetailPageStyled = styled.main`
   background: ${(props) => props.theme.colors.backgroundPages};
   display: flex;
   flex-direction: column;
@@ -17,7 +17,7 @@ const InfluencerDetailPageStyled = styled.main`
     padding: 70px 200px;
   }
 
-  .influencer-detail {
+  .company-detail {
     &__info {
       position: relative;
     }
@@ -32,4 +32,4 @@ const InfluencerDetailPageStyled = styled.main`
   }
 `;
 
-export default InfluencerDetailPageStyled;
+export default CompanyDetailPageStyled;

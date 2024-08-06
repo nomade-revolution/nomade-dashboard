@@ -6,9 +6,10 @@ export const collabsGetAll = (
   collabsRepo: CollabsRepository<CollabsApiResponse>,
   page: number,
   per_page: number,
-  influencer_id?: number,
+  influencer_id?: number | undefined,
+  company_id?: number | undefined,
 ): Promise<HttpResponseInterface<CollabsApiResponse>> => {
-  return collabsRepo.getAllCollabs(page, per_page, influencer_id);
+  return collabsRepo.getAllCollabs(page, per_page, influencer_id, company_id);
 };
 
 export const deleteCollab = (
