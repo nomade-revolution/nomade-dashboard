@@ -70,7 +70,7 @@ export const getSideBarUpperSections = (
       name: "Leads",
       pathname: "leads",
       quantity: 0,
-      path: appPaths.settings,
+      path: "/leads/page/1",
     },
   ];
 
