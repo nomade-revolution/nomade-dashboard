@@ -10,6 +10,7 @@ import { FullCollab } from "modules/collabs/domain/Collabs";
 import { Company, User } from "modules/user/domain/User";
 import { Customer } from "modules/customers/domain/Customers";
 import { Influencer } from "@influencer";
+import { MdVerifiedUser } from "react-icons/md";
 
 interface ActionsProps {
   pageName: string;
@@ -120,6 +121,30 @@ const Actions = ({
             onClick={() => handleIsDialogOpen(setIsDialogOpen)}
           >
             <RiDeleteBin6Line className={"icon"} color="red" />
+          </button>
+        </Tooltip>
+      );
+      break;
+
+    case SectionTypes.leads:
+      buttons = (
+        <Tooltip title="Verificar usuario">
+          <button
+            aria-label="Verificar usuario"
+            onClick={() => {}}
+            style={{
+              background: "#8C9B6E",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              color: "#fff",
+              padding: "10px",
+              borderRadius: "8px",
+              fontWeight: "bold",
+            }}
+          >
+            <MdVerifiedUser />
+            <span>Veirifcar usuario</span>
           </button>
         </Tooltip>
       );
