@@ -11,11 +11,12 @@ import { Company, User } from "modules/user/domain/User";
 import { Customer } from "modules/customers/domain/Customers";
 import { Influencer } from "@influencer";
 import { MdVerifiedUser } from "react-icons/md";
+import { Lead } from "modules/leads/domain/Leads";
 
 interface ActionsProps {
   pageName: string;
   setIsDialogOpen: (value: boolean) => void;
-  section: object | Customer | Offer | FullCollab | User | Company;
+  section: object | Customer | Offer | FullCollab | User | Company | Lead;
 }
 
 const Actions = ({

@@ -7,9 +7,10 @@ import { HeaderSection } from "sections/shared/interfaces/interfaces";
 import DialogDeleteConfirm from "../DialogDeleteConfirm/DialogDeleteConfirm";
 import DashboardContentSections from "../DashboardContentSections/DashboardContentSections";
 import { Influencer } from "@influencer";
+import { Lead } from "modules/leads/domain/Leads";
 
 interface ReusableTableBodyCellProps {
-  section: Offer | Customer | Collab | User | Influencer;
+  section: Offer | Customer | Collab | User | Influencer | Lead;
   headerSection: HeaderSection;
   pageName: string;
 }
