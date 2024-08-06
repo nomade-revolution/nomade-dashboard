@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import DashboardCardListMobile from "sections/shared/components/DashboardCardListMobile/DashboardCardListMobile";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
 import Loader from "sections/shared/components/Loader/Loader";
@@ -9,8 +9,11 @@ import { useCollabsContext } from "../CollabsContext/useCollabsContext";
 import { collabsHeaderSections } from "../utils/collabsSections";
 import { useParams } from "react-router-dom";
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
+import SearchBar from "sections/shared/components/SearchBar/SearchBar";
 
 const CollabsPage = (): React.ReactElement => {
+  const [searchText, setSearchText] = useState<string | null>(null);
+
   const { getAllCollabs, collabs, pagination, loading } = useCollabsContext();
   const { page } = useParams();
 
@@ -25,7 +28,15 @@ const CollabsPage = (): React.ReactElement => {
       ) : !loading && collabs.length !== 0 ? (
         <ReusablePageStyled>
           <div className="dashboard__table">
-            <div className="dashboard__searchContainer"></div>
+            <div className="dashboard__searchContainer">
+              <SearchBar
+                pageName={SectionTypes.influencers}
+                pageTypes={SectionTypes.influencers}
+                searchText={searchText!}
+                setSearchText={setSearchText}
+                onSearchSubmit={() => {}}
+              />
+            </div>
             <DashboardTable
               bodySections={collabs}
               headerSections={collabsHeaderSections}

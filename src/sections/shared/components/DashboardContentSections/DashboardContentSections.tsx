@@ -200,6 +200,17 @@ const DashboardContentSections = ({
         />
       );
 
+    case "history":
+      return (
+        <span>
+          {
+            (section as FullCollab).history[
+              (section as FullCollab).history.length - 1
+            ].name
+          }
+        </span>
+      );
+
     default:
       return (
         <section>

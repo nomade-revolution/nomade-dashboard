@@ -6,5 +6,6 @@ export const collabsHeaderSections: HeaderSection[] = [
   { id: 3, name: "Día", property: "day", sortTag: "" },
   { id: 4, name: "Hora", property: "time", sortTag: "" },
   { id: 5, name: "Tipo", property: "type", sortTag: "" },
-  { id: 5, name: "Acciones", property: "actions", sortTag: "" },
+  { id: 6, name: "Estado", property: "history", sortTag: "" },
+  { id: 7, name: "Acciones", property: "actions", sortTag: "" },
 ];
