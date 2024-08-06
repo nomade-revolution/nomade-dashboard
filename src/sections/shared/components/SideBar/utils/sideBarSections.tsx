@@ -18,6 +18,7 @@ export const getSideBarUpperSections = (
       pathname: "usuarios",
       quantity: ordersQuantity,
       path: `/usuarios/page/1`,
+      subSection: "usuario",
     },
     {
       id: 2,
@@ -26,6 +27,7 @@ export const getSideBarUpperSections = (
       pathname: "influencers",
       quantity: pendingCustomers,
       path: `/influencers/page/1`,
+      subSection: "influencer",
     },
     {
       id: 4,
@@ -34,6 +36,7 @@ export const getSideBarUpperSections = (
       pathname: "clientes",
       quantity: pendingCustomers,
       path: `/clientes/page/1`,
+      subSection: "cliente",
     },
     {
       id: 5,
@@ -42,6 +45,7 @@ export const getSideBarUpperSections = (
       pathname: "ofertas",
       quantity: 0,
       path: "/ofertas/page/1",
+      subSection: "oferta",
     },
     {
       id: 6,
@@ -50,6 +54,7 @@ export const getSideBarUpperSections = (
       pathname: "collabs",
       quantity: 0,
       path: "/collabs/page/1",
+      subSection: "collab",
     },
     {
       id: 7,
