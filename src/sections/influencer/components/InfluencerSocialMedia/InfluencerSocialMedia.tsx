@@ -1,5 +1,5 @@
 import { SocialMedia } from "@influencer/domain/InfluencerSocialMedia";
-import getSocialMediaIcons from "./utils/getSocialMediaIcons";
+import getSocialMediaIcons from "../../../shared/utils/getSocialMediaIcons/getSocialMediaIcons";
 import InfluencerSocialMediaStyles from "./InfluencerSocialMediaStyled";
 
 interface Props {
