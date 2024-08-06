@@ -4,7 +4,7 @@ const InfluencerDetailPageStyled = styled.main`
   background: ${(props) => props.theme.colors.backgroundPages};
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 40px;
   padding: 20px 20px;
   color: ${(props) => props.theme.fontsColors.dashBoard};
   height: 100vh;
@@ -14,7 +14,7 @@ const InfluencerDetailPageStyled = styled.main`
   }
 
   @media (min-width: 1600px) {
-    padding: 120px 200px;
+    padding: 70px 200px;
   }
 
   .influencer-detail {

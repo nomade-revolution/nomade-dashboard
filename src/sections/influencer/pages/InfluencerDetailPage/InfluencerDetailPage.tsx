@@ -6,6 +6,7 @@ import ImageCustom from "sections/shared/components/ImageCustom/ImageCustom";
 import InfluencerDetailPageStyled from "./InfluencerDetailPageStyled";
 import InfluencerCollabs from "sections/influencer/components/InfluencerCollabs/InfluencerCollabs";
 import Loader from "sections/shared/components/Loader/Loader";
+import GoBackButton from "sections/shared/components/GoBackButton/GoBackButton";
 
 const InfluencerDetailPage = (): React.ReactElement => {
   const { getInfluencer, influencer, loading } = useInfluencerContext();
@@ -21,6 +22,7 @@ const InfluencerDetailPage = (): React.ReactElement => {
         <Loader height="40px" width="40px" />
       ) : (
         <InfluencerDetailPageStyled className="influencer-detail">
+          <GoBackButton />
           <section className="influencer-detail__info">
             <ImageCustom
               image={influencer.avatar}
