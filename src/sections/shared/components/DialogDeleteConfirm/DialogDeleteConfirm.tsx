@@ -8,9 +8,13 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
 import { GoAlert } from "react-icons/go";
-import useDialogDelete from "sections/shared/hooks/useDialogDelete/useDialogDelete";
+import useDialog from "sections/shared/hooks/useDialog/useDialog";
 import getDialogText from "./utils/getDialogText/getDialogText";
 import SuccessFeedback from "../Feedbacks/components/SuccessFeedback/SuccessFeedback";
+import { CollabActionTypes } from "modules/collabs/domain/Collabs";
+import CollabsRejectedReasons from "sections/collabs/components/CollabsRejectedReasons/CollabsRejectedReasons";
+import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
+import { useEffect, useState } from "react";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -26,6 +30,7 @@ interface DialogDeleteConfirmProps {
   handleClose: () => void;
   sectionId: number;
   pageName: string;
+  type?: string;
 }
 
 export default function DialogDeleteConfirm({
@@ -33,8 +38,16 @@ export default function DialogDeleteConfirm({
   handleClose,
   sectionId,
   pageName,
+  type,
 }: DialogDeleteConfirmProps) {
-  const { getFunctionToDelete, isSuccess } = useDialogDelete();
+  const [reason, setReason] = useState<number>(0);
+  const { getFunctionForDialog, isSuccess } = useDialog();
+  const { collabRejectedReasons, getAllRejectedCollabReasons } =
+    useCollabsContext();
+
+  useEffect(() => {
+    type === CollabActionTypes.refuse && getAllRejectedCollabReasons();
+  }, [getAllRejectedCollabReasons, type]);
 
   return (
     <div>
@@ -56,12 +69,22 @@ export default function DialogDeleteConfirm({
           Alerta
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>{getDialogText(pageName)}</DialogContentText>
+          <DialogContentText>{getDialogText(pageName, type)}</DialogContentText>
         </DialogContent>
         <DialogActions>
+          {type === CollabActionTypes.refuse && (
+            <CollabsRejectedReasons
+              rejectedReasons={collabRejectedReasons}
+              reason={reason}
+              setReason={setReason}
+            />
+          )}
           <Button
-            onClick={() => getFunctionToDelete(sectionId, pageName)}
+            onClick={() =>
+              getFunctionForDialog(sectionId, pageName, type, reason!)
+            }
             sx={{ color: "#000", fontWeight: 700 }}
+            disabled={false}
           >
             {isSuccess ? <SuccessFeedback text="Borrado" /> : "Aceptar"}
           </Button>
