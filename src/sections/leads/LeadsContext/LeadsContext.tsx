@@ -3,7 +3,7 @@ import { isHttpSuccessResponse } from "../../shared/utils/typeGuards/typeGuardsF
 import { PaginationStucture } from "sections/shared/interfaces/interfaces";
 import { LeadsRepository } from "modules/leads/domain/LeadsRepository";
 import { Lead, LeadsApiResponse } from "modules/leads/domain/Leads";
-import { getLeads } from "modules/leads/application/leads";
+import { getLeads, sendLeadLink } from "modules/leads/application/leads";
 
 interface ContextState {
   leads: Lead[];
@@ -12,6 +12,7 @@ interface ContextState {
   isSuccess: boolean;
   pagination: PaginationStucture;
   getLeadsPaginated: (page: number, per_page: number) => void;
+  sendLinkForLead: (lead_id: number) => void;
 }
 
 export const LeadsContext = createContext<ContextState>({} as ContextState);
@@ -40,11 +41,20 @@ export const LeadsContextProvider = ({
         setLoading(false);
         setLeads(response.data.leads);
         setPagination(response.data.pagination);
-        setIsSuccess(true);
       }
     },
     [repository],
   );
+
+  const sendLinkForLead = async (lead_id: number) => {
+    const response = await sendLeadLink(repository, lead_id);
+
+    setIsSuccess(response.success);
+
+    return response;
+  };
+
+  setTimeout(() => setIsSuccess(false), 2000);
 
   return (
     <LeadsContext.Provider
@@ -55,6 +65,7 @@ export const LeadsContextProvider = ({
         isSuccess,
         pagination,
         getLeadsPaginated,
+        sendLinkForLead,
       }}
     >
       {children}
