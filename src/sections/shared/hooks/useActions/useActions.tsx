@@ -2,7 +2,11 @@ import { useNavigate } from "react-router-dom";
 import * as collabStates from "../../../collabs/utils/collabsStates";
 import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
 
+import { useLeadsContext } from "sections/leads/LeadsContext/useLeadsContext";
+
 const useActions = () => {
+  const { sendLinkForLead } = useLeadsContext();
+
   const { updateCollabState } = useCollabsContext();
   const navigate = useNavigate();
 
@@ -12,6 +16,10 @@ const useActions = () => {
 
   const handleIsDialogClosed = (setter: (value: boolean) => void) => {
     setter(false);
+  };
+
+  const handleSendLeadLink = async (section_id: number) => {
+    await sendLinkForLead(section_id);
   };
 
   const acceptCollab = async (collabId: number) => {
@@ -37,6 +45,7 @@ const useActions = () => {
     handleIsDialogClosed,
     acceptCollab,
     rejectCollab,
+    handleSendLeadLink,
   };
 };
 

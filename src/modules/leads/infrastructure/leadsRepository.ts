@@ -1,6 +1,6 @@
 import { Http } from "@core/application";
 import { HttpResponseInterface } from "@core/domain";
-import { LeadsApiResponse } from "../domain/Leads";
+import { Lead, LeadsApiResponse } from "../domain/Leads";
 import { LEADS_BASE } from "../application/routes";
 
 export class LeadsRepository {
@@ -15,6 +15,19 @@ export class LeadsRepository {
         page,
         per_page,
       });
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  public async sendLeadLink(
+    lead_id: number,
+  ): Promise<HttpResponseInterface<Lead>> {
+    try {
+      const resp = await this.http.post<Lead>(
+        `${LEADS_BASE}/${lead_id}/send-link`,
+      );
       return resp;
     } catch (error) {
       return Promise.reject(error);
