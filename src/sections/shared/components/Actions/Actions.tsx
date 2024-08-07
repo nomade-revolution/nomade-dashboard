@@ -1,26 +1,31 @@
 import { Tooltip } from "@mui/material";
-import { FaEye } from "react-icons/fa";
+import { FaCheckCircle, FaEye } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { SectionTypes } from "sections/shared/interfaces/interfaces";
 import ActionsStyled from "./ActionsStyled";
 import useActions from "sections/shared/hooks/useActions/useActions";
 import { Offer } from "modules/offers/domain/Offer";
-import { FullCollab } from "modules/collabs/domain/Collabs";
+import { CollabActionTypes, FullCollab } from "modules/collabs/domain/Collabs";
 import { Company, User } from "modules/user/domain/User";
 import { Customer } from "modules/customers/domain/Customers";
 import { Influencer } from "@influencer";
+import { MdVerifiedUser } from "react-icons/md";
+import { BsFillXSquareFill } from "react-icons/bs";
+import * as collabStates from "../../../collabs/utils/collabsStates";
 
 interface ActionsProps {
   pageName: string;
   setIsDialogOpen: (value: boolean) => void;
   section: object | Customer | Offer | FullCollab | User | Company;
+  setCollabStateActionType?: (value: CollabActionTypes) => void;
 }
 
 const Actions = ({
   pageName,
   setIsDialogOpen,
   section,
+  setCollabStateActionType,
 }: ActionsProps): React.ReactElement => {
   let buttons: React.ReactNode;
   const { handleIsDialogOpen } = useActions();
@@ -31,11 +36,11 @@ const Actions = ({
     case SectionTypes.collabs:
       buttons = (
         <>
-          <Tooltip title="Consultar colección">
+          <Tooltip title="Consultar collab">
             <Link
               to={``}
               target="_blank"
-              aria-label="Consultar colección"
+              aria-label="Consultar collab"
               className="link"
             >
               <FaEye className={"icon"} />
@@ -49,6 +54,34 @@ const Actions = ({
               <RiDeleteBin6Line className={"icon"} color="red" />
             </button>
           </Tooltip>
+          {(section as FullCollab).history[
+            (section as FullCollab).history.length - 1
+          ].id === collabStates.COLAB_PENDING_NOMADE_STATE && (
+            <>
+              <Tooltip title="Aceptar">
+                <button
+                  aria-label="Aceptar"
+                  onClick={() => {
+                    handleIsDialogOpen(setIsDialogOpen),
+                      setCollabStateActionType!(CollabActionTypes.accept);
+                  }}
+                >
+                  <FaCheckCircle color="green" className="icon" />
+                </button>
+              </Tooltip>
+              <Tooltip title="Rechazar">
+                <button
+                  aria-label="Rechazar"
+                  onClick={() => {
+                    handleIsDialogOpen(setIsDialogOpen),
+                      setCollabStateActionType!(CollabActionTypes.refuse);
+                  }}
+                >
+                  <BsFillXSquareFill className="icon" color="#C64B56" />
+                </button>
+              </Tooltip>
+            </>
+          )}
         </>
       );
       break;
@@ -91,14 +124,25 @@ const Actions = ({
       break;
     case SectionTypes.customers:
       buttons = (
-        <Tooltip title="Borrar cliente">
-          <button
-            aria-label="Borrar cliente"
-            onClick={() => handleIsDialogOpen(setIsDialogOpen)}
-          >
-            <RiDeleteBin6Line className={"icon"} color="red" />
-          </button>
-        </Tooltip>
+        <>
+          <Tooltip title="Ver detalles">
+            <Link
+              to={`/cliente/${(section as Company)?.id}`}
+              aria-label="Ver detalles"
+              className="link"
+            >
+              <FaEye className={"icon"} />
+            </Link>
+          </Tooltip>
+          <Tooltip title="Borrar cliente">
+            <button
+              aria-label="Borrar cliente"
+              onClick={() => handleIsDialogOpen(setIsDialogOpen)}
+            >
+              <RiDeleteBin6Line className={"icon"} color="red" />
+            </button>
+          </Tooltip>
+        </>
       );
       break;
     case SectionTypes.users:
@@ -109,6 +153,30 @@ const Actions = ({
             onClick={() => handleIsDialogOpen(setIsDialogOpen)}
           >
             <RiDeleteBin6Line className={"icon"} color="red" />
+          </button>
+        </Tooltip>
+      );
+      break;
+
+    case SectionTypes.leads:
+      buttons = (
+        <Tooltip title="Verificar usuario">
+          <button
+            aria-label="Verificar usuario"
+            onClick={() => {}}
+            style={{
+              background: "#8C9B6E",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              color: "#fff",
+              padding: "10px",
+              borderRadius: "8px",
+              fontWeight: "bold",
+            }}
+          >
+            <MdVerifiedUser />
+            <span>Veirifcar usuario</span>
           </button>
         </Tooltip>
       );

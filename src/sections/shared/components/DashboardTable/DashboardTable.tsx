@@ -11,7 +11,7 @@ import { Offer } from "../../../../modules/offers/domain/Offer";
 
 import { Company, User } from "modules/user/domain/User";
 import DashboardTableCellContent from "../DashboardTableCellContent/DashboardTableCellContent";
-import { Collab } from "modules/collabs/domain/Collabs";
+import { Collab, CollabActionTypes } from "modules/collabs/domain/Collabs";
 import { Influencer } from "@influencer";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -43,15 +43,17 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 interface DashboardTableProps<Type> {
   bodySections: Type[];
   headerSections: HeaderSection[];
-  // type: SectionTypes;
   pageName: string;
+  type?: string;
+  setCollabStateActionType?: (value: CollabActionTypes) => void;
 }
 
 const DashboardTable = <Type,>({
   bodySections,
   headerSections,
-  // type,
   pageName,
+  type,
+  setCollabStateActionType,
 }: DashboardTableProps<Type>): React.ReactElement => {
   return (
     <TableContainer
@@ -107,6 +109,8 @@ const DashboardTable = <Type,>({
                       section as Offer | User | Influencer | Company | Collab
                     }
                     pageName={pageName}
+                    type={type}
+                    setCollabStateActionType={setCollabStateActionType}
                   />
                 </StyledTableCell>
               ))}

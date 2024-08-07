@@ -8,9 +8,11 @@ import UsersPage from "../sections/user/pages/UsersPage/UsersPage";
 import OffersPage from "../sections/offers/pages/OffersPage/OffersPage";
 import MyAccountPage from "../sections/user/pages/MyAccountPage/MyAccountPage";
 import CollabsPage from "sections/collabs/pages/CollabsPage";
-import CompaniesPage from "sections/company/pages/CompanyPage";
 import InfluencerDetailPage from "sections/influencer/pages/InfluencerDetailPage/InfluencerDetailPage";
 import InfluencersPage from "sections/influencer/pages/InfluencerPage/InfluencerPage";
+import CompaniesPage from "sections/company/pages/CompanyPage/CompanyPage";
+import CompanyDetailPage from "sections/company/pages/CompanyDetailPage/CompanyDetailPage";
+import LeadsPage from "sections/leads/pages/LeadsPage/LeadsPage";
 
 const routes: RouteObject[] = [
   {
@@ -38,7 +40,10 @@ const routes: RouteObject[] = [
         path: appPaths.clients,
         element: <CompaniesPage />,
       },
-
+      {
+        path: appPaths.client,
+        element: <CompanyDetailPage />,
+      },
       {
         path: appPaths.offers,
         element: <OffersPage />,
@@ -46,6 +51,10 @@ const routes: RouteObject[] = [
       {
         path: appPaths.collabs,
         element: <CollabsPage />,
+      },
+      {
+        path: appPaths.leads,
+        element: <LeadsPage />,
       },
       {
         path: appPaths.account,

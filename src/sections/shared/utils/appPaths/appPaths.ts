@@ -3,7 +3,7 @@ export const appPaths = {
   register: "/registro",
   offers: "/ofertas/page/:page",
   clients: "/clientes/page/:page",
-  client: "/clientes/:id",
+  client: "/cliente/:id",
   users: "/usuarios/page/:page",
   settings: "/configuración",
   account: "/mi-cuenta",
@@ -13,4 +13,5 @@ export const appPaths = {
   collabs: "/collabs/page/:page",
   influencers: "/influencers/page/:page",
   influencer: "/influencer/:id",
+  leads: "/leads/page/:page",
 };

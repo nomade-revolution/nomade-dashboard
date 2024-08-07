@@ -1,0 +1,79 @@
+import ReusablePageStyled from "assets/styles/ReusablePageStyled";
+import { mockUsers } from "mocks/userMocks";
+import { useState, useEffect } from "react";
+import { useLocation, useParams } from "react-router-dom";
+import { useLeadsContext } from "sections/leads/LeadsContext/useLeadsContext";
+import { leadsHeaderSection } from "sections/leads/utils/leadsSections";
+import DashboardCardListMobile from "sections/shared/components/DashboardCardListMobile/DashboardCardListMobile";
+import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
+import Loader from "sections/shared/components/Loader/Loader";
+import NoDataHandler from "sections/shared/components/NoDataHandler/NoDataHandler";
+import PaginationComponent from "sections/shared/components/Pagination/PaginationComponent";
+import SearchBar from "sections/shared/components/SearchBar/SearchBar";
+import { SectionTypes } from "sections/shared/interfaces/interfaces";
+
+const LeadsPage = (): React.ReactElement => {
+  const [searchText, setSearchText] = useState<string | null>(null);
+
+  const { search } = useLocation();
+  const { getLeadsPaginated, loading, leads, pagination } = useLeadsContext();
+  const { page } = useParams();
+
+  const searchParams = search.split("?").join("");
+
+  useEffect(() => {
+    // const filters: FilterParams = {
+    //   types: ["Company"],
+    // };
+
+    getLeadsPaginated(+page!, 12);
+  }, [getLeadsPaginated, page]);
+
+  return (
+    <>
+      {loading ? (
+        <Loader width="40px" height="40px" />
+      ) : !loading && mockUsers.length !== 0 ? (
+        <ReusablePageStyled className="dashboard">
+          <div className="dashboard__search">
+            <SearchBar
+              pageName={SectionTypes.leads}
+              pageTypes={SectionTypes.leads}
+              searchText={searchText!}
+              setSearchText={setSearchText}
+              onSearchSubmit={() => {}}
+            />
+          </div>
+          <div className="dashboard__orders-table">
+            <DashboardTable
+              bodySections={leads}
+              headerSections={leadsHeaderSection}
+              pageName={SectionTypes.leads}
+            />
+          </div>
+          <div className="dashboard__mobile">
+            <h3>Influencers</h3>
+            <DashboardCardListMobile
+              bodySections={leads}
+              headerSections={leadsHeaderSection}
+              pageName={SectionTypes.leads}
+            />
+          </div>
+          <PaginationComponent
+            current_page={pagination.current_page}
+            last_page={pagination.last_page}
+            per_page={pagination.per_page}
+            pageName={SectionTypes.leads}
+            filterParams={searchParams}
+          />
+        </ReusablePageStyled>
+      ) : mockUsers.length === 0 ? (
+        <NoDataHandler pageName={SectionTypes.leads} search={searchText!} />
+      ) : (
+        <></>
+      )}
+    </>
+  );
+};
+
+export default LeadsPage;

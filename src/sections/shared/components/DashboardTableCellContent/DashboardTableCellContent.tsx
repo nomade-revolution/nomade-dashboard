@@ -1,4 +1,4 @@
-import { Collab } from "modules/collabs/domain/Collabs";
+import { Collab, CollabActionTypes } from "modules/collabs/domain/Collabs";
 import { Customer } from "modules/customers/domain/Customers";
 import { Offer } from "modules/offers/domain/Offer";
 import { User } from "modules/user/domain/User";
@@ -12,12 +12,16 @@ interface ReusableTableBodyCellProps {
   section: Offer | Customer | Collab | User | Influencer;
   headerSection: HeaderSection;
   pageName: string;
+  type?: string;
+  setCollabStateActionType?: (value: CollabActionTypes) => void;
 }
 
 const DashboardTableCellContent = ({
   headerSection,
   section,
   pageName,
+  type,
+  setCollabStateActionType,
 }: ReusableTableBodyCellProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
@@ -29,6 +33,7 @@ const DashboardTableCellContent = ({
           section={section}
           setIsDialogOpen={setIsDialogOpen}
           pageName={pageName}
+          setCollabStateActionType={setCollabStateActionType}
         />
       }
 
@@ -38,6 +43,7 @@ const DashboardTableCellContent = ({
           open={isDialogOpen}
           sectionId={section.id!}
           pageName={pageName}
+          type={type}
         />
       )}
     </>

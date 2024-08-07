@@ -8,7 +8,7 @@ import { FullOffer, Offer } from "../../../../modules/offers/domain/Offer";
 import { Switch } from "@mui/material";
 import { TimeSlot } from "modules/offers/domain/OfferCalendar";
 import { Company, User } from "modules/user/domain/User";
-import { FullCollab } from "modules/collabs/domain/Collabs";
+import { CollabActionTypes, FullCollab } from "modules/collabs/domain/Collabs";
 import { getTypesClassNames } from "./utils/getClassNames/getClassNames";
 import Actions from "../Actions/Actions";
 import { Influencer } from "@influencer";
@@ -18,6 +18,7 @@ interface DashboardTableCellContentProps {
   section: object | Customer | Offer | FullCollab | User | Company;
   pageName: string;
   setIsDialogOpen: (value: boolean) => void;
+  setCollabStateActionType?: (value: CollabActionTypes) => void;
 }
 
 const DashboardContentSections = ({
@@ -25,6 +26,7 @@ const DashboardContentSections = ({
   section,
   pageName,
   setIsDialogOpen,
+  setCollabStateActionType,
 }: DashboardTableCellContentProps) => {
   const calendar = (section as FullOffer).calendar;
   const daysSet = new Set<string>();
@@ -197,7 +199,19 @@ const DashboardContentSections = ({
           pageName={pageName}
           setIsDialogOpen={setIsDialogOpen}
           section={section}
+          setCollabStateActionType={setCollabStateActionType}
         />
+      );
+
+    case "history":
+      return (
+        <span>
+          {
+            (section as FullCollab).history[
+              (section as FullCollab).history.length - 1
+            ].name
+          }
+        </span>
       );
 
     default:

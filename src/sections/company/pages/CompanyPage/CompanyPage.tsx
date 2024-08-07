@@ -15,7 +15,7 @@ import {
 } from "sections/shared/interfaces/interfaces";
 
 import { useUserContext } from "sections/user/UserContext/useUserContext";
-import { companyTableHeaderSections } from "../utils/companySections";
+import { companyTableHeaderSections } from "../../utils/companySections";
 
 const CompaniesPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string | null>(null);
