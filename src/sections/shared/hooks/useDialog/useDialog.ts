@@ -6,8 +6,10 @@ import { useInfluencerContext } from "sections/influencer/InfluencerContext/useI
 import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
 import { SectionTypes } from "sections/shared/interfaces/interfaces";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
+import useActions from "../useActions/useActions";
+import { CollabActionTypes } from "modules/collabs/domain/Collabs";
 
-const useDialogDelete = () => {
+const useDialog = () => {
   const navigate = useNavigate();
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const { deleteUserById } = useUserContext();
@@ -15,6 +17,7 @@ const useDialogDelete = () => {
   const { deleteCompanyById } = useCompanyContext();
   const { deleteOfferById } = useOffersContext();
   const { deleteCollabById } = useCollabsContext();
+  const { acceptCollab, rejectCollab } = useActions();
 
   const handleDeleteUsers = async (sectionId: number) => {
     const response = await deleteUserById(sectionId!);
@@ -46,18 +49,30 @@ const useDialogDelete = () => {
     setTimeout(() => navigate(0), 1500);
   };
 
-  const getFunctionToDelete = (sectionId: number, pageName: string) => {
-    return pageName === SectionTypes.offers
-      ? handleDeleteOffer(sectionId)
-      : pageName === SectionTypes.collabs
-        ? handleDeleteCollab(sectionId)
-        : pageName === SectionTypes.customers
-          ? handleDeleteCompany(sectionId)
-          : pageName === SectionTypes.influencers
-            ? handleDeleteInfluencer(sectionId)
-            : pageName === SectionTypes.users
-              ? handleDeleteUsers(sectionId)
-              : null;
+  const getFunctionForDialog = (
+    sectionId: number,
+    pageName: string,
+    type?: string,
+    rejected_colab_reason_id?: number,
+  ) => {
+    switch (pageName) {
+      case SectionTypes.offers:
+        return handleDeleteOffer(sectionId);
+      case SectionTypes.collabs:
+        return type === CollabActionTypes.accept
+          ? acceptCollab(sectionId)
+          : type === CollabActionTypes.refuse
+            ? rejectCollab(sectionId, rejected_colab_reason_id!)
+            : handleDeleteCollab(sectionId);
+      case SectionTypes.customers:
+        return handleDeleteCompany(sectionId);
+      case SectionTypes.influencers:
+        return handleDeleteInfluencer(sectionId);
+      case SectionTypes.users:
+        return handleDeleteUsers(sectionId);
+      default:
+        return null;
+    }
   };
 
   return {
@@ -66,9 +81,9 @@ const useDialogDelete = () => {
     handleDeleteCompany,
     handleDeleteOffer,
     handleDeleteCollab,
-    getFunctionToDelete,
+    getFunctionForDialog,
     isSuccess,
   };
 };
 
-export default useDialogDelete;
+export default useDialog;

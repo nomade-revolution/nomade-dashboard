@@ -64,3 +64,8 @@ export enum CollabTypes {
   delivery = "Delivery",
   activity = "Activity",
 }
+
+export enum CollabActionTypes {
+  accept = "accept",
+  refuse = "refuse",
+}

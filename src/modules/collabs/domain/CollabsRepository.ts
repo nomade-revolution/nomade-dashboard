@@ -8,4 +8,10 @@ export interface CollabsRepository<I> {
     company_id?: number | undefined,
   ): Promise<HttpResponseInterface<I>>;
   deleteCollab(collab_id: number): Promise<HttpResponseInterface<I>>;
+  updateCollabHistoryState(
+    collab_id: number,
+    state_id: number,
+    rejected_colab_reason_id?: number,
+  ): Promise<HttpResponseInterface<I>>;
+  getRejectedCollabReasons(): Promise<HttpResponseInterface<I>>;
 }

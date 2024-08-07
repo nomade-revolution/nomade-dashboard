@@ -9,6 +9,10 @@ const dialogTexts = {
             borrarás la oferta permanentemente de la base de datos.`,
   deleteCollab: `¿Estás seguro/a de borrar esta collab? Haciendo click en aceptar,
             borrarás la collab permanentemente de la base de datos.`,
+  acceptCollab: `¿Estás seguro/a de aceptar esta collab? Haciendo click en aceptar,
+             aceptarás la collab.`,
+  refuseCollab: `¿Estás seguro/a de rechazar esta collab? Haciendo click en aceptar,
+            rechazarás la collab.`,
 };
 
 export default dialogTexts;

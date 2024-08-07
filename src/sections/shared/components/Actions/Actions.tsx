@@ -1,27 +1,31 @@
 import { Tooltip } from "@mui/material";
-import { FaEye } from "react-icons/fa";
+import { FaCheckCircle, FaEye } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { SectionTypes } from "sections/shared/interfaces/interfaces";
 import ActionsStyled from "./ActionsStyled";
 import useActions from "sections/shared/hooks/useActions/useActions";
 import { Offer } from "modules/offers/domain/Offer";
-import { FullCollab } from "modules/collabs/domain/Collabs";
+import { CollabActionTypes, FullCollab } from "modules/collabs/domain/Collabs";
 import { Company, User } from "modules/user/domain/User";
 import { Customer } from "modules/customers/domain/Customers";
 import { Influencer } from "@influencer";
 import { MdVerifiedUser } from "react-icons/md";
+import { BsFillXSquareFill } from "react-icons/bs";
+import * as collabStates from "../../../collabs/utils/collabsStates";
 
 interface ActionsProps {
   pageName: string;
   setIsDialogOpen: (value: boolean) => void;
   section: object | Customer | Offer | FullCollab | User | Company;
+  setCollabStateActionType?: (value: CollabActionTypes) => void;
 }
 
 const Actions = ({
   pageName,
   setIsDialogOpen,
   section,
+  setCollabStateActionType,
 }: ActionsProps): React.ReactElement => {
   let buttons: React.ReactNode;
   const { handleIsDialogOpen } = useActions();
@@ -32,11 +36,11 @@ const Actions = ({
     case SectionTypes.collabs:
       buttons = (
         <>
-          <Tooltip title="Consultar colección">
+          <Tooltip title="Consultar collab">
             <Link
               to={``}
               target="_blank"
-              aria-label="Consultar colección"
+              aria-label="Consultar collab"
               className="link"
             >
               <FaEye className={"icon"} />
@@ -50,6 +54,34 @@ const Actions = ({
               <RiDeleteBin6Line className={"icon"} color="red" />
             </button>
           </Tooltip>
+          {(section as FullCollab).history[
+            (section as FullCollab).history.length - 1
+          ].id === collabStates.COLAB_PENDING_NOMADE_STATE && (
+            <>
+              <Tooltip title="Aceptar">
+                <button
+                  aria-label="Aceptar"
+                  onClick={() => {
+                    handleIsDialogOpen(setIsDialogOpen),
+                      setCollabStateActionType!(CollabActionTypes.accept);
+                  }}
+                >
+                  <FaCheckCircle color="green" className="icon" />
+                </button>
+              </Tooltip>
+              <Tooltip title="Rechazar">
+                <button
+                  aria-label="Rechazar"
+                  onClick={() => {
+                    handleIsDialogOpen(setIsDialogOpen),
+                      setCollabStateActionType!(CollabActionTypes.refuse);
+                  }}
+                >
+                  <BsFillXSquareFill className="icon" color="#C64B56" />
+                </button>
+              </Tooltip>
+            </>
+          )}
         </>
       );
       break;
