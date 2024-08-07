@@ -10,8 +10,8 @@ import { FullCollab } from "modules/collabs/domain/Collabs";
 import { Company, User } from "modules/user/domain/User";
 import { Customer } from "modules/customers/domain/Customers";
 import { Influencer } from "@influencer";
-import { MdVerifiedUser } from "react-icons/md";
 import { Lead } from "modules/leads/domain/Leads";
+import { BsSendCheckFill } from "react-icons/bs";
 
 interface ActionsProps {
   pageName: string;
@@ -25,7 +25,7 @@ const Actions = ({
   section,
 }: ActionsProps): React.ReactElement => {
   let buttons: React.ReactNode;
-  const { handleIsDialogOpen } = useActions();
+  const { handleIsDialogOpen, handleSendLeadLink } = useActions();
 
   // const navigate = useNavigate();
 
@@ -129,10 +129,10 @@ const Actions = ({
 
     case SectionTypes.leads:
       buttons = (
-        <Tooltip title="Verificar usuario">
+        <Tooltip title="Enviar link">
           <button
             aria-label="Verificar usuario"
-            onClick={() => {}}
+            onClick={() => handleSendLeadLink((section as Lead).id)}
             style={{
               background: "#8C9B6E",
               display: "flex",
@@ -144,8 +144,8 @@ const Actions = ({
               fontWeight: "bold",
             }}
           >
-            <MdVerifiedUser />
-            <span>Veirifcar usuario</span>
+            <BsSendCheckFill />
+            <span>Enviar link</span>
           </button>
         </Tooltip>
       );
