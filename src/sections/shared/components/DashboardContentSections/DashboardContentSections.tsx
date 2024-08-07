@@ -12,10 +12,11 @@ import { CollabActionTypes, FullCollab } from "modules/collabs/domain/Collabs";
 import { getTypesClassNames } from "./utils/getClassNames/getClassNames";
 import Actions from "../Actions/Actions";
 import { Influencer } from "@influencer";
+import { Lead } from "modules/leads/domain/Leads";
 
 interface DashboardTableCellContentProps {
   headerSection: HeaderSection;
-  section: object | Customer | Offer | FullCollab | User | Company;
+  section: object | Customer | Offer | FullCollab | User | Company | Lead;
   pageName: string;
   setIsDialogOpen: (value: boolean) => void;
   setCollabStateActionType?: (value: CollabActionTypes) => void;

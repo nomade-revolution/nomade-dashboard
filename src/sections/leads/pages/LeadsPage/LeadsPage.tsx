@@ -6,6 +6,7 @@ import { useLeadsContext } from "sections/leads/LeadsContext/useLeadsContext";
 import { leadsHeaderSection } from "sections/leads/utils/leadsSections";
 import DashboardCardListMobile from "sections/shared/components/DashboardCardListMobile/DashboardCardListMobile";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
+import SuccessFeedback from "sections/shared/components/Feedbacks/components/SuccessFeedback/SuccessFeedback";
 import Loader from "sections/shared/components/Loader/Loader";
 import NoDataHandler from "sections/shared/components/NoDataHandler/NoDataHandler";
 import PaginationComponent from "sections/shared/components/Pagination/PaginationComponent";
@@ -16,7 +17,8 @@ const LeadsPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string | null>(null);
 
   const { search } = useLocation();
-  const { getLeadsPaginated, loading, leads, pagination } = useLeadsContext();
+  const { getLeadsPaginated, loading, leads, pagination, isSuccess } =
+    useLeadsContext();
   const { page } = useParams();
 
   const searchParams = search.split("?").join("");
@@ -36,6 +38,7 @@ const LeadsPage = (): React.ReactElement => {
       ) : !loading && mockUsers.length !== 0 ? (
         <ReusablePageStyled className="dashboard">
           <div className="dashboard__search">
+            {isSuccess && <SuccessFeedback text="Link enviado" />}
             <SearchBar
               pageName={SectionTypes.leads}
               pageTypes={SectionTypes.leads}
