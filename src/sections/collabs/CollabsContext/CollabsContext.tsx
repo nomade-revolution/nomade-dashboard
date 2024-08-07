@@ -5,12 +5,16 @@ import { CollabsRepository } from "modules/collabs/domain/CollabsRepository";
 import {
   collabsGetAll,
   deleteCollab,
+  getRejectedCollabReasons,
+  updateCollabHistoryState,
 } from "modules/collabs/application/collabs";
-import { FullCollab } from "modules/collabs/domain/Collabs";
+import { FullCollab, RejectedCollab } from "modules/collabs/domain/Collabs";
 import { PaginationStucture } from "sections/shared/interfaces/interfaces";
 
 interface ContextState {
   collabs: FullCollab[];
+  collab: FullCollab;
+  collabRejectedReasons: RejectedCollab[];
   loading: boolean;
   error: string | null;
   isSuccess: boolean;
@@ -22,6 +26,12 @@ interface ContextState {
     company_id?: number | undefined,
   ) => void;
   deleteCollabById: (influencer_id: number) => void;
+  updateCollabState: (
+    collab_id: number,
+    state_id: number,
+    reject_collab_reason_id?: number,
+  ) => void;
+  getAllRejectedCollabReasons: () => void;
 }
 
 export const CollabsContext = createContext<ContextState>({} as ContextState);
@@ -31,6 +41,10 @@ export const CollabsContextProvider = ({
   repository,
 }: React.PropsWithChildren<{ repository: CollabsRepository<FullOffer[]> }>) => {
   const [collabs, setCollabs] = useState<FullCollab[]>([]);
+  const [collab, setCollab] = useState<FullCollab>({} as FullCollab);
+  const [collabRejectedReasons, setCollabRejectedReasons] = useState<
+    RejectedCollab[]
+  >([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [pagination, setPagination] = useState<PaginationStucture>(
@@ -75,16 +89,48 @@ export const CollabsContextProvider = ({
     return response;
   };
 
+  const updateCollabState = async (
+    collab_id: number,
+    state_id: number,
+    rejected_collab_reason_id?: number,
+  ) => {
+    const response = await updateCollabHistoryState(
+      repository,
+      collab_id,
+      state_id,
+      rejected_collab_reason_id,
+    );
+
+    if (isHttpSuccessResponse(response)) {
+      setCollab(response.data);
+    }
+
+    return response;
+  };
+
+  const getAllRejectedCollabReasons = useCallback(async () => {
+    setError(null);
+
+    const response = await getRejectedCollabReasons(repository);
+    if (isHttpSuccessResponse(response)) {
+      setCollabRejectedReasons(response.data);
+    }
+  }, [repository]);
+
   return (
     <CollabsContext.Provider
       value={{
         collabs,
+        collab,
+        collabRejectedReasons,
         loading,
         error,
         isSuccess,
         pagination,
         getAllCollabs,
         deleteCollabById,
+        updateCollabState,
+        getAllRejectedCollabReasons,
       }}
     >
       {children}
