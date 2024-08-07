@@ -13,6 +13,8 @@ import SearchBar from "sections/shared/components/SearchBar/SearchBar";
 
 const CollabsPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string | null>(null);
+  const [collabStateActionType, setCollabStateActionType] =
+    useState<string>("");
 
   const { getAllCollabs, collabs, pagination, loading } = useCollabsContext();
   const { page } = useParams();
@@ -30,8 +32,8 @@ const CollabsPage = (): React.ReactElement => {
           <div className="dashboard__table">
             <div className="dashboard__searchContainer">
               <SearchBar
-                pageName={SectionTypes.influencers}
-                pageTypes={SectionTypes.influencers}
+                pageName={SectionTypes.collabs}
+                pageTypes={SectionTypes.collabs}
                 searchText={searchText!}
                 setSearchText={setSearchText}
                 onSearchSubmit={() => {}}
@@ -41,6 +43,8 @@ const CollabsPage = (): React.ReactElement => {
               bodySections={collabs}
               headerSections={collabsHeaderSections}
               pageName={SectionTypes.collabs}
+              type={collabStateActionType}
+              setCollabStateActionType={setCollabStateActionType}
             />
           </div>
           <div className="dashboard__mobile">
