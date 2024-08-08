@@ -30,6 +30,7 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
     { setSubmitting }: FormikHelpers<CompanyRegisterStructure>,
   ) => {
     setSubmitting(false);
+    values;
   };
 
   const initialValues = {
