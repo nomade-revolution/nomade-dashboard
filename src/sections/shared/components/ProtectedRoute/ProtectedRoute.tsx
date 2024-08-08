@@ -17,7 +17,8 @@ const ProtectedRoute = ({ element }: ProtectedRouteProps): JSX.Element => {
       location.pathname === appPaths.register ||
       location.pathname === "/" ||
       location.pathname === appPaths.recovery_password ||
-      location.pathname === appPaths.reset_password
+      location.pathname === appPaths.reset_password ||
+      location.pathname === appPaths.leadsSubmit
     ) {
       return <Navigate to={"/usuarios/page/1"} replace={true} />;
     }
@@ -26,7 +27,8 @@ const ProtectedRoute = ({ element }: ProtectedRouteProps): JSX.Element => {
       location.pathname !== appPaths.login &&
       location.pathname !== appPaths.register &&
       location.pathname !== appPaths.recovery_password &&
-      location.pathname !== appPaths.reset_password
+      location.pathname !== appPaths.reset_password &&
+      location.pathname !== appPaths.leadsSubmit
     ) {
       return <Navigate to={appPaths.login} replace={true} />;
     }
