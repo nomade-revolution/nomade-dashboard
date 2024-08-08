@@ -4,3 +4,15 @@ export interface Address {
   min_guests: number;
   max_guests: number;
 }
+
+export interface FullAddress {
+  name: string;
+  address: string;
+  address_2: string;
+  city_id: string;
+  province: string;
+  country_id: number;
+  zip_code: string;
+  contact_name: string;
+  contact_phone: string;
+}

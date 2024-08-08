@@ -1,5 +1,6 @@
 import { Influencer } from "@influencer";
 import { SocialMedia } from "@influencer/domain/InfluencerSocialMedia";
+import { FullAddress } from "modules/offers/domain/OfferrAddress";
 import { PaginationStucture } from "sections/shared/interfaces/interfaces";
 
 export interface User {
@@ -73,4 +74,19 @@ export enum UserTypes {
 export interface UserApiResponse {
   users: User[] | Influencer[] | Company[];
   pagination: PaginationStucture;
+}
+
+export interface CompanyRegisterStructure {
+  nif: string;
+  company: string;
+  company_name: string;
+  phone: string;
+  web: string;
+  description: string;
+  image: string;
+  hash: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
+  address: FullAddress;
 }
