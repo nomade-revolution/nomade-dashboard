@@ -41,8 +41,8 @@ const SideBar = ({
       />
       <div className="side-bar__actions actions">
         {sideBarUpperSections.map((section) => {
-          const isSubSectionActive =
-            pathname.split("/")[1] === section.subSection;
+          // const isSubSectionActive =
+          //   pathname.split("/")[1] === section.subSection;
           return (
             <>
               <Link to={section.path} key={section.id}>
@@ -83,11 +83,11 @@ const SideBar = ({
                   )}
                 </div>
               </Link>
-              {isSubSectionActive && (
+              {/* {isSubSectionActive && (
                 <div className="subsection">
                   <span className="subsection__text">{section.subSection}</span>
                 </div>
-              )}
+              )} */}
             </>
           );
         })}
