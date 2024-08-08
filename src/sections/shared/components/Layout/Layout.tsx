@@ -20,7 +20,8 @@ const Layout = (): React.ReactElement => {
           location.pathname !== appPaths.login &&
           location.pathname !== appPaths.register &&
           location.pathname !== appPaths.recovery_password &&
-          location.pathname !== appPaths.reset_password
+          location.pathname !== appPaths.reset_password &&
+          location.pathname !== appPaths.leadsSubmit
             ? "layout"
             : ""
         }
@@ -30,7 +31,8 @@ const Layout = (): React.ReactElement => {
             location.pathname === appPaths.login ||
             location.pathname === appPaths.register ||
             location.pathname === appPaths.recovery_password ||
-            location.pathname === appPaths.reset_password
+            location.pathname === appPaths.reset_password ||
+            location.pathname === appPaths.leadsSubmit
               ? "layout__sidebar-hidden"
               : "layout__sidebar"
           }
@@ -38,7 +40,8 @@ const Layout = (): React.ReactElement => {
           {location.pathname !== appPaths.login &&
             location.pathname !== appPaths.register &&
             location.pathname !== appPaths.recovery_password &&
-            location.pathname !== appPaths.reset_password && (
+            location.pathname !== appPaths.reset_password &&
+            location.pathname !== appPaths.leadsSubmit && (
               <SideBar pendingOrders={5} pendingCustomers={10} />
             )}
         </section>
@@ -51,7 +54,8 @@ const Layout = (): React.ReactElement => {
             location.pathname == appPaths.login ||
             location.pathname === appPaths.register ||
             location.pathname === appPaths.recovery_password ||
-            location.pathname === appPaths.reset_password
+            location.pathname === appPaths.reset_password ||
+            location.pathname === appPaths.leadsSubmit
               ? "layout__sidebar-hidden"
               : "layout__pages"
           }
