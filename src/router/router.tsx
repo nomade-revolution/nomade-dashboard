@@ -13,6 +13,7 @@ import InfluencersPage from "sections/influencer/pages/InfluencerPage/Influencer
 import CompaniesPage from "sections/company/pages/CompanyPage/CompanyPage";
 import CompanyDetailPage from "sections/company/pages/CompanyDetailPage/CompanyDetailPage";
 import LeadsPage from "sections/leads/pages/LeadsPage/LeadsPage";
+import LeadsSubmitInfoPage from "sections/leads/pages/LeadsSubmitInfoPage/LeadsSubmitInfoPage";
 
 const routes: RouteObject[] = [
   {
@@ -55,6 +56,10 @@ const routes: RouteObject[] = [
       {
         path: appPaths.leads,
         element: <LeadsPage />,
+      },
+      {
+        path: appPaths.leadsSubmit,
+        element: <LeadsSubmitInfoPage />,
       },
       {
         path: appPaths.account,

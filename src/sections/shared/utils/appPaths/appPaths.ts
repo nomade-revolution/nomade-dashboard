@@ -14,4 +14,5 @@ export const appPaths = {
   influencers: "/influencers/page/:page",
   influencer: "/influencer/:id",
   leads: "/leads/page/:page",
+  leadsSubmit: "/client/register",
 };
