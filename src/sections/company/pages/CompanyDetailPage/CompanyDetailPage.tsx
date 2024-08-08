@@ -24,6 +24,9 @@ const InfluencerDetailPage = (): React.ReactElement => {
       ) : (
         <CompanyDetailPageStyled className="company-detail">
           <GoBackButton />
+          <div className="company-detail__title">
+            <h2>Cliente</h2>
+          </div>
           <section className="company-detail__info">
             <ImageCustom
               image={company.image}

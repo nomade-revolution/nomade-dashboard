@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
-const LoginPageStyled = styled.main`
+const LeadsSubmitInfoPageStyled = styled.main`
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
 
-  .login-page {
+  .leadSubmit-page {
     height: 100%;
 
     &__company {
@@ -35,4 +35,4 @@ const LoginPageStyled = styled.main`
   }
 `;
 
-export default LoginPageStyled;
+export default LeadsSubmitInfoPageStyled;

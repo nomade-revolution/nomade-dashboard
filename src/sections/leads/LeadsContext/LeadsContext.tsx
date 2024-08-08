@@ -3,16 +3,23 @@ import { isHttpSuccessResponse } from "../../shared/utils/typeGuards/typeGuardsF
 import { PaginationStucture } from "sections/shared/interfaces/interfaces";
 import { LeadsRepository } from "modules/leads/domain/LeadsRepository";
 import { Lead, LeadsApiResponse } from "modules/leads/domain/Leads";
-import { getLeads, sendLeadLink } from "modules/leads/application/leads";
+import {
+  getLeads,
+  getLeadsForm,
+  sendLeadLink,
+} from "modules/leads/application/leads";
+import { CompanyRegisterStructure } from "modules/user/domain/User";
 
 interface ContextState {
   leads: Lead[];
+  lead: CompanyRegisterStructure;
   loading: boolean;
   error: string | null;
   isSuccess: boolean;
   pagination: PaginationStucture;
   getLeadsPaginated: (page: number, per_page: number) => void;
   sendLinkForLead: (lead_id: number) => void;
+  getLeadFromHash: (hash: string) => void;
 }
 
 export const LeadsContext = createContext<ContextState>({} as ContextState);
@@ -24,6 +31,9 @@ export const LeadsContextProvider = ({
   repository: LeadsRepository<LeadsApiResponse>;
 }>) => {
   const [leads, setLeads] = useState<Lead[]>([]);
+  const [lead, setLead] = useState<CompanyRegisterStructure>(
+    {} as CompanyRegisterStructure,
+  );
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [pagination, setPagination] = useState<PaginationStucture>(
@@ -54,18 +64,35 @@ export const LeadsContextProvider = ({
     return response;
   };
 
+  const getLeadFromHash = useCallback(
+    async (hash: string) => {
+      setLoading(true);
+      const response = await getLeadsForm(repository, hash);
+      if (isHttpSuccessResponse(response)) {
+        setLead(response.data);
+      }
+      setLoading(false);
+      setIsSuccess(response.success);
+
+      return response;
+    },
+    [repository],
+  );
+
   setTimeout(() => setIsSuccess(false), 2000);
 
   return (
     <LeadsContext.Provider
       value={{
         leads,
+        lead,
         loading,
         error,
         isSuccess,
         pagination,
         getLeadsPaginated,
         sendLinkForLead,
+        getLeadFromHash,
       }}
     >
       {children}
