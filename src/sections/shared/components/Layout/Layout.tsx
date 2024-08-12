@@ -13,7 +13,7 @@ const Layout = (): React.ReactElement => {
 
   useEffect(() => {
     setSessionToken();
-  }, []);
+  }, [setSessionToken]);
   return (
     <LayoutStyled>
       <div
