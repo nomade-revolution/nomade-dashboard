@@ -14,7 +14,7 @@ import {
   REGISTER_ROUTE,
   USER_ROUTE,
 } from "@auth/application";
-import { AuthUserType } from "@auth/domain/AuthUserType.ts";
+import { User } from "modules/user/domain/User";
 
 interface SignUpResponseInterface {
   user: {
@@ -74,9 +74,9 @@ export class AuthRepository
     }
   }
 
-  public async getUser(): Promise<HttpResponseInterface<AuthUserType>> {
+  public async getLoggedUser(): Promise<HttpResponseInterface<User>> {
     try {
-      const resp = await this.http.get<AuthUserType>(USER_ROUTE);
+      const resp = await this.http.get<User>(USER_ROUTE);
       return resp;
     } catch (error) {
       return Promise.reject(error);

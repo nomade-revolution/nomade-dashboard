@@ -63,7 +63,10 @@ const DropdownMenu = ({
           <li key={section.id}>
             <div key={section.id} className="user-actions__section">
               <span className="user-actions__icon">{section.icon}</span>
-              <Link to={section.path} onClick={handleLogout}>
+              <Link
+                to={section.path}
+                onClick={section.isLogout ? handleLogout : () => {}}
+              >
                 <span className="user-actions__name">{section.name}</span>
               </Link>
             </div>

@@ -78,6 +78,17 @@ export const getSideBarUpperSections = (
 };
 
 export const sideBarDownSections = [
-  { id: 5, icon: <IoIosSettings />, name: "Mi cuenta", path: appPaths.account },
-  { id: 6, icon: <CiLogout />, name: "Log out", path: appPaths.login },
+  {
+    id: 9,
+    icon: <IoIosSettings />,
+    name: "Mi cuenta",
+    path: appPaths.account,
+  },
+  {
+    id: 10,
+    icon: <CiLogout />,
+    name: "Log out",
+    path: appPaths.login,
+    isLogout: true,
+  },
 ];

@@ -44,8 +44,8 @@ const SideBar = ({
           // const isSubSectionActive =
           //   pathname.split("/")[1] === section.subSection;
           return (
-            <>
-              <Link to={section.path} key={section.id}>
+            <div key={section.id}>
+              <Link to={section.path} key={section.id + ""}>
                 <div
                   className={
                     pathname.includes(section.path) ||
@@ -85,10 +85,10 @@ const SideBar = ({
               </Link>
               {/* {isSubSectionActive && (
                 <div className="subsection">
-                  <span className="subsection__text">{section.subSection}</span>
+                <span className="subsection__text">{section.subSection}</span>
                 </div>
-              )} */}
-            </>
+                )} */}
+            </div>
           );
         })}
       </div>

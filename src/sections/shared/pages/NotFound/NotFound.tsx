@@ -11,7 +11,7 @@ const NotFound = (): React.ReactElement => {
         {" "}
         Upsss. No hemos podido encontrar la pagina que estás buscando.
       </span>
-      <Link to={"/usuarios"} className="not-found__link">
+      <Link to={"/"} className="not-found__link">
         Volver atrás
       </Link>
     </NotFoundStyled>
