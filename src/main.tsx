@@ -15,6 +15,8 @@ import { UserContextProvider } from "sections/user/UserContext/UserContext.tsx";
 import { InfluencerContextProvider } from "sections/influencer/InfluencerContext/InfluencerContext.tsx";
 import { CompanyContextProvider } from "sections/company/CompanyContext/CompanyContext.tsx";
 import { LeadsContextProvider } from "sections/leads/LeadsContext/LeadsContext.tsx";
+import { CountryContextProvider } from "sections/country/CountryContext/CountryContext.tsx";
+import { CityContextProvider } from "sections/city/CityContext/CityContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -25,10 +27,14 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <InfluencerContextProvider repository={repositories.influencers}>
               <CompanyContextProvider repository={repositories.companies}>
                 <LeadsContextProvider repository={repositories.leads}>
-                  <ThemeProvider theme={theme}>
-                    <GlobalStyles />
-                    <RouterProvider router={router} />
-                  </ThemeProvider>
+                  <CountryContextProvider repository={repositories.countries}>
+                    <CityContextProvider repository={repositories.city}>
+                      <ThemeProvider theme={theme}>
+                        <GlobalStyles />
+                        <RouterProvider router={router} />
+                      </ThemeProvider>
+                    </CityContextProvider>
+                  </CountryContextProvider>
                 </LeadsContextProvider>
               </CompanyContextProvider>
             </InfluencerContextProvider>

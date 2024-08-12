@@ -15,3 +15,10 @@ export const getCompanyById = (
 ): Promise<HttpResponseInterface<Company>> => {
   return companyRepo.getCompanyById(company_id);
 };
+
+export const registerCompany = (
+  companyRepo: CompanyRepository<Company>,
+  company: FormData,
+): Promise<HttpResponseInterface<Company>> => {
+  return companyRepo.registerCompany(company);
+};
