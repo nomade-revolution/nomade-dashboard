@@ -92,6 +92,7 @@ const LoginForm = (): React.ReactElement => {
               Registrate aquí
             </a>
           </span>
+
           {isSuccess && isFormSubmitted ? (
             <Loader width="20px" height="20px" />
           ) : (

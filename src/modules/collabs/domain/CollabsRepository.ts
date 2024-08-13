@@ -14,4 +14,5 @@ export interface CollabsRepository<I> {
     rejected_colab_reason_id?: number,
   ): Promise<HttpResponseInterface<I>>;
   getRejectedCollabReasons(): Promise<HttpResponseInterface<I>>;
+  getCollab(collab_id: number): Promise<HttpResponseInterface<I>>;
 }

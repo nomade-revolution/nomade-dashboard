@@ -14,7 +14,7 @@ import SearchBar from "sections/shared/components/SearchBar/SearchBar";
 import { SectionTypes } from "sections/shared/interfaces/interfaces";
 
 const LeadsPage = (): React.ReactElement => {
-  const [searchText, setSearchText] = useState<string | null>(null);
+  const [searchText, setSearchText] = useState<string>("");
 
   const { search } = useLocation();
   const { getLeadsPaginated, loading, leads, pagination, isSuccess } =
@@ -47,7 +47,7 @@ const LeadsPage = (): React.ReactElement => {
               onSearchSubmit={() => {}}
             />
           </div>
-          <div className="dashboard__orders-table">
+          <div className="dashboard__table">
             <DashboardTable
               bodySections={leads}
               headerSections={leadsHeaderSection}
@@ -55,7 +55,7 @@ const LeadsPage = (): React.ReactElement => {
             />
           </div>
           <div className="dashboard__mobile">
-            <h3>Influencers</h3>
+            <h3>Leads</h3>
             <DashboardCardListMobile
               bodySections={leads}
               headerSections={leadsHeaderSection}

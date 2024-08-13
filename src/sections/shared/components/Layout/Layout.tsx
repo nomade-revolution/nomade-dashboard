@@ -4,15 +4,16 @@ import LayoutStyled from "./LayoutStyled";
 
 import { appPaths } from "../../utils/appPaths/appPaths";
 import Header from "../Header/Header";
+import { useEffect } from "react";
+import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 
 const Layout = (): React.ReactElement => {
   const location = useLocation();
-  // const { decodedToken, token } = useUserContext();
+  const { setSessionToken } = useAuthContext();
 
-  // useEffect(() => {
-  //   token();
-  // }, [token]);
-
+  useEffect(() => {
+    setSessionToken();
+  }, [setSessionToken]);
   return (
     <LayoutStyled>
       <div

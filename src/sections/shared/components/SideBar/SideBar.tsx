@@ -40,57 +40,44 @@ const SideBar = ({
         image="/main_logo.png"
       />
       <div className="side-bar__actions actions">
-        {sideBarUpperSections.map((section) => {
-          // const isSubSectionActive =
-          //   pathname.split("/")[1] === section.subSection;
-          return (
-            <>
-              <Link to={section.path} key={section.id}>
-                <div
+        {sideBarUpperSections.map((section) => (
+          <Link to={section.path} key={section.id}>
+            <div
+              className={
+                pathname.includes(section.path) ||
+                pathname.includes(section.pathname!)
+                  ? "actions__section--active"
+                  : "actions__section"
+              }
+            >
+              <div className="actions__subsection">
+                <span
                   className={
                     pathname.includes(section.path) ||
                     pathname.includes(section.pathname!)
-                      ? "actions__section--active"
-                      : "actions__section"
+                      ? "actions__icon--selected"
+                      : "actions__icon"
                   }
                 >
-                  <div className="actions__subsection">
-                    <span
-                      className={
-                        pathname.includes(section.path) ||
-                        pathname.includes(section.pathname!)
-                          ? "actions__icon--selected"
-                          : "actions__icon"
-                      }
-                    >
-                      {section.icon}
-                    </span>
-                    <span
-                      className={
-                        pathname.includes(section.path) ||
-                        pathname.includes(section.pathname!)
-                          ? "actions__name--selected"
-                          : "actions__name"
-                      }
-                    >
-                      {section.name}
-                    </span>
-                  </div>
-                  {section.quantity > 0 && (
-                    <span className="actions__quantity">
-                      {section.quantity}
-                    </span>
-                  )}
-                </div>
-              </Link>
-              {/* {isSubSectionActive && (
-                <div className="subsection">
-                  <span className="subsection__text">{section.subSection}</span>
-                </div>
-              )} */}
-            </>
-          );
-        })}
+                  {section.icon}
+                </span>
+                <span
+                  className={
+                    pathname.includes(section.path) ||
+                    pathname.includes(section.pathname!)
+                      ? "actions__name--selected"
+                      : "actions__name"
+                  }
+                >
+                  {section.name}
+                </span>
+              </div>
+              {section.quantity > 0 && (
+                <span className="actions__quantity">{section.quantity}</span>
+              )}
+            </div>
+          </Link>
+        ))}
       </div>
       <div className="side-bar__user-action user-actions">
         <div

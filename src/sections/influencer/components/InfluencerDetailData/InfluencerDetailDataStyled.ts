@@ -6,16 +6,25 @@ const InfluecerDetailDataStyled = styled.section`
   justify-content: space-between;
   gap: 40px;
   letter-spacing: 0.6px;
-  padding: 20px 120px;
-  background-color: ${(props) => props.theme.colors.lightGrey};
   border-radius: 10px;
-  box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
+
+  @media (min-width: 1000px) {
+    box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
+    background-color: ${(props) => props.theme.colors.lightGrey};
+    padding: 20px 120px;
+  }
 
   .influencer-data {
     &__mainData {
       display: flex;
-      justify-content: space-between;
-      gap: 10px;
+      flex-direction: column;
+      gap: 30px;
+
+      @media (min-width: 1000px) {
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 10px;
+      }
     }
     &__data {
       display: flex;

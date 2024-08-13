@@ -17,7 +17,7 @@ import { UserTypes } from "modules/user/domain/User";
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 
 const UsersPage = (): React.ReactElement => {
-  const [searchText, setSearchText] = useState<string | null>(null);
+  const [searchText, setSearchText] = useState<string>("");
 
   const { search } = useLocation();
   const { page } = useParams();
@@ -52,7 +52,7 @@ const UsersPage = (): React.ReactElement => {
               onSearchSubmit={() => {}}
             />
           </div>
-          <div className="dashboard__orders-table">
+          <div className="dashboard__table">
             <DashboardTable
               bodySections={users_nomade}
               headerSections={usersTableHeaderSections}

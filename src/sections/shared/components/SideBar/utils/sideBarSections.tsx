@@ -30,7 +30,7 @@ export const getSideBarUpperSections = (
       subSection: "influencer",
     },
     {
-      id: 4,
+      id: 3,
       icon: <FaUserTie />,
       name: "Clientes",
       pathname: "clientes",
@@ -39,7 +39,7 @@ export const getSideBarUpperSections = (
       subSection: "cliente",
     },
     {
-      id: 5,
+      id: 4,
       icon: <BiSolidOffer />,
       name: "Ofertas",
       pathname: "ofertas",
@@ -48,7 +48,7 @@ export const getSideBarUpperSections = (
       subSection: "oferta",
     },
     {
-      id: 6,
+      id: 5,
       icon: <FaPeopleArrows />,
       name: "Collabs",
       pathname: "collabs",
@@ -57,7 +57,7 @@ export const getSideBarUpperSections = (
       subSection: "collab",
     },
     {
-      id: 7,
+      id: 6,
       icon: <BiSolidCategory />,
       name: "Categorías",
       pathname: "categorias",
@@ -65,7 +65,7 @@ export const getSideBarUpperSections = (
       path: appPaths.settings,
     },
     {
-      id: 8,
+      id: 7,
       icon: <AiFillFileAdd />,
       name: "Leads",
       pathname: "leads",
@@ -78,6 +78,17 @@ export const getSideBarUpperSections = (
 };
 
 export const sideBarDownSections = [
-  { id: 5, icon: <IoIosSettings />, name: "Mi cuenta", path: appPaths.account },
-  { id: 6, icon: <CiLogout />, name: "Log out", path: appPaths.login },
+  {
+    id: 9,
+    icon: <IoIosSettings />,
+    name: "Mi cuenta",
+    path: appPaths.account,
+  },
+  {
+    id: 10,
+    icon: <CiLogout />,
+    name: "Log out",
+    path: appPaths.login,
+    isLogout: true,
+  },
 ];

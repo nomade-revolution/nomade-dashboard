@@ -10,7 +10,6 @@ const ProtectedRoute = ({ element }: ProtectedRouteProps): JSX.Element => {
   const { getSessionToken } = useAuthContext();
 
   const location = useLocation();
-
   if (getSessionToken()) {
     if (
       location.pathname === appPaths.login ||

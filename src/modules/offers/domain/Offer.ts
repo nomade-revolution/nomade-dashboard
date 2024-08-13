@@ -1,7 +1,7 @@
 import { PaginationStucture } from "sections/shared/interfaces/interfaces";
 import { Calendar, CalendarWithWeeks } from "./OfferCalendar";
 import { ImageStructure } from "./OfferImage";
-import { Address } from "./OfferrAddress";
+import { Address } from "modules/address/domain/Address";
 
 export type OfferType =
   | "Activity"

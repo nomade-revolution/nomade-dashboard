@@ -14,7 +14,7 @@ import {
   REGISTER_ROUTE,
   USER_ROUTE,
 } from "@auth/application";
-import { AuthUserType } from "@auth/domain/AuthUserType.ts";
+import { User } from "modules/user/domain/User";
 
 interface SignUpResponseInterface {
   user: {
@@ -27,6 +27,11 @@ interface SignUpResponseInterface {
   message: string;
 }
 
+export interface UserResponseInterface {
+  data: User;
+  message: string;
+  success: boolean;
+}
 interface MessageInterface {
   message: string;
 }
@@ -74,9 +79,11 @@ export class AuthRepository
     }
   }
 
-  public async getUser(): Promise<HttpResponseInterface<AuthUserType>> {
+  public async getLoggedUser(): Promise<
+    HttpResponseInterface<UserResponseInterface>
+  > {
     try {
-      const resp = await this.http.get<AuthUserType>(USER_ROUTE);
+      const resp = await this.http.get<UserResponseInterface>(USER_ROUTE);
       return resp;
     } catch (error) {
       return Promise.reject(error);

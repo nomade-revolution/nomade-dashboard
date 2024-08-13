@@ -1,6 +1,6 @@
 import { Influencer } from "@influencer";
 import { SocialMedia } from "@influencer/domain/InfluencerSocialMedia";
-import { FullAddress } from "modules/offers/domain/OfferrAddress";
+import { FullAddress } from "modules/address/domain/Address";
 import { PaginationStucture } from "sections/shared/interfaces/interfaces";
 
 export interface User {

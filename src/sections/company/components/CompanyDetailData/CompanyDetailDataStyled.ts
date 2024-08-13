@@ -7,9 +7,12 @@ const CompanyDetailDataStyled = styled.section`
   gap: 40px;
   letter-spacing: 0.6px;
   padding: 20px 120px;
-  background-color: ${(props) => props.theme.colors.lightGrey};
   border-radius: 10px;
-  box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
+
+  @media (min-width: 1000px) {
+    box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
+    background-color: ${(props) => props.theme.colors.lightGrey};
+  }
 
   .company-data {
     &__mainData {

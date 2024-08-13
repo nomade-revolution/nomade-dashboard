@@ -1,8 +1,8 @@
 import { Formik, Field, ErrorMessage, FormikHelpers } from "formik";
 import { leadsScheme } from "./validations/validations";
 import { CompanyRegisterStructure } from "modules/user/domain/User";
-import { FullAddress } from "modules/offers/domain/OfferrAddress";
 import LeadsFormStyled from "./LeadsFormStyled";
+import { FullAddress } from "modules/address/domain/Address";
 
 interface Props {
   lead: CompanyRegisterStructure;

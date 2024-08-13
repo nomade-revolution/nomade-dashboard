@@ -16,7 +16,7 @@ import {
 import { useUserContext } from "sections/user/UserContext/useUserContext";
 
 const InfluencersPage = (): React.ReactElement => {
-  const [searchText, setSearchText] = useState<string | null>(null);
+  const [searchText, setSearchText] = useState<string>("");
 
   const { search } = useLocation();
   const { getUsers, users_influencer, pagination, loading } = useUserContext();
@@ -47,7 +47,7 @@ const InfluencersPage = (): React.ReactElement => {
               onSearchSubmit={() => {}}
             />
           </div>
-          <div className="dashboard__orders-table">
+          <div className="dashboard__table">
             <DashboardTable
               bodySections={users_influencer}
               headerSections={influencersTableHeaderSections}

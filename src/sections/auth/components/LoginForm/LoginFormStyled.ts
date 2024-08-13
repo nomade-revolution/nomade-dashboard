@@ -6,7 +6,11 @@ const LoginFormStyled = styled.form`
   align-items: center;
   gap: 20px;
   font-size: ${(props) => props.theme.fontsSize.__SM};
-  width: 60%;
+  width: 85%;
+
+  @media (min-width: 1000px) {
+    width: 60%;
+  }
 
   .form-section {
     display: flex;
