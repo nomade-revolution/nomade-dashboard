@@ -12,7 +12,7 @@ import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 import SearchBar from "sections/shared/components/SearchBar/SearchBar";
 
 const CollabsPage = (): React.ReactElement => {
-  const [searchText, setSearchText] = useState<string | null>(null);
+  const [searchText, setSearchText] = useState<string>("");
   const [collabStateActionType, setCollabStateActionType] =
     useState<string>("");
 

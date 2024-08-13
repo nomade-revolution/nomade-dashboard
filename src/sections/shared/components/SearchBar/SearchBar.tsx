@@ -7,7 +7,7 @@ interface SearchBarProps {
   pageName: string;
   pageTypes: string;
   searchText: string;
-  setSearchText: (value: string | null) => void;
+  setSearchText: (value: string) => void;
   onSearchSubmit: () => void;
   setFilters?: (value: null) => void;
 }
@@ -38,7 +38,7 @@ const SearchBar = ({
   };
 
   const handleClear = () => {
-    setSearchText(null);
+    setSearchText("");
     setFilters!(null);
 
     navigate(`/${pageName}/page/1`);
@@ -50,6 +50,7 @@ const SearchBar = ({
     <SearchBarStyled action="" className="search" onSubmit={handleSubmit}>
       <div className="search__fieldContainer">
         <input
+          id="search"
           type="text"
           className="search__field"
           placeholder={` Buscar ${pageTypes}`}

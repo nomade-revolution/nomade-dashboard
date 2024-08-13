@@ -14,7 +14,7 @@ import SearchBar from "sections/shared/components/SearchBar/SearchBar";
 import { SectionTypes } from "sections/shared/interfaces/interfaces";
 
 const LeadsPage = (): React.ReactElement => {
-  const [searchText, setSearchText] = useState<string | null>(null);
+  const [searchText, setSearchText] = useState<string>("");
 
   const { search } = useLocation();
   const { getLeadsPaginated, loading, leads, pagination, isSuccess } =

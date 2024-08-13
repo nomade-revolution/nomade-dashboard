@@ -18,7 +18,7 @@ import { useUserContext } from "sections/user/UserContext/useUserContext";
 import { companyTableHeaderSections } from "../../utils/companySections";
 
 const CompaniesPage = (): React.ReactElement => {
-  const [searchText, setSearchText] = useState<string | null>(null);
+  const [searchText, setSearchText] = useState<string>("");
 
   const { search } = useLocation();
   const { getUsers, users_company, pagination, loading } = useUserContext();

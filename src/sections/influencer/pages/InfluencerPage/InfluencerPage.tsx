@@ -16,7 +16,7 @@ import {
 import { useUserContext } from "sections/user/UserContext/useUserContext";
 
 const InfluencersPage = (): React.ReactElement => {
-  const [searchText, setSearchText] = useState<string | null>(null);
+  const [searchText, setSearchText] = useState<string>("");
 
   const { search } = useLocation();
   const { getUsers, users_influencer, pagination, loading } = useUserContext();
