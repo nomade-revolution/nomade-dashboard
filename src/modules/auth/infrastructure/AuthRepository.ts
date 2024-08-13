@@ -27,6 +27,11 @@ interface SignUpResponseInterface {
   message: string;
 }
 
+export interface UserResponseInterface {
+  data: User;
+  message: string;
+  success: boolean;
+}
 interface MessageInterface {
   message: string;
 }
@@ -74,9 +79,11 @@ export class AuthRepository
     }
   }
 
-  public async getLoggedUser(): Promise<HttpResponseInterface<User>> {
+  public async getLoggedUser(): Promise<
+    HttpResponseInterface<UserResponseInterface>
+  > {
     try {
-      const resp = await this.http.get<User>(USER_ROUTE);
+      const resp = await this.http.get<UserResponseInterface>(USER_ROUTE);
       return resp;
     } catch (error) {
       return Promise.reject(error);

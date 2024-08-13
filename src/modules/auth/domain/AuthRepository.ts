@@ -5,5 +5,5 @@ export interface AuthRepository<T, I> {
   signIn(data: T): Promise<HttpResponseInterface<I>>;
   signOut(data: T): Promise<I | HttpErrorResponseInterface>;
   signUp(data: T): Promise<I | HttpErrorResponseInterface>;
-  getLoggedUser(token: string): Promise<User | HttpErrorResponseInterface>;
+  getLoggedUser(token: string): Promise<HttpResponseInterface<User>>;
 }

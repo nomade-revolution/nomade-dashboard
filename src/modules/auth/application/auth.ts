@@ -10,7 +10,7 @@ export const authLogin = (
   return authRepo.signIn(user);
 };
 
-export const authGetLoggerUser = (
+export const authGetLoggedUser = (
   token: string,
   authRepo: AuthRepository<AuthLoginInterface, SessionInterface>,
 ): Promise<HttpResponseInterface<User>> => {

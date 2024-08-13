@@ -5,7 +5,7 @@ import {
   AuthRegisterInterface,
   SessionInterface,
 } from "@auth";
-import { authGetLoggerUser, authLogin } from "@auth/application/auth";
+import { authGetLoggedUser, authLogin } from "@auth/application/auth";
 import { isHttpSuccessResponse } from "../../shared/utils/typeGuards/typeGuardsFunctions";
 import { AsyncCookiesImplementation } from "@core";
 import environments from "@environments";
@@ -63,7 +63,7 @@ export const AuthContextProvider = ({
 
   const getLoggedUser = useCallback(
     async (token: string) => {
-      const response = await authGetLoggerUser(token, repository);
+      const response = await authGetLoggedUser(token, repository);
       if (isHttpSuccessResponse(response)) {
         return response.data;
       }
