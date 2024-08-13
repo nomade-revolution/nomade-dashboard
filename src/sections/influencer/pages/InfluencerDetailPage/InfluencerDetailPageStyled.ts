@@ -10,7 +10,7 @@ const InfluencerDetailPageStyled = styled.main`
   height: 100vh;
 
   @media (min-width: 1000px) and (max-width: 1600px) {
-    padding: 200px 150px;
+    padding: 70px 150px;
   }
 
   @media (min-width: 1600px) {

@@ -39,8 +39,7 @@ const Actions = ({
         <>
           <Tooltip title="Consultar collab">
             <Link
-              to={``}
-              target="_blank"
+              to={`/collab/${(section as FullCollab).id}`}
               aria-label="Consultar collab"
               className="link"
             >

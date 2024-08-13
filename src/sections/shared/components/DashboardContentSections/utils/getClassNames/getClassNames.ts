@@ -1,24 +1,24 @@
 import { CollabTypes, FullCollab } from "modules/collabs/domain/Collabs";
 import { User, UserTypes } from "modules/user/domain/User";
 
-export const getTypesClassNames = (section: object) => {
-  return `dashboard__type-section ${
+export const getTypesClassNames = (section: object, className: string) => {
+  return `${className}__type-section ${
     (section as User).type === UserTypes.influencer
-      ? "dashboard__type-section--influencer"
+      ? `${className}__type-section--influencer`
       : (section as User).type === UserTypes.nomade
-        ? "dashboard__type-section--nomade"
+        ? `${className}__type-section--nomade`
         : (section as User).type === UserTypes.company
-          ? "dashboard__type-section--company"
+          ? `${className}__type-section--company`
           : (section as FullCollab).type === CollabTypes.restaurant
-            ? "dashboard__type-section--restaurant"
+            ? `${className}__type-section--restaurant`
             : (section as FullCollab).type === CollabTypes.lodging
-              ? "dashboard__type-section--lodging"
+              ? `${className}__type-section--lodging`
               : (section as FullCollab).type === CollabTypes.delivery
-                ? "dashboard__type-section--delivery"
+                ? `${className}__type-section--delivery`
                 : (section as FullCollab).type === CollabTypes.brand
-                  ? "dashboard__type-section--brand"
+                  ? `${className}__type-section--brand`
                   : (section as FullCollab).type === CollabTypes.activity
-                    ? "dashboard__type-section--activity"
+                    ? `${className}__type-section--activity`
                     : ""
   }`;
 };

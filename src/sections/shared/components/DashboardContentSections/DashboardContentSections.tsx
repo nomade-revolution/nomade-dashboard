@@ -157,7 +157,7 @@ const DashboardContentSections = ({
 
     case "type":
       return (
-        <span className={getTypesClassNames(section)}>
+        <span className={getTypesClassNames(section, "dashboard")}>
           {(section as User).type}
         </span>
       );
