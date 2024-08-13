@@ -18,7 +18,7 @@ const ReusablePageStyled = styled.main`
   }
 
   .dashboard {
-    &__customers-table {
+    &__table {
       display: none;
 
       @media (min-width: 1000px) {
@@ -200,12 +200,6 @@ const ReusablePageStyled = styled.main`
     &__country,
     &__influencer {
       font-weight: bold;
-    }
-
-    &__table {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
     }
   }
 `;

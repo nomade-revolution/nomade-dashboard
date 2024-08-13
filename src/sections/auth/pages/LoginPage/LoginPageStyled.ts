@@ -10,14 +10,18 @@ const LoginPageStyled = styled.main`
     height: 100%;
 
     &__company {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 40px;
-      background: ${(props) => props.theme.colors.secondaryColor};
-      height: 100vh;
-      width: 50%;
+      display: none;
+
+      @media (min-width: 1000px) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+        background: ${(props) => props.theme.colors.secondaryColor};
+        height: 100vh;
+        width: 50%;
+      }
     }
 
     &__slogan {
@@ -25,12 +29,17 @@ const LoginPageStyled = styled.main`
     }
 
     &__form-section {
-      width: 50%;
-      padding: 40px;
+      padding-top: 40px;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 30px;
+      width: 100%;
+
+      @media (min-width: 1000px) {
+        padding: 40px;
+        width: 50%;
+      }
     }
   }
 `;
