@@ -7,8 +7,12 @@ const InfluencerSocialMediaStyles = styled.ul`
   .social-media {
     &__data {
       display: flex;
-      align-items: center;
+      flex-direction: column;
       gap: 8px;
+
+      @media (min-width: 1000px) {
+        flex-direction: row;
+      }
     }
   }
 `;

@@ -25,15 +25,33 @@ const CompanyDetailPageStyled = styled.main`
     }
 
     &__info {
-      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
+      background-color: ${(props) => props.theme.colors.lightGrey};
+      padding-top: 20px;
+      border-radius: 10px;
+
+      @media (min-width: 1000px) {
+        display: block;
+        position: relative;
+        box-shadow: none;
+        background-color: none;
+        padding-top: 100px;
+      }
     }
 
     &__avatar {
       border-radius: 50%;
-      position: absolute;
-      bottom: 100px;
-      left: -50px;
       box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
+
+      @media (min-width: 1000px) {
+        position: absolute;
+        left: -50px;
+        bottom: 100px;
+      }
     }
   }
 `;
