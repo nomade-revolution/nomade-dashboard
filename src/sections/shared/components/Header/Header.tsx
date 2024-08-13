@@ -37,7 +37,7 @@ const Header = ({
         className="header__image"
         height={30}
         width={200}
-        image="/Fresatitan-Logo.png"
+        image="/main_logo.png"
       />
       {token && (
         <div className="header__button-container">
