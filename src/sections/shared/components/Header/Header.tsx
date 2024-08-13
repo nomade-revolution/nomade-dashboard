@@ -1,0 +1,64 @@
+import ImageCustom from "../ImageCustom/ImageCustom";
+import { IoPersonCircleSharp } from "react-icons/io5";
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+import { useState } from "react";
+import DropdownMenu from "./components/DropdownMenu/DropdownMenu";
+import { useNavigate } from "react-router-dom";
+import HeaderStyled from "./HeaderStyled";
+import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
+
+interface HeaderProps {
+  pendingOrders: number;
+  pendingCustomers: number;
+}
+
+const Header = ({
+  pendingOrders,
+  pendingCustomers,
+}: HeaderProps): React.ReactElement => {
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const { logoutUser, token } = useAuthContext();
+  const navigate = useNavigate();
+
+  const handleMenuState = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleLogOut = () => {
+    handleMenuState();
+    logoutUser();
+    navigate(0);
+  };
+
+  return (
+    <HeaderStyled className="header">
+      <ImageCustom
+        alt="Fresatitan logo"
+        className="header__image"
+        height={30}
+        width={200}
+        image="/main_logo.png"
+      />
+      {token && (
+        <div className="header__button-container">
+          <button className="header__button" onClick={handleMenuState}>
+            <div className="header__icons-section">
+              <IoPersonCircleSharp className="header__profile-icon" />
+              <MdOutlineKeyboardArrowDown className="header__profile-subIcon" />
+            </div>
+          </button>
+        </div>
+      )}
+      {isMenuOpen && (
+        <DropdownMenu
+          handleLogout={handleLogOut}
+          handleMenuState={handleMenuState}
+          pendingOrders={pendingOrders}
+          pendingCustomers={pendingCustomers}
+        />
+      )}
+    </HeaderStyled>
+  );
+};
+
+export default Header;

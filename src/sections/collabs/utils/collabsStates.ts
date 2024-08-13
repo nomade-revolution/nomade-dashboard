@@ -1,0 +1,8 @@
+export const COLAB_PENDING_NOMADE_STATE = 1;
+export const COLAB_PENDING_COMPANY_STATE = 2;
+export const COLAB_ACCEPTED_STATE = 3;
+export const COLAB_MODIFICATION_IN_PROGRESS_STATE = 4;
+export const COLAB_DONE_STATE = 5;
+export const COLAB_FINISHED_STATE = 6;
+export const COLAB_CANCELLED_STATE = 7;
+export const COLAB_REJECTED_STATE = 8;
