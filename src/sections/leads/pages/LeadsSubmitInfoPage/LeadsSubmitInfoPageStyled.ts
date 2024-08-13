@@ -6,18 +6,26 @@ const LeadsSubmitInfoPageStyled = styled.main`
   justify-content: space-between;
   width: 100%;
 
+  @media (min-width: 1000px) {
+    height: 100vh;
+  }
+
   .leadSubmit-page {
     height: 100%;
 
     &__company {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 40px;
-      background: ${(props) => props.theme.colors.secondaryColor};
-      height: 100vh;
-      width: 50%;
+      display: none;
+
+      @media (min-width: 1000px) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+        background: ${(props) => props.theme.colors.secondaryColor};
+        height: 100vh;
+        width: 50%;
+      }
     }
 
     &__slogan {
@@ -25,12 +33,16 @@ const LeadsSubmitInfoPageStyled = styled.main`
     }
 
     &__form-section {
-      width: 50%;
       padding: 40px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 30px;
+      width: 100%;
+
+      @media (min-width: 1000px) {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+      }
     }
   }
 `;

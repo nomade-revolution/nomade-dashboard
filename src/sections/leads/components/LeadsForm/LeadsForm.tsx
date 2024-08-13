@@ -9,6 +9,8 @@ import ReusableModal from "sections/shared/components/ReusableModal/ReusableModa
 import AddressForm from "sections/shared/components/AddressForm/AddressForm";
 import ReusableFormStyled from "assets/styles/ReusableFormStyled";
 import { FaCheckCircle, FaEdit } from "react-icons/fa";
+import ContactForm from "sections/shared/components/ContactForm/ContactForm";
+import { Contact } from "modules/contact/domain/Contact";
 
 interface Props {
   lead: CompanyRegisterStructure;
@@ -35,7 +37,9 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
   const [registerAddress, setRegisterAddress] = useState<FullAddress | null>(
     null,
   );
+  const [registerContact, setRegisterContact] = useState<Contact | null>(null);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState<boolean>(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState<boolean>(false);
   const { postCompany, isSuccess } = useCompanyContext();
 
   const handleSubmitForm = async (
@@ -68,6 +72,10 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
 
   const handleIsAddressModalOpen = () => {
     setIsAddressModalOpen(true);
+  };
+
+  const handleIsContactModalOpen = () => {
+    setIsContactModalOpen(true);
   };
 
   const initialValues = {
@@ -266,6 +274,26 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                   </span>
                 )}
               </div>
+              <div className="datasheet-form__contact-section">
+                <button
+                  type="button"
+                  className="datasheet-form__add-contact"
+                  onClick={handleIsContactModalOpen}
+                >
+                  {registerContact ? (
+                    <FaEdit className="datasheet-form__create--icon" />
+                  ) : (
+                    <IoAddCircle className="datasheet-form__create--icon" />
+                  )}
+                  {registerContact ? "Modificar contacto" : "Añadir contacto"}
+                </button>
+                {registerContact && (
+                  <span className="datasheet-form__contact-mssg">
+                    <FaCheckCircle />
+                    Contacto añadido
+                  </span>
+                )}
+              </div>
             </div>
           </section>
           <section className="datasheet-form__section">
@@ -337,6 +365,16 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
             }
             openModal={isAddressModalOpen}
             setIsModalOpen={setIsAddressModalOpen}
+          />
+          <ReusableModal
+            children={
+              <ContactForm
+                contact={registerContact!}
+                setContact={setRegisterContact}
+              />
+            }
+            openModal={isContactModalOpen}
+            setIsModalOpen={setIsContactModalOpen}
           />
         </ReusableFormStyled>
       )}

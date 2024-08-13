@@ -3,8 +3,9 @@ import { IoPersonCircleSharp } from "react-icons/io5";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { useState } from "react";
 import DropdownMenu from "./components/DropdownMenu/DropdownMenu";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import HeaderStyled from "./HeaderStyled";
+import { appPaths } from "sections/shared/utils/appPaths/appPaths";
 
 interface HeaderProps {
   pendingOrders: number;
@@ -18,6 +19,7 @@ const Header = ({
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   const handleMenuState = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -34,17 +36,24 @@ const Header = ({
         alt="Fresatitan logo"
         className="header__image"
         height={30}
-        width={200}
-        image="/Fresatitan-Logo.png"
+        width={130}
+        image="/main_logo.png"
       />
-      <div className="header__button-container">
-        <button className="header__button" onClick={handleMenuState}>
-          <div className="header__icons-section">
-            <IoPersonCircleSharp className="header__profile-icon" />
-            <MdOutlineKeyboardArrowDown className="header__profile-subIcon" />
+      {pathname !== appPaths.login &&
+        pathname !== appPaths.register &&
+        pathname !== appPaths.recovery_password &&
+        pathname !== appPaths.reset_password &&
+        pathname !== appPaths.leadsSubmit && (
+          <div className="header__button-container">
+            <button className="header__button" onClick={handleMenuState}>
+              <div className="header__icons-section">
+                <IoPersonCircleSharp className="header__profile-icon" />
+                <MdOutlineKeyboardArrowDown className="header__profile-subIcon" />
+              </div>
+            </button>
           </div>
-        </button>
-      </div>
+        )}
+
       {isMenuOpen && (
         <DropdownMenu
           handleLogout={handleLogOut}

@@ -105,14 +105,6 @@ const ReusableFormStyled = styled.form`
       padding: 0 8px;
       width: 100%;
       gap: 40px;
-
-      @media (min-width: 1000px) and (max-width: 1600px) {
-        width: ${(props) => props.theme.widths.datasheetSmallestInputs};
-      }
-
-      @media (min-width: 1600px) {
-        width: ${(props) => props.theme.widths.datasheetSmallerInputs};
-      }
     }
 
     &__field-large,
@@ -123,7 +115,7 @@ const ReusableFormStyled = styled.form`
       }
 
       @media (min-width: 1200px) {
-        width: ${(props) => props.theme.widths.datasheetSmallInputs};
+        width: ${(props) => props.theme.widths.datasheetSmallerInputs};
       }
 
       @media (min-width: 1600px) {
