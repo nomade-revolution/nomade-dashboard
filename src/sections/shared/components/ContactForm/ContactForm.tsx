@@ -1,10 +1,12 @@
 import { Formik, Field, ErrorMessage, FormikHelpers } from "formik";
 import ReusableSelect from "../ReusableSelect/ReusableSelect";
 import ReusableFormStyled from "assets/styles/ReusableFormStyled";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Contact } from "modules/contact/domain/Contact";
 import { contactSchema } from "./validations/validations";
+import { useContactContext } from "sections/contact/ContactContext/useContactContext";
+import { OptionsStructure } from "sections/shared/interfaces/interfaces";
 
 interface Props {
   setContact: (value: Contact) => void;
@@ -20,7 +22,11 @@ const initialState: Contact = {
 };
 
 const ContactForm = ({ setContact, contact }: Props): React.ReactElement => {
-  const [country, setCountry] = useState<string>("");
+  const [registerContact, setRegisterContact] = useState<string>("");
+  const [contactTypesFormat, setContactTypesFormat] = useState<
+    OptionsStructure[]
+  >([]);
+  const { contact_types, getAllContactTypes } = useContactContext();
 
   const handleSubmitForm = async (
     values: Contact,
@@ -35,6 +41,20 @@ const ContactForm = ({ setContact, contact }: Props): React.ReactElement => {
     ...initialState,
     ...contact,
   };
+
+  useEffect(() => {
+    getAllContactTypes();
+  }, [getAllContactTypes]);
+
+  useEffect(() => {
+    const contactTypes: OptionsStructure[] = contact_types.map((type) => ({
+      id: type.id,
+      name: type.name,
+      value: type.id,
+    }));
+
+    setContactTypesFormat(contactTypes);
+  }, [contact, contact_types]);
 
   return (
     <Formik
@@ -132,9 +152,9 @@ const ContactForm = ({ setContact, contact }: Props): React.ReactElement => {
               </label>
               <ReusableSelect
                 label="Seleccionar país"
-                options={[]}
-                setValue={setCountry}
-                value={country}
+                options={contactTypesFormat}
+                setValue={setRegisterContact}
+                value={registerContact}
               />
               {errors.type_id && touched.type_id && (
                 <ErrorMessage

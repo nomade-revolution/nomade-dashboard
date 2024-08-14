@@ -5,3 +5,9 @@ export interface Contact {
   phone: string;
   type_id: number;
 }
+
+export interface ContactType {
+  id: number;
+  name: string;
+  description: string | null;
+}

@@ -17,6 +17,7 @@ import { CompanyContextProvider } from "sections/company/CompanyContext/CompanyC
 import { LeadsContextProvider } from "sections/leads/LeadsContext/LeadsContext.tsx";
 import { CountryContextProvider } from "sections/country/CountryContext/CountryContext.tsx";
 import { CityContextProvider } from "sections/city/CityContext/CityContext.tsx";
+import { ContactContextProvider } from "sections/contact/ContactContext/ContactContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -29,10 +30,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 <LeadsContextProvider repository={repositories.leads}>
                   <CountryContextProvider repository={repositories.countries}>
                     <CityContextProvider repository={repositories.city}>
-                      <ThemeProvider theme={theme}>
-                        <GlobalStyles />
-                        <RouterProvider router={router} />
-                      </ThemeProvider>
+                      <ContactContextProvider repository={repositories.contact}>
+                        <ThemeProvider theme={theme}>
+                          <GlobalStyles />
+                          <RouterProvider router={router} />
+                        </ThemeProvider>
+                      </ContactContextProvider>
                     </CityContextProvider>
                   </CountryContextProvider>
                 </LeadsContextProvider>
