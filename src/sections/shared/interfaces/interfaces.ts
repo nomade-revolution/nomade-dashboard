@@ -3,6 +3,7 @@ export interface HeaderSection {
   name: string;
   property: string;
   sortTag: string | null;
+  pageName: string;
 }
 
 export interface PaginationStucture {

@@ -21,18 +21,23 @@ const CompaniesPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
 
   const { search } = useLocation();
-  const { getUsers, users_company, pagination, loading } = useUserContext();
+  const { getUsers, users_company, pagination, loading, order } =
+    useUserContext();
   const { page } = useParams();
 
   const searchParams = search.split("?").join("");
 
   useEffect(() => {
     const filters: FilterParams = {
-      types: ["Company"],
+      filters: {
+        types: ["Company"],
+      },
     };
-
+    if (order?.sortTag) {
+      filters.order = [{ by: order.sortTag, dir: order.direction }];
+    }
     getUsers(+page!, 12, filters, UserTypes.company);
-  }, [getUsers, page]);
+  }, [getUsers, page, order]);
 
   return (
     <>

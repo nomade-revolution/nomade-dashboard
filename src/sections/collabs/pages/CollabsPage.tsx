@@ -4,7 +4,10 @@ import DashboardTable from "sections/shared/components/DashboardTable/DashboardT
 import Loader from "sections/shared/components/Loader/Loader";
 import NoDataHandler from "sections/shared/components/NoDataHandler/NoDataHandler";
 import PaginationComponent from "sections/shared/components/Pagination/PaginationComponent";
-import { SectionTypes } from "sections/shared/interfaces/interfaces";
+import {
+  FilterParams,
+  SectionTypes,
+} from "sections/shared/interfaces/interfaces";
 import { useCollabsContext } from "../CollabsContext/useCollabsContext";
 import { collabsHeaderSections } from "../utils/collabsSections";
 import { useParams } from "react-router-dom";
@@ -16,12 +19,18 @@ const CollabsPage = (): React.ReactElement => {
   const [collabStateActionType, setCollabStateActionType] =
     useState<string>("");
 
-  const { getAllCollabs, collabs, pagination, loading } = useCollabsContext();
+  const { getAllCollabs, collabs, pagination, loading, order } =
+    useCollabsContext();
   const { page } = useParams();
 
   useEffect(() => {
-    getAllCollabs(+page!, 12);
-  }, [getAllCollabs, page]);
+    const filters: FilterParams = {};
+
+    if (order?.sortTag) {
+      filters.order = [{ by: order.sortTag, dir: order.direction }];
+    }
+    getAllCollabs(+page!, 12, filters);
+  }, [getAllCollabs, page, order]);
 
   return (
     <>

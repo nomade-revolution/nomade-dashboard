@@ -16,7 +16,7 @@ export class UsersRepository {
       const resp = await this.http.get<UserApiResponse>(GET_USERS, {
         page,
         per_page,
-        filters: { ...filterParams },
+        ...filterParams,
       });
       return resp;
     } catch (error) {

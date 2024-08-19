@@ -6,6 +6,7 @@ import {
   RejectedCollab,
 } from "../domain/Collabs";
 import { COLLABS_BASE, COLLABS_REJECTED_REASONS } from "../application/routes";
+import { FilterParams } from "sections/shared/interfaces/interfaces";
 
 export class CollabsRepository {
   private readonly http: Http = Http.getInstance();
@@ -13,14 +14,13 @@ export class CollabsRepository {
   public async getAllCollabs(
     page: number,
     per_page: number,
-    influencer_id?: number | undefined,
-    company_id?: number | undefined,
+    params: FilterParams,
   ): Promise<HttpResponseInterface<CollabsApiResponse>> {
     try {
       const resp = await this.http.get<CollabsApiResponse>(COLLABS_BASE, {
         page,
         per_page,
-        filters: { influencer_id, company_id },
+        ...params,
       });
       return resp;
     } catch (error) {

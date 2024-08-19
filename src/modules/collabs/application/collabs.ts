@@ -5,15 +5,15 @@ import {
   RejectedCollab,
 } from "../domain/Collabs";
 import { CollabsRepository } from "../domain/CollabsRepository";
+import { FilterParams } from "sections/shared/interfaces/interfaces";
 
 export const collabsGetAll = (
   collabsRepo: CollabsRepository<CollabsApiResponse>,
   page: number,
   per_page: number,
-  influencer_id?: number | undefined,
-  company_id?: number | undefined,
+  params: FilterParams,
 ): Promise<HttpResponseInterface<CollabsApiResponse>> => {
-  return collabsRepo.getAllCollabs(page, per_page, influencer_id, company_id);
+  return collabsRepo.getAllCollabs(page, per_page, params);
 };
 
 export const deleteCollab = (

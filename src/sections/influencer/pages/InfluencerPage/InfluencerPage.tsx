@@ -19,18 +19,23 @@ const InfluencersPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
 
   const { search } = useLocation();
-  const { getUsers, users_influencer, pagination, loading } = useUserContext();
+  const { getUsers, users_influencer, pagination, loading, order } =
+    useUserContext();
   const { page } = useParams();
 
   const searchParams = search.split("?").join("");
 
   useEffect(() => {
     const filters: FilterParams = {
-      types: ["Influencer"],
+      filters: {
+        types: ["Influencer"],
+      },
     };
-
+    if (order?.sortTag) {
+      filters.order = [{ by: order.sortTag, dir: order.direction }];
+    }
     getUsers(+page!, 10, filters, UserTypes.influencer);
-  }, [getUsers, page]);
+  }, [getUsers, page, order]);
 
   return (
     <>

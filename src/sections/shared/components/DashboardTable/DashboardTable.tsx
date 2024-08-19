@@ -8,24 +8,22 @@ import Paper from "@mui/material/Paper";
 import DashboardStyled from "./DashboardTableStyled";
 import { HeaderSection } from "../../interfaces/interfaces";
 import { Offer } from "../../../../modules/offers/domain/Offer";
-
 import { Company, User } from "modules/user/domain/User";
 import DashboardTableCellContent from "../DashboardTableCellContent/DashboardTableCellContent";
 import { Collab, CollabActionTypes } from "modules/collabs/domain/Collabs";
 import { Influencer } from "@influencer";
+import DashBoardHeaderCell from "../DashboardHeaderCell/DashboardHeaderCell";
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
+export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.white,
     color: "#B78D00",
     fontWeight: "700",
-
     paddingTop: "25px",
     paddingBottom: "25px",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-
     paddingTop: "20px",
     paddingBottom: "20px",
   },
@@ -73,29 +71,9 @@ const DashboardTable = <Type,>({
             className="table__header"
             sx={{ textTransform: "uppercase" }}
           >
-            {headerSections.map((section) => {
-              return (
-                <StyledTableCell
-                  align="center"
-                  key={section.id}
-                  className={
-                    section.property === "contact"
-                      ? "contact__section"
-                      : section.property === "client"
-                        ? "client__section"
-                        : "header__section"
-                  }
-                >
-                  <button
-                    onClick={() => {}}
-                    disabled={!section.sortTag}
-                    className="table__sort-button"
-                  >
-                    {section.name}
-                  </button>
-                </StyledTableCell>
-              );
-            })}
+            {headerSections.map((section) => (
+              <DashBoardHeaderCell section={section} key={section.id} />
+            ))}
           </TableRow>
         </TableHead>
         <TableBody sx={{ borderCollapse: "collapse" }}>
