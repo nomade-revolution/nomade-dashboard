@@ -11,6 +11,7 @@ export const appPaths = {
   recovery_password: "/recovery-password",
   reset_password: "/reset-password",
   collabs: "/collabs/page/:page",
+  collab: "/collab/:id",
   influencers: "/influencers/page/:page",
   influencer: "/influencer/:id",
   leads: "/leads/page/:page",

@@ -1,18 +1,24 @@
 import React, { createContext, useCallback, useState } from "react";
 import { isHttpSuccessResponse } from "../../shared/utils/typeGuards/typeGuardsFunctions";
-import { deleteOffer, offersGetAll } from "modules/offers/application/offers";
+import {
+  deleteOffer,
+  getOfferById,
+  offersGetAll,
+} from "modules/offers/application/offers";
 import { FullOffer } from "modules/offers/domain/Offer";
 import { OffersRepository } from "modules/offers/domain/OffersRepository";
 import { PaginationStucture } from "sections/shared/interfaces/interfaces";
 
 interface ContextState {
   offers: FullOffer[];
+  offer: FullOffer;
   loading: boolean;
   error: string | null;
   isSuccess: boolean;
   pagination: PaginationStucture;
   getAllOffers: (page: number, per_page: number) => void;
   deleteOfferById: (offer_id: number) => void;
+  getOffer: (offer_id: number) => void;
 }
 
 export const OffersContext = createContext<ContextState>({} as ContextState);
@@ -22,6 +28,7 @@ export const OffersContextProvider = ({
   repository,
 }: React.PropsWithChildren<{ repository: OffersRepository<FullOffer[]> }>) => {
   const [offers, setOffers] = useState<FullOffer[]>([]);
+  const [offer, setOffer] = useState<FullOffer>({} as FullOffer);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [pagination, setPagination] = useState<PaginationStucture>(
@@ -52,16 +59,28 @@ export const OffersContextProvider = ({
     return response;
   };
 
+  const getOffer = useCallback(
+    async (offer_id: number) => {
+      const response = await getOfferById(repository, offer_id);
+      if (isHttpSuccessResponse(response)) {
+        setOffer(response.data);
+      }
+    },
+    [repository],
+  );
+
   return (
     <OffersContext.Provider
       value={{
         offers,
+        offer,
         loading,
         error,
         pagination,
         isSuccess,
         getAllOffers,
         deleteOfferById,
+        getOffer,
       }}
     >
       {children}

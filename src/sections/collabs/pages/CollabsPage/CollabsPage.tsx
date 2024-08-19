@@ -8,11 +8,11 @@ import {
   FilterParams,
   SectionTypes,
 } from "sections/shared/interfaces/interfaces";
-import { useCollabsContext } from "../CollabsContext/useCollabsContext";
-import { collabsHeaderSections } from "../utils/collabsSections";
 import { useParams } from "react-router-dom";
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 import SearchBar from "sections/shared/components/SearchBar/SearchBar";
+import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
+import { collabsHeaderSections } from "sections/collabs/utils/collabsSections";
 
 const CollabsPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");

@@ -7,13 +7,14 @@ import LoginPage from "../sections/auth/pages/LoginPage/LoginPage";
 import UsersPage from "../sections/user/pages/UsersPage/UsersPage";
 import OffersPage from "../sections/offers/pages/OffersPage/OffersPage";
 import MyAccountPage from "../sections/user/pages/MyAccountPage/MyAccountPage";
-import CollabsPage from "sections/collabs/pages/CollabsPage";
 import InfluencerDetailPage from "sections/influencer/pages/InfluencerDetailPage/InfluencerDetailPage";
 import InfluencersPage from "sections/influencer/pages/InfluencerPage/InfluencerPage";
 import CompaniesPage from "sections/company/pages/CompanyPage/CompanyPage";
 import CompanyDetailPage from "sections/company/pages/CompanyDetailPage/CompanyDetailPage";
 import LeadsPage from "sections/leads/pages/LeadsPage/LeadsPage";
 import LeadsSubmitInfoPage from "sections/leads/pages/LeadsSubmitInfoPage/LeadsSubmitInfoPage";
+import CollabsPage from "sections/collabs/pages/CollabsPage/CollabsPage";
+import CollabDetailPage from "sections/collabs/pages/CollabDetailPage/CollabDetailPage";
 
 const routes: RouteObject[] = [
   {
@@ -52,6 +53,10 @@ const routes: RouteObject[] = [
       {
         path: appPaths.collabs,
         element: <CollabsPage />,
+      },
+      {
+        path: appPaths.collab,
+        element: <CollabDetailPage />,
       },
       {
         path: appPaths.leads,

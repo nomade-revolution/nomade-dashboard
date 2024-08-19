@@ -5,6 +5,7 @@ import { CollabsRepository } from "modules/collabs/domain/CollabsRepository";
 import {
   collabsGetAll,
   deleteCollab,
+  getCollab,
   getRejectedCollabReasons,
   updateCollabHistoryState,
 } from "modules/collabs/application/collabs";
@@ -33,6 +34,7 @@ interface ContextState {
   getAllRejectedCollabReasons: () => void;
   setOrder: (order: OrderItem) => void;
   order: OrderItem;
+  getCollabById: (collab_id: number) => void;
 }
 
 export const CollabsContext = createContext<ContextState>({} as ContextState);
@@ -108,6 +110,20 @@ export const CollabsContextProvider = ({
     }
   }, [repository]);
 
+  const getCollabById = useCallback(
+    async (collab_id: number) => {
+      setLoading(true);
+      const response = await getCollab(repository, collab_id);
+
+      if (isHttpSuccessResponse(response)) {
+        setCollab(response.data);
+      }
+
+      setLoading(false);
+    },
+    [repository],
+  );
+
   return (
     <CollabsContext.Provider
       value={{
@@ -124,6 +140,7 @@ export const CollabsContextProvider = ({
         getAllRejectedCollabReasons,
         order,
         setOrder,
+        getCollabById,
       }}
     >
       {children}

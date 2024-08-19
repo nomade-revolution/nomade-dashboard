@@ -1,5 +1,5 @@
 import { HttpResponseInterface } from "@core/domain/HttpResponseInterface";
-import { OffersApiResponse } from "../domain/Offer";
+import { FullOffer, OffersApiResponse } from "../domain/Offer";
 import { OffersRepository } from "../domain/OffersRepository";
 
 export const offersGetAll = (
@@ -15,4 +15,11 @@ export const deleteOffer = (
   offer_id: number,
 ): Promise<HttpResponseInterface<{ success: boolean }>> => {
   return offersRepo.deleteOffer(offer_id);
+};
+
+export const getOfferById = (
+  offersRepo: OffersRepository<FullOffer>,
+  offer_id: number,
+): Promise<HttpResponseInterface<FullOffer>> => {
+  return offersRepo.getOfferById(offer_id);
 };

@@ -57,7 +57,7 @@ const UsersPage = (): React.ReactElement => {
               onSearchSubmit={() => {}}
             />
           </div>
-          <div className="dashboard__orders-table">
+          <div className="dashboard__table">
             <DashboardTable
               bodySections={users_nomade}
               headerSections={usersTableHeaderSections}

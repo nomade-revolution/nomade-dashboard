@@ -52,7 +52,7 @@ const InfluencersPage = (): React.ReactElement => {
               onSearchSubmit={() => {}}
             />
           </div>
-          <div className="dashboard__orders-table">
+          <div className="dashboard__table">
             <DashboardTable
               bodySections={users_influencer}
               headerSections={influencersTableHeaderSections}

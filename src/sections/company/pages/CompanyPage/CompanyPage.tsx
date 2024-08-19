@@ -54,7 +54,7 @@ const CompaniesPage = (): React.ReactElement => {
               onSearchSubmit={() => {}}
             />
           </div>
-          <div className="dashboard__orders-table">
+          <div className="dashboard__table">
             <DashboardTable
               bodySections={users_company}
               headerSections={companyTableHeaderSections}
@@ -62,7 +62,7 @@ const CompaniesPage = (): React.ReactElement => {
             />
           </div>
           <div className="dashboard__mobile">
-            <h3>Influencers</h3>
+            <h3>Clientes</h3>
             <DashboardCardListMobile
               bodySections={users_company}
               headerSections={companyTableHeaderSections}

@@ -41,3 +41,10 @@ export const getRejectedCollabReasons = (
 ): Promise<HttpResponseInterface<RejectedCollab[]>> => {
   return collabsRepo.getRejectedCollabReasons();
 };
+
+export const getCollab = (
+  collabsRepo: CollabsRepository<FullCollab>,
+  collab_id: number,
+): Promise<HttpResponseInterface<FullCollab>> => {
+  return collabsRepo.getCollab(collab_id);
+};

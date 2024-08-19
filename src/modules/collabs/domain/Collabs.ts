@@ -19,6 +19,8 @@ export interface FullCollab extends Collab {
   history: State[];
   influencer_name: string;
   influencer_id: number;
+  offer_id: number;
+  addresses_id: number;
 }
 
 export interface State {

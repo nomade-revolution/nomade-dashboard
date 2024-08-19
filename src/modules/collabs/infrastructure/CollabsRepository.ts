@@ -71,4 +71,17 @@ export class CollabsRepository {
       return Promise.reject(error);
     }
   }
+
+  public async getCollab(
+    collab_id: number,
+  ): Promise<HttpResponseInterface<FullCollab>> {
+    try {
+      const resp = await this.http.get<FullCollab>(
+        `${COLLABS_BASE}/${collab_id}`,
+      );
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 }

@@ -1,7 +1,7 @@
 import { Http } from "@core/application";
 import { HttpResponseInterface } from "@core/domain";
 import { OFFERS_BASE } from "../application/routes";
-import { OffersApiResponse } from "../domain/Offer";
+import { FullOffer, OffersApiResponse } from "../domain/Offer";
 
 export class OffersRepository {
   private readonly http: Http = Http.getInstance();
@@ -28,6 +28,17 @@ export class OffersRepository {
       const resp = await this.http.delete<{ success: boolean }>(
         `${OFFERS_BASE}/${offer_id}`,
       );
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  public async getOfferById(
+    offer_id: number,
+  ): Promise<HttpResponseInterface<FullOffer>> {
+    try {
+      const resp = await this.http.get<FullOffer>(`${OFFERS_BASE}/${offer_id}`);
       return resp;
     } catch (error) {
       return Promise.reject(error);
