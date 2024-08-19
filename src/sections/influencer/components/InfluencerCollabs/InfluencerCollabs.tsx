@@ -17,7 +17,7 @@ const InfluencerCollabs = ({ influencer_id }: Props): React.ReactElement => {
 
   useEffect(() => {
     setPage(pagination.current_page + 1);
-    getAllCollabs(page, 12, influencer_id);
+    getAllCollabs(page, 12, { filters: { influencer_id } });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getAllCollabs, influencer_id]);
 
