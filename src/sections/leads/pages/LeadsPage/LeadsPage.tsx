@@ -1,41 +1,47 @@
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
-import { mockUsers } from "mocks/userMocks";
 import { useState, useEffect } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useLeadsContext } from "sections/leads/LeadsContext/useLeadsContext";
 import { leadsHeaderSection } from "sections/leads/utils/leadsSections";
 import DashboardCardListMobile from "sections/shared/components/DashboardCardListMobile/DashboardCardListMobile";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
 import SuccessFeedback from "sections/shared/components/Feedbacks/components/SuccessFeedback/SuccessFeedback";
 import Loader from "sections/shared/components/Loader/Loader";
-import NoDataHandler from "sections/shared/components/NoDataHandler/NoDataHandler";
 import PaginationComponent from "sections/shared/components/Pagination/PaginationComponent";
 import SearchBar from "sections/shared/components/SearchBar/SearchBar";
-import { SectionTypes } from "sections/shared/interfaces/interfaces";
+import {
+  FilterParams,
+  SectionTypes,
+} from "sections/shared/interfaces/interfaces";
 
 const LeadsPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
 
-  const { search } = useLocation();
   const { getLeadsPaginated, loading, leads, pagination, isSuccess } =
     useLeadsContext();
   const { page } = useParams();
 
-  const searchParams = search.split("?").join("");
+  const getLeadsData = (text?: string) => {
+    const filters: FilterParams = {};
+    if (searchText) {
+      filters.search = text;
+    }
+    getLeadsPaginated(+page!, 12, filters);
+  };
+
+  const handleSearch = (text: string) => {
+    getLeadsData(text);
+  };
 
   useEffect(() => {
-    // const filters: FilterParams = {
-    //   types: ["Company"],
-    // };
-
-    getLeadsPaginated(+page!, 12);
+    getLeadsData();
   }, [getLeadsPaginated, page]);
 
   return (
     <>
       {loading ? (
         <Loader width="40px" height="40px" />
-      ) : !loading && mockUsers.length !== 0 ? (
+      ) : (
         <ReusablePageStyled className="dashboard">
           <div className="dashboard__search">
             {isSuccess && <SuccessFeedback text="Link enviado" />}
@@ -44,7 +50,8 @@ const LeadsPage = (): React.ReactElement => {
               pageTypes={SectionTypes.leads}
               searchText={searchText!}
               setSearchText={setSearchText}
-              onSearchSubmit={() => {}}
+              onSearchSubmit={() => handleSearch(searchText)}
+              onReset={() => getLeadsData()}
             />
           </div>
           <div className="dashboard__table">
@@ -67,13 +74,9 @@ const LeadsPage = (): React.ReactElement => {
             last_page={pagination.last_page}
             per_page={pagination.per_page}
             pageName={SectionTypes.leads}
-            filterParams={searchParams}
+            filterParams={""}
           />
         </ReusablePageStyled>
-      ) : mockUsers.length === 0 ? (
-        <NoDataHandler pageName={SectionTypes.leads} search={searchText!} />
-      ) : (
-        <></>
       )}
     </>
   );

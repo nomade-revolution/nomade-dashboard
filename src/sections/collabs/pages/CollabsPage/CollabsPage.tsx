@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import DashboardCardListMobile from "sections/shared/components/DashboardCardListMobile/DashboardCardListMobile";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
 import Loader from "sections/shared/components/Loader/Loader";
-import NoDataHandler from "sections/shared/components/NoDataHandler/NoDataHandler";
 import PaginationComponent from "sections/shared/components/Pagination/PaginationComponent";
 import {
   FilterParams,
@@ -22,21 +21,30 @@ const CollabsPage = (): React.ReactElement => {
   const { getAllCollabs, collabs, pagination, loading, order } =
     useCollabsContext();
   const { page } = useParams();
-
-  useEffect(() => {
+  const handleSearch = (text: string) => {
+    getCollabs(text);
+  };
+  const getCollabs = (text?: string) => {
     const filters: FilterParams = {};
 
     if (order?.sortTag) {
       filters.order = [{ by: order.sortTag, dir: order.direction }];
     }
+    if (text) {
+      filters.search = text;
+    }
+
     getAllCollabs(+page!, 12, filters);
+  };
+  useEffect(() => {
+    getCollabs();
   }, [getAllCollabs, page, order]);
 
   return (
     <>
       {loading ? (
         <Loader width="40px" height="40px" />
-      ) : !loading && collabs.length !== 0 ? (
+      ) : (
         <ReusablePageStyled>
           <div className="dashboard__table">
             <div className="dashboard__searchContainer">
@@ -45,7 +53,8 @@ const CollabsPage = (): React.ReactElement => {
                 pageTypes={SectionTypes.collabs}
                 searchText={searchText!}
                 setSearchText={setSearchText}
-                onSearchSubmit={() => {}}
+                onReset={() => getCollabs()}
+                onSearchSubmit={() => handleSearch(searchText)}
               />
             </div>
             <DashboardTable
@@ -74,10 +83,6 @@ const CollabsPage = (): React.ReactElement => {
             filterParams=""
           />
         </ReusablePageStyled>
-      ) : collabs.length === 0 ? (
-        <NoDataHandler pageName={SectionTypes.collabs} search={""} />
-      ) : (
-        <></>
       )}
     </>
   );

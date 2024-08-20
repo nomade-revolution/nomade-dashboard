@@ -1,13 +1,15 @@
 import { HttpResponseInterface } from "@core/domain/HttpResponseInterface";
 import { FullOffer, OffersApiResponse } from "../domain/Offer";
 import { OffersRepository } from "../domain/OffersRepository";
+import { FilterParams } from "../../../sections/shared/interfaces/interfaces";
 
 export const offersGetAll = (
   offersRepo: OffersRepository<OffersApiResponse>,
   page: number,
   per_page: number,
+  params: FilterParams,
 ): Promise<HttpResponseInterface<OffersApiResponse>> => {
-  return offersRepo.getAllOffers(page, per_page);
+  return offersRepo.getAllOffers(page, per_page, params);
 };
 
 export const deleteOffer = (

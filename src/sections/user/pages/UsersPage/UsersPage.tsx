@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Loader from "../../../shared/components/Loader/Loader";
-import NoDataHandler from "../../../shared/components/NoDataHandler/NoDataHandler";
 import DashboardTable from "../../../shared/components/DashboardTable/DashboardTable";
 import DashboardCardListMobile from "../../../shared/components/DashboardCardListMobile/DashboardCardListMobile";
 import PaginationComponent from "../../../shared/components/Pagination/PaginationComponent";
@@ -18,31 +17,38 @@ import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 
 const UsersPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
-  const { search } = useLocation();
   const { page } = useParams();
   const { getUsers, users_nomade, pagination, loading, order } =
     useUserContext();
 
-  const searchParams = search.split("?").join("");
+  const handleSearch = (searchText: string) => {
+    getUsersData(searchText);
+  };
 
-  useEffect(() => {
+  const getUsersData = (text?: string) => {
     const filters: FilterParams = {
       filters: {
         types: ["Nomade"],
       },
     };
-
     if (order?.sortTag) {
       filters.order = [{ by: order.sortTag, dir: order.direction }];
     }
+    if (text) {
+      filters.search = text;
+    }
     getUsers(+page!, 12, filters, UserTypes.nomade);
+  };
+
+  useEffect(() => {
+    getUsersData(searchText);
   }, [getUsers, page, order]);
 
   return (
     <>
       {loading ? (
         <Loader width="40px" height="40px" />
-      ) : !loading && users_nomade.length !== 0 ? (
+      ) : (
         <ReusablePageStyled className="dashboard">
           <div className="dashboard__search-user">
             <button className="dashboard__create">
@@ -50,11 +56,14 @@ const UsersPage = (): React.ReactElement => {
               Crear usuario
             </button>
             <SearchBar
+              onReset={() => getUsersData()}
               pageName={SectionTypes.users}
               pageTypes={SectionTypes.users}
               searchText={searchText!}
               setSearchText={setSearchText}
-              onSearchSubmit={() => {}}
+              onSearchSubmit={() => {
+                handleSearch(searchText!);
+              }}
             />
           </div>
           <div className="dashboard__table">
@@ -77,13 +86,9 @@ const UsersPage = (): React.ReactElement => {
             last_page={pagination.last_page}
             per_page={pagination.per_page}
             pageName={SectionTypes.users}
-            filterParams={searchParams}
+            filterParams={""}
           />
         </ReusablePageStyled>
-      ) : users_nomade.length === 0 ? (
-        <NoDataHandler pageName={SectionTypes.users} search={searchText!} />
-      ) : (
-        <></>
       )}
     </>
   );
