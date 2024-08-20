@@ -39,7 +39,9 @@ const CompaniesPage = (): React.ReactElement => {
     }
     getUsers(+page!, 12, filters, UserTypes.company);
   };
-  useEffect(() => {}, [getUsers, page, order]);
+  useEffect(() => {
+    getUsersData();
+  }, [getUsers, page, order]);
 
   return (
     <>

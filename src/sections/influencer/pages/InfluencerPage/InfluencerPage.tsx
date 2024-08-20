@@ -40,7 +40,9 @@ const InfluencersPage = (): React.ReactElement => {
     getUsers(+page!, 10, filters, UserTypes.influencer);
   };
 
-  useEffect(() => {}, [getUsers, page, order]);
+  useEffect(() => {
+    getUsersData();
+  }, [getUsers, page, order]);
 
   return (
     <>
