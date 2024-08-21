@@ -13,6 +13,7 @@ import {
   LOGOUT_ROUTE,
   REGISTER_ROUTE,
   USER_ROUTE,
+  RECOVER_PASSWORD_ROUTE,
 } from "@auth/application";
 import { User } from "modules/user/domain/User";
 
@@ -78,7 +79,17 @@ export class AuthRepository
       return Promise.reject(error);
     }
   }
-
+  public async recoverPassword(email: string): Promise<boolean> {
+    try {
+      const resp = await this.http.post<MessageInterface>(
+        RECOVER_PASSWORD_ROUTE,
+        { email },
+      );
+      return resp.success;
+    } catch (error) {
+      return false;
+    }
+  }
   public async getLoggedUser(): Promise<
     HttpResponseInterface<UserResponseInterface>
   > {

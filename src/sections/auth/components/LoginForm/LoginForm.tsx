@@ -7,6 +7,7 @@ import { useState } from "react";
 import { AuthLoginInterface } from "@auth";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import Loader from "sections/shared/components/Loader/Loader";
+import { Link } from "react-router-dom";
 
 const initialState: AuthLoginInterface = {
   email: "",
@@ -22,9 +23,9 @@ const LoginForm = (): React.ReactElement => {
     values: AuthLoginInterface,
     { setSubmitting }: FormikHelpers<AuthLoginInterface>,
   ) => {
-    submitForm(values);
-    setSubmitting(false);
     setIsFormSubmitted(true);
+    await submitForm(values);
+    setSubmitting(false);
   };
 
   return (
@@ -75,9 +76,12 @@ const LoginForm = (): React.ReactElement => {
           </div>
           <span>
             ¿Olvidaste la contraseña?{" "}
-            <a href="" className="login-form__forgot-password">
+            <Link
+              to={"/recovery-password"}
+              className="login-form__forgot-password"
+            >
               Haz click aquí
-            </a>
+            </Link>
           </span>
           <button
             type="submit"
@@ -93,15 +97,16 @@ const LoginForm = (): React.ReactElement => {
             </a>
           </span>
 
-          {isSuccess && isFormSubmitted ? (
+          {isSubmitting ? (
+            <Loader width="20px" height="20px" />
+          ) : !isSuccess && isFormSubmitted ? (
+            <span className="login-form__error-message">
+              Credenciales inválidas
+            </span>
+          ) : isFormSubmitted && isSuccess ? (
             <Loader width="20px" height="20px" />
           ) : (
-            !isSuccess &&
-            isFormSubmitted && (
-              <span className="login-form__error-message">
-                Credenciales inválidas
-              </span>
-            )
+            <></>
           )}
         </LoginFormStyled>
       )}

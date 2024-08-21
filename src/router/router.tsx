@@ -15,6 +15,7 @@ import LeadsPage from "sections/leads/pages/LeadsPage/LeadsPage";
 import LeadsSubmitInfoPage from "sections/leads/pages/LeadsSubmitInfoPage/LeadsSubmitInfoPage";
 import CollabsPage from "sections/collabs/pages/CollabsPage/CollabsPage";
 import CollabDetailPage from "sections/collabs/pages/CollabDetailPage/CollabDetailPage";
+import RecoverPasswordPage from "sections/auth/pages/RecoverPasswordPage/RecoverPasswordPage";
 
 const routes: RouteObject[] = [
   {
@@ -25,6 +26,10 @@ const routes: RouteObject[] = [
       {
         path: appPaths.login,
         element: <LoginPage />,
+      },
+      {
+        path: appPaths.recovery_password,
+        element: <RecoverPasswordPage />,
       },
       {
         path: appPaths.users,
