@@ -19,6 +19,7 @@ export enum SectionTypes {
   influencers = "influencers",
   collabs = "collabs",
   leads = "leads",
+  categories = "categories",
 }
 
 export interface OptionsStructure {

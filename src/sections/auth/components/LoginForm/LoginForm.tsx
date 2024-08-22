@@ -90,12 +90,12 @@ const LoginForm = (): React.ReactElement => {
           >
             Iniciar sesión
           </button>
-          <span>
+          {/* <span>
             ¿Todavía no tienes cuenta?{" "}
             <a href="" className="login-form__forgot-password">
               Registrate aquí
             </a>
-          </span>
+          </span> */}
 
           {isSubmitting ? (
             <Loader width="20px" height="20px" />

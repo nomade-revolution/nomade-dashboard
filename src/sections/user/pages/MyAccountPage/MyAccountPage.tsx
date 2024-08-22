@@ -1,5 +1,3 @@
-// import { mockFullUser } from "../../../../mocks/userMocks";
-// import UserDatasheet from "../../components/UserDataSheet/UserDataSheet";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import MyAccountPageStyled from "./MyAccountPageStyled";
 
@@ -7,8 +5,21 @@ const MyAccountPage = (): React.ReactElement => {
   const { user } = useAuthContext();
   return (
     <MyAccountPageStyled className="my-account">
-      {/* <UserDatasheet  /> */}
-      <div>{JSON.stringify(user)}</div>
+      <div>
+        <div>
+          <span>nombre</span>
+          <span>{user.name}</span>
+        </div>
+
+        <div>
+          <span>email</span>
+          <span>{user.email}</span>
+        </div>
+        <div>
+          <span>Rol</span>
+          <span>{user.type}</span>
+        </div>
+      </div>
     </MyAccountPageStyled>
   );
 };

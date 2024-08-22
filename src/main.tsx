@@ -16,28 +16,31 @@ import { InfluencerContextProvider } from "sections/influencer/InfluencerContext
 import { CompanyContextProvider } from "sections/company/CompanyContext/CompanyContext.tsx";
 import { LeadsContextProvider } from "sections/leads/LeadsContext/LeadsContext.tsx";
 import { AddressContextProvider } from "sections/address/AddressContext/AddressContext.tsx";
+import { CategoriesContextProvider } from "sections/categories/CategoriesContext/CategoriesContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <AuthContextProvider repository={repositories.user}>
-      <OffersContextProvider repository={repositories.offers}>
-        <CollabsContextProvider repository={repositories.collabs}>
-          <UserContextProvider repository={repositories.users}>
-            <InfluencerContextProvider repository={repositories.influencers}>
-              <CompanyContextProvider repository={repositories.companies}>
-                <LeadsContextProvider repository={repositories.leads}>
-                  <AddressContextProvider repository={repositories.address}>
-                    <ThemeProvider theme={theme}>
-                      <GlobalStyles />
-                      <RouterProvider router={router} />
-                    </ThemeProvider>
-                  </AddressContextProvider>
-                </LeadsContextProvider>
-              </CompanyContextProvider>
-            </InfluencerContextProvider>
-          </UserContextProvider>
-        </CollabsContextProvider>
-      </OffersContextProvider>
+      <CategoriesContextProvider repository={repositories.categories}>
+        <OffersContextProvider repository={repositories.offers}>
+          <CollabsContextProvider repository={repositories.collabs}>
+            <UserContextProvider repository={repositories.users}>
+              <InfluencerContextProvider repository={repositories.influencers}>
+                <CompanyContextProvider repository={repositories.companies}>
+                  <LeadsContextProvider repository={repositories.leads}>
+                    <AddressContextProvider repository={repositories.address}>
+                      <ThemeProvider theme={theme}>
+                        <GlobalStyles />
+                        <RouterProvider router={router} />
+                      </ThemeProvider>
+                    </AddressContextProvider>
+                  </LeadsContextProvider>
+                </CompanyContextProvider>
+              </InfluencerContextProvider>
+            </UserContextProvider>
+          </CollabsContextProvider>
+        </OffersContextProvider>
+      </CategoriesContextProvider>
     </AuthContextProvider>
   </React.StrictMode>,
 );

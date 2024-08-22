@@ -5,7 +5,7 @@ export const appPaths = {
   clients: "/clientes/page/:page",
   client: "/cliente/:id",
   users: "/usuarios/page/:page",
-  settings: "/configuración",
+  settings: "/configuration",
   account: "/mi-cuenta",
   place_order: "/realizar-pedido",
   recovery_password: "/recovery-password",
@@ -16,4 +16,5 @@ export const appPaths = {
   influencer: "/influencer/:id",
   leads: "/leads/page/:page",
   leadsSubmit: "/client/register",
+  categories: "/categories",
 };

@@ -16,6 +16,7 @@ import LeadsSubmitInfoPage from "sections/leads/pages/LeadsSubmitInfoPage/LeadsS
 import CollabsPage from "sections/collabs/pages/CollabsPage/CollabsPage";
 import CollabDetailPage from "sections/collabs/pages/CollabDetailPage/CollabDetailPage";
 import RecoverPasswordPage from "sections/auth/pages/RecoverPasswordPage/RecoverPasswordPage";
+import CategoriesPage from "sections/categories/pages/CategoriesPage";
 
 const routes: RouteObject[] = [
   {
@@ -74,6 +75,10 @@ const routes: RouteObject[] = [
       {
         path: appPaths.account,
         element: <MyAccountPage />,
+      },
+      {
+        path: appPaths.categories,
+        element: <CategoriesPage />,
       },
     ],
   },

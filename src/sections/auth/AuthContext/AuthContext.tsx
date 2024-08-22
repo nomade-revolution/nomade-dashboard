@@ -100,6 +100,9 @@ export const AuthContextProvider = ({
     setUser(user);
   }, [getSessionToken, getLoggedUser]);
 
+  setTimeout(() => {
+    setIsSuccess(false);
+  }, 2000);
   return (
     <AuthContext.Provider
       value={{

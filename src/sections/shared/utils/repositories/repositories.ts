@@ -2,6 +2,7 @@ import { AuthRepository } from "@auth";
 import { CompanyRepository } from "@company/infrastructure/companyRepository";
 import { InfluencerRepository } from "@influencer/infrastructure/influencerRepository";
 import { AddressRepository } from "modules/address/infrastructure/addressRepository";
+import { CategoriesRepository } from "modules/categories/infrastructure/CategoriesRepository";
 import { CollabsRepository } from "modules/collabs/infrastructure/CollabsRepository";
 import { LeadsRepository } from "modules/leads/infrastructure/leadsRepository";
 import { OffersRepository } from "modules/offers/infrastructure";
@@ -16,4 +17,5 @@ export const repositories = {
   companies: new CompanyRepository(),
   leads: new LeadsRepository(),
   address: new AddressRepository(),
+  categories: new CategoriesRepository(),
 };
