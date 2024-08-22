@@ -46,20 +46,18 @@ const OffersPage = (): React.ReactElement => {
       ) : (
         <OffersPageStyled>
           <div className="dashboard__searchContainer">
-            <div className="dashboard__search-user">
-              <SearchBar
-                onReset={() => {
-                  getOffers();
-                }}
-                pageName={SectionTypes.users}
-                pageTypes={SectionTypes.users}
-                searchText={searchText!}
-                setSearchText={setSearchText}
-                onSearchSubmit={() => {
-                  handleSearch(searchText);
-                }}
-              />
-            </div>
+            <SearchBar
+              onReset={() => {
+                getOffers();
+              }}
+              pageName={SectionTypes.users}
+              pageTypes={SectionTypes.users}
+              searchText={searchText!}
+              setSearchText={setSearchText}
+              onSearchSubmit={() => {
+                handleSearch(searchText);
+              }}
+            />
           </div>
           <DashboardTable
             bodySections={offers}
@@ -76,13 +74,22 @@ const OffersPage = (): React.ReactElement => {
               pageName={SectionTypes.offers}
             />
           </div>
-          <PaginationComponent
-            current_page={pagination.current_page}
-            last_page={pagination.last_page}
-            per_page={pagination.per_page}
-            pageName={SectionTypes.offers}
-            filterParams=""
-          />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <PaginationComponent
+              current_page={pagination.current_page}
+              last_page={pagination.last_page}
+              per_page={pagination.per_page}
+              pageName={SectionTypes.offers}
+              filterParams=""
+            />
+          </div>
         </OffersPageStyled>
       )}
     </>

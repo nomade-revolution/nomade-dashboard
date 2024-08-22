@@ -7,10 +7,10 @@ const InfluencerDetailPageStyled = styled.main`
   gap: 50px;
   padding: 20px 20px;
   color: ${(props) => props.theme.fontsColors.dashBoard};
-  height: 100vh;
+  height: auto;
 
   @media (min-width: 1000px) and (max-width: 1600px) {
-    padding: 70px 150px;
+    padding: 50px 100px;
   }
 
   @media (min-width: 1600px) {

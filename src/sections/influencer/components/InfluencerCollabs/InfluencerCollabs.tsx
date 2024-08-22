@@ -23,11 +23,11 @@ const InfluencerCollabs = ({ influencer_id }: Props): React.ReactElement => {
 
   return (
     <>
-      <h2>Collabs</h2>
+      <h3>Collabs</h3>
       {loading ? (
         <Loader height="40px" width="40px" />
       ) : !loading && collabs.length !== 0 ? (
-        <section>
+        <section style={{ gap: 20, display: "flex", flexDirection: "column" }}>
           <DashboardTable
             bodySections={collabs}
             headerSections={influencerCollabsHeaderSections}

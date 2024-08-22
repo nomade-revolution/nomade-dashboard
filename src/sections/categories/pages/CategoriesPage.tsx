@@ -22,7 +22,10 @@ const CategoriesPage = () => {
         <Loader width="40px" height="40px" />
       ) : (
         <ReusablePageStyled>
-          <div className="dashboard__table">
+          <div
+            className="dashboard__table"
+            style={{ justifyContent: "center", alignItems: "flex-start" }}
+          >
             <DashboardTable
               bodySections={categories}
               headerSections={categoriesSections}

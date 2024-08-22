@@ -29,7 +29,7 @@ const ReusablePageStyled = styled.main`
         display: flex;
         flex-direction: column;
         gap: 20px;
-        align-items: flex-start;
+        align-items: center;
         justify-content: center;
       }
     }
