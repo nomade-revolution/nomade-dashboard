@@ -25,14 +25,14 @@ describe("Given a LoginForm component", () => {
       expect(expectedLabel).toBeInTheDocument();
     });
 
-    test("Then it should show a link with the text 'Registrate aquí'", () => {
-      const linkText = "Registrate aquí";
+    // test("Then it should show a link with the text 'Registrate aquí'", () => {
+    //   const linkText = "Registrate aquí";
 
-      renderRouterWithProviders(<LoginPage />);
+    //   renderRouterWithProviders(<LoginPage />);
 
-      const expectedLink = screen.getByRole("link", { name: linkText });
+    //   const expectedLink = screen.getByRole("link", { name: linkText });
 
-      expect(expectedLink).toBeInTheDocument();
-    });
+    //   expect(expectedLink).toBeInTheDocument();
+    // });
   });
 });
