@@ -27,6 +27,11 @@ export interface ContextState {
   getLoggedUser: (token: string) => Promise<User>;
   user: User;
   recoverPassword: (email: string) => Promise<boolean>;
+  changePassword: (
+    password: string,
+    newPassword: string,
+    repeatNewPassword: string,
+  ) => Promise<boolean>;
 }
 
 export const AuthContext = createContext({} as ContextState);
@@ -100,12 +105,30 @@ export const AuthContextProvider = ({
     setUser(user);
   }, [getSessionToken, getLoggedUser]);
 
+  const changePassword = async (
+    password: string,
+    newPassword: string,
+    repeatNewPassword: string,
+  ) => {
+    const response = await repository.changePassword(
+      password,
+      newPassword,
+      repeatNewPassword,
+    );
+    if (response) {
+      setIsSuccess(response);
+      return response;
+    }
+    setIsSuccess(false);
+    return response;
+  };
   setTimeout(() => {
     setIsSuccess(false);
   }, 2000);
   return (
     <AuthContext.Provider
       value={{
+        changePassword,
         recoverPassword,
         token,
         isSuccess,

@@ -5,12 +5,36 @@ const MyAccountPageStyled = styled.main`
   display: flex;
   flex-direction: column;
   gap: 50px;
-  padding: 20px 20px;
+  padding: 40px 40px;
   color: ${(props) => props.theme.fontsColors.dashBoard};
   height: 100%;
+  max-width: 100%;
 
   @media (min-width: 800px) {
-    padding: 90px 30px;
+    padding: 90px 50px;
+  }
+
+  .section {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .data-section {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+  }
+  .data-title {
+    width: 100px;
+    font-weight: bold;
+    padding: 5;
+  }
+  .data {
+    width: 200px;
+    padding: 5;
   }
 `;
 

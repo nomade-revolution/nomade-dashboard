@@ -14,6 +14,7 @@ import {
   REGISTER_ROUTE,
   USER_ROUTE,
   RECOVER_PASSWORD_ROUTE,
+  CHANGE_PASSWORD_ROUTE,
 } from "@auth/application";
 import { User } from "modules/user/domain/User";
 
@@ -96,6 +97,25 @@ export class AuthRepository
     try {
       const resp = await this.http.get<UserResponseInterface>(USER_ROUTE);
       return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  public async changePassword(
+    password: string,
+    newPassword: string,
+  ): Promise<boolean> {
+    try {
+      const resp = await this.http.post<MessageInterface>(
+        CHANGE_PASSWORD_ROUTE,
+        {
+          current_password: password,
+          new_password: newPassword,
+          new_password_confirmation: newPassword,
+        },
+      );
+      return resp.success;
     } catch (error) {
       return Promise.reject(error);
     }

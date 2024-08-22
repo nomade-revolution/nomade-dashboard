@@ -26,6 +26,9 @@ const LoginForm = (): React.ReactElement => {
     setIsFormSubmitted(true);
     await submitForm(values);
     setSubmitting(false);
+    setTimeout(() => {
+      setIsFormSubmitted(false);
+    }, 5000);
   };
 
   return (

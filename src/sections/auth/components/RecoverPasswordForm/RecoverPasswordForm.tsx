@@ -22,6 +22,10 @@ const RecoverPasswordForm = (): React.ReactElement => {
     await sendForm(values);
     setSubmitting(false);
     setIsFormSubmitted(true);
+
+    setTimeout(() => {
+      setIsFormSubmitted(false);
+    }, 5000);
   };
   return (
     <Formik
@@ -58,16 +62,18 @@ const RecoverPasswordForm = (): React.ReactElement => {
             Enviar nueva contraseña
           </button>
 
-          {!isSuccess && isSubmitting ? (
+          {isSubmitting ? (
             <Loader width="20px" height="20px" />
           ) : !isSuccess && isFormSubmitted ? (
             <span className="login-form__error-message">
               Credenciales inválidas
             </span>
-          ) : (
+          ) : isFormSubmitted && isSuccess ? (
             <span className="login-form__success-message">
               Email enviado correctamente
             </span>
+          ) : (
+            <></>
           )}
         </RecoverPasswordStyled>
       )}

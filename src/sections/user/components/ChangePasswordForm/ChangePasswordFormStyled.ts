@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const RecoverPasswordStyled = styled.form`
+const ChangePasswordFormStyled = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9,6 +9,7 @@ const RecoverPasswordStyled = styled.form`
   width: 85%;
 
   @media (min-width: 1000px) {
+    width: 50%;
   }
 
   .form-section {
@@ -33,6 +34,7 @@ const RecoverPasswordStyled = styled.form`
       height: ${(props) => props.theme.heights.inputs};
       border-radius: ${(props) => props.theme.borderRadius.submitButton};
       width: 100%;
+      height: 40px;
     }
 
     &__label {
@@ -51,4 +53,4 @@ const RecoverPasswordStyled = styled.form`
   }
 `;
 
-export default RecoverPasswordStyled;
+export default ChangePasswordFormStyled;
