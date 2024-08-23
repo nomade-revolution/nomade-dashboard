@@ -1,6 +1,9 @@
 import styled from "styled-components";
 
 const DashboardStyled = styled.table`
+  @media (max-width: 768px) {
+    display: none;
+  }
   .table {
     &__sort-button {
       color: ${(props) => props.theme.fontsColors.corporativeColor};

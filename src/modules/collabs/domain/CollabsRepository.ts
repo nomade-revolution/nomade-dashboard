@@ -1,11 +1,11 @@
 import { HttpResponseInterface } from "@core";
+import { FilterParams } from "sections/shared/interfaces/interfaces";
 
 export interface CollabsRepository<I> {
   getAllCollabs(
     page: number,
     per_page: number,
-    influencer_id?: number | undefined,
-    company_id?: number | undefined,
+    params: FilterParams,
   ): Promise<HttpResponseInterface<I>>;
   deleteCollab(collab_id: number): Promise<HttpResponseInterface<I>>;
   updateCollabHistoryState(

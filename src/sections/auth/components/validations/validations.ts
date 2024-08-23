@@ -8,3 +8,7 @@ export const loginScheme = yup.object({
   email: yup.string().required(errorMessages.required),
   password: yup.string().required(errorMessages.required),
 });
+
+export const recoverPasswordScheme = yup.object({
+  email: yup.string().required(errorMessages.required),
+});

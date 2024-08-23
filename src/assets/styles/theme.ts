@@ -28,6 +28,7 @@ const theme = {
     error: "#E02020",
     darkBlue: "#125AA9",
     dashBoard: "#273241",
+    success: "#30D59B",
   },
   borders: {
     lightGrey: "#E2E1E1",

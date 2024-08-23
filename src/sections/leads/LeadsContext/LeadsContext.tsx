@@ -1,6 +1,9 @@
 import React, { createContext, useCallback, useState } from "react";
 import { isHttpSuccessResponse } from "../../shared/utils/typeGuards/typeGuardsFunctions";
-import { PaginationStucture } from "sections/shared/interfaces/interfaces";
+import {
+  FilterParams,
+  PaginationStucture,
+} from "sections/shared/interfaces/interfaces";
 import { LeadsRepository } from "modules/leads/domain/LeadsRepository";
 import { Lead, LeadsApiResponse } from "modules/leads/domain/Leads";
 import {
@@ -17,7 +20,11 @@ interface ContextState {
   error: string | null;
   isSuccess: boolean;
   pagination: PaginationStucture;
-  getLeadsPaginated: (page: number, per_page: number) => void;
+  getLeadsPaginated: (
+    page: number,
+    per_page: number,
+    params: FilterParams,
+  ) => void;
   sendLinkForLead: (lead_id: number) => void;
   getLeadFromHash: (hash: string) => void;
 }
@@ -42,11 +49,11 @@ export const LeadsContextProvider = ({
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
   const getLeadsPaginated = useCallback(
-    async (page: number, per_page: number) => {
+    async (page: number, per_page: number, params: FilterParams) => {
       setLoading(true);
       setError(null);
 
-      const response = await getLeads(repository, page, per_page);
+      const response = await getLeads(repository, page, per_page, params);
       if (isHttpSuccessResponse(response)) {
         setLoading(false);
         setLeads(response.data.leads);

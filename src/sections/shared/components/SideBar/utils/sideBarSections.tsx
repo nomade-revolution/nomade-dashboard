@@ -62,7 +62,7 @@ export const getSideBarUpperSections = (
       name: "Categorías",
       pathname: "categorias",
       quantity: 0,
-      path: appPaths.settings,
+      path: appPaths.categories,
     },
     {
       id: 7,

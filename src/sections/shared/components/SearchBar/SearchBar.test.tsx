@@ -13,6 +13,7 @@ describe("Given a SearchBar component", () => {
 
       renderRouterWithProviders(
         <SearchBar
+          onReset={vi.fn()}
           pageName="pedidos"
           pageTypes={"pedidos"}
           onSearchSubmit={vi.fn()}
@@ -36,6 +37,7 @@ describe("Given a SearchBar component", () => {
 
       renderRouterWithProviders(
         <SearchBar
+          onReset={vi.fn()}
           pageName="pedidos"
           pageTypes={"pedidos"}
           onSearchSubmit={vi.fn()}

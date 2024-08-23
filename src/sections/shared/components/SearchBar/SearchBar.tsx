@@ -10,6 +10,7 @@ interface SearchBarProps {
   setSearchText: (value: string) => void;
   onSearchSubmit: () => void;
   setFilters?: (value: null) => void;
+  onReset: () => void;
 }
 
 const SearchBar = ({
@@ -19,6 +20,7 @@ const SearchBar = ({
   setSearchText,
   onSearchSubmit,
   setFilters,
+  onReset,
 }: SearchBarProps): React.ReactElement => {
   const navigate = useNavigate();
 
@@ -39,9 +41,9 @@ const SearchBar = ({
 
   const handleClear = () => {
     setSearchText("");
-    setFilters!(null);
+    setFilters && setFilters(null);
 
-    navigate(`/${pageName}/page/1`);
+    onReset();
   };
 
   const isButtonDisabled = searchText === "" || searchText === null;

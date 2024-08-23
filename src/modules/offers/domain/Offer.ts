@@ -21,6 +21,7 @@ export interface Offer {
   conditions: string;
   advance_notice_time: number | null;
   favorite: boolean;
+  reserves?: number;
 }
 
 export interface ActivityOffer extends Offer {

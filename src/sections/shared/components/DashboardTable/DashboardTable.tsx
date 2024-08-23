@@ -8,24 +8,23 @@ import Paper from "@mui/material/Paper";
 import DashboardStyled from "./DashboardTableStyled";
 import { HeaderSection } from "../../interfaces/interfaces";
 import { Offer } from "../../../../modules/offers/domain/Offer";
-
 import { Company, User } from "modules/user/domain/User";
 import DashboardTableCellContent from "../DashboardTableCellContent/DashboardTableCellContent";
 import { Collab, CollabActionTypes } from "modules/collabs/domain/Collabs";
 import { Influencer } from "@influencer";
+import DashBoardHeaderCell from "../DashboardHeaderCell/DashboardHeaderCell";
+import NoDataHandler from "../NoDataHandler/NoDataHandler";
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
+export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.white,
     color: "#B78D00",
     fontWeight: "700",
-
     paddingTop: "25px",
     paddingBottom: "25px",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-
     paddingTop: "20px",
     paddingBottom: "20px",
   },
@@ -56,69 +55,60 @@ const DashboardTable = <Type,>({
   setCollabStateActionType,
 }: DashboardTableProps<Type>): React.ReactElement => {
   return (
-    <TableContainer
-      component={Paper}
-      sx={{
-        boxShadow: "0px 0px 20px 0.2em rgba(0, 0, 0, 0.1)",
-        width: "fit-content",
-      }}
-    >
-      <DashboardStyled
-        className="table"
-        aria-label="dashboard table"
-        style={{ borderCollapse: "collapse" }}
-      >
-        <TableHead>
-          <TableRow
-            className="table__header"
-            sx={{ textTransform: "uppercase" }}
+    <>
+      {bodySections.length > 0 ? (
+        <TableContainer
+          component={Paper}
+          sx={{
+            boxShadow: "0px 0px 20px 0.2em rgba(0, 0, 0, 0.1)",
+            width: "fit-content",
+          }}
+        >
+          <DashboardStyled
+            className="table"
+            aria-label="dashboard table"
+            style={{ borderCollapse: "collapse" }}
           >
-            {headerSections.map((section) => {
-              return (
-                <StyledTableCell
-                  align="center"
-                  key={section.id}
-                  className={
-                    section.property === "contact"
-                      ? "contact__section"
-                      : section.property === "client"
-                        ? "client__section"
-                        : "header__section"
-                  }
-                >
-                  <button
-                    onClick={() => {}}
-                    disabled={!section.sortTag}
-                    className="table__sort-button"
-                  >
-                    {section.name}
-                  </button>
-                </StyledTableCell>
-              );
-            })}
-          </TableRow>
-        </TableHead>
-        <TableBody sx={{ borderCollapse: "collapse" }}>
-          {bodySections?.map((section: Type, index) => (
-            <StyledTableRow key={index}>
-              {headerSections?.map((headerSection) => (
-                <StyledTableCell align="center" key={headerSection.id}>
-                  <DashboardTableCellContent
-                    headerSection={headerSection}
-                    section={
-                      section as Offer | User | Influencer | Company | Collab
-                    }
-                    pageName={pageName}
-                    type={type}
-                    setCollabStateActionType={setCollabStateActionType}
-                  />
-                </StyledTableCell>
+            <TableHead>
+              <TableRow
+                className="table__header"
+                sx={{ textTransform: "uppercase" }}
+              >
+                {headerSections.map((section) => (
+                  <DashBoardHeaderCell section={section} key={section.id} />
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody sx={{ borderCollapse: "collapse" }}>
+              {bodySections?.map((section: Type, index) => (
+                <StyledTableRow key={index}>
+                  {headerSections?.map((headerSection) => (
+                    <StyledTableCell align="center" key={headerSection.id}>
+                      <DashboardTableCellContent
+                        headerSection={headerSection}
+                        section={
+                          section as
+                            | Offer
+                            | User
+                            | Influencer
+                            | Company
+                            | Collab
+                        }
+                        pageName={pageName}
+                        type={type}
+                        setCollabStateActionType={setCollabStateActionType}
+                      />
+                    </StyledTableCell>
+                  ))}
+                </StyledTableRow>
               ))}
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </DashboardStyled>
-    </TableContainer>
+            </TableBody>
+          </DashboardStyled>
+        </TableContainer>
+      ) : (
+        <NoDataHandler pageName="" search={""} />
+      )}
+    </>
   );
 };
 

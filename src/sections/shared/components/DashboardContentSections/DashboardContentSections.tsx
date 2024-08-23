@@ -130,11 +130,14 @@ const DashboardContentSections = ({
         </div>
       );
 
-    case "reservations":
+    case "reserves":
       return (
-        <Link to="" className="dashboard__reservations">
+        <Link
+          to={`/collabsReservations/${(section as Offer).id}/page/1`}
+          className="dashboard__reservations"
+        >
           <FaEye />
-          Reservas (3)
+          Reservas ({(section as Offer)?.reserves ?? 0})
         </Link>
       );
 

@@ -7,7 +7,10 @@ import {
 } from "modules/offers/application/offers";
 import { FullOffer } from "modules/offers/domain/Offer";
 import { OffersRepository } from "modules/offers/domain/OffersRepository";
-import { PaginationStucture } from "sections/shared/interfaces/interfaces";
+import {
+  FilterParams,
+  PaginationStucture,
+} from "sections/shared/interfaces/interfaces";
 
 interface ContextState {
   offers: FullOffer[];
@@ -16,7 +19,7 @@ interface ContextState {
   error: string | null;
   isSuccess: boolean;
   pagination: PaginationStucture;
-  getAllOffers: (page: number, per_page: number) => void;
+  getAllOffers: (page: number, per_page: number, params: FilterParams) => void;
   deleteOfferById: (offer_id: number) => void;
   getOffer: (offer_id: number) => void;
 }
@@ -37,11 +40,11 @@ export const OffersContextProvider = ({
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
   const getAllOffers = useCallback(
-    async (page: number, per_page: number) => {
+    async (page: number, per_page: number, params: FilterParams) => {
       setLoading(true);
       setError(null);
 
-      const response = await offersGetAll(repository, page, per_page);
+      const response = await offersGetAll(repository, page, per_page, params);
       if (isHttpSuccessResponse(response)) {
         setOffers(response.data.offers);
         setPagination(response.data.pagination);
@@ -61,10 +64,12 @@ export const OffersContextProvider = ({
 
   const getOffer = useCallback(
     async (offer_id: number) => {
+      setLoading(true);
       const response = await getOfferById(repository, offer_id);
       if (isHttpSuccessResponse(response)) {
         setOffer(response.data);
       }
+      setLoading(false);
     },
     [repository],
   );

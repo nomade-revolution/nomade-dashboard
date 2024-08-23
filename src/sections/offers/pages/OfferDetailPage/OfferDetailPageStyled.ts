@@ -1,0 +1,154 @@
+import styled from "styled-components";
+
+const OfferDetailPageStyled = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 20px;
+  align-self: center;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+  .images-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+    overflow: scroll;
+    flex-wrap: wrap;
+    padding: 20px;
+    margin-top: 50px;
+  }
+  .adress-list {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .collab-detail {
+    &__participants {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      background: ${(props) => props.theme.colors.lightGrey};
+      box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
+      padding: 20px 40px;
+      border-radius: 10px;
+    }
+
+    &__participant {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    &__avatar {
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    &__name {
+      font-weight: 700;
+    }
+
+    &__link {
+      background: ${(props) => props.theme.colors.mainColor};
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      padding: 5px;
+      border-radius: 8px;
+      color: ${(props) => props.theme.colors.light};
+      font-size: ${(props) => props.theme.fontsSize.__SM};
+      font-weight: 700;
+    }
+
+    &__icon {
+      padding-top: 40px;
+      font-size: 200px;
+      color: ${(props) => props.theme.colors.mainColor};
+    }
+
+    &__data {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 0 40px;
+      background: ${(props) => props.theme.colors.lightGrey};
+      box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
+      padding: 20px 40px;
+      border-radius: 10px;
+    }
+
+    &__offer {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    &__collab-data {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+      padding-top: 20px;
+      padding-left: 20px;
+      padding-bottom: 20px;
+    }
+
+    &__data-section {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+      align-items: flex-start;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    &__data-title {
+      font-weight: 700;
+    }
+
+    &__type-section {
+      font-weight: bold;
+
+      &--restaurant {
+        color: ${(props) => props.theme.colors.darkRed};
+      }
+
+      &--delivery {
+        color: ${(props) => props.theme.colors.softGreen};
+      }
+
+      &--brand {
+        color: ${(props) => props.theme.colors.orange};
+      }
+
+      &--lodging {
+        color: ${(props) => props.theme.colors.tagsBlue};
+      }
+
+      &--activity {
+        color: ${(props) => props.theme.colors.red};
+      }
+    }
+
+    &__offer-img {
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    &__address {
+      display: flex;
+      gap: 5px;
+    }
+  }
+`;
+
+export default OfferDetailPageStyled;

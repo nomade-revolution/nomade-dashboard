@@ -10,7 +10,11 @@ import {
   updateCollabHistoryState,
 } from "modules/collabs/application/collabs";
 import { FullCollab, RejectedCollab } from "modules/collabs/domain/Collabs";
-import { PaginationStucture } from "sections/shared/interfaces/interfaces";
+import {
+  FilterParams,
+  PaginationStucture,
+} from "sections/shared/interfaces/interfaces";
+import { OrderItem } from "sections/user/UserContext/UserContext";
 
 interface ContextState {
   collabs: FullCollab[];
@@ -20,12 +24,7 @@ interface ContextState {
   error: string | null;
   isSuccess: boolean;
   pagination: PaginationStucture;
-  getAllCollabs: (
-    page: number,
-    per_page: number,
-    influencer_id?: number | undefined,
-    company_id?: number | undefined,
-  ) => void;
+  getAllCollabs: (page: number, per_page: number, params: FilterParams) => void;
   deleteCollabById: (influencer_id: number) => void;
   updateCollabState: (
     collab_id: number,
@@ -33,6 +32,8 @@ interface ContextState {
     reject_collab_reason_id?: number,
   ) => void;
   getAllRejectedCollabReasons: () => void;
+  setOrder: (order: OrderItem) => void;
+  order: OrderItem;
   getCollabById: (collab_id: number) => void;
 }
 
@@ -53,24 +54,14 @@ export const CollabsContextProvider = ({
     {} as PaginationStucture,
   );
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [order, setOrder] = useState<OrderItem>({} as OrderItem);
 
   const getAllCollabs = useCallback(
-    async (
-      page: number,
-      per_page: number,
-      influencer_id?: number | undefined,
-      company_id?: number | undefined,
-    ) => {
+    async (page: number, per_page: number, params: FilterParams) => {
       setLoading(true);
       setError(null);
 
-      const response = await collabsGetAll(
-        repository,
-        page,
-        per_page,
-        influencer_id,
-        company_id,
-      );
+      const response = await collabsGetAll(repository, page, per_page, params);
       if (isHttpSuccessResponse(response)) {
         setLoading(false);
         setCollabs(response.data.colabs);
@@ -147,6 +138,8 @@ export const CollabsContextProvider = ({
         deleteCollabById,
         updateCollabState,
         getAllRejectedCollabReasons,
+        order,
+        setOrder,
         getCollabById,
       }}
     >

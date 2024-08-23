@@ -15,6 +15,10 @@ import LeadsPage from "sections/leads/pages/LeadsPage/LeadsPage";
 import LeadsSubmitInfoPage from "sections/leads/pages/LeadsSubmitInfoPage/LeadsSubmitInfoPage";
 import CollabsPage from "sections/collabs/pages/CollabsPage/CollabsPage";
 import CollabDetailPage from "sections/collabs/pages/CollabDetailPage/CollabDetailPage";
+import RecoverPasswordPage from "sections/auth/pages/RecoverPasswordPage/RecoverPasswordPage";
+import CategoriesPage from "sections/categories/pages/CategoriesPage";
+import CollabsReservationsPage from "sections/collabs/pages/CollabsReservations/CollabsReservationsPage";
+import OfferDetailsPage from "sections/offers/pages/OfferDetailPage/OfferDetailPage";
 
 const routes: RouteObject[] = [
   {
@@ -25,6 +29,10 @@ const routes: RouteObject[] = [
       {
         path: appPaths.login,
         element: <LoginPage />,
+      },
+      {
+        path: appPaths.recovery_password,
+        element: <RecoverPasswordPage />,
       },
       {
         path: appPaths.users,
@@ -69,6 +77,18 @@ const routes: RouteObject[] = [
       {
         path: appPaths.account,
         element: <MyAccountPage />,
+      },
+      {
+        path: appPaths.categories,
+        element: <CategoriesPage />,
+      },
+      {
+        path: appPaths.collabsReservations,
+        element: <CollabsReservationsPage />,
+      },
+      {
+        path: appPaths.offerDetail,
+        element: <OfferDetailsPage />,
       },
     ],
   },

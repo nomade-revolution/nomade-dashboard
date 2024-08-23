@@ -32,7 +32,8 @@ export class HttpImplementation implements HttpInterface {
       const response = await axios.get(url, {
         headers: this.getHeaders(),
         timeout: this.REQUEST_TIMEOUT,
-        params,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        params: { ...(params as any) },
         responseType: responseType as "json",
       });
       return response;

@@ -1,12 +1,11 @@
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 import { UserTypes } from "modules/user/domain/User";
 import { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { influencersTableHeaderSections } from "sections/influencer/utils/influencersSections";
 import DashboardCardListMobile from "sections/shared/components/DashboardCardListMobile/DashboardCardListMobile";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
 import Loader from "sections/shared/components/Loader/Loader";
-import NoDataHandler from "sections/shared/components/NoDataHandler/NoDataHandler";
 import PaginationComponent from "sections/shared/components/Pagination/PaginationComponent";
 import SearchBar from "sections/shared/components/SearchBar/SearchBar";
 import {
@@ -18,25 +17,38 @@ import { useUserContext } from "sections/user/UserContext/useUserContext";
 const InfluencersPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
 
-  const { search } = useLocation();
-  const { getUsers, users_influencer, pagination, loading } = useUserContext();
+  const { getUsers, users_influencer, pagination, loading, order } =
+    useUserContext();
   const { page } = useParams();
 
-  const searchParams = search.split("?").join("");
+  const handleSearch = (text: string) => {
+    getUsersData(text);
+  };
+  const getUsersData = (text?: string) => {
+    const filters: FilterParams = {
+      filters: {
+        types: ["Influencer"],
+      },
+    };
+    if (order?.sortTag) {
+      filters.order = [{ by: order.sortTag, dir: order.direction }];
+    }
+
+    if (text) {
+      filters.search = text;
+    }
+    getUsers(+page!, 10, filters, UserTypes.influencer);
+  };
 
   useEffect(() => {
-    const filters: FilterParams = {
-      types: ["Influencer"],
-    };
-
-    getUsers(+page!, 10, filters, UserTypes.influencer);
-  }, [getUsers, page]);
+    getUsersData();
+  }, [getUsers, page, order]);
 
   return (
     <>
       {loading ? (
         <Loader width="40px" height="40px" />
-      ) : !loading && users_influencer.length !== 0 ? (
+      ) : (
         <ReusablePageStyled className="dashboard">
           <div className="dashboard__search">
             <SearchBar
@@ -44,7 +56,8 @@ const InfluencersPage = (): React.ReactElement => {
               pageTypes={SectionTypes.influencers}
               searchText={searchText!}
               setSearchText={setSearchText}
-              onSearchSubmit={() => {}}
+              onSearchSubmit={() => handleSearch(searchText)}
+              onReset={() => getUsersData()}
             />
           </div>
           <div className="dashboard__table">
@@ -67,16 +80,9 @@ const InfluencersPage = (): React.ReactElement => {
             last_page={pagination.last_page}
             per_page={pagination.per_page}
             pageName={SectionTypes.influencers}
-            filterParams={searchParams}
+            filterParams={""}
           />
         </ReusablePageStyled>
-      ) : users_influencer.length === 0 ? (
-        <NoDataHandler
-          pageName={SectionTypes.influencers}
-          search={searchText!}
-        />
-      ) : (
-        <></>
       )}
     </>
   );

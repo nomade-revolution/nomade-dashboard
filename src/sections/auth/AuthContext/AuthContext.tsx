@@ -2,10 +2,15 @@ import React, { createContext, useCallback, useState } from "react";
 import { AuthRepository } from "@auth/domain/AuthRepository";
 import {
   AuthLoginInterface,
+  AuthRecoverPasswordInterface,
   AuthRegisterInterface,
   SessionInterface,
 } from "@auth";
-import { authGetLoggedUser, authLogin } from "@auth/application/auth";
+import {
+  authGetLoggedUser,
+  authLogin,
+  authRecoverPassword,
+} from "@auth/application/auth";
 import { isHttpSuccessResponse } from "../../shared/utils/typeGuards/typeGuardsFunctions";
 import { AsyncCookiesImplementation } from "@core";
 import environments from "@environments";
@@ -21,6 +26,12 @@ export interface ContextState {
   setSessionToken: () => void;
   getLoggedUser: (token: string) => Promise<User>;
   user: User;
+  recoverPassword: (email: string) => Promise<boolean>;
+  changePassword: (
+    password: string,
+    newPassword: string,
+    repeatNewPassword: string,
+  ) => Promise<boolean>;
 }
 
 export const AuthContext = createContext({} as ContextState);
@@ -30,7 +41,7 @@ export const AuthContextProvider = ({
   repository,
 }: React.PropsWithChildren<{
   repository: AuthRepository<
-    AuthLoginInterface | AuthRegisterInterface,
+    AuthLoginInterface | AuthRegisterInterface | AuthRecoverPasswordInterface,
     SessionInterface
   >;
 }>) => {
@@ -71,6 +82,21 @@ export const AuthContextProvider = ({
     },
     [repository],
   );
+  const recoverPassword = async (email: string) => {
+    const response = await authRecoverPassword(
+      email,
+      repository as unknown as AuthRepository<
+        AuthRecoverPasswordInterface,
+        boolean
+      >,
+    );
+    if (response) {
+      setIsSuccess(response);
+      return response;
+    }
+    setIsSuccess(false);
+    return response;
+  };
 
   const setSessionToken = useCallback(async () => {
     const token = getSessionToken();
@@ -79,11 +105,31 @@ export const AuthContextProvider = ({
     setUser(user);
   }, [getSessionToken, getLoggedUser]);
 
-  setTimeout(() => setIsSuccess(false), 2000);
-
+  const changePassword = async (
+    password: string,
+    newPassword: string,
+    repeatNewPassword: string,
+  ) => {
+    const response = await repository.changePassword(
+      password,
+      newPassword,
+      repeatNewPassword,
+    );
+    if (response) {
+      setIsSuccess(response);
+      return response;
+    }
+    setIsSuccess(false);
+    return response;
+  };
+  setTimeout(() => {
+    setIsSuccess(false);
+  }, 2000);
   return (
     <AuthContext.Provider
       value={{
+        changePassword,
+        recoverPassword,
         token,
         isSuccess,
         loginUser: login,

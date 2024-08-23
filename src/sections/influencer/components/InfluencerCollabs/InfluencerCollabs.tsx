@@ -17,17 +17,17 @@ const InfluencerCollabs = ({ influencer_id }: Props): React.ReactElement => {
 
   useEffect(() => {
     setPage(pagination.current_page + 1);
-    getAllCollabs(page, 12, influencer_id);
+    getAllCollabs(page, 12, { filters: { influencer_id } });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getAllCollabs, influencer_id]);
 
   return (
     <>
-      <h2>Collabs</h2>
+      <h3>Collabs</h3>
       {loading ? (
         <Loader height="40px" width="40px" />
       ) : !loading && collabs.length !== 0 ? (
-        <section>
+        <section style={{ gap: 20, display: "flex", flexDirection: "column" }}>
           <DashboardTable
             bodySections={collabs}
             headerSections={influencerCollabsHeaderSections}

@@ -14,6 +14,10 @@ import {
 import { deleteUser, getUsersFiltered } from "modules/user/application/user";
 import { Influencer } from "@influencer";
 
+export interface OrderItem {
+  sortTag: string;
+  direction: "ASC" | "DESC" | null;
+}
 interface ContextState {
   users_nomade: User[];
   users_influencer: Influencer[];
@@ -29,6 +33,8 @@ interface ContextState {
     type: string,
   ) => void;
   deleteUserById: (user_id: number) => void;
+  setOrder: (order: OrderItem) => void;
+  order: OrderItem;
 }
 
 export const UserContext = createContext<ContextState>({} as ContextState);
@@ -48,6 +54,7 @@ export const UserContextProvider = ({
   const [pagination, setPagination] = useState<PaginationStucture>(
     {} as PaginationStucture,
   );
+  const [order, setOrder] = useState<OrderItem>({} as OrderItem);
 
   const getUsers = useCallback(
     async (
@@ -58,7 +65,6 @@ export const UserContextProvider = ({
     ) => {
       setLoading(true);
       setError(null);
-
       const response = await getUsersFiltered(
         repository,
         page,
@@ -105,6 +111,8 @@ export const UserContextProvider = ({
         isSuccess,
         getUsers,
         deleteUserById,
+        setOrder,
+        order,
       }}
     >
       {children}

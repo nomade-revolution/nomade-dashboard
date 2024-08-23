@@ -1,12 +1,10 @@
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
-import { mockUsers } from "mocks/userMocks";
 import { UserTypes } from "modules/user/domain/User";
 import { useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import DashboardCardListMobile from "sections/shared/components/DashboardCardListMobile/DashboardCardListMobile";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
 import Loader from "sections/shared/components/Loader/Loader";
-import NoDataHandler from "sections/shared/components/NoDataHandler/NoDataHandler";
 import PaginationComponent from "sections/shared/components/Pagination/PaginationComponent";
 import SearchBar from "sections/shared/components/SearchBar/SearchBar";
 import {
@@ -20,25 +18,36 @@ import { companyTableHeaderSections } from "../../utils/companySections";
 const CompaniesPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
 
-  const { search } = useLocation();
-  const { getUsers, users_company, pagination, loading } = useUserContext();
+  const { getUsers, users_company, pagination, loading, order } =
+    useUserContext();
   const { page } = useParams();
 
-  const searchParams = search.split("?").join("");
-
-  useEffect(() => {
+  const handleSearch = (searchText: string) => {
+    getUsersData(searchText);
+  };
+  const getUsersData = (text?: string) => {
     const filters: FilterParams = {
-      types: ["Company"],
+      filters: {
+        types: ["Company"],
+      },
     };
-
+    if (order?.sortTag) {
+      filters.order = [{ by: order.sortTag, dir: order.direction }];
+    }
+    if (text) {
+      filters.search = text;
+    }
     getUsers(+page!, 12, filters, UserTypes.company);
-  }, [getUsers, page]);
+  };
+  useEffect(() => {
+    getUsersData();
+  }, [getUsers, page, order]);
 
   return (
     <>
       {loading ? (
         <Loader width="40px" height="40px" />
-      ) : !loading && mockUsers.length !== 0 ? (
+      ) : (
         <ReusablePageStyled className="dashboard">
           <div className="dashboard__search">
             <SearchBar
@@ -46,7 +55,8 @@ const CompaniesPage = (): React.ReactElement => {
               pageTypes={SectionTypes.customers}
               searchText={searchText!}
               setSearchText={setSearchText}
-              onSearchSubmit={() => {}}
+              onSearchSubmit={() => handleSearch(searchText)}
+              onReset={() => getUsersData()}
             />
           </div>
           <div className="dashboard__table">
@@ -69,13 +79,9 @@ const CompaniesPage = (): React.ReactElement => {
             last_page={pagination.last_page}
             per_page={pagination.per_page}
             pageName={SectionTypes.customers}
-            filterParams={searchParams}
+            filterParams={""}
           />
         </ReusablePageStyled>
-      ) : mockUsers.length === 0 ? (
-        <NoDataHandler pageName={SectionTypes.customers} search={searchText!} />
-      ) : (
-        <></>
       )}
     </>
   );

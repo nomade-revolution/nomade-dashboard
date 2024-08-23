@@ -3,6 +3,7 @@ import { HttpResponseInterface } from "@core/domain";
 import { Lead, LeadsApiResponse } from "../domain/Leads";
 import { LEADS_BASE } from "../application/routes";
 import { CompanyRegisterStructure } from "modules/user/domain/User";
+import { FilterParams } from "sections/shared/interfaces/interfaces";
 
 export class LeadsRepository {
   private readonly http: Http = Http.getInstance();
@@ -10,11 +11,13 @@ export class LeadsRepository {
   public async getLeads(
     page: number,
     per_page: number,
+    params: FilterParams,
   ): Promise<HttpResponseInterface<LeadsApiResponse>> {
     try {
       const resp = await this.http.get<LeadsApiResponse>(LEADS_BASE, {
         page,
         per_page,
+        ...params,
       });
       return resp;
     } catch (error) {

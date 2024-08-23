@@ -18,7 +18,7 @@ const CompanyCollabs = ({ company_id }: Props): React.ReactElement => {
 
   useEffect(() => {
     setPage(pagination.current_page + 1);
-    getAllCollabs(page, 12, undefined, company_id);
+    getAllCollabs(page, 12, { filters: { company_id } });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getAllCollabs, company_id]);
 

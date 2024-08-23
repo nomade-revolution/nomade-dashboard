@@ -1,4 +1,8 @@
-import { AuthLoginInterface, SessionInterface } from "@auth/domain";
+import {
+  AuthLoginInterface,
+  AuthRecoverPasswordInterface,
+  SessionInterface,
+} from "@auth/domain";
 import { AuthRepository } from "@auth/domain/AuthRepository";
 import { HttpResponseInterface } from "@core/domain/HttpResponseInterface";
 import { User } from "modules/user/domain/User";
@@ -15,4 +19,11 @@ export const authGetLoggedUser = (
   authRepo: AuthRepository<AuthLoginInterface, SessionInterface>,
 ): Promise<HttpResponseInterface<User>> => {
   return authRepo.getLoggedUser(token);
+};
+
+export const authRecoverPassword = (
+  email: string,
+  authRepo: AuthRepository<AuthRecoverPasswordInterface, boolean>,
+) => {
+  return authRepo.recoverPassword(email);
 };

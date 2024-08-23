@@ -2,6 +2,7 @@ import { Http } from "@core/application";
 import { HttpResponseInterface } from "@core/domain";
 import { OFFERS_BASE } from "../application/routes";
 import { FullOffer, OffersApiResponse } from "../domain/Offer";
+import { FilterParams } from "sections/shared/interfaces/interfaces";
 
 export class OffersRepository {
   private readonly http: Http = Http.getInstance();
@@ -9,12 +10,15 @@ export class OffersRepository {
   public async getAllOffers(
     page: number,
     per_page: number,
+    params: FilterParams,
   ): Promise<HttpResponseInterface<OffersApiResponse>> {
     try {
       const resp = await this.http.get<OffersApiResponse>(OFFERS_BASE, {
         page,
         per_page,
+        ...params,
       });
+
       return resp;
     } catch (error) {
       return Promise.reject(error);

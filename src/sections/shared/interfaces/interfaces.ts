@@ -3,6 +3,7 @@ export interface HeaderSection {
   name: string;
   property: string;
   sortTag: string | null;
+  pageName: string;
 }
 
 export interface PaginationStucture {
@@ -18,6 +19,8 @@ export enum SectionTypes {
   influencers = "influencers",
   collabs = "collabs",
   leads = "leads",
+  categories = "categories",
+  collabsReservations = "collabsReservations",
 }
 
 export interface OptionsStructure {

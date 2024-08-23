@@ -2,13 +2,15 @@ import { HttpResponseInterface } from "@core/domain";
 import { Lead, LeadsApiResponse } from "../domain/Leads";
 import { LeadsRepository } from "../domain/LeadsRepository";
 import { CompanyRegisterStructure } from "modules/user/domain/User";
+import { FilterParams } from "sections/shared/interfaces/interfaces";
 
 export const getLeads = (
   leadsRepo: LeadsRepository<LeadsApiResponse>,
   page: number,
   per_page: number,
+  params: FilterParams,
 ): Promise<HttpResponseInterface<LeadsApiResponse>> => {
-  return leadsRepo.getLeads(page, per_page);
+  return leadsRepo.getLeads(page, per_page, params);
 };
 
 export const sendLeadLink = (

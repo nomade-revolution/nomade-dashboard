@@ -9,7 +9,7 @@ describe("Given an OrdersTable component", () => {
       renderRouterWithProviders(
         <DashboardTable
           headerSections={[]}
-          bodySections={[]}
+          bodySections={[{}]}
           pageName={SectionTypes.collabs}
         />,
       );

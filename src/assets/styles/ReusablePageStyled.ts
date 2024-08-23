@@ -2,14 +2,17 @@ import styled from "styled-components";
 
 const ReusablePageStyled = styled.main`
   background: ${(props) => props.theme.colors.backgroundPages};
+  justify-content: center;
+  align-items: center;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 20px 20px;
+  padding: 40px 20px;
+  max-width: 100%;
   color: ${(props) => props.theme.fontsColors.dashBoard};
 
   @media (min-width: 1000px) and (max-width: 1600px) {
-    padding: 40px 30px;
+    padding: 40px 40px;
   }
 
   @media (min-width: 1600px) {
@@ -26,7 +29,8 @@ const ReusablePageStyled = styled.main`
         display: flex;
         flex-direction: column;
         gap: 20px;
-        align-items: flex-start;
+        align-items: center;
+        justify-content: center;
       }
     }
 

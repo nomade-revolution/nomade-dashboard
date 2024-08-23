@@ -4,6 +4,7 @@ const OffersPageStyled = styled.main`
   background: ${(props) => props.theme.colors.backgroundPages};
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 20px;
   padding: 20px 20px;
   color: ${(props) => props.theme.fontsColors.dashBoard};
