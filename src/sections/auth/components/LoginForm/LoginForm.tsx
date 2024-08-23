@@ -5,7 +5,6 @@ import { useLoginForm } from "../../hooks/useLoginForm";
 
 import { useState } from "react";
 import { AuthLoginInterface } from "@auth";
-import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import Loader from "sections/shared/components/Loader/Loader";
 import { Link } from "react-router-dom";
 
@@ -17,14 +16,15 @@ const initialState: AuthLoginInterface = {
 const LoginForm = (): React.ReactElement => {
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const { submitForm } = useLoginForm();
-  const { isSuccess } = useAuthContext();
-
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const handleSubmitForm = async (
     values: AuthLoginInterface,
     { setSubmitting }: FormikHelpers<AuthLoginInterface>,
   ) => {
     setIsFormSubmitted(true);
-    await submitForm(values);
+    const resp = await submitForm(values);
+
+    setIsSuccess(Boolean(resp));
     setSubmitting(false);
     setTimeout(() => {
       setIsFormSubmitted(false);

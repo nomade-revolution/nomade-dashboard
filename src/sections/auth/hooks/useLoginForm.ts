@@ -26,10 +26,12 @@ export function useLoginForm(): {
     setFormStatus(FormStatus.Loading);
 
     try {
-      loginUser({ email, password });
+      const resp = loginUser({ email, password });
       setFormStatus(FormStatus.Success);
+      return resp;
     } catch (error) {
       setFormStatus(FormStatus.Error);
+      return false;
     }
   }
 
