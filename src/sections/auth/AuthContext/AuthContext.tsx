@@ -20,7 +20,7 @@ import { User } from "modules/user/domain/User";
 export interface ContextState {
   token: string;
   isSuccess: boolean;
-  loginUser: (user: AuthLoginInterface) => void;
+  loginUser: (user: AuthLoginInterface) => Promise<boolean>;
   logoutUser: () => void;
   getSessionToken: () => string;
   setSessionToken: () => void;
@@ -52,14 +52,17 @@ export const AuthContextProvider = ({
 
   const login = async (user: AuthLoginInterface) => {
     const response = await authLogin(user, repository);
-
     if (isHttpSuccessResponse(response)) {
       setToken(response.data.access_token);
       cookies.set(environments.cookies!, response.data.access_token);
       const userLogged = await getLoggedUser(response.data.access_token);
       setUser(userLogged);
+      setIsSuccess(response.success);
+
+      return true;
     }
     setIsSuccess(response.success);
+    return false;
   };
 
   function logout() {
