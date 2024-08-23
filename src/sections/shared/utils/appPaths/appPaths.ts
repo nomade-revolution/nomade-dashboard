@@ -17,4 +17,6 @@ export const appPaths = {
   leads: "/leads/page/:page",
   leadsSubmit: "/client/register",
   categories: "/categories",
+  offerDetail: "/oferta/:id",
+  collabsReservations: "/collabsReservations/:id/page/:page",
 };

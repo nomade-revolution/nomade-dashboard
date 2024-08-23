@@ -64,10 +64,12 @@ export const OffersContextProvider = ({
 
   const getOffer = useCallback(
     async (offer_id: number) => {
+      setLoading(true);
       const response = await getOfferById(repository, offer_id);
       if (isHttpSuccessResponse(response)) {
         setOffer(response.data);
       }
+      setLoading(false);
     },
     [repository],
   );

@@ -39,7 +39,7 @@ export const offersHeaderSections: HeaderSection[] = [
   {
     id: 6,
     name: "Reservas",
-    property: "reservations",
+    property: "reserves",
     sortTag: "",
     pageName: "offers",
   },

@@ -9,6 +9,7 @@ interface PaginationProps {
   per_page?: number;
   filterParams: string;
   customerId?: number;
+  id?: number;
 }
 
 const PaginationComponent = ({
@@ -16,6 +17,7 @@ const PaginationComponent = ({
   last_page,
   pageName,
   filterParams,
+  id,
 }: PaginationProps): React.ReactElement => {
   const [page, setPage] = useState<number>(current_page);
   const navigate = useNavigate();
@@ -25,15 +27,21 @@ const PaginationComponent = ({
     value: number,
   ) => {
     setPage(value);
-    navigate(`/${pageName}/page/${value}?${filterParams ? filterParams : ""}`);
+    navigate(
+      `/${pageName}/${id ? `${id}/` : ""}page/${value}?${
+        filterParams ? filterParams : ""
+      }`,
+    );
   };
 
   useEffect(() => {
     if (current_page <= last_page) return;
-    pageName !== "" && navigate(`/${pageName}/page/${last_page}`);
+    pageName !== "" &&
+      navigate(`/${pageName}/${id ? `${id}/` : ""}page/${last_page}`);
 
-    if (!current_page && pageName !== "") navigate(`/${pageName}/page/1`);
-  }, [last_page, current_page, navigate, pageName]);
+    if (!current_page && pageName !== "")
+      navigate(`/${pageName}/${id ? `${id}/` : ""}page/1`);
+  }, [last_page, current_page, navigate, pageName, id]);
 
   useEffect(() => {
     setPage(current_page);

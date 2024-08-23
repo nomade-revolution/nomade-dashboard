@@ -5,7 +5,6 @@ import DashboardCardListMobileStyled from "./DashboardCardListMobileStyles";
 interface DashboardCardListMobileProps {
   bodySections: object[];
   headerSections: HeaderSection[];
-  // type: SectionTypes;
   pageName: string;
 }
 
@@ -13,7 +12,6 @@ const DashboardCardListMobile = ({
   bodySections,
   headerSections,
   pageName,
-  // type,
 }: DashboardCardListMobileProps): React.ReactElement => {
   return (
     <DashboardCardListMobileStyled className="dashboard-list">
@@ -23,7 +21,6 @@ const DashboardCardListMobile = ({
             bodySection={section}
             headerSections={headerSections}
             pageName={pageName}
-            // type={type}
           />
         </li>
       ))}

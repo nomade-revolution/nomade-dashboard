@@ -32,16 +32,16 @@ const CollabDetail = ({
         <div className="collab-detail__participant">
           <h3>Influencer</h3>
           <ImageCustom
-            alt={`${influencer.name} avatar`}
+            alt={`${influencer?.name} avatar`}
             className="collab-detail__avatar"
             height={120}
             width={120}
-            image={influencer.avatar}
+            image={influencer?.avatar}
           />
           <span className="collab-detail__name">{influencer?.name}</span>
-          <span>@ {influencer.user_name}</span>
+          <span>@ {influencer?.user_name}</span>
           <Link
-            to={`/influencer/${influencer.id}`}
+            to={`/influencer/${influencer?.id}`}
             className="collab-detail__link"
           >
             <FaEye />
