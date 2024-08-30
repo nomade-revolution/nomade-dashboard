@@ -17,6 +17,9 @@ import { CompanyContextProvider } from "sections/company/CompanyContext/CompanyC
 import { LeadsContextProvider } from "sections/leads/LeadsContext/LeadsContext.tsx";
 import { AddressContextProvider } from "sections/address/AddressContext/AddressContext.tsx";
 import { CategoriesContextProvider } from "sections/categories/CategoriesContext/CategoriesContext.tsx";
+import { CountryContextProvider } from "sections/country/CountryContext/CountryContext.tsx";
+import { CityContextProvider } from "sections/city/CityContext/CityContext.tsx";
+import { ContactContextProvider } from "sections/contact/ContactContext/ContactContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -29,10 +32,20 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 <CompanyContextProvider repository={repositories.companies}>
                   <LeadsContextProvider repository={repositories.leads}>
                     <AddressContextProvider repository={repositories.address}>
-                      <ThemeProvider theme={theme}>
-                        <GlobalStyles />
-                        <RouterProvider router={router} />
-                      </ThemeProvider>
+                      <CountryContextProvider
+                        repository={repositories.countries}
+                      >
+                        <CityContextProvider repository={repositories.city}>
+                          <ContactContextProvider
+                            repository={repositories.contact}
+                          >
+                            <ThemeProvider theme={theme}>
+                              <GlobalStyles />
+                              <RouterProvider router={router} />
+                            </ThemeProvider>
+                          </ContactContextProvider>
+                        </CityContextProvider>
+                      </CountryContextProvider>
                     </AddressContextProvider>
                   </LeadsContextProvider>
                 </CompanyContextProvider>

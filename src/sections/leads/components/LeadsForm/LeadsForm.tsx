@@ -1,8 +1,17 @@
 import { Formik, Field, ErrorMessage, FormikHelpers } from "formik";
 import { leadsScheme } from "./validations/validations";
 import { CompanyRegisterStructure } from "modules/user/domain/User";
-import LeadsFormStyled from "./LeadsFormStyled";
 import { FullAddress } from "modules/address/domain/Address";
+import { ChangeEvent, useState } from "react";
+import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
+import { IoAddCircle } from "react-icons/io5";
+import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
+import AddressForm from "sections/shared/components/AddressForm/AddressForm";
+import ReusableFormStyled from "assets/styles/ReusableFormStyled";
+import { FaCheckCircle, FaEdit } from "react-icons/fa";
+import ContactForm from "sections/shared/components/ContactForm/ContactForm";
+import { Contact } from "modules/contact/domain/Contact";
+import SuccessFeedback from "sections/shared/components/Feedbacks/components/SuccessFeedback/SuccessFeedback";
 
 interface Props {
   lead: CompanyRegisterStructure;
@@ -25,12 +34,54 @@ const initialState: CompanyRegisterStructure = {
 };
 
 const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
+  const [file, setFile] = useState<File | null>(null);
+  const [registerAddress, setRegisterAddress] = useState<FullAddress | null>(
+    null,
+  );
+  const [registerContact, setRegisterContact] = useState<Contact | null>(null);
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState<boolean>(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState<boolean>(false);
+  const { postCompany, isSuccess } = useCompanyContext();
+
   const handleSubmitForm = async (
     values: CompanyRegisterStructure,
     { setSubmitting }: FormikHelpers<CompanyRegisterStructure>,
   ) => {
+    setSubmitting(true);
+    const formData = new FormData();
+
+    Object.keys(values).forEach((key) => {
+      key !== "id" && formData.append(key, (values as never)[key as never]);
+    });
+
+    if (file) {
+      formData.append("image", file);
+    }
+
+    registerAddress &&
+      formData.append("address", JSON.stringify(registerAddress));
+
+    registerContact &&
+      formData.append("contacts", JSON.stringify([registerContact]));
+
+    formData.append("name", values.company_name);
+
+    await postCompany(formData);
     setSubmitting(false);
-    values;
+  };
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.currentTarget.files) {
+      setFile(event.currentTarget.files[0]);
+    }
+  };
+
+  const handleIsAddressModalOpen = () => {
+    setIsAddressModalOpen(true);
+  };
+
+  const handleIsContactModalOpen = () => {
+    setIsContactModalOpen(true);
   };
 
   const initialValues = {
@@ -45,8 +96,8 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
       validationSchema={leadsScheme}
       onSubmit={handleSubmitForm}
     >
-      {({ errors, touched, handleSubmit, getFieldProps }) => (
-        <LeadsFormStyled onSubmit={handleSubmit} className="datasheet-form">
+      {({ errors, touched, handleSubmit, getFieldProps, isSubmitting }) => (
+        <ReusableFormStyled onSubmit={handleSubmit} className="datasheet-form">
           <h3>Alta cliente</h3>
           <section className="datasheet-form__section">
             <div className="form-subsection">
@@ -168,7 +219,6 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
               )}
             </div>
           </section>
-          <section className="datasheet-form__section"></section>
           <section className="datasheet-form__section">
             <div className="form-subsection">
               <label htmlFor="description" className="form-subsection__label">
@@ -190,25 +240,66 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                 />
               )}
             </div>
-            <div className="form-subsection">
-              <label htmlFor="description" className="form-subsection__label">
-                Imágen
-              </label>
-              <Field
-                type="file"
-                id="description"
-                className="form-subsection__field-image"
-                aria-label="Comentarios"
-                maxlength="1000"
-                {...getFieldProps("description")}
-              />
-              {errors.description && touched.description && (
-                <ErrorMessage
-                  className="form-subsection__error-message"
-                  component="span"
-                  name="description"
+            <div className="datasheet-form__addresses">
+              <div className="form-subsection">
+                <label htmlFor="image" className="form-subsection__label">
+                  Imágen
+                </label>
+                <input
+                  type="file"
+                  id="image"
+                  className="form-subsection__field-image"
+                  aria-label="Comentarios"
+                  onChange={handleFileChange}
                 />
-              )}
+                {errors.image && touched.image && (
+                  <ErrorMessage
+                    className="form-subsection__error-message"
+                    component="span"
+                    name="image"
+                  />
+                )}
+              </div>
+              <div className="datasheet-form__address-section">
+                <button
+                  type="button"
+                  className="datasheet-form__add-address"
+                  onClick={handleIsAddressModalOpen}
+                >
+                  {registerAddress ? (
+                    <FaEdit className="datasheet-form__create--icon" />
+                  ) : (
+                    <IoAddCircle className="datasheet-form__create--icon" />
+                  )}
+                  {registerAddress ? "Modificar dirección" : "Añadir dirección"}
+                </button>
+                {registerAddress && (
+                  <span className="datasheet-form__address-mssg">
+                    <FaCheckCircle />
+                    Dirección añadida
+                  </span>
+                )}
+              </div>
+              <div className="datasheet-form__contact-section">
+                <button
+                  type="button"
+                  className="datasheet-form__add-contact"
+                  onClick={handleIsContactModalOpen}
+                >
+                  {registerContact ? (
+                    <FaEdit className="datasheet-form__create--icon" />
+                  ) : (
+                    <IoAddCircle className="datasheet-form__create--icon" />
+                  )}
+                  {registerContact ? "Modificar contacto" : "Añadir contacto"}
+                </button>
+                {registerContact && (
+                  <span className="datasheet-form__contact-mssg">
+                    <FaCheckCircle />
+                    Contacto añadido
+                  </span>
+                )}
+              </div>
             </div>
           </section>
           <section className="datasheet-form__section">
@@ -263,10 +354,37 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
               value={hash}
             />
           </section>
-          <button type="submit" className="datasheet-form__submit">
+          <button
+            type="submit"
+            className="datasheet-form__submit"
+            disabled={isSubmitting}
+          >
             Enviar
           </button>
-        </LeadsFormStyled>
+          {isSuccess && (
+            <SuccessFeedback text="Te has registrado correctamente" />
+          )}
+          <ReusableModal
+            children={
+              <AddressForm
+                address={registerAddress!}
+                setAddress={setRegisterAddress}
+              />
+            }
+            openModal={isAddressModalOpen}
+            setIsModalOpen={setIsAddressModalOpen}
+          />
+          <ReusableModal
+            children={
+              <ContactForm
+                contact={registerContact!}
+                setContact={setRegisterContact}
+              />
+            }
+            openModal={isContactModalOpen}
+            setIsModalOpen={setIsContactModalOpen}
+          />
+        </ReusableFormStyled>
       )}
     </Formik>
   );

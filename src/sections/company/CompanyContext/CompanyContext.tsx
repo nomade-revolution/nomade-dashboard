@@ -1,6 +1,10 @@
 import React, { createContext, useCallback, useState } from "react";
 import { CompanyRepository } from "@company/domain/CompanyRepository";
-import { deleteCompany, getCompanyById } from "@company/application/company";
+import {
+  deleteCompany,
+  getCompanyById,
+  registerCompany,
+} from "@company/application/company";
 import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
 import { Company } from "modules/user/domain/User";
 
@@ -10,6 +14,7 @@ interface ContextState {
   company: Company;
   deleteCompanyById: (company_id: number) => void;
   getCompany: (company_id: number) => void;
+  postCompany: (company: FormData) => void;
 }
 
 export const CompanyContext = createContext<ContextState>({} as ContextState);
@@ -51,6 +56,21 @@ export const CompanyContextProvider = ({
     [repository],
   );
 
+  const postCompany = async (company: FormData) => {
+    setLoading(true);
+    const response = await registerCompany(repository, company);
+
+    if (isHttpSuccessResponse(response)) {
+      setCompany(response.data);
+      setLoading(false);
+    }
+
+    setLoading(false);
+    setIsSuccess(response.success);
+
+    return response;
+  };
+
   return (
     <CompanyContext.Provider
       value={{
@@ -59,6 +79,7 @@ export const CompanyContextProvider = ({
         company,
         getCompany,
         deleteCompanyById,
+        postCompany,
       }}
     >
       {children}

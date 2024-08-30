@@ -58,8 +58,8 @@ const theme = {
     inputs: "40px",
   },
   widths: {
-    datasheetSmallInputs: "300px",
-    datasheetLargeInputs: "400px",
+    datasheetSmallInputs: "16.5rem",
+    datasheetLargeInputs: "370px",
     datasheetExtraSmallIputs: "250px",
   },
 };
