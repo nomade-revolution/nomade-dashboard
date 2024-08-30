@@ -11,6 +11,7 @@ import ReusableFormStyled from "assets/styles/ReusableFormStyled";
 import { FaCheckCircle, FaEdit } from "react-icons/fa";
 import ContactForm from "sections/shared/components/ContactForm/ContactForm";
 import { Contact } from "modules/contact/domain/Contact";
+import SuccessFeedback from "sections/shared/components/Feedbacks/components/SuccessFeedback/SuccessFeedback";
 
 interface Props {
   lead: CompanyRegisterStructure;
@@ -59,6 +60,11 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
 
     registerAddress &&
       formData.append("address", JSON.stringify(registerAddress));
+
+    registerContact &&
+      formData.append("contacts", JSON.stringify([registerContact]));
+
+    formData.append("name", values.company_name);
 
     await postCompany(formData);
     setSubmitting(false);
@@ -355,7 +361,9 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
           >
             Enviar
           </button>
-          {isSuccess && <span>Good</span>}
+          {isSuccess && (
+            <SuccessFeedback text="Te has registrado correctamente" />
+          )}
           <ReusableModal
             children={
               <AddressForm

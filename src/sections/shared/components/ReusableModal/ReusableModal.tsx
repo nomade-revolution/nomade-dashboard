@@ -21,7 +21,7 @@ const ReusableModal = ({
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: matches ? "90%" : "40%",
-    height: "fit-content",
+    height: matches ? "80%" : "fit-content",
     bgcolor: "background.paper",
     boxShadow: 24,
     padding: "20px",
@@ -29,6 +29,7 @@ const ReusableModal = ({
     display: "flex",
     flexDirection: "column",
     gap: "20px",
+    overflowY: "scroll",
   };
 
   return (

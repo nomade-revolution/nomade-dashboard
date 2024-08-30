@@ -139,6 +139,14 @@ const ReusableFormStyled = styled.form`
       padding: 10px;
       font-family: inherit;
     }
+
+    &__field-image {
+      width: 90%;
+
+      @media (min-width: 1000px) {
+        width: 100%;
+      }
+    }
   }
 
   input::-webkit-outer-spin-button,

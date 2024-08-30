@@ -33,7 +33,7 @@ const ContactForm = ({ setContact, contact }: Props): React.ReactElement => {
     { setSubmitting }: FormikHelpers<Contact>,
   ) => {
     setSubmitting(true);
-    setContact(values);
+    setContact({ ...values, type_id: +registerContact });
     setSubmitting(false);
   };
 
@@ -148,10 +148,10 @@ const ContactForm = ({ setContact, contact }: Props): React.ReactElement => {
           <section className="datasheet-form__section">
             <div className="form-subsection">
               <label htmlFor="type_id" className="form-subsection__label">
-                País
+                Tipo de contacto
               </label>
               <ReusableSelect
-                label="Seleccionar país"
+                label="Tipo de contacto"
                 options={contactTypesFormat}
                 setValue={setRegisterContact}
                 value={registerContact}
