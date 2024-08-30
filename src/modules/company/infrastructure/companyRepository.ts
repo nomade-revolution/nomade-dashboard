@@ -31,4 +31,18 @@ export class CompanyRepository {
       return Promise.reject(error);
     }
   }
+
+  public async registerCompany(
+    company: FormData,
+  ): Promise<HttpResponseInterface<Company>> {
+    try {
+      const resp = await this.http.post<Company>(
+        `${COMPANY_BASE}/register`,
+        company,
+      );
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 }

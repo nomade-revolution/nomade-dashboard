@@ -1,13 +1,17 @@
 import styled from "styled-components";
 
 const NomadeLogoSectionStyled = styled.section`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 40px;
-  width: 100%;
-  height: 100%;
+  display: none;
+
+  @media (min-width: 1000px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    width: 100%;
+    height: 100%;
+  }
 
   .nomade-section {
     &__slogan {

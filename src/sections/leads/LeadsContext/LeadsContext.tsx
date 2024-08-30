@@ -81,6 +81,8 @@ export const LeadsContextProvider = ({
       setLoading(false);
       setIsSuccess(response.success);
 
+      setTimeout(() => setIsSuccess(false), 3000);
+
       return response;
     },
     [repository],

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const LeadsFormStyled = styled.form`
+const ReusableFormStyled = styled.form`
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -41,6 +41,47 @@ const LeadsFormStyled = styled.form`
         width: ${(props) => props.theme.widths.datasheetLargeInputs};
       }
     }
+
+    &__addresses {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 30px;
+    }
+
+    &__address-section,
+    &__contact-section {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    &__add-address,
+    &__add-contact {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px;
+      font-weight: 700;
+      background: ${(props) => props.theme.colors.darkBlue};
+      color: ${(props) => props.theme.fontsColors.light};
+      border-radius: ${(props) => props.theme.borderRadius.badges};
+      width: fit-content;
+
+      &--icon {
+        font-size: large;
+      }
+    }
+
+    &__address-mssg,
+    &__contact-mssg {
+      color: ${(props) => props.theme.colors.softGreen};
+      font-weight: 700;
+      font-size: ${(props) => props.theme.fontsSize.__SM};
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
   }
 
   .form-subsection {
@@ -64,14 +105,6 @@ const LeadsFormStyled = styled.form`
       padding: 0 8px;
       width: 100%;
       gap: 40px;
-
-      @media (min-width: 1000px) and (max-width: 1600px) {
-        width: ${(props) => props.theme.widths.datasheetSmallestInputs};
-      }
-
-      @media (min-width: 1600px) {
-        width: ${(props) => props.theme.widths.datasheetSmallerInputs};
-      }
     }
 
     &__field-large,
@@ -82,7 +115,7 @@ const LeadsFormStyled = styled.form`
       }
 
       @media (min-width: 1200px) {
-        width: ${(props) => props.theme.widths.datasheetSmallInputs};
+        width: ${(props) => props.theme.widths.datasheetSmallerInputs};
       }
 
       @media (min-width: 1600px) {
@@ -106,6 +139,14 @@ const LeadsFormStyled = styled.form`
       padding: 10px;
       font-family: inherit;
     }
+
+    &__field-image {
+      width: 90%;
+
+      @media (min-width: 1000px) {
+        width: 100%;
+      }
+    }
   }
 
   input::-webkit-outer-spin-button,
@@ -127,4 +168,4 @@ const LeadsFormStyled = styled.form`
   }
 `;
 
-export default LeadsFormStyled;
+export default ReusableFormStyled;
