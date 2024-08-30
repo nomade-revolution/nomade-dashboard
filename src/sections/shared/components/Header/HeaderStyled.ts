@@ -5,6 +5,7 @@ const HeaderStyled = styled.header`
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  padding: 0 25px;
 
   @media (min-width: 1000px) {
     display: none;
@@ -16,6 +17,7 @@ const HeaderStyled = styled.header`
       display: flex;
       justify-content: flex-end;
     }
+
     &__button {
       display: flex;
       align-items: center;
