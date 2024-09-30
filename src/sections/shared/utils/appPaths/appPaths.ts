@@ -18,5 +18,5 @@ export const appPaths = {
   leadsSubmit: "/client/register",
   categories: "/categories",
   offerDetail: "/oferta/:id",
-  collabsReservations: "/collabsReservations/:id/page/:page",
+  collabsReservations: "/collabs-reservations/:id/page/:page",
 };

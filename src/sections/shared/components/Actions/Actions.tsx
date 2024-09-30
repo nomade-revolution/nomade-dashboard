@@ -88,6 +88,15 @@ const Actions = ({
     case SectionTypes.offers:
       buttons = (
         <>
+          <Tooltip title="Ver detalles">
+            <Link
+              to={`/oferta/${(section as Offer)?.id}`}
+              aria-label="Ver detalles"
+              className="link"
+            >
+              <FaEye className={"icon"} />
+            </Link>
+          </Tooltip>
           <Tooltip title="Borrar oferta">
             <button
               aria-label="Borrar oferta"

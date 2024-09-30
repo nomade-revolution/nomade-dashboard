@@ -133,7 +133,7 @@ const DashboardContentSections = ({
     case "reserves":
       return (
         <Link
-          to={`/collabsReservations/${(section as Offer).id}/page/1`}
+          to={`/collabs-reservations/${(section as Offer).company_id}/page/1`}
           className="dashboard__reservations"
         >
           <FaEye />
