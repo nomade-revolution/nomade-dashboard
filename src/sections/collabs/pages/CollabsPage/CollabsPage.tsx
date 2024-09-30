@@ -24,6 +24,7 @@ const CollabsPage = (): React.ReactElement => {
   const handleSearch = (text: string) => {
     getCollabs(text);
   };
+
   const getCollabs = (text?: string) => {
     const filters: FilterParams = {};
 
@@ -36,6 +37,7 @@ const CollabsPage = (): React.ReactElement => {
 
     getAllCollabs(+page!, 12, filters);
   };
+
   useEffect(() => {
     getCollabs();
   }, [getAllCollabs, page, order]);

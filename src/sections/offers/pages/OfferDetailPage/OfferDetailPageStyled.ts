@@ -9,6 +9,7 @@ const OfferDetailPageStyled = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
+  padding: 0 50px;
 
   .images-container {
     display: flex;
@@ -18,9 +19,9 @@ const OfferDetailPageStyled = styled.div`
     max-width: 100%;
     overflow: scroll;
     flex-wrap: wrap;
-    padding: 20px;
-    margin-top: 50px;
+    margin-top: 20px;
   }
+
   .adress-list {
     display: flex;
     justify-content: center;
@@ -28,7 +29,14 @@ const OfferDetailPageStyled = styled.div`
     flex-direction: column;
     gap: 20px;
   }
-  .collab-detail {
+
+  .offer-detail {
+    &__section {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+    }
+
     &__participants {
       display: flex;
       justify-content: space-between;
@@ -37,6 +45,13 @@ const OfferDetailPageStyled = styled.div`
       box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
       padding: 20px 40px;
       border-radius: 10px;
+    }
+
+    &__title {
+      font-size: ${(props) => props.theme.fontsSize.__XXL};
+      border-bottom: 2px solid ${(props) => props.theme.colors.mainColor};
+      padding-bottom: 10px;
+      width: 18%;
     }
 
     &__participant {
@@ -91,21 +106,20 @@ const OfferDetailPageStyled = styled.div`
       height: 100%;
     }
 
-    &__collab-data {
+    &__offer-data {
       display: flex;
       align-items: center;
       flex-direction: column;
       justify-content: center;
-      gap: 20px;
+      gap: 30px;
       padding-top: 20px;
-      padding-left: 20px;
       padding-bottom: 20px;
     }
 
     &__data-section {
       display: flex;
       gap: 8px;
-      width: 100%;
+      width: 40%;
       align-items: flex-start;
       justify-content: center;
       flex-direction: column;
@@ -117,6 +131,7 @@ const OfferDetailPageStyled = styled.div`
 
     &__type-section {
       font-weight: bold;
+      font-size: large;
 
       &--restaurant {
         color: ${(props) => props.theme.colors.darkRed};
@@ -146,7 +161,13 @@ const OfferDetailPageStyled = styled.div`
 
     &__address {
       display: flex;
+      align-items: center;
       gap: 5px;
+      font-size: ${(props) => props.theme.fontsSize.__SMM};
+    }
+
+    &__text {
+      font-size: ${(props) => props.theme.fontsSize.__SMM};
     }
   }
 `;
