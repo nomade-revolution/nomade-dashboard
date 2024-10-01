@@ -19,6 +19,7 @@ export interface Company extends User {
   description: string;
   image: string;
   socialMedia: SocialMedia[];
+  user_id: number;
 }
 
 export interface Account {
