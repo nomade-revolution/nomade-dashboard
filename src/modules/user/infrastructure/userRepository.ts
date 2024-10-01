@@ -36,4 +36,15 @@ export class UsersRepository {
       return Promise.reject(error);
     }
   }
+
+  public async getUsersBadge(): Promise<HttpResponseInterface<number>> {
+    try {
+      const resp = await this.http.get<UserApiResponse>(
+        `${GET_USERS}/status/badge`,
+      );
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 }

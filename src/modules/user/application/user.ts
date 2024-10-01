@@ -19,3 +19,7 @@ export const deleteUser = (
 ): Promise<HttpResponseInterface<{ success: boolean }>> => {
   return usersRepo.deleteUser(user_id);
 };
+
+export const getUsersBadge = (usersRepo: UserRepository<number>) => {
+  return usersRepo.getUsersBadge();
+};

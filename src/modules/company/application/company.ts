@@ -22,3 +22,7 @@ export const registerCompany = (
 ): Promise<HttpResponseInterface<Company>> => {
   return companyRepo.registerCompany(company);
 };
+
+export const getCompaniesBadge = (companyRepo: CompanyRepository<number>) => {
+  return companyRepo.getCompaniesBadge();
+};

@@ -8,13 +8,20 @@ import { useEffect } from "react";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
 import { Company } from "modules/user/domain/User";
+import { useUserContext } from "sections/user/UserContext/useUserContext";
+import { useInfluencerContext } from "sections/influencer/InfluencerContext/useInfluencerContext";
+import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
 
 const Layout = (): React.ReactElement => {
   const location = useLocation();
-  const { setSessionToken, token } = useAuthContext();
 
-  const { getLoggedUser, user } = useAuthContext();
+  const { setSessionToken, token, getLoggedUser, user } = useAuthContext();
+  const { getUsersStatusBadge, badgeCount: badgeCountUsers } = useUserContext();
   const { getAllOffers, offers } = useOffersContext();
+  const { getInfluencersStatusBadge, badgeCount: badgeCountInfluencers } =
+    useInfluencerContext();
+  const { getCompaniesStatusBadge, badgeCount: badgeCountCompanies } =
+    useCompanyContext();
 
   useEffect(() => {
     setSessionToken();
@@ -36,6 +43,18 @@ const Layout = (): React.ReactElement => {
       getAllOffers(1, 1, filters);
     }
   }, [getAllOffers, user]);
+
+  useEffect(() => {
+    getUsersStatusBadge();
+  }, [getUsersStatusBadge]);
+
+  useEffect(() => {
+    getInfluencersStatusBadge();
+  }, [getInfluencersStatusBadge]);
+
+  useEffect(() => {
+    getCompaniesStatusBadge();
+  }, [getCompaniesStatusBadge]);
 
   return (
     <LayoutStyled>
@@ -67,15 +86,22 @@ const Layout = (): React.ReactElement => {
             location.pathname !== appPaths.reset_password &&
             location.pathname !== appPaths.leadsSubmit && (
               <SideBar
-                pendingOrders={5}
-                pendingCustomers={10}
+                badgeUsers={badgeCountUsers}
+                badgeInfluencers={badgeCountInfluencers}
+                badgeCompanies={badgeCountCompanies}
                 user={user}
                 offer={offers[0]}
               />
             )}
         </section>
         <div className="layout__header">
-          <Header pendingOrders={5} pendingCustomers={10} />
+          <Header
+            badgeCountUsers={badgeCountUsers}
+            badgeCountInfluencers={badgeCountInfluencers}
+            badgeCountCompanies={badgeCountCompanies}
+            offer={offers[0]}
+            user={user}
+          />
         </div>
 
         <main

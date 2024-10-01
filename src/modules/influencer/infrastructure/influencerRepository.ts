@@ -31,4 +31,15 @@ export class InfluencerRepository {
       return Promise.reject(error);
     }
   }
+
+  public async getInfluencersBadge(): Promise<HttpResponseInterface<number>> {
+    try {
+      const resp = await this.http.get<number>(
+        `${INFLUENCER_BASE}/status/badge`,
+      );
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 }

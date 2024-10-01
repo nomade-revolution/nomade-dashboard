@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useState } from "react";
+import React, { createContext, useCallback, useEffect, useState } from "react";
 import { AuthRepository } from "@auth/domain/AuthRepository";
 import {
   AuthLoginInterface,
@@ -20,12 +20,13 @@ import { User } from "modules/user/domain/User";
 export interface ContextState {
   token: string;
   isSuccess: boolean;
+  user: User;
+  isLoading: boolean;
   loginUser: (user: AuthLoginInterface) => Promise<boolean>;
   logoutUser: () => void;
   getSessionToken: () => string;
   setSessionToken: () => void;
   getLoggedUser: (token: string) => Promise<User>;
-  user: User;
   recoverPassword: (email: string) => Promise<boolean>;
   changePassword: (
     password: string,
@@ -49,6 +50,7 @@ export const AuthContextProvider = ({
   const cookies = new AsyncCookiesImplementation();
   const [token, setToken] = useState<string>("");
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const login = async (user: AuthLoginInterface) => {
     const response = await authLogin(user, repository);
@@ -85,6 +87,7 @@ export const AuthContextProvider = ({
     },
     [repository],
   );
+
   const recoverPassword = async (email: string) => {
     const response = await authRecoverPassword(
       email,
@@ -125,16 +128,25 @@ export const AuthContextProvider = ({
     setIsSuccess(false);
     return response;
   };
+
+  useEffect(() => {
+    setIsLoading(true);
+    setSessionToken();
+  }, [setSessionToken]);
+
   setTimeout(() => {
     setIsSuccess(false);
+    setIsLoading(false);
   }, 2000);
+
   return (
     <AuthContext.Provider
       value={{
-        changePassword,
-        recoverPassword,
         token,
         isSuccess,
+        isLoading,
+        changePassword,
+        recoverPassword,
         loginUser: login,
         logoutUser: logout,
         getSessionToken,

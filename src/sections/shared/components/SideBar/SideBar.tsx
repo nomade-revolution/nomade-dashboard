@@ -10,15 +10,17 @@ import { Company, User } from "modules/user/domain/User";
 import { FullOffer } from "modules/offers/domain/Offer";
 
 interface SideBarProps {
-  pendingOrders: number;
-  pendingCustomers: number;
+  badgeUsers: number;
+  badgeInfluencers: number;
+  badgeCompanies: number;
   user: Company | User;
   offer: FullOffer;
 }
 
 const SideBar = ({
-  pendingOrders,
-  pendingCustomers,
+  badgeUsers,
+  badgeInfluencers,
+  badgeCompanies,
   user,
   offer,
 }: SideBarProps): React.ReactElement => {
@@ -29,16 +31,19 @@ const SideBar = ({
   const sideBarUpperSections =
     user.type === "Company"
       ? getSideBarUpperSections(
-          pendingOrders,
-          pendingCustomers,
+          badgeUsers,
+          badgeInfluencers,
+          badgeCompanies,
           offer?.id,
         ).filter(
           (section) =>
             section.pathname === "collabs" || section.pathname === "oferta",
         )
-      : getSideBarUpperSections(pendingOrders, pendingCustomers).filter(
-          (section) => section.pathname !== "oferta",
-        );
+      : getSideBarUpperSections(
+          badgeUsers,
+          badgeInfluencers,
+          badgeCompanies,
+        ).filter((section) => section.pathname !== "oferta");
 
   const handleLogout = () => {
     navigate(0);

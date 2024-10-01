@@ -5,26 +5,46 @@ import {
 import { Link, useLocation } from "react-router-dom";
 import DropdownMenuStyled from "./DropdownMenuStyled";
 import { Divider } from "@mui/material";
+import { User } from "modules/user/domain/User";
+import { FullOffer } from "modules/offers/domain/Offer";
 
 interface DropdownMenuProps {
   handleMenuState: () => void;
   handleLogout: () => void;
-  pendingOrders: number;
-  pendingCustomers: number;
+  badgeCountUsers: number;
+  badgeCountInfluencers: number;
+  badgeCountCompanies: number;
+  user: User;
+  offer: FullOffer;
 }
 
 const DropdownMenu = ({
   handleMenuState,
   handleLogout,
-  pendingOrders,
-  pendingCustomers,
+  badgeCountUsers,
+  badgeCountInfluencers,
+  badgeCountCompanies,
+  user,
+  offer,
 }: DropdownMenuProps): React.ReactElement => {
   const location = useLocation();
 
-  const sideBarUpperSections = getSideBarUpperSections(
-    pendingOrders,
-    pendingCustomers,
-  );
+  const sideBarUpperSections =
+    user.type === "Company"
+      ? getSideBarUpperSections(
+          badgeCountUsers,
+          badgeCountInfluencers,
+          badgeCountCompanies,
+          offer?.id,
+        ).filter(
+          (section) =>
+            section.pathname === "collabs" || section.pathname === "oferta",
+        )
+      : getSideBarUpperSections(
+          badgeCountUsers,
+          badgeCountInfluencers,
+          badgeCountCompanies,
+        ).filter((section) => section.pathname !== "oferta");
 
   return (
     <DropdownMenuStyled>

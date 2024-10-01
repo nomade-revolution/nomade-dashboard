@@ -15,3 +15,9 @@ export const getInfluencerById = (
 ): Promise<HttpResponseInterface<Influencer>> => {
   return influencerRepo.getInfluencerById(influencer_id);
 };
+
+export const getInfluencersBadge = (
+  influencerRepo: InfluencerRepository<number>,
+) => {
+  return influencerRepo.getInfluencersBadge();
+};
