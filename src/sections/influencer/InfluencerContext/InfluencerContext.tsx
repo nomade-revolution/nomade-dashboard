@@ -2,6 +2,7 @@ import React, { createContext, useCallback, useState } from "react";
 import {
   deleteInfluencer,
   getInfluencerById,
+  getInfluencersBadge,
 } from "@influencer/application/influencer";
 import { InfluencerRepository } from "@influencer/domain/InfluencerRepository";
 import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
@@ -11,8 +12,10 @@ interface ContextState {
   loading: boolean;
   isSuccess: boolean;
   influencer: Influencer;
+  badgeCount: number;
   deleteInfluencerById: (influencer_id: number) => void;
   getInfluencer: (influencer_id: number) => void;
+  getInfluencersStatusBadge: () => void;
 }
 
 export const InfluencerContext = createContext<ContextState>(
@@ -28,6 +31,7 @@ export const InfluencerContextProvider = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [influencer, setInfluencer] = useState<Influencer>({} as Influencer);
+  const [badgeCount, setBadgeCount] = useState<number>(0);
 
   const deleteInfluencerById = async (influencer_id: number) => {
     setLoading(true);
@@ -56,14 +60,26 @@ export const InfluencerContextProvider = ({
     [repository],
   );
 
+  const getInfluencersStatusBadge = useCallback(async () => {
+    const response = await getInfluencersBadge(repository);
+
+    if (isHttpSuccessResponse(response)) {
+      setBadgeCount(response.data);
+    }
+
+    return response;
+  }, [repository]);
+
   return (
     <InfluencerContext.Provider
       value={{
         loading,
         isSuccess,
         influencer,
+        badgeCount,
         deleteInfluencerById,
         getInfluencer,
+        getInfluencersStatusBadge,
       }}
     >
       {children}

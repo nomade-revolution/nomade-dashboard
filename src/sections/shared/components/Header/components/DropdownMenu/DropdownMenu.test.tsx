@@ -14,7 +14,7 @@ describe("Given a DropdownMenu component", () => {
         <DropdownMenu
           handleLogout={mockedHandleFunction}
           handleMenuState={mockedHandleFunction}
-          pendingOrders={1}
+          badgeCountUsers={1}
           pendingCustomers={2}
         />,
       );

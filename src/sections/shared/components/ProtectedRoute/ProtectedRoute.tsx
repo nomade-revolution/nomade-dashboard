@@ -8,14 +8,14 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({ element }: ProtectedRouteProps): JSX.Element => {
-  const { getSessionToken, user } = useAuthContext();
+  const { getSessionToken, user, isLoading } = useAuthContext();
   const location = useLocation();
 
   const isAuthenticated = !!getSessionToken();
 
   const isUserLoaded = isAuthenticated ? !!user?.type : true;
 
-  if (!isUserLoaded) {
+  if (!isUserLoaded || isLoading) {
     return <Loader width="20px" height="20px" />;
   }
 

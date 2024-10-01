@@ -9,13 +9,16 @@ import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
 import { Company } from "modules/user/domain/User";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
+import { useInfluencerContext } from "sections/influencer/InfluencerContext/useInfluencerContext";
 
 const Layout = (): React.ReactElement => {
   const location = useLocation();
-  const { setSessionToken, token, getLoggedUser, user } = useAuthContext();
 
+  const { setSessionToken, token, getLoggedUser, user } = useAuthContext();
   const { getUsersStatusBadge, badgeCount: badgeCountUsers } = useUserContext();
   const { getAllOffers, offers } = useOffersContext();
+  const { getInfluencersStatusBadge, badgeCount: badgeCountInfluencers } =
+    useInfluencerContext();
 
   useEffect(() => {
     setSessionToken();
@@ -41,6 +44,10 @@ const Layout = (): React.ReactElement => {
   useEffect(() => {
     getUsersStatusBadge();
   }, [getUsersStatusBadge]);
+
+  useEffect(() => {
+    getInfluencersStatusBadge();
+  }, [getInfluencersStatusBadge]);
 
   return (
     <LayoutStyled>
@@ -73,7 +80,7 @@ const Layout = (): React.ReactElement => {
             location.pathname !== appPaths.leadsSubmit && (
               <SideBar
                 badgeUsers={badgeCountUsers}
-                badgeInfluencers={10}
+                badgeInfluencers={badgeCountInfluencers}
                 badgeCompanies={1}
                 user={user}
                 offer={offers[0]}
@@ -81,7 +88,10 @@ const Layout = (): React.ReactElement => {
             )}
         </section>
         <div className="layout__header">
-          <Header pendingOrders={5} pendingCustomers={10} />
+          <Header
+            badgeCountUsers={badgeCountUsers}
+            badgeCountInfluencers={badgeCountInfluencers}
+          />
         </div>
 
         <main

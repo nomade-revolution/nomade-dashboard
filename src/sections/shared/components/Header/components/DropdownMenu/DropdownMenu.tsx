@@ -9,21 +9,21 @@ import { Divider } from "@mui/material";
 interface DropdownMenuProps {
   handleMenuState: () => void;
   handleLogout: () => void;
-  pendingOrders: number;
-  pendingCustomers: number;
+  badgeCountUsers: number;
+  badgeCountInfluencers: number;
 }
 
 const DropdownMenu = ({
   handleMenuState,
   handleLogout,
-  pendingOrders,
-  pendingCustomers,
+  badgeCountUsers,
+  badgeCountInfluencers,
 }: DropdownMenuProps): React.ReactElement => {
   const location = useLocation();
 
   const sideBarUpperSections = getSideBarUpperSections(
-    pendingOrders,
-    pendingCustomers,
+    badgeCountUsers,
+    badgeCountInfluencers,
   );
 
   return (

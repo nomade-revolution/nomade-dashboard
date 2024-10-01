@@ -9,13 +9,13 @@ import { appPaths } from "sections/shared/utils/appPaths/appPaths";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 
 interface HeaderProps {
-  pendingOrders: number;
-  pendingCustomers: number;
+  badgeCountUsers: number;
+  badgeCountInfluencers: number;
 }
 
 const Header = ({
-  pendingOrders,
-  pendingCustomers,
+  badgeCountUsers,
+  badgeCountInfluencers,
 }: HeaderProps): React.ReactElement => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const { logoutUser, token } = useAuthContext();
@@ -60,8 +60,8 @@ const Header = ({
         <DropdownMenu
           handleLogout={handleLogOut}
           handleMenuState={handleMenuState}
-          pendingOrders={pendingOrders}
-          pendingCustomers={pendingCustomers}
+          badgeCountUsers={badgeCountUsers}
+          badgeCountInfluencers={badgeCountInfluencers}
         />
       )}
     </HeaderStyled>
