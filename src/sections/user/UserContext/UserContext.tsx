@@ -11,7 +11,11 @@ import {
   FilterParams,
   PaginationStucture,
 } from "sections/shared/interfaces/interfaces";
-import { deleteUser, getUsersFiltered } from "modules/user/application/user";
+import {
+  deleteUser,
+  getUsersBadge,
+  getUsersFiltered,
+} from "modules/user/application/user";
 import { Influencer } from "@influencer";
 
 export interface OrderItem {
@@ -26,6 +30,8 @@ interface ContextState {
   error: string | null;
   isSuccess: boolean;
   pagination: PaginationStucture;
+  order: OrderItem;
+  badgeCount: number;
   getUsers: (
     page: number,
     per_page: number,
@@ -34,7 +40,7 @@ interface ContextState {
   ) => void;
   deleteUserById: (user_id: number) => void;
   setOrder: (order: OrderItem) => void;
-  order: OrderItem;
+  getUsersStatusBadge: () => void;
 }
 
 export const UserContext = createContext<ContextState>({} as ContextState);
@@ -55,6 +61,7 @@ export const UserContextProvider = ({
     {} as PaginationStucture,
   );
   const [order, setOrder] = useState<OrderItem>({} as OrderItem);
+  const [badgeCount, setBadgeCount] = useState<number>(0);
 
   const getUsers = useCallback(
     async (
@@ -99,6 +106,16 @@ export const UserContextProvider = ({
     return response;
   };
 
+  const getUsersStatusBadge = useCallback(async () => {
+    const response = await getUsersBadge(repository);
+
+    if (isHttpSuccessResponse(response)) {
+      setBadgeCount(response.data);
+    }
+
+    return response;
+  }, [repository]);
+
   return (
     <UserContext.Provider
       value={{
@@ -108,11 +125,13 @@ export const UserContextProvider = ({
         loading,
         error,
         pagination,
+        order,
         isSuccess,
+        badgeCount,
         getUsers,
         deleteUserById,
         setOrder,
-        order,
+        getUsersStatusBadge,
       }}
     >
       {children}

@@ -8,4 +8,5 @@ export interface UserRepository<I> {
     filterParams: FilterParams,
   ): Promise<HttpResponseInterface<I>>;
   deleteUser(user_id: number): Promise<HttpResponseInterface<I>>;
+  getUsersBadge(): Promise<HttpResponseInterface<I>>;
 }

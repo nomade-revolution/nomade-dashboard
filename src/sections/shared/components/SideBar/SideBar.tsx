@@ -10,15 +10,16 @@ import { Company, User } from "modules/user/domain/User";
 import { FullOffer } from "modules/offers/domain/Offer";
 
 interface SideBarProps {
-  pendingOrders: number;
-  pendingCustomers: number;
+  badgeUsers: number;
+  badgeInfluencers: number;
+  badgeCompanies: number;
   user: Company | User;
   offer: FullOffer;
 }
 
 const SideBar = ({
-  pendingOrders,
-  pendingCustomers,
+  badgeUsers,
+  badgeInfluencers,
   user,
   offer,
 }: SideBarProps): React.ReactElement => {
@@ -28,15 +29,11 @@ const SideBar = ({
   const { logoutUser } = useAuthContext();
   const sideBarUpperSections =
     user.type === "Company"
-      ? getSideBarUpperSections(
-          pendingOrders,
-          pendingCustomers,
-          offer?.id,
-        ).filter(
+      ? getSideBarUpperSections(badgeUsers, badgeInfluencers, offer?.id).filter(
           (section) =>
             section.pathname === "collabs" || section.pathname === "oferta",
         )
-      : getSideBarUpperSections(pendingOrders, pendingCustomers).filter(
+      : getSideBarUpperSections(badgeUsers, badgeInfluencers).filter(
           (section) => section.pathname !== "oferta",
         );
 

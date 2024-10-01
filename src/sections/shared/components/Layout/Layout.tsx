@@ -8,12 +8,13 @@ import { useEffect } from "react";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
 import { Company } from "modules/user/domain/User";
+import { useUserContext } from "sections/user/UserContext/useUserContext";
 
 const Layout = (): React.ReactElement => {
   const location = useLocation();
-  const { setSessionToken, token } = useAuthContext();
+  const { setSessionToken, token, getLoggedUser, user } = useAuthContext();
 
-  const { getLoggedUser, user } = useAuthContext();
+  const { getUsersStatusBadge, badgeCount: badgeCountUsers } = useUserContext();
   const { getAllOffers, offers } = useOffersContext();
 
   useEffect(() => {
@@ -36,6 +37,10 @@ const Layout = (): React.ReactElement => {
       getAllOffers(1, 1, filters);
     }
   }, [getAllOffers, user]);
+
+  useEffect(() => {
+    getUsersStatusBadge();
+  }, [getUsersStatusBadge]);
 
   return (
     <LayoutStyled>
@@ -67,8 +72,9 @@ const Layout = (): React.ReactElement => {
             location.pathname !== appPaths.reset_password &&
             location.pathname !== appPaths.leadsSubmit && (
               <SideBar
-                pendingOrders={5}
-                pendingCustomers={10}
+                badgeUsers={badgeCountUsers}
+                badgeInfluencers={10}
+                badgeCompanies={1}
                 user={user}
                 offer={offers[0]}
               />
