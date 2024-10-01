@@ -9,6 +9,7 @@ import { AiFillFileAdd } from "react-icons/ai";
 export const getSideBarUpperSections = (
   ordersQuantity: number,
   pendingCustomers: number,
+  offer_id?: number,
 ) => {
   const sideBarUpperSections = [
     {
@@ -71,6 +72,14 @@ export const getSideBarUpperSections = (
       pathname: "leads",
       quantity: 0,
       path: "/leads/page/1",
+    },
+    {
+      id: 7,
+      icon: <AiFillFileAdd />,
+      name: "Oferta",
+      pathname: "oferta",
+      quantity: 0,
+      path: `/oferta/${offer_id}`,
     },
   ];
 
