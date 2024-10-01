@@ -36,7 +36,7 @@ const CollabDetailPage = (): React.ReactElement => {
   return (
     <CollabsDetailPageStyled className="detail-collab">
       {loading ? (
-        <Loader height="40px" width="40px" />
+        <Loader height="20px" width="20px" />
       ) : (
         <>
           <GoBackButton />

@@ -6,24 +6,39 @@ import SideBarStyled from "./SideBarStyled";
 import { appPaths } from "../../utils/appPaths/appPaths";
 import ImageCustom from "../ImageCustom/ImageCustom";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
+import { Company, User } from "modules/user/domain/User";
+import { FullOffer } from "modules/offers/domain/Offer";
 
 interface SideBarProps {
   pendingOrders: number;
   pendingCustomers: number;
+  user: Company | User;
+  offer: FullOffer;
 }
 
 const SideBar = ({
   pendingOrders,
   pendingCustomers,
+  user,
+  offer,
 }: SideBarProps): React.ReactElement => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
   const { logoutUser } = useAuthContext();
-  const sideBarUpperSections = getSideBarUpperSections(
-    pendingOrders,
-    pendingCustomers,
-  );
+  const sideBarUpperSections =
+    user.type === "Company"
+      ? getSideBarUpperSections(
+          pendingOrders,
+          pendingCustomers,
+          offer?.id,
+        ).filter(
+          (section) =>
+            section.pathname === "collabs" || section.pathname === "oferta",
+        )
+      : getSideBarUpperSections(pendingOrders, pendingCustomers).filter(
+          (section) => section.pathname !== "oferta",
+        );
 
   const handleLogout = () => {
     navigate(0);

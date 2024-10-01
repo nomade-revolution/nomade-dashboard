@@ -9,7 +9,7 @@ import DashboardCardListMobile from "../../../shared/components/DashboardCardLis
 import { offersHeaderSections } from "../../utils/offersSections";
 import OffersPageStyled from "./OffersPageStyled";
 import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import SearchBar from "sections/shared/components/SearchBar/SearchBar";
 
@@ -25,24 +25,27 @@ const OffersPage = (): React.ReactElement => {
     }
     getOffers(text);
   };
-  const getOffers = (search?: string) => {
-    const filters = { filters: {} as FilterParams };
+  const getOffers = useCallback(
+    (search?: string) => {
+      const filters = { filters: {} as FilterParams };
 
-    if (search) {
-      filters.filters.search = search;
-    }
+      if (search) {
+        filters.filters.search = search;
+      }
 
-    getAllOffers(+page!, 12, filters as FilterParams);
-  };
+      getAllOffers(+page!, 12, filters as FilterParams);
+    },
+    [getAllOffers, page],
+  );
 
   useEffect(() => {
     getOffers();
-  }, [getAllOffers, page]);
+  }, [getOffers, page]);
 
   return (
     <>
       {loading ? (
-        <Loader width="40px" height="40px" />
+        <Loader width="20px" height="20px" />
       ) : (
         <OffersPageStyled>
           <div className="dashboard__searchContainer">

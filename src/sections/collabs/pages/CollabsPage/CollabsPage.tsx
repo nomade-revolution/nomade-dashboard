@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import DashboardCardListMobile from "sections/shared/components/DashboardCardListMobile/DashboardCardListMobile";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
 import Loader from "sections/shared/components/Loader/Loader";
@@ -12,6 +12,7 @@ import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 import SearchBar from "sections/shared/components/SearchBar/SearchBar";
 import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
 import { collabsHeaderSections } from "sections/collabs/utils/collabsSections";
+import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 
 const CollabsPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
@@ -20,32 +21,38 @@ const CollabsPage = (): React.ReactElement => {
 
   const { getAllCollabs, collabs, pagination, loading, order } =
     useCollabsContext();
+  const { user } = useAuthContext();
   const { page } = useParams();
+
   const handleSearch = (text: string) => {
     getCollabs(text);
   };
 
-  const getCollabs = (text?: string) => {
-    const filters: FilterParams = {};
+  const getCollabs = useCallback(
+    (text?: string) => {
+      const filters: FilterParams =
+        user.type === "Company" ? { filters: { company_id: user.id } } : {};
 
-    if (order?.sortTag) {
-      filters.order = [{ by: order.sortTag, dir: order.direction }];
-    }
-    if (text) {
-      filters.search = text;
-    }
+      if (order?.sortTag) {
+        filters.order = [{ by: order.sortTag, dir: order.direction }];
+      }
+      if (text) {
+        filters.search = text;
+      }
 
-    getAllCollabs(+page!, 12, filters);
-  };
+      getAllCollabs(+page!, 12, filters);
+    },
+    [getAllCollabs, order.direction, order.sortTag, page, user.id, user.type],
+  );
 
   useEffect(() => {
     getCollabs();
-  }, [getAllCollabs, page, order]);
+  }, [page, order, getCollabs]);
 
   return (
     <>
       {loading ? (
-        <Loader width="40px" height="40px" />
+        <Loader width="20px" height="20px" />
       ) : (
         <ReusablePageStyled>
           <div className="dashboard__table">

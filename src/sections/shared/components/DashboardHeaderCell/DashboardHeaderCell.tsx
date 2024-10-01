@@ -29,7 +29,7 @@ const DashBoardHeaderCell = ({ section }: Props) => {
       section.pageName === "influencer" ||
       section.pageName === "company"
     ) {
-      if (order.sortTag === section.sortTag) {
+      if (order?.sortTag === section?.sortTag) {
         return order.direction;
       } else {
         return null;

@@ -1,6 +1,6 @@
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 import { UserTypes } from "modules/user/domain/User";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import DashboardCardListMobile from "sections/shared/components/DashboardCardListMobile/DashboardCardListMobile";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
@@ -25,28 +25,32 @@ const CompaniesPage = (): React.ReactElement => {
   const handleSearch = (searchText: string) => {
     getUsersData(searchText);
   };
-  const getUsersData = (text?: string) => {
-    const filters: FilterParams = {
-      filters: {
-        types: ["Company"],
-      },
-    };
-    if (order?.sortTag) {
-      filters.order = [{ by: order.sortTag, dir: order.direction }];
-    }
-    if (text) {
-      filters.search = text;
-    }
-    getUsers(+page!, 12, filters, UserTypes.company);
-  };
+  const getUsersData = useCallback(
+    (text?: string) => {
+      const filters: FilterParams = {
+        filters: {
+          types: ["Company"],
+        },
+      };
+      if (order?.sortTag) {
+        filters.order = [{ by: order.sortTag, dir: order.direction }];
+      }
+      if (text) {
+        filters.search = text;
+      }
+      getUsers(+page!, 12, filters, UserTypes.company);
+    },
+    [getUsers, order.direction, order.sortTag, page],
+  );
+
   useEffect(() => {
     getUsersData();
-  }, [getUsers, page, order]);
+  }, [page, order, getUsersData]);
 
   return (
     <>
       {loading ? (
-        <Loader width="40px" height="40px" />
+        <Loader width="20px" height="20px" />
       ) : (
         <ReusablePageStyled className="dashboard">
           <div className="dashboard__search">
