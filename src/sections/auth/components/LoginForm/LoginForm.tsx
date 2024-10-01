@@ -17,6 +17,7 @@ const LoginForm = (): React.ReactElement => {
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const { submitForm } = useLoginForm();
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
+
   const handleSubmitForm = async (
     values: AuthLoginInterface,
     { setSubmitting }: FormikHelpers<AuthLoginInterface>,
@@ -26,6 +27,7 @@ const LoginForm = (): React.ReactElement => {
 
     setIsSuccess(Boolean(resp));
     setSubmitting(false);
+
     setTimeout(() => {
       setIsFormSubmitted(false);
     }, 5000);

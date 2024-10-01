@@ -18,7 +18,7 @@ const OfferDetailsPage = () => {
   return (
     <>
       {loading ? (
-        <Loader width="40px" height="40px" />
+        <Loader width="20px" height="20px" />
       ) : (
         <OfferDetailPageStyled>
           <section className="offer-detail__data">

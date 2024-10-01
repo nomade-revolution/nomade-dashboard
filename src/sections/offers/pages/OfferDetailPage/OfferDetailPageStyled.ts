@@ -51,7 +51,7 @@ const OfferDetailPageStyled = styled.div`
       font-size: ${(props) => props.theme.fontsSize.__XXL};
       border-bottom: 2px solid ${(props) => props.theme.colors.mainColor};
       padding-bottom: 10px;
-      width: 18%;
+      width: 25%;
     }
 
     &__participant {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Loader from "../../../shared/components/Loader/Loader";
 import DashboardTable from "../../../shared/components/DashboardTable/DashboardTable";
@@ -25,29 +25,32 @@ const UsersPage = (): React.ReactElement => {
     getUsersData(searchText);
   };
 
-  const getUsersData = (text?: string) => {
-    const filters: FilterParams = {
-      filters: {
-        types: ["Nomade"],
-      },
-    };
-    if (order?.sortTag) {
-      filters.order = [{ by: order.sortTag, dir: order.direction }];
-    }
-    if (text) {
-      filters.search = text;
-    }
-    getUsers(+page!, 12, filters, UserTypes.nomade);
-  };
+  const getUsersData = useCallback(
+    (text?: string) => {
+      const filters: FilterParams = {
+        filters: {
+          types: ["Nomade"],
+        },
+      };
+      if (order?.sortTag) {
+        filters.order = [{ by: order.sortTag, dir: order.direction }];
+      }
+      if (text) {
+        filters.search = text;
+      }
+      getUsers(+page!, 12, filters, UserTypes.nomade);
+    },
+    [getUsers, order.direction, order.sortTag, page],
+  );
 
   useEffect(() => {
     getUsersData(searchText);
-  }, [getUsers, page, order]);
+  }, [page, order, getUsersData, searchText]);
 
   return (
     <>
       {loading ? (
-        <Loader width="40px" height="40px" />
+        <Loader width="20px" height="20px" />
       ) : (
         <ReusablePageStyled className="dashboard">
           <div className="dashboard__search-user">
