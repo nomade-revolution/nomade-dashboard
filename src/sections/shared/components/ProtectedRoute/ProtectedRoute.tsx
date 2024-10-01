@@ -1,16 +1,25 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { appPaths } from "../../utils/appPaths/appPaths";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
+import Loader from "../Loader/Loader";
 
 interface ProtectedRouteProps {
   element: JSX.Element;
 }
 
 const ProtectedRoute = ({ element }: ProtectedRouteProps): JSX.Element => {
-  const { getSessionToken } = useAuthContext();
-
+  const { getSessionToken, user } = useAuthContext();
   const location = useLocation();
-  if (getSessionToken()) {
+
+  const isAuthenticated = !!getSessionToken();
+
+  const isUserLoaded = isAuthenticated ? !!user?.type : true;
+
+  if (!isUserLoaded) {
+    return <Loader width="20px" height="20px" />;
+  }
+
+  if (isAuthenticated) {
     if (
       location.pathname === appPaths.login ||
       location.pathname === appPaths.register ||
@@ -19,7 +28,12 @@ const ProtectedRoute = ({ element }: ProtectedRouteProps): JSX.Element => {
       location.pathname === appPaths.reset_password ||
       location.pathname === appPaths.leadsSubmit
     ) {
-      return <Navigate to={"/usuarios/page/1"} replace={true} />;
+      return (
+        <Navigate
+          to={user?.type === "Company" ? "/collabs/page/1" : "/usuarios/page/1"}
+          replace={true}
+        />
+      );
     }
   } else {
     if (
