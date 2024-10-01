@@ -7,15 +7,23 @@ import { useLocation, useNavigate } from "react-router-dom";
 import HeaderStyled from "./HeaderStyled";
 import { appPaths } from "sections/shared/utils/appPaths/appPaths";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
+import { User } from "modules/user/domain/User";
+import { FullOffer } from "modules/offers/domain/Offer";
 
 interface HeaderProps {
   badgeCountUsers: number;
   badgeCountInfluencers: number;
+  badgeCountCompanies: number;
+  user: User;
+  offer: FullOffer;
 }
 
 const Header = ({
   badgeCountUsers,
   badgeCountInfluencers,
+  badgeCountCompanies,
+  user,
+  offer,
 }: HeaderProps): React.ReactElement => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const { logoutUser, token } = useAuthContext();
@@ -62,6 +70,9 @@ const Header = ({
           handleMenuState={handleMenuState}
           badgeCountUsers={badgeCountUsers}
           badgeCountInfluencers={badgeCountInfluencers}
+          badgeCountCompanies={badgeCountCompanies}
+          offer={offer}
+          user={user}
         />
       )}
     </HeaderStyled>

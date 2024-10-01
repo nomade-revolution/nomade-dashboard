@@ -2,6 +2,8 @@ import { screen } from "@testing-library/react";
 import DropdownMenu from "./DropdownMenu";
 import { renderRouterWithProviders } from "../../../../utils/testUtils/testUtils";
 import { vi } from "vitest";
+import { mockOffers } from "mocks/offersMocks";
+import { mockUsers } from "mocks/userMocks";
 
 const mockedHandleFunction = vi.fn();
 
@@ -14,8 +16,11 @@ describe("Given a DropdownMenu component", () => {
         <DropdownMenu
           handleLogout={mockedHandleFunction}
           handleMenuState={mockedHandleFunction}
+          badgeCountCompanies={1}
+          badgeCountInfluencers={1}
           badgeCountUsers={1}
-          pendingCustomers={2}
+          offer={mockOffers[0]}
+          user={mockUsers[1]}
         />,
       );
 

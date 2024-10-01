@@ -45,4 +45,13 @@ export class CompanyRepository {
       return Promise.reject(error);
     }
   }
+
+  public async getCompaniesBadge(): Promise<HttpResponseInterface<number>> {
+    try {
+      const resp = await this.http.get<number>(`${COMPANY_BASE}/status/badge`);
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 }

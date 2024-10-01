@@ -20,6 +20,7 @@ interface SideBarProps {
 const SideBar = ({
   badgeUsers,
   badgeInfluencers,
+  badgeCompanies,
   user,
   offer,
 }: SideBarProps): React.ReactElement => {
@@ -29,13 +30,20 @@ const SideBar = ({
   const { logoutUser } = useAuthContext();
   const sideBarUpperSections =
     user.type === "Company"
-      ? getSideBarUpperSections(badgeUsers, badgeInfluencers, offer?.id).filter(
+      ? getSideBarUpperSections(
+          badgeUsers,
+          badgeInfluencers,
+          badgeCompanies,
+          offer?.id,
+        ).filter(
           (section) =>
             section.pathname === "collabs" || section.pathname === "oferta",
         )
-      : getSideBarUpperSections(badgeUsers, badgeInfluencers).filter(
-          (section) => section.pathname !== "oferta",
-        );
+      : getSideBarUpperSections(
+          badgeUsers,
+          badgeInfluencers,
+          badgeCompanies,
+        ).filter((section) => section.pathname !== "oferta");
 
   const handleLogout = () => {
     navigate(0);

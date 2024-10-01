@@ -10,6 +10,7 @@ import { useOffersContext } from "sections/offers/OffersContext/useOffersContext
 import { Company } from "modules/user/domain/User";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
 import { useInfluencerContext } from "sections/influencer/InfluencerContext/useInfluencerContext";
+import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
 
 const Layout = (): React.ReactElement => {
   const location = useLocation();
@@ -19,6 +20,8 @@ const Layout = (): React.ReactElement => {
   const { getAllOffers, offers } = useOffersContext();
   const { getInfluencersStatusBadge, badgeCount: badgeCountInfluencers } =
     useInfluencerContext();
+  const { getCompaniesStatusBadge, badgeCount: badgeCountCompanies } =
+    useCompanyContext();
 
   useEffect(() => {
     setSessionToken();
@@ -48,6 +51,10 @@ const Layout = (): React.ReactElement => {
   useEffect(() => {
     getInfluencersStatusBadge();
   }, [getInfluencersStatusBadge]);
+
+  useEffect(() => {
+    getCompaniesStatusBadge();
+  }, [getCompaniesStatusBadge]);
 
   return (
     <LayoutStyled>
@@ -81,7 +88,7 @@ const Layout = (): React.ReactElement => {
               <SideBar
                 badgeUsers={badgeCountUsers}
                 badgeInfluencers={badgeCountInfluencers}
-                badgeCompanies={1}
+                badgeCompanies={badgeCountCompanies}
                 user={user}
                 offer={offers[0]}
               />
@@ -91,6 +98,9 @@ const Layout = (): React.ReactElement => {
           <Header
             badgeCountUsers={badgeCountUsers}
             badgeCountInfluencers={badgeCountInfluencers}
+            badgeCountCompanies={badgeCountCompanies}
+            offer={offers[0]}
+            user={user}
           />
         </div>
 
