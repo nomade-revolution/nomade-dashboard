@@ -45,10 +45,13 @@ const Actions = ({
     useActions();
   const { user } = useAuthContext();
 
-  const state_id = (section as FullCollab).history[
-    (section as FullCollab).history.length - 1
-  ].id;
+  let state_id: number | undefined;
 
+  if (section && (section as FullCollab)?.history?.length) {
+    state_id = (section as FullCollab).history[
+      (section as FullCollab).history.length - 1
+    ]?.id;
+  }
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -130,7 +133,7 @@ const Actions = ({
                       );
                     }}
                     options={collabStates
-                      .getCollabStates(state_id, (section as FullCollab).type)
+                      .getCollabStates(state_id!, (section as FullCollab).type)
                       .filter((state) => state.type === CollabType.company)}
                   />
                 }
