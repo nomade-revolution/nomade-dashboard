@@ -18,8 +18,6 @@ interface DashboardCardMobileProps {
   pageName: string;
   type: CollabActionTypes;
   setCollabStateActionType?: (value: CollabActionTypes) => void;
-  setIsDialogOpen: (value: boolean) => void;
-  isDialogOpen: boolean;
 }
 
 const DashboardCardMobile = ({
@@ -27,16 +25,15 @@ const DashboardCardMobile = ({
   headerSections,
   pageName,
   setCollabStateActionType,
-  setIsDialogOpen,
-  isDialogOpen,
   type,
 }: DashboardCardMobileProps): React.ReactElement => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
   const { handleCollabStateUpdate } = useActions();
 
   const state_id = (bodySection as FullCollab).history[
-    (bodySection as FullCollab).history.length - 1
+    (bodySection as FullCollab).history?.length - 1
   ].id;
 
   return (
@@ -74,15 +71,14 @@ const DashboardCardMobile = ({
           .getCollabStates(state_id, (bodySection as FullCollab).type)
           .filter((state) => state.type === CollabType.company)}
       />
-      {isDialogOpen && (
-        <DialogDeleteConfirm
-          handleClose={() => setIsDialogOpen(false)}
-          open={isDialogOpen}
-          sectionId={(bodySection as FullCollab).id!}
-          pageName={pageName}
-          type={type}
-        />
-      )}
+
+      <DialogDeleteConfirm
+        handleClose={() => setIsDialogOpen(false)}
+        open={isDialogOpen}
+        sectionId={(bodySection as FullCollab).id!}
+        pageName={pageName}
+        type={type}
+      />
     </DashboardCardMobileStyled>
   );
 };

@@ -20,7 +20,12 @@ const CollabsDetailPageStyled = styled.main`
   .detail-collab {
     &__data {
       display: flex;
+      flex-direction: column;
       gap: 40px;
+
+      @media (min-width: 1000px) {
+        flex-direction: row;
+      }
     }
 
     &__stepper {
@@ -32,6 +37,10 @@ const CollabsDetailPageStyled = styled.main`
       padding: 20px 40px;
       border-radius: 10px;
       width: 40%;
+
+      @media (max-width: 1000px) {
+        width: 100%;
+      }
     }
 
     &__top-section {

@@ -2,13 +2,12 @@ import { CollabActionTypes } from "modules/collabs/domain/Collabs";
 import { HeaderSection } from "../../interfaces/interfaces";
 import DashboardCardMobile from "../DashboardCardMobile/DashboardCardMobile";
 import DashboardCardListMobileStyled from "./DashboardCardListMobileStyles";
-import { useState } from "react";
 
 interface DashboardCardListMobileProps {
   bodySections: object[];
   headerSections: HeaderSection[];
   pageName: string;
-  type: CollabActionTypes;
+  type?: CollabActionTypes;
   setCollabStateActionType?: (value: CollabActionTypes) => void;
 }
 
@@ -19,8 +18,6 @@ const DashboardCardListMobile = ({
   type,
   setCollabStateActionType,
 }: DashboardCardListMobileProps): React.ReactElement => {
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-
   return (
     <DashboardCardListMobileStyled className="dashboard-list">
       {bodySections.map((section) => (
@@ -30,9 +27,7 @@ const DashboardCardListMobile = ({
             headerSections={headerSections}
             pageName={pageName}
             setCollabStateActionType={setCollabStateActionType}
-            type={type}
-            setIsDialogOpen={setIsDialogOpen}
-            isDialogOpen={isDialogOpen}
+            type={type!}
           />
         </li>
       ))}

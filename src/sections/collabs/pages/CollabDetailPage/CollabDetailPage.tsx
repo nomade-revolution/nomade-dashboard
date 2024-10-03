@@ -38,11 +38,11 @@ const CollabDetailPage = (): React.ReactElement => {
   }, [collab.addresses_id, getAddress]);
 
   return (
-    <CollabsDetailPageStyled className="detail-collab">
+    <>
       {loading ? (
         <Loader height="20px" width="20px" />
       ) : (
-        <>
+        <CollabsDetailPageStyled className="detail-collab">
           <GoBackButton />
           <h2>Collab</h2>
           <div className="detail-collab__data">
@@ -61,9 +61,9 @@ const CollabDetailPage = (): React.ReactElement => {
               />
             </section>
           </div>
-        </>
+        </CollabsDetailPageStyled>
       )}
-    </CollabsDetailPageStyled>
+    </>
   );
 };
 
