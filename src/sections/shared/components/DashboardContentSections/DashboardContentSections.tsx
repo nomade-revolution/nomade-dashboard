@@ -149,7 +149,7 @@ const DashboardContentSections = ({
       );
 
     case "state":
-      return <Switch />;
+      return <Switch checked />;
 
     case "from_country":
       return (
