@@ -33,6 +33,12 @@ const CollabsDetailPageStyled = styled.main`
       border-radius: 10px;
       width: 40%;
     }
+
+    &__top-section {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
   }
 `;
 
