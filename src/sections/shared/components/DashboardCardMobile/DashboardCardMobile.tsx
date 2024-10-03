@@ -32,9 +32,13 @@ const DashboardCardMobile = ({
 
   const { handleCollabStateUpdate } = useActions();
 
-  const state_id = (bodySection as FullCollab).history[
-    (bodySection as FullCollab).history?.length - 1
-  ].id;
+  let state_id: number | undefined;
+
+  if (bodySection && (bodySection as FullCollab)?.history?.length) {
+    state_id = (bodySection as FullCollab).history[
+      (bodySection as FullCollab).history?.length - 1
+    ]?.id;
+  }
 
   return (
     <DashboardCardMobileStyled className="dashboard-card">
@@ -61,14 +65,14 @@ const DashboardCardMobile = ({
         setAnchorEl={setAnchorEl}
         onClickFC={() =>
           handleCollabStateUpdate(
-            state_id,
+            state_id!,
             setIsDialogOpen,
             setCollabStateActionType!,
             bodySection as FullCollab,
           )
         }
         options={collabStates
-          .getCollabStates(state_id, (bodySection as FullCollab).type)
+          .getCollabStates(state_id!, (bodySection as FullCollab).type)
           .filter((state) => state.type === CollabType.company)}
       />
 
