@@ -1,3 +1,5 @@
+import { IconType } from "react-icons";
+
 export interface HeaderSection {
   id: number;
   name: string;
@@ -30,3 +32,10 @@ export interface OptionsStructure {
 }
 
 export type FilterParams = { [key: string]: unknown };
+
+export interface DropdownOption {
+  id: number;
+  name: string;
+  icon: IconType;
+  isVisible: boolean;
+}

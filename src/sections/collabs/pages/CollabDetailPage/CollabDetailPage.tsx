@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
 import CollabDetail from "sections/collabs/components/CollabDetail/CollabDetail";
@@ -9,6 +9,7 @@ import GoBackButton from "sections/shared/components/GoBackButton/GoBackButton";
 import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
 import { useAddressContext } from "sections/address/AddressContext/useAddressContext";
 import ReusableStepper from "sections/shared/components/ReusableStepper/ReusableStepper";
+import { CollabActionTypes } from "modules/collabs/domain/Collabs";
 
 const CollabDetailPage = (): React.ReactElement => {
   const { getCollabById, collab, loading } = useCollabsContext();
@@ -16,6 +17,9 @@ const CollabDetailPage = (): React.ReactElement => {
   const { getOffer, offer } = useOffersContext();
   const { getAddress } = useAddressContext();
   const { id } = useParams();
+
+  const [collabStateActionType, setCollabStateActionType] =
+    useState<CollabActionTypes | null>(null);
 
   useEffect(() => {
     getCollabById(+id!);
@@ -34,11 +38,11 @@ const CollabDetailPage = (): React.ReactElement => {
   }, [collab.addresses_id, getAddress]);
 
   return (
-    <CollabsDetailPageStyled className="detail-collab">
+    <>
       {loading ? (
         <Loader height="20px" width="20px" />
       ) : (
-        <>
+        <CollabsDetailPageStyled className="detail-collab">
           <GoBackButton />
           <h2>Collab</h2>
           <div className="detail-collab__data">
@@ -49,12 +53,17 @@ const CollabDetailPage = (): React.ReactElement => {
             />
             <section className="detail-collab__stepper">
               <h3>Estados</h3>
-              <ReusableStepper steps={collab.history} />
+              <ReusableStepper
+                steps={collab.history}
+                setCollabStateActionType={setCollabStateActionType}
+                collab={collab}
+                collabStateActionType={collabStateActionType!}
+              />
             </section>
           </div>
-        </>
+        </CollabsDetailPageStyled>
       )}
-    </CollabsDetailPageStyled>
+    </>
   );
 };
 

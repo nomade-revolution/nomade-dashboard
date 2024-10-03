@@ -14,6 +14,7 @@ import { Collab, CollabActionTypes } from "modules/collabs/domain/Collabs";
 import { Influencer } from "@influencer";
 import DashBoardHeaderCell from "../DashboardHeaderCell/DashboardHeaderCell";
 import NoDataHandler from "../NoDataHandler/NoDataHandler";
+import { useState } from "react";
 
 export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -54,6 +55,8 @@ const DashboardTable = <Type,>({
   type,
   setCollabStateActionType,
 }: DashboardTableProps<Type>): React.ReactElement => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
   return (
     <>
       {bodySections.length > 0 ? (
@@ -97,6 +100,8 @@ const DashboardTable = <Type,>({
                         pageName={pageName}
                         type={type}
                         setCollabStateActionType={setCollabStateActionType}
+                        anchorEl={anchorEl}
+                        setAnchorEl={setAnchorEl}
                       />
                     </StyledTableCell>
                   ))}

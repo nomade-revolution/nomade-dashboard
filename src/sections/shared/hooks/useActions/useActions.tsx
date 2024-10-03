@@ -3,6 +3,7 @@ import * as collabStates from "../../../collabs/utils/collabsStates";
 import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
 
 import { useLeadsContext } from "sections/leads/LeadsContext/useLeadsContext";
+import { Collab, CollabActionTypes } from "modules/collabs/domain/Collabs";
 
 const useActions = () => {
   const { sendLinkForLead } = useLeadsContext();
@@ -40,12 +41,30 @@ const useActions = () => {
     setTimeout(() => navigate(0), 1500);
   };
 
+  const handleCollabStateUpdate = (
+    state_id: number,
+    setIsDialogOpen: (value: boolean) => void,
+    setCollabStateActionType: (value: CollabActionTypes) => void,
+    section: Collab,
+    type?: "detail" | "",
+  ) => {
+    if (collabStates.COLAB_REJECTED_STATE === state_id) {
+      setIsDialogOpen(true);
+      setCollabStateActionType!(CollabActionTypes.refuse);
+      return;
+    }
+    updateCollabState(section.id, state_id);
+
+    type === "detail" && setTimeout(() => navigate(0), 1000);
+  };
+
   return {
     handleIsDialogOpen,
     handleIsDialogClosed,
     acceptCollab,
     rejectCollab,
     handleSendLeadLink,
+    handleCollabStateUpdate,
   };
 };
 

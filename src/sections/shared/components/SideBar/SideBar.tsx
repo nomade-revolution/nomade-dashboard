@@ -1,5 +1,5 @@
 import { getSideBarUpperSections } from "./utils/sideBarSections";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { IoIosSettings } from "react-icons/io";
 import { CiLogout } from "react-icons/ci";
 import SideBarStyled from "./SideBarStyled";
@@ -25,7 +25,6 @@ const SideBar = ({
   offer,
 }: SideBarProps): React.ReactElement => {
   const { pathname } = useLocation();
-  const navigate = useNavigate();
 
   const { logoutUser } = useAuthContext();
   const sideBarUpperSections =
@@ -46,7 +45,6 @@ const SideBar = ({
         ).filter((section) => section.pathname !== "oferta");
 
   const handleLogout = () => {
-    navigate(0);
     logoutUser();
   };
 

@@ -93,7 +93,7 @@ const CollabDetail = ({
             </div>
             {address.address && (
               <div className="collab-detail__data-section">
-                <MdOutlineLocationOn size={30} />
+                <MdOutlineLocationOn size={20} />
                 <article className="collab-detail__address">
                   <span className="collab-detail__offer-data">
                     {address.address}

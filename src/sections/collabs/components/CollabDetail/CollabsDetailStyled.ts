@@ -6,6 +6,10 @@ const CollabsDetailStyled = styled.div`
   width: 60%;
   gap: 20px;
 
+  @media (max-width: 1000px) {
+    width: 100%;
+  }
+
   .collab-detail {
     &__participants {
       display: flex;
@@ -15,6 +19,12 @@ const CollabsDetailStyled = styled.div`
       box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
       padding: 20px 40px;
       border-radius: 10px;
+
+      @media (max-width: 1000px) {
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+      }
     }
 
     &__participant {
@@ -74,6 +84,10 @@ const CollabsDetailStyled = styled.div`
       flex-direction: column;
       justify-content: space-between;
       height: 100%;
+
+      @media (max-width: 1000px) {
+        gap: 20px;
+      }
     }
 
     &__collab-data {
@@ -82,6 +96,13 @@ const CollabsDetailStyled = styled.div`
       justify-content: space-between;
       gap: 10px;
       padding-top: 20px;
+
+      @media (max-width: 1000px) {
+        width: 100%;
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+      }
     }
 
     &__data-section {

@@ -6,7 +6,12 @@ import { SectionTypes } from "sections/shared/interfaces/interfaces";
 import ActionsStyled from "./ActionsStyled";
 import useActions from "sections/shared/hooks/useActions/useActions";
 import { Offer } from "modules/offers/domain/Offer";
-import { CollabActionTypes, FullCollab } from "modules/collabs/domain/Collabs";
+import {
+  Collab,
+  CollabActionTypes,
+  CollabType,
+  FullCollab,
+} from "modules/collabs/domain/Collabs";
 import { Company, User } from "modules/user/domain/User";
 import { Customer } from "modules/customers/domain/Customers";
 import { Influencer } from "@influencer";
@@ -14,12 +19,17 @@ import { Lead } from "modules/leads/domain/Leads";
 import { BsSendCheckFill } from "react-icons/bs";
 import { BsFillXSquareFill } from "react-icons/bs";
 import * as collabStates from "../../../collabs/utils/collabsStates";
+import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
+import { MdOutlineHistory } from "react-icons/md";
+import CustomDropdown from "../CustomDropdown/CustomDropdown";
 
 interface ActionsProps {
   pageName: string;
   setIsDialogOpen: (value: boolean) => void;
   section: object | Customer | Offer | FullCollab | User | Company | Lead;
   setCollabStateActionType?: (value: CollabActionTypes) => void;
+  anchorEl: null | HTMLElement;
+  setAnchorEl: (value: null | HTMLElement) => void;
 }
 
 const Actions = ({
@@ -27,17 +37,27 @@ const Actions = ({
   setIsDialogOpen,
   section,
   setCollabStateActionType,
+  anchorEl,
+  setAnchorEl,
 }: ActionsProps): React.ReactElement => {
   let buttons: React.ReactNode;
-  const { handleIsDialogOpen, handleSendLeadLink } = useActions();
+  const { handleIsDialogOpen, handleSendLeadLink, handleCollabStateUpdate } =
+    useActions();
+  const { user } = useAuthContext();
 
-  // const navigate = useNavigate();
+  const state_id = (section as FullCollab).history[
+    (section as FullCollab).history.length - 1
+  ].id;
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
 
   switch (pageName) {
     case SectionTypes.collabs:
       buttons = (
         <>
-          <Tooltip title="Consultar collab">
+          <Tooltip title="Ver collab">
             <Link
               to={`/collab/${(section as FullCollab).id}`}
               aria-label="Consultar collab"
@@ -82,6 +102,40 @@ const Actions = ({
               </Tooltip>
             </>
           )}
+          {user.type === "Company" &&
+            state_id !== collabStates.COLAB_CANCELLED_STATE &&
+            state_id !== collabStates.COLAB_REJECTED_STATE &&
+            state_id !== collabStates.COLAB_SENT_STATE && (
+              <>
+                <Tooltip title={"Estados collab"}>
+                  <button aria-label="Estados" onClick={handleClick}>
+                    <MdOutlineHistory
+                      color="orange"
+                      size={20}
+                      className="icon--states"
+                    />
+                  </button>
+                </Tooltip>
+                {
+                  <CustomDropdown
+                    anchorEl={anchorEl}
+                    setAnchorEl={setAnchorEl}
+                    onClickFC={(selectedStateId) => {
+                      handleCollabStateUpdate(
+                        selectedStateId,
+                        setIsDialogOpen,
+                        setCollabStateActionType!,
+                        section as Collab,
+                        "detail",
+                      );
+                    }}
+                    options={collabStates
+                      .getCollabStates(state_id, (section as FullCollab).type)
+                      .filter((state) => state.type === CollabType.company)}
+                  />
+                }
+              </>
+            )}
         </>
       );
       break;

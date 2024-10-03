@@ -72,3 +72,9 @@ export enum CollabActionTypes {
   accept = "accept",
   refuse = "refuse",
 }
+
+export const enum CollabType {
+  company = "Company",
+  nomade = "Nomade",
+  influencer = "Influencer",
+}
