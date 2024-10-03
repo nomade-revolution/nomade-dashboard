@@ -136,8 +136,11 @@ export const AuthContextProvider = ({
 
   setTimeout(() => {
     setIsSuccess(false);
-    setIsLoading(false);
   }, 2000);
+
+  setTimeout(() => {
+    setIsLoading(false);
+  }, 1000);
 
   return (
     <AuthContext.Provider

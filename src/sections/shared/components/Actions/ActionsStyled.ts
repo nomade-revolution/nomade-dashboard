@@ -40,6 +40,10 @@ const ActionsStyled = styled.div`
 
   .icon {
     font-size: large;
+
+    &--states {
+      padding-top: 2px;
+    }
   }
 `;
 
