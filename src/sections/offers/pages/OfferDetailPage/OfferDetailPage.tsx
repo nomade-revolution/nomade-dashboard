@@ -4,6 +4,8 @@ import { useOffersContext } from "sections/offers/OffersContext/useOffersContext
 import Loader from "sections/shared/components/Loader/Loader";
 import OfferDetailPageStyled from "./OfferDetailPageStyled";
 import ImageCustom from "sections/shared/components/ImageCustom/ImageCustom";
+import { getTypesClassNames } from "sections/shared/components/DashboardContentSections/utils/getClassNames/getClassNames";
+import { MdOutlineLocationOn } from "react-icons/md";
 
 const OfferDetailsPage = () => {
   const { id } = useParams();
@@ -12,69 +14,76 @@ const OfferDetailsPage = () => {
   useEffect(() => {
     getOffer(+id!);
   }, [id, getOffer]);
+
   return (
     <>
       {loading ? (
-        <Loader width="40px" height="40px" />
+        <Loader width="20px" height="20px" />
       ) : (
         <OfferDetailPageStyled>
-          <section className="collab-detail__data">
-            <h3>{offer.company}</h3>
-            <div className="collab-detail__collab-data">
+          <section className="offer-detail__data">
+            <h3 className="offer-detail__title">{offer.company}</h3>
+
+            <span className={getTypesClassNames(offer, "offer-detail")}>
+              {offer.type}
+            </span>
+
+            <div className="offer-detail__offer-data">
               <div className="images-container">
                 {offer.images?.length > 0 &&
                   offer.images.map((image) => (
                     <ImageCustom
                       key={image.alt}
                       alt="Imágen de la oferta"
-                      className="collab-detail__offer-img"
+                      className="offer-detail__offer-img"
                       height={200}
                       width={250}
                       image={image.url}
                     />
                   ))}
               </div>
-              <div className="collab-detail__data-section">
-                <span className="collab-detail__data-title">Descripción</span>
-                <article className="collab-detail__address">
-                  {offer.description}
-                </article>
-              </div>
-              <div className="collab-detail__data-section">
-                <span className="collab-detail__data-title">Condiciones</span>
-                <article className="collab-detail__address">
-                  {offer.conditions}
-                </article>
-              </div>
-              <div className="collab-detail__data-section">
-                <span className="collab-detail__data-title">A cambio</span>
-                <article className="collab-detail__address">
-                  {offer.in_exchange}
-                </article>
-                <div className="collab-detail__data-section">
-                  <span className="collab-detail__data-title">
-                    Tipo de oferta
+              <section className="offer-detail__section">
+                <div className="offer-detail__data-section">
+                  <span className="offer-detail__data-title">Descripción</span>
+                  <span className="offer-detail__text">
+                    {offer.description}
                   </span>
-                  <article className="collab-detail__address">
-                    {offer.type}
-                  </article>
                 </div>
-              </div>
-              <div className="collab-detail__data-section">
-                <span className="collab-detail__data-title">¿Dónde?</span>
-                <article className="collab-detail__address">
-                  <ul className="adress-list">
+                <div className="offer-detail__data-section">
+                  <span className="offer-detail__data-title">Condiciones</span>
+                  <span className="offer-detail__text">{offer.conditions}</span>
+                </div>
+              </section>
+              <section className="offer-detail__section">
+                {offer.addresses && (
+                  <div className="offer-detail__data-section">
+                    <span className="offer-detail__data-title">Locales</span>
+
+                    {/* <ul className="adress-list">
                     {offer?.calendar?.map((adress) => (
                       <li key={adress.address}>{adress.address}</li>
                     ))}
-                  </ul>
-                  <ul className="adress-list">
-                    {offer?.addresses?.map((adress) => (
-                      <li key={adress.address}>{adress.address}</li>
-                    ))}
-                  </ul>
-                </article>
-              </div>
+                  </ul> */}
+                    <ul className="adress-list">
+                      {offer?.addresses?.map((adress) => (
+                        <li
+                          key={adress.address}
+                          className="offer-detail__address"
+                        >
+                          <MdOutlineLocationOn color="#8C9B6E" size={15} />
+                          {adress.address}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                <div className="offer-detail__data-section">
+                  <span className="offer-detail__data-title">A cambio</span>
+                  <span className="offer-detail__text">
+                    {offer.in_exchange}
+                  </span>
+                </div>
+              </section>
             </div>
           </section>
         </OfferDetailPageStyled>

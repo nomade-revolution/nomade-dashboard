@@ -8,13 +8,13 @@ interface NoDataProps {
 }
 
 const NoDataHandler = ({
-  pageName,
+  // pageName,
   search,
 }: NoDataProps): React.ReactElement => {
   const navigate = useNavigate();
 
   const handleNotFoundButton = () => {
-    navigate(`/${pageName}`);
+    navigate(-1);
   };
 
   return (

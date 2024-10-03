@@ -6,6 +6,10 @@ const CollabsDetailStyled = styled.div`
   width: 60%;
   gap: 20px;
 
+  @media (max-width: 1000px) {
+    width: 100%;
+  }
+
   .collab-detail {
     &__participants {
       display: flex;
@@ -15,12 +19,19 @@ const CollabsDetailStyled = styled.div`
       box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
       padding: 20px 40px;
       border-radius: 10px;
+
+      @media (max-width: 1000px) {
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+      }
     }
 
     &__participant {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 5px;
+      align-items: center;
     }
 
     &__avatar {
@@ -30,6 +41,11 @@ const CollabsDetailStyled = styled.div`
 
     &__name {
       font-weight: 700;
+    }
+
+    &__social,
+    &__offer-data {
+      font-size: ${(props) => props.theme.fontsSize.__SM};
     }
 
     &__link {
@@ -43,6 +59,7 @@ const CollabsDetailStyled = styled.div`
       color: ${(props) => props.theme.colors.light};
       font-size: ${(props) => props.theme.fontsSize.__SM};
       font-weight: 700;
+      width: 100%;
     }
 
     &__icon {
@@ -67,6 +84,10 @@ const CollabsDetailStyled = styled.div`
       flex-direction: column;
       justify-content: space-between;
       height: 100%;
+
+      @media (max-width: 1000px) {
+        gap: 20px;
+      }
     }
 
     &__collab-data {
@@ -75,10 +96,18 @@ const CollabsDetailStyled = styled.div`
       justify-content: space-between;
       gap: 10px;
       padding-top: 20px;
+
+      @media (max-width: 1000px) {
+        width: 100%;
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+      }
     }
 
     &__data-section {
       display: flex;
+      align-items: center;
       gap: 8px;
     }
 
@@ -88,6 +117,7 @@ const CollabsDetailStyled = styled.div`
 
     &__type-section {
       font-weight: bold;
+      font-size: large;
 
       &--restaurant {
         color: ${(props) => props.theme.colors.darkRed};
@@ -118,6 +148,26 @@ const CollabsDetailStyled = styled.div`
     &__address {
       display: flex;
       gap: 5px;
+    }
+
+    &__offer-section {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    &__conditions {
+      font-size: ${(props) => props.theme.fontsSize.__SM};
+      padding-top: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    &__company {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
   }
 `;

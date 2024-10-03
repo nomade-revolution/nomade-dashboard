@@ -2,6 +2,7 @@ import React, { createContext, useCallback, useState } from "react";
 import { CompanyRepository } from "@company/domain/CompanyRepository";
 import {
   deleteCompany,
+  getCompaniesBadge,
   getCompanyById,
   registerCompany,
 } from "@company/application/company";
@@ -12,9 +13,11 @@ interface ContextState {
   loading: boolean;
   isSuccess: boolean;
   company: Company;
+  badgeCount: number;
   deleteCompanyById: (company_id: number) => void;
   getCompany: (company_id: number) => void;
   postCompany: (company: FormData) => void;
+  getCompaniesStatusBadge: () => void;
 }
 
 export const CompanyContext = createContext<ContextState>({} as ContextState);
@@ -28,6 +31,7 @@ export const CompanyContextProvider = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [company, setCompany] = useState<Company>({} as Company);
+  const [badgeCount, setBadgeCount] = useState<number>(0);
 
   const deleteCompanyById = async (company_id: number) => {
     setLoading(true);
@@ -71,15 +75,27 @@ export const CompanyContextProvider = ({
     return response;
   };
 
+  const getCompaniesStatusBadge = useCallback(async () => {
+    const response = await getCompaniesBadge(repository);
+
+    if (isHttpSuccessResponse(response)) {
+      setBadgeCount(response.data);
+    }
+
+    return response;
+  }, [repository]);
+
   return (
     <CompanyContext.Provider
       value={{
         loading,
         isSuccess,
         company,
+        badgeCount,
         getCompany,
         deleteCompanyById,
         postCompany,
+        getCompaniesStatusBadge,
       }}
     >
       {children}

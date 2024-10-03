@@ -145,6 +145,26 @@ const ReusablePageStyled = styled.main`
       }
     }
 
+    &__state-section {
+      font-weight: bold;
+
+      &--accepted {
+        color: ${(props) => props.theme.colors.softGreen};
+      }
+
+      &--rejected {
+        color: ${(props) => props.theme.colors.darkRed};
+      }
+
+      &--cancelled {
+        color: ${(props) => props.theme.colors.red};
+      }
+
+      &--sent {
+        color: ${(props) => props.theme.colors.darkBlue};
+      }
+    }
+
     &__create {
       display: flex;
       align-items: center;

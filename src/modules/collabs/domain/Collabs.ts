@@ -21,6 +21,7 @@ export interface FullCollab extends Collab {
   influencer_id: number;
   offer_id: number;
   addresses_id: number;
+  conditions: string;
 }
 
 export interface State {
@@ -70,4 +71,10 @@ export enum CollabTypes {
 export enum CollabActionTypes {
   accept = "accept",
   refuse = "refuse",
+}
+
+export const enum CollabType {
+  company = "Company",
+  nomade = "Nomade",
+  influencer = "Influencer",
 }

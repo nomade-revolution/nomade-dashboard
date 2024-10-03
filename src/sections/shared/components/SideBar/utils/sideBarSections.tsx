@@ -7,8 +7,10 @@ import { BiSolidOffer, BiSolidCategory } from "react-icons/bi";
 import { AiFillFileAdd } from "react-icons/ai";
 
 export const getSideBarUpperSections = (
-  ordersQuantity: number,
-  pendingCustomers: number,
+  usersQuantity: number,
+  influencersQuantity: number,
+  companiesQuantity: number,
+  offer_id?: number,
 ) => {
   const sideBarUpperSections = [
     {
@@ -16,7 +18,7 @@ export const getSideBarUpperSections = (
       icon: <FaUserGroup />,
       name: "Usuarios",
       pathname: "usuarios",
-      quantity: ordersQuantity,
+      quantity: usersQuantity,
       path: `/usuarios/page/1`,
       subSection: "usuario",
     },
@@ -25,7 +27,7 @@ export const getSideBarUpperSections = (
       icon: <PiUsersThreeFill />,
       name: "Usuarios (App)",
       pathname: "influencers",
-      quantity: pendingCustomers,
+      quantity: influencersQuantity,
       path: `/influencers/page/1`,
       subSection: "influencer",
     },
@@ -34,7 +36,7 @@ export const getSideBarUpperSections = (
       icon: <FaUserTie />,
       name: "Clientes",
       pathname: "clientes",
-      quantity: pendingCustomers,
+      quantity: companiesQuantity,
       path: `/clientes/page/1`,
       subSection: "cliente",
     },
@@ -71,6 +73,14 @@ export const getSideBarUpperSections = (
       pathname: "leads",
       quantity: 0,
       path: "/leads/page/1",
+    },
+    {
+      id: 7,
+      icon: <AiFillFileAdd />,
+      name: "Oferta",
+      pathname: "oferta",
+      quantity: 0,
+      path: `/oferta/${offer_id}`,
     },
   ];
 

@@ -19,7 +19,7 @@ const InfluencerDetailPage = (): React.ReactElement => {
   return (
     <>
       {loading ? (
-        <Loader height="40px" width="40px" />
+        <Loader height="20px" width="20px" />
       ) : (
         <InfluencerDetailPageStyled className="influencer-detail">
           <GoBackButton />

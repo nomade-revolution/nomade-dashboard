@@ -1,32 +1,50 @@
 import { getSideBarUpperSections } from "./utils/sideBarSections";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { IoIosSettings } from "react-icons/io";
 import { CiLogout } from "react-icons/ci";
 import SideBarStyled from "./SideBarStyled";
 import { appPaths } from "../../utils/appPaths/appPaths";
 import ImageCustom from "../ImageCustom/ImageCustom";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
+import { Company, User } from "modules/user/domain/User";
+import { FullOffer } from "modules/offers/domain/Offer";
 
 interface SideBarProps {
-  pendingOrders: number;
-  pendingCustomers: number;
+  badgeUsers: number;
+  badgeInfluencers: number;
+  badgeCompanies: number;
+  user: Company | User;
+  offer: FullOffer;
 }
 
 const SideBar = ({
-  pendingOrders,
-  pendingCustomers,
+  badgeUsers,
+  badgeInfluencers,
+  badgeCompanies,
+  user,
+  offer,
 }: SideBarProps): React.ReactElement => {
   const { pathname } = useLocation();
-  const navigate = useNavigate();
 
   const { logoutUser } = useAuthContext();
-  const sideBarUpperSections = getSideBarUpperSections(
-    pendingOrders,
-    pendingCustomers,
-  );
+  const sideBarUpperSections =
+    user.type === "Company"
+      ? getSideBarUpperSections(
+          badgeUsers,
+          badgeInfluencers,
+          badgeCompanies,
+          offer?.id,
+        ).filter(
+          (section) =>
+            section.pathname === "collabs" || section.pathname === "oferta",
+        )
+      : getSideBarUpperSections(
+          badgeUsers,
+          badgeInfluencers,
+          badgeCompanies,
+        ).filter((section) => section.pathname !== "oferta");
 
   const handleLogout = () => {
-    navigate(0);
     logoutUser();
   };
 
