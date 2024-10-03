@@ -31,8 +31,8 @@ export const offersHeaderSections: HeaderSection[] = [
   },
   {
     id: 5,
-    name: "Max. personas",
-    property: "max_number",
+    name: "Categoría",
+    property: "type",
     sortTag: "",
     pageName: "offers",
   },

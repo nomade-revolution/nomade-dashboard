@@ -85,12 +85,16 @@ const CollabDetail = ({
               </div>
             )}
 
-            <div className="collab-detail__data-section">
-              <BsCalendarEvent size={20} />
-              <span className="collab-detail__offer-data">{collab.day}</span>
-              <span className="collab-detail__offer-data">-</span>
-              <span className="collab-detail__offer-data">{collab.time}h</span>
-            </div>
+            {(collab.day || collab.time) && (
+              <div className="collab-detail__data-section">
+                <BsCalendarEvent size={20} />
+                <span className="collab-detail__offer-data">{collab.day}</span>
+                <span className="collab-detail__offer-data">-</span>
+                <span className="collab-detail__offer-data">
+                  {collab.time}h
+                </span>
+              </div>
+            )}
             {address.address && (
               <div className="collab-detail__data-section">
                 <MdOutlineLocationOn size={20} />

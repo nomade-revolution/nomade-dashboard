@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import SideBar from "../SideBar/SideBar";
 import LayoutStyled from "./LayoutStyled";
 
@@ -15,13 +15,16 @@ import { useCompanyContext } from "sections/company/CompanyContext/useCompanyCon
 const Layout = (): React.ReactElement => {
   const location = useLocation();
 
-  const { setSessionToken, token, getLoggedUser, user } = useAuthContext();
+  const { setSessionToken, token, getLoggedUser, user, logoutUser } =
+    useAuthContext();
   const { getUsersStatusBadge, badgeCount: badgeCountUsers } = useUserContext();
   const { getAllOffers, offers } = useOffersContext();
   const { getInfluencersStatusBadge, badgeCount: badgeCountInfluencers } =
     useInfluencerContext();
   const { getCompaniesStatusBadge, badgeCount: badgeCountCompanies } =
     useCompanyContext();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setSessionToken();
@@ -55,6 +58,12 @@ const Layout = (): React.ReactElement => {
   useEffect(() => {
     getCompaniesStatusBadge();
   }, [getCompaniesStatusBadge]);
+
+  useEffect(() => {
+    if (!user) {
+      logoutUser(), navigate(0);
+    }
+  }, [logoutUser, navigate, user]);
 
   return (
     <LayoutStyled>
