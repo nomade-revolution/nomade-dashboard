@@ -3,7 +3,7 @@ import { FaUserTie, FaUserGroup, FaPeopleArrows } from "react-icons/fa6";
 import { CiLogout } from "react-icons/ci";
 import { appPaths } from "../../../utils/appPaths/appPaths";
 import { PiUsersThreeFill } from "react-icons/pi";
-import { BiSolidOffer, BiSolidCategory } from "react-icons/bi";
+import { BiSolidOffer } from "react-icons/bi";
 import { AiFillFileAdd } from "react-icons/ai";
 
 export const getSideBarUpperSections = (
@@ -58,14 +58,14 @@ export const getSideBarUpperSections = (
       path: "/collabs/page/1",
       subSection: "collab",
     },
-    {
-      id: 6,
-      icon: <BiSolidCategory />,
-      name: "Categorías",
-      pathname: "categorias",
-      quantity: 0,
-      path: appPaths.categories,
-    },
+    // {
+    //   id: 6,
+    //   icon: <BiSolidCategory />,
+    //   name: "Categorías",
+    //   pathname: "categorias",
+    //   quantity: 0,
+    //   path: appPaths.categories,
+    // },
     {
       id: 7,
       icon: <AiFillFileAdd />,

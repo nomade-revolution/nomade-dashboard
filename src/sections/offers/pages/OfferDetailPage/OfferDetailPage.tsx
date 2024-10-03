@@ -6,6 +6,7 @@ import OfferDetailPageStyled from "./OfferDetailPageStyled";
 import ImageCustom from "sections/shared/components/ImageCustom/ImageCustom";
 import { getTypesClassNames } from "sections/shared/components/DashboardContentSections/utils/getClassNames/getClassNames";
 import { MdOutlineLocationOn } from "react-icons/md";
+import NoDataHandler from "sections/shared/components/NoDataHandler/NoDataHandler";
 
 const OfferDetailsPage = () => {
   const { id } = useParams();
@@ -19,6 +20,8 @@ const OfferDetailsPage = () => {
     <>
       {loading ? (
         <Loader width="20px" height="20px" />
+      ) : !offer ? (
+        <NoDataHandler pageName={"oferta"} search={""} />
       ) : (
         <OfferDetailPageStyled>
           <section className="offer-detail__data">

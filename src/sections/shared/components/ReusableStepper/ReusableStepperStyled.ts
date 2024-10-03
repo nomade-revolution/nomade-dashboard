@@ -9,7 +9,7 @@ const ReusableStepperStyled = styled.section`
   .stepper {
     &__btn-container {
       display: flex;
-      justify-content: flex-end;
+      justify-content: flex-start;
     }
 
     &__state-btn {
