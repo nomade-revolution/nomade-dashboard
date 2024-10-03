@@ -15,6 +15,8 @@ interface ReusableTableBodyCellProps {
   pageName: string;
   type?: string;
   setCollabStateActionType?: (value: CollabActionTypes) => void;
+  anchorEl: null | HTMLElement;
+  setAnchorEl: (value: null | HTMLElement) => void;
 }
 
 const DashboardTableCellContent = ({
@@ -23,6 +25,8 @@ const DashboardTableCellContent = ({
   pageName,
   type,
   setCollabStateActionType,
+  anchorEl,
+  setAnchorEl,
 }: ReusableTableBodyCellProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
@@ -35,6 +39,8 @@ const DashboardTableCellContent = ({
           setIsDialogOpen={setIsDialogOpen}
           pageName={pageName}
           setCollabStateActionType={setCollabStateActionType}
+          anchorEl={anchorEl}
+          setAnchorEl={setAnchorEl}
         />
       }
 

@@ -9,17 +9,22 @@ import { Switch } from "@mui/material";
 import { TimeSlot } from "modules/offers/domain/OfferCalendar";
 import { Company, User } from "modules/user/domain/User";
 import { CollabActionTypes, FullCollab } from "modules/collabs/domain/Collabs";
-import { getTypesClassNames } from "./utils/getClassNames/getClassNames";
+import {
+  getCollabStateClassname,
+  getTypesClassNames,
+} from "./utils/getClassNames/getClassNames";
 import Actions from "../Actions/Actions";
 import { Influencer } from "@influencer";
 import { Lead } from "modules/leads/domain/Leads";
 
-interface DashboardTableCellContentProps {
+interface Props {
   headerSection: HeaderSection;
   section: object | Customer | Offer | FullCollab | User | Company | Lead;
   pageName: string;
   setIsDialogOpen: (value: boolean) => void;
   setCollabStateActionType?: (value: CollabActionTypes) => void;
+  anchorEl: null | HTMLElement;
+  setAnchorEl: (value: null | HTMLElement) => void;
 }
 
 const DashboardContentSections = ({
@@ -28,7 +33,9 @@ const DashboardContentSections = ({
   pageName,
   setIsDialogOpen,
   setCollabStateActionType,
-}: DashboardTableCellContentProps) => {
+  anchorEl,
+  setAnchorEl,
+}: Props) => {
   const calendar = (section as FullOffer).calendar;
   const daysSet = new Set<string>();
 
@@ -204,12 +211,21 @@ const DashboardContentSections = ({
           setIsDialogOpen={setIsDialogOpen}
           section={section}
           setCollabStateActionType={setCollabStateActionType}
+          anchorEl={anchorEl}
+          setAnchorEl={setAnchorEl}
         />
       );
 
     case "history":
       return (
-        <span>
+        <span
+          className={getCollabStateClassname(
+            (section as FullCollab).history[
+              (section as FullCollab).history.length - 1
+            ].id,
+            "dashboard",
+          )}
+        >
           {
             (section as FullCollab).history[
               (section as FullCollab).history.length - 1
