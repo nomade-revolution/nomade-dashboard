@@ -38,7 +38,7 @@ const useActions = () => {
       rejected_collab_reason_id,
     );
 
-    setTimeout(() => navigate(0), 1500);
+    // setTimeout(() => navigate(0), 1500);
   };
 
   const handleCollabStateUpdate = (

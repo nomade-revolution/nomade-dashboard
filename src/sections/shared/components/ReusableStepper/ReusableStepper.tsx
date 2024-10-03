@@ -90,7 +90,7 @@ export default function ReusableStepper({
               onClick={handleClick}
               type="button"
             >
-              Estados <MdOutlineHistory size={20} />
+              Acciones <MdOutlineHistory size={20} />
             </button>
           </div>
         )}
@@ -110,7 +110,7 @@ export default function ReusableStepper({
           .filter((state) => state.type === CollabType.company)}
       />
       <DialogDeleteConfirm
-        handleClose={() => setAnchorEl(null)}
+        handleClose={() => setIsDialogOpen(false)}
         open={isDialogOpen}
         pageName={SectionTypes.collabs}
         sectionId={collab?.id}

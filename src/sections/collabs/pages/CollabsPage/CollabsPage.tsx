@@ -13,11 +13,12 @@ import SearchBar from "sections/shared/components/SearchBar/SearchBar";
 import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
 import { collabsHeaderSections } from "sections/collabs/utils/collabsSections";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
+import { CollabActionTypes } from "modules/collabs/domain/Collabs";
 
 const CollabsPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
   const [collabStateActionType, setCollabStateActionType] =
-    useState<string>("");
+    useState<CollabActionTypes | null>(null);
 
   const { getAllCollabs, collabs, pagination, loading, order } =
     useCollabsContext();
@@ -70,7 +71,7 @@ const CollabsPage = (): React.ReactElement => {
               bodySections={collabs}
               headerSections={collabsHeaderSections}
               pageName={SectionTypes.collabs}
-              type={collabStateActionType}
+              type={collabStateActionType!}
               setCollabStateActionType={setCollabStateActionType}
             />
           </div>
@@ -82,6 +83,8 @@ const CollabsPage = (): React.ReactElement => {
               bodySections={collabs}
               headerSections={collabsHeaderSections}
               pageName={SectionTypes.collabs}
+              type={collabStateActionType!}
+              setCollabStateActionType={setCollabStateActionType}
             />
           </div>
           <PaginationComponent
