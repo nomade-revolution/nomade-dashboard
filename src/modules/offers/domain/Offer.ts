@@ -10,7 +10,7 @@ export type OfferType =
   | "Lodging"
   | "Restaurant";
 export interface Offer {
-  id: number;
+  id?: number;
   images: ImageStructure[];
   company: string;
   company_id: number;
@@ -22,6 +22,7 @@ export interface Offer {
   advance_notice_time: number | null;
   favorite: boolean;
   reserves?: number;
+  active: boolean;
 }
 
 export interface ActivityOffer extends Offer {
@@ -47,6 +48,7 @@ export interface FullOffer extends Offer {
   addresses: Address[];
   images: ImageStructure[];
   limitDate: string;
+  offerable_type: string;
 }
 
 export interface OffersApiResponse {
@@ -57,4 +59,22 @@ export interface OffersApiResponse {
 export interface FavsOffersApiResponse {
   offers: FullOffer[];
   pagination: PaginationStucture;
+}
+
+export type PartialOffer = Pick<
+  FullOffer,
+  | "company_id"
+  | "description"
+  | "conditions"
+  | "in_exchange"
+  | "offer_category_id"
+  | "active"
+  | "offerable_type"
+  | "images"
+>;
+
+export interface OfferFormStructure extends PartialOffer {
+  location_id: number;
+  location_type: string;
+  offerable: object;
 }

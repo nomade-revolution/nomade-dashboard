@@ -12,6 +12,13 @@ const ReusableFormStyled = styled.form`
   box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
 
   .datasheet-form {
+    &__content {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      gap: 20px;
+    }
+
     &__section {
       display: flex;
       flex-direction: column;
@@ -96,7 +103,8 @@ const ReusableFormStyled = styled.form`
 
     &__field,
     &__field-large,
-    &__field-textarea {
+    &__field-textarea,
+    &__field-textarea--offer {
       display: flex;
       align-items: center;
       height: 40px;
@@ -108,7 +116,8 @@ const ReusableFormStyled = styled.form`
     }
 
     &__field-large,
-    &__field-textarea {
+    &__field-textarea,
+    &__field-textarea--offer {
       width: 100%;
       @media (min-width: 1000px) {
         width: ${(props) => props.theme.widths.datasheetSmallerInputs};
@@ -134,10 +143,27 @@ const ReusableFormStyled = styled.form`
       gap: 20px;
     }
 
-    &__field-textarea {
+    &__field-textarea,
+    &__field-textarea--offer {
       height: 200px;
       padding: 10px;
       font-family: inherit;
+    }
+
+    &__field-textarea--offer {
+      width: 100%;
+
+      @media (min-width: 1000px) {
+        width: ${(props) => props.theme.widths.datasheetSmallerInputs};
+      }
+
+      @media (min-width: 1200px) {
+        width: 400px;
+      }
+
+      @media (min-width: 1600px) {
+        width: 500px;
+      }
     }
 
     &__field-image {
