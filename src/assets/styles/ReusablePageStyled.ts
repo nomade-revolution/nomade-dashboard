@@ -3,7 +3,6 @@ import styled from "styled-components";
 const ReusablePageStyled = styled.main`
   background: ${(props) => props.theme.colors.backgroundPages};
   justify-content: center;
-  align-items: center;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -29,7 +28,6 @@ const ReusablePageStyled = styled.main`
         display: flex;
         flex-direction: column;
         gap: 20px;
-        align-items: center;
         justify-content: center;
       }
     }
@@ -224,6 +222,38 @@ const ReusablePageStyled = styled.main`
     &__country,
     &__influencer {
       font-weight: bold;
+    }
+
+    &__progress {
+      position: relative;
+    }
+
+    &__progress-percentage {
+      position: absolute;
+      top: 0;
+      font-weight: 700;
+    }
+
+    &__plan {
+      &--basic {
+        font-weight: 700;
+        color: fuchsia;
+      }
+
+      &--standard {
+        font-weight: 700;
+        color: blue;
+      }
+
+      &--premium {
+        font-weight: 700;
+        color: orange;
+      }
+
+      &--pending {
+        font-weight: 700;
+        color: red;
+      }
     }
   }
 `;
