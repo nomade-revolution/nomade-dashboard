@@ -20,6 +20,7 @@ import { CategoriesContextProvider } from "sections/categories/CategoriesContext
 import { CountryContextProvider } from "sections/country/CountryContext/CountryContext.tsx";
 import { CityContextProvider } from "sections/city/CityContext/CityContext.tsx";
 import { ContactContextProvider } from "sections/contact/ContactContext/ContactContext.tsx";
+import { PlansContextProvider } from "sections/plans/PlansContext/PlansContext.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -39,10 +40,14 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                           <ContactContextProvider
                             repository={repositories.contact}
                           >
-                            <ThemeProvider theme={theme}>
-                              <GlobalStyles />
-                              <RouterProvider router={router} />
-                            </ThemeProvider>
+                            <PlansContextProvider
+                              repository={repositories.plans}
+                            >
+                              <ThemeProvider theme={theme}>
+                                <GlobalStyles />
+                                <RouterProvider router={router} />
+                              </ThemeProvider>
+                            </PlansContextProvider>
                           </ContactContextProvider>
                         </CityContextProvider>
                       </CountryContextProvider>
