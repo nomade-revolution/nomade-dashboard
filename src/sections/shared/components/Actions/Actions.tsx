@@ -69,14 +69,7 @@ const Actions = ({
               <FaEye className={"icon"} />
             </Link>
           </Tooltip>
-          <Tooltip title="Borrar collab">
-            <button
-              aria-label="Borrar collab"
-              onClick={() => handleIsDialogOpen(setIsDialogOpen)}
-            >
-              <RiDeleteBin6Line className={"icon"} color="red" />
-            </button>
-          </Tooltip>
+
           {(section as FullCollab).history[
             (section as FullCollab).history.length - 1
           ].id === collabStates.COLAB_PENDING_NOMADE_STATE && (
