@@ -26,6 +26,7 @@ const PlansPage = (): React.ReactElement => {
             headerSections={monthPlansTableSections}
             pageName=""
           />,
+          <span>En proceso...</span>,
         ]}
       />
     </ReusablePageStyled>
