@@ -72,10 +72,7 @@ export const CollabsContextProvider = ({
   );
 
   const deleteCollabById = async (collab_id: number) => {
-    setLoading(true);
     const response = await deleteCollab(repository, collab_id);
-
-    setLoading(false);
 
     setIsSuccess(response.success);
 

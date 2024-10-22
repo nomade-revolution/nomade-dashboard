@@ -75,4 +75,18 @@ export const influencerCollabsHeaderSections: HeaderSection[] = [
     sortTag: "",
     pageName: "influencer",
   },
+  {
+    id: 5,
+    name: "Estado",
+    property: "history",
+    sortTag: "",
+    pageName: "influencer",
+  },
+  {
+    id: 7,
+    name: "Acciones",
+    property: "actions",
+    sortTag: "",
+    pageName: "influencer",
+  },
 ];
