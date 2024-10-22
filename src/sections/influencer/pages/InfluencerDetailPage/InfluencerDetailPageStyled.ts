@@ -18,6 +18,12 @@ const InfluencerDetailPageStyled = styled.main`
   }
 
   .influencer-detail {
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+
     &__title {
       border-bottom: 2px solid ${(props) => props.theme.colors.mainColor};
       padding-bottom: 10px;

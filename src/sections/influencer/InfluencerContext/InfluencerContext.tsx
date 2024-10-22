@@ -34,10 +34,7 @@ export const InfluencerContextProvider = ({
   const [badgeCount, setBadgeCount] = useState<number>(0);
 
   const deleteInfluencerById = async (influencer_id: number) => {
-    setLoading(true);
     const response = await deleteInfluencer(repository, influencer_id);
-
-    setLoading(false);
 
     setIsSuccess(response.success);
 
