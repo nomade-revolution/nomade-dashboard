@@ -147,6 +147,7 @@ const ReusablePageStyled = styled.main`
       font-weight: bold;
 
       &--accepted {
+        font-weight: bold;
         color: ${(props) => props.theme.colors.softGreen};
       }
 
@@ -161,6 +162,40 @@ const ReusablePageStyled = styled.main`
       &--sent {
         color: ${(props) => props.theme.colors.darkBlue};
       }
+
+      &--pending-nomade {
+        font-weight: bold;
+        color: blue;
+      }
+
+      &--pending-company {
+        font-weight: bold;
+        color: fuchsia;
+      }
+
+      &--done {
+        color: green;
+      }
+
+      &--finished {
+        color: ${(props) => props.theme.colors.purple};
+      }
+
+      &--incident {
+        color: brown;
+      }
+    }
+
+    &--modification {
+      color: teal;
+    }
+
+    &--received {
+      color: lightBlue;
+    }
+
+    &--published {
+      color: gold;
     }
 
     &__create {
