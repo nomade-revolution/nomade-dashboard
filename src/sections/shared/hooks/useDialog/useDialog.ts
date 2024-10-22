@@ -46,7 +46,7 @@ const useDialog = () => {
   const handleDeleteCollab = async (sectionId: number) => {
     const response = await deleteCollabById(sectionId!);
     setIsSuccess(response!);
-    setTimeout(() => navigate(0), 1500);
+    setTimeout(() => navigate(-1), 1500);
   };
 
   const getFunctionForDialog = (
