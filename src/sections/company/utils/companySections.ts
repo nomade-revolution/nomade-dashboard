@@ -52,4 +52,18 @@ export const companyCollabsHeaderSections: HeaderSection[] = [
   { id: 3, name: "Día", property: "day", sortTag: "", pageName: "company" },
   { id: 4, name: "Hora", property: "time", sortTag: "", pageName: "company" },
   { id: 5, name: "Tipo", property: "type", sortTag: "", pageName: "company" },
+  {
+    id: 6,
+    name: "Estado",
+    property: "history",
+    sortTag: "",
+    pageName: "influencer",
+  },
+  {
+    id: 7,
+    name: "Acciones",
+    property: "actions",
+    sortTag: "",
+    pageName: "influencer",
+  },
 ];

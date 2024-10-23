@@ -12,15 +12,15 @@ const getSocialMediaIcons = (type: string) => {
     case SocialMediaTypes.instagram:
       return (
         <Tooltip title={"Instagram"}>
-          <FaInstagramSquare />
+          <FaInstagramSquare color="#ff38c0" />
         </Tooltip>
       );
     case SocialMediaTypes.tiktok:
       return <FaTiktok />;
     case SocialMediaTypes.twitch:
-      return <FaTwitch />;
+      return <FaTwitch color="#8c45f7" />;
     case SocialMediaTypes.youtube:
-      return <FaYoutube />;
+      return <FaYoutube color="red" />;
   }
 };
 

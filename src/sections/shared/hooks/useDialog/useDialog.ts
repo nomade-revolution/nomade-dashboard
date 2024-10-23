@@ -34,7 +34,7 @@ const useDialog = () => {
   const handleDeleteCompany = async (sectionId: number) => {
     const response = await deleteCompanyById(sectionId!);
     setIsSuccess(response!);
-    setTimeout(() => navigate(0), 1500);
+    setTimeout(() => navigate(-1), 1500);
   };
 
   const handleDeleteOffer = async (sectionId: number) => {

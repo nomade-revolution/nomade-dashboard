@@ -34,10 +34,7 @@ export const CompanyContextProvider = ({
   const [badgeCount, setBadgeCount] = useState<number>(0);
 
   const deleteCompanyById = async (company_id: number) => {
-    setLoading(true);
     const response = await deleteCompany(repository, company_id);
-
-    setLoading(false);
 
     setIsSuccess(response.success);
 
