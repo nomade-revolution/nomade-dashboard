@@ -185,14 +185,6 @@ const Actions = ({
               <FaEye className={"icon"} />
             </Link>
           </Tooltip>
-          <Tooltip title="Borrar cliente">
-            <button
-              aria-label="Borrar cliente"
-              onClick={() => handleIsDialogOpen(setIsDialogOpen)}
-            >
-              <RiDeleteBin6Line className={"icon"} color="red" />
-            </button>
-          </Tooltip>
         </>
       );
       break;
