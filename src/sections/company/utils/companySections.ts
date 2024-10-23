@@ -60,6 +60,13 @@ export const companyCollabsHeaderSections: HeaderSection[] = [
     pageName: "influencer",
   },
   {
+    id: 6,
+    name: "Publicada",
+    property: "published",
+    sortTag: "",
+    pageName: "influencer",
+  },
+  {
     id: 7,
     name: "Acciones",
     property: "actions",

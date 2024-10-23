@@ -3,7 +3,7 @@ import { Customer } from "../../../../modules/customers/domain/Customers";
 import { HeaderSection } from "../../interfaces/interfaces";
 import ImageCustom from "../ImageCustom/ImageCustom";
 import { FaEye } from "react-icons/fa";
-import { FaLocationDot } from "react-icons/fa6";
+import { FaCheckDouble, FaLocationDot } from "react-icons/fa6";
 import { FullOffer, Offer } from "../../../../modules/offers/domain/Offer";
 import { Switch } from "@mui/material";
 import { TimeSlot } from "modules/offers/domain/OfferCalendar";
@@ -18,6 +18,8 @@ import { Influencer } from "@influencer";
 import { Lead } from "modules/leads/domain/Leads";
 import { Plan } from "modules/plans/domain/Plan";
 import LinearBuffer from "../LinearBuffer/LinearBuffer";
+import { COLAB_PUBLISHED_STATE } from "sections/collabs/utils/collabsStates";
+import formatDate from "sections/shared/utils/formatDate/formatDate";
 
 interface Props {
   headerSection: HeaderSection;
@@ -242,6 +244,26 @@ const DashboardContentSections = ({
             ].name
           }
         </span>
+      );
+
+    case "published":
+      return (
+        <>
+          {(section as FullCollab).history[
+            (section as FullCollab).history.length - 1
+          ].id === COLAB_PUBLISHED_STATE ? (
+            <span className="dashboard__published">
+              <FaCheckDouble />
+              {formatDate(
+                (section as FullCollab).history[
+                  (section as FullCollab).history.length - 1
+                ].created_at,
+              )}
+            </span>
+          ) : (
+            <span className="dashboard__not-published">No publicada</span>
+          )}
+        </>
       );
 
     case "percentage":
