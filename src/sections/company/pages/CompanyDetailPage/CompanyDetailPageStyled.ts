@@ -154,30 +154,6 @@ const CompanyDetailPageStyled = styled.main`
       }
     }
   }
-
-  .plan {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-
-    &__data {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-
-      @media (min-width: 1000px) {
-        flex-direction: row;
-        align-items: flex-start;
-        justify-content: space-between;
-      }
-    }
-
-    &__section {
-      display: flex;
-      gap: 10px;
-      flex-direction: column;
-    }
-  }
 `;
 
 export default CompanyDetailPageStyled;
