@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
 import ImageCustom from "sections/shared/components/ImageCustom/ImageCustom";
 import Loader from "sections/shared/components/Loader/Loader";
 import GoBackButton from "sections/shared/components/GoBackButton/GoBackButton";
@@ -52,6 +51,7 @@ const InfluencerDetailPage = (): React.ReactElement => {
             />
             <CompanyDetailData company={company} />
           </section>
+
           <CompanyCollabs company_id={+id!} />
           <DialogDeleteConfirm
             handleClose={() => setIsDialogOpen(false)}

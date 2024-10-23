@@ -7,7 +7,7 @@ const CompanyDetailPageStyled = styled.main`
   gap: 50px;
   padding: 20px 20px;
   color: ${(props) => props.theme.fontsColors.dashBoard};
-  height: 100vh;
+  height: 100%;
 
   @media (min-width: 1000px) and (max-width: 1600px) {
     padding: 200px 150px;
@@ -15,6 +15,7 @@ const CompanyDetailPageStyled = styled.main`
 
   @media (min-width: 1600px) {
     padding: 70px 200px;
+    padding-bottom: 40px;
   }
 
   .company-detail {
@@ -37,7 +38,7 @@ const CompanyDetailPageStyled = styled.main`
       gap: 20px;
       box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
       background-color: ${(props) => props.theme.colors.lightGrey};
-      padding-top: 20px;
+      /* padding-top: 20px; */
       border-radius: 10px;
 
       @media (min-width: 1000px) {
@@ -45,7 +46,7 @@ const CompanyDetailPageStyled = styled.main`
         position: relative;
         box-shadow: none;
         background-color: none;
-        padding-top: 100px;
+        /* padding-top: 100px; */
       }
     }
 
@@ -56,7 +57,7 @@ const CompanyDetailPageStyled = styled.main`
       @media (min-width: 1000px) {
         position: absolute;
         left: -50px;
-        bottom: 100px;
+        top: -20px;
       }
     }
   }
@@ -151,6 +152,30 @@ const CompanyDetailPageStyled = styled.main`
       &--activity {
         color: ${(props) => props.theme.colors.red};
       }
+    }
+  }
+
+  .plan {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    &__data {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      @media (min-width: 1000px) {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-between;
+      }
+    }
+
+    &__section {
+      display: flex;
+      gap: 10px;
+      flex-direction: column;
     }
   }
 `;

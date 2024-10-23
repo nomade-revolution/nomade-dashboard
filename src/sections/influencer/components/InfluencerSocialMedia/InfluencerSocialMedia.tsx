@@ -13,7 +13,9 @@ const InfluencerSocialMedia = ({ socialMedia }: Props): React.ReactElement => {
         <li className="social-media__data">
           {getSocialMediaIcons(media.name)}
           <span>{media.account_name}</span>
-          <span>{media.followers}</span>
+          <span className="social-media__followers">
+            {media.followers} followers
+          </span>
         </li>
       ))}
     </InfluencerSocialMediaStyles>
