@@ -54,6 +54,10 @@ const CompanyDetailDataStyled = styled.section`
       align-items: center;
       gap: 5px;
     }
+
+    &__title {
+      color: ${(props) => props.theme.colors.mainColor};
+    }
   }
 
   .contact {
@@ -73,6 +77,60 @@ const CompanyDetailDataStyled = styled.section`
     &__type {
       font-weight: 600;
       color: darkblue;
+    }
+  }
+
+  .plan {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    &__data {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      @media (min-width: 1000px) {
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-between;
+      }
+    }
+
+    &__section {
+      display: flex;
+      gap: 10px;
+      flex-direction: column;
+    }
+
+    &__mensual {
+      font-weight: 700;
+      color: chocolate;
+    }
+
+    &__trimestral {
+      font-weight: 700;
+      color: darkorange;
+    }
+
+    &--basic {
+      font-weight: 700;
+      color: fuchsia;
+    }
+
+    &--standard {
+      font-weight: 700;
+      color: blue;
+    }
+
+    &--premium {
+      font-weight: 700;
+      color: orange;
+    }
+
+    &--pending {
+      font-weight: 700;
+      color: red;
     }
   }
 `;
