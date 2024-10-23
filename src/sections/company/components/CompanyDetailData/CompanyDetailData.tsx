@@ -43,7 +43,7 @@ const CompanyDetailData = ({ company }: Props): React.ReactElement => {
             <FaLocationDot color="#a13b4b" />
             <span>{company.address?.address}</span>
           </section>
-          <h4>Personas de contacto</h4>
+          <h4 className="company-data__title">Personas de contacto</h4>
           <ul className="company-data__contacts">
             {company?.contacts?.map((contact) => (
               <li className="company-data__contact contact">
@@ -55,21 +55,43 @@ const CompanyDetailData = ({ company }: Props): React.ReactElement => {
             ))}
           </ul>
           <section>
-            <h3>Descripción</h3>
+            <h4 className="company-data__title">Descripción</h4>
             <span>{company?.description}</span>
           </section>
         </div>
       </div>
       <section className="company-detal__plan plan">
-        <h3>Plan</h3>
+        <h4 className="company-data__title">Plan</h4>
         <div className="plan__data">
           <div className="plan__section">
-            <h4>Tipo</h4>
-            <span>{company.plan?.billing}</span>
-            <span>{company.plan?.plan_name}</span>
+            <h5>Tipo</h5>
+            <span
+              className={
+                company.plan.billing === "Mensual"
+                  ? "plan__mensual"
+                  : "plan__trimestral"
+              }
+            >
+              {company.plan?.billing}
+            </span>
+            <span
+              className={`plan${
+                company.plan?.plan_name === "Básico"
+                  ? "--basic"
+                  : company.plan?.plan_name === "Estandar"
+                    ? "--standard"
+                    : company.plan?.plan_name === "Premium"
+                      ? "--premium"
+                      : company.plan?.plan_name === "Pendiente"
+                        ? "--pending"
+                        : ""
+              }`}
+            >
+              {company.plan?.plan_name}
+            </span>
           </div>
           <div className="plan__section">
-            <h4>Fecha de inicio</h4>
+            <h5>Fecha de inicio</h5>
             <span>{company.plan?.start_date}</span>
           </div>
           <div className="plan__section">
