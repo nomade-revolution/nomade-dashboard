@@ -9,6 +9,7 @@ import { CollabsRepository } from "modules/collabs/infrastructure/CollabsReposit
 import { ContactRepository } from "modules/contact/infrastructure/contactRepository";
 import { LeadsRepository } from "modules/leads/infrastructure/leadsRepository";
 import { OffersRepository } from "modules/offers/infrastructure";
+import { PlansRepository } from "modules/plans/infrastructure/plansRepo";
 import { UsersRepository } from "modules/user/infrastructure/userRepository";
 
 export const repositories = {
@@ -24,4 +25,5 @@ export const repositories = {
   contact: new ContactRepository(),
   address: new AddressRepository(),
   categories: new CategoriesRepository(),
+  plans: new PlansRepository(),
 };

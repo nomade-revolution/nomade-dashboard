@@ -19,4 +19,5 @@ export const appPaths = {
   categories: "/categories",
   offerDetail: "/oferta/:id",
   collabsReservations: "/collabs-reservations/:id/page/:page",
+  plans: "/planes/page/:page",
 };

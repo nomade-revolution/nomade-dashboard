@@ -19,6 +19,7 @@ import RecoverPasswordPage from "sections/auth/pages/RecoverPasswordPage/Recover
 import CategoriesPage from "sections/categories/pages/CategoriesPage";
 import CollabsReservationsPage from "sections/collabs/pages/CollabsReservations/CollabsReservationsPage";
 import OfferDetailsPage from "sections/offers/pages/OfferDetailPage/OfferDetailPage";
+import PlansPage from "sections/plans/pages/PlansPage/PlansPage";
 
 const routes: RouteObject[] = [
   {
@@ -89,6 +90,10 @@ const routes: RouteObject[] = [
       {
         path: appPaths.offerDetail,
         element: <OfferDetailsPage />,
+      },
+      {
+        path: appPaths.plans,
+        element: <PlansPage />,
       },
     ],
   },

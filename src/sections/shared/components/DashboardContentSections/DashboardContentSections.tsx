@@ -16,10 +16,20 @@ import {
 import Actions from "../Actions/Actions";
 import { Influencer } from "@influencer";
 import { Lead } from "modules/leads/domain/Leads";
+import { Plan } from "modules/plans/domain/Plan";
+import LinearBuffer from "../LinearBuffer/LinearBuffer";
 
 interface Props {
   headerSection: HeaderSection;
-  section: object | Customer | Offer | FullCollab | User | Company | Lead;
+  section:
+    | object
+    | Customer
+    | Offer
+    | FullCollab
+    | User
+    | Company
+    | Lead
+    | Plan;
   pageName: string;
   setIsDialogOpen: (value: boolean) => void;
   setCollabStateActionType?: (value: CollabActionTypes) => void;
@@ -231,6 +241,35 @@ const DashboardContentSections = ({
               (section as FullCollab).history.length - 1
             ].name
           }
+        </span>
+      );
+
+    case "percentage":
+      return (
+        <section className="dashboard__progress">
+          <LinearBuffer progress={(section as Plan).percentage} />
+          <span className="dashboard__progress-percentage">
+            {(section as Plan).percentage}%
+          </span>
+        </section>
+      );
+
+    case "plan":
+      return (
+        <span
+          className={`dashboard__plan${
+            (section as Plan).plan === "Básico"
+              ? "--basic"
+              : (section as Plan).plan === "Estandar"
+                ? "--standard"
+                : (section as Plan).plan === "Premium"
+                  ? "--premium"
+                  : (section as Plan).plan === "Pendiente"
+                    ? "--pending"
+                    : ""
+          }`}
+        >
+          {(section as Plan).plan}
         </span>
       );
 

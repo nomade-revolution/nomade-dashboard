@@ -69,14 +69,7 @@ const Actions = ({
               <FaEye className={"icon"} />
             </Link>
           </Tooltip>
-          <Tooltip title="Borrar collab">
-            <button
-              aria-label="Borrar collab"
-              onClick={() => handleIsDialogOpen(setIsDialogOpen)}
-            >
-              <RiDeleteBin6Line className={"icon"} color="red" />
-            </button>
-          </Tooltip>
+
           {(section as FullCollab).history[
             (section as FullCollab).history.length - 1
           ].id === collabStates.COLAB_PENDING_NOMADE_STATE && (
@@ -177,14 +170,6 @@ const Actions = ({
               <FaEye className={"icon"} />
             </Link>
           </Tooltip>
-          <Tooltip title="Borrar influencer">
-            <button
-              aria-label="Borrar influencer"
-              onClick={() => handleIsDialogOpen(setIsDialogOpen)}
-            >
-              <RiDeleteBin6Line className={"icon"} color="red" />
-            </button>
-          </Tooltip>
         </>
       );
       break;
@@ -199,14 +184,6 @@ const Actions = ({
             >
               <FaEye className={"icon"} />
             </Link>
-          </Tooltip>
-          <Tooltip title="Borrar cliente">
-            <button
-              aria-label="Borrar cliente"
-              onClick={() => handleIsDialogOpen(setIsDialogOpen)}
-            >
-              <RiDeleteBin6Line className={"icon"} color="red" />
-            </button>
           </Tooltip>
         </>
       );

@@ -18,6 +18,13 @@ const CollabsDetailPageStyled = styled.main`
   }
 
   .detail-collab {
+    &__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
     &__data {
       display: flex;
       flex-direction: column;

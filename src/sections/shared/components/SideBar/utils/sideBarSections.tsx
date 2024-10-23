@@ -1,4 +1,4 @@
-import { IoIosSettings } from "react-icons/io";
+import { IoIosSettings, IoIosStats } from "react-icons/io";
 import { FaUserTie, FaUserGroup, FaPeopleArrows } from "react-icons/fa6";
 import { CiLogout } from "react-icons/ci";
 import { appPaths } from "../../../utils/appPaths/appPaths";
@@ -75,12 +75,20 @@ export const getSideBarUpperSections = (
       path: "/leads/page/1",
     },
     {
-      id: 7,
+      id: 8,
       icon: <AiFillFileAdd />,
       name: "Oferta",
       pathname: "oferta",
       quantity: 0,
       path: `/oferta/${offer_id}`,
+    },
+    {
+      id: 9,
+      icon: <IoIosStats />,
+      name: "Uso planes",
+      pathname: "planes",
+      quantity: 0,
+      path: `/planes/page/1`,
     },
   ];
 
