@@ -3,10 +3,7 @@ import DashboardCardListMobile from "sections/shared/components/DashboardCardLis
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
 import Loader from "sections/shared/components/Loader/Loader";
 import PaginationComponent from "sections/shared/components/Pagination/PaginationComponent";
-import {
-  FilterParams,
-  SectionTypes,
-} from "sections/shared/interfaces/interfaces";
+import { SectionTypes } from "sections/shared/interfaces/interfaces";
 import { useParams } from "react-router-dom";
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 import SearchBar from "sections/shared/components/SearchBar/SearchBar";
@@ -14,6 +11,12 @@ import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsCon
 import { collabsHeaderSections } from "sections/collabs/utils/collabsSections";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { CollabActionTypes } from "modules/collabs/domain/Collabs";
+import ReusableSelect from "sections/shared/components/ReusableSelect/ReusableSelect";
+import { FilterParams } from "../../../shared/interfaces/interfaces";
+import {
+  collabsFiltersCompany,
+  collabsFiltersNomade,
+} from "sections/collabs/utils/collabsStates";
 
 const CollabsPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
@@ -24,6 +27,7 @@ const CollabsPage = (): React.ReactElement => {
     useCollabsContext();
   const { user } = useAuthContext();
   const { page } = useParams();
+  const [filterId, setFilterId] = useState<string>("");
 
   const handleSearch = (text: string) => {
     getCollabs(text);
@@ -32,23 +36,35 @@ const CollabsPage = (): React.ReactElement => {
   const getCollabs = useCallback(
     (text?: string) => {
       const filters: FilterParams =
-        user.type === "Company" ? { filters: { company_id: user.id } } : {};
+        user.type === "Company"
+          ? { filters: { company_id: user.id } }
+          : { filters: {} };
 
       if (order?.sortTag) {
         filters.order = [{ by: order.sortTag, dir: order.direction }];
       }
       if (text) {
-        filters.search = text;
+        filters.filters = { search: text };
       }
-
+      if (filterId !== "") {
+        filters.filters = { states: [filterId] };
+      }
       getAllCollabs(+page!, 12, filters);
     },
-    [getAllCollabs, order.direction, order.sortTag, page, user.id, user.type],
+    [
+      getAllCollabs,
+      filterId,
+      order.direction,
+      order.sortTag,
+      page,
+      user.id,
+      user.type,
+    ],
   );
 
   useEffect(() => {
     getCollabs();
-  }, [page, order, getCollabs]);
+  }, [page, order, getCollabs, filterId]);
 
   return (
     <>
@@ -66,6 +82,20 @@ const CollabsPage = (): React.ReactElement => {
                 onReset={() => getCollabs()}
                 onSearchSubmit={() => handleSearch(searchText)}
               />
+            </div>
+            <div className="dashboard__filterContainer">
+              <div className="filterBox">
+                <ReusableSelect
+                  label="Filtrar por estado"
+                  options={
+                    user.type === "Company"
+                      ? collabsFiltersCompany
+                      : collabsFiltersNomade
+                  }
+                  setValue={setFilterId}
+                  value={filterId}
+                />
+              </div>
             </div>
             <DashboardTable
               bodySections={collabs}
