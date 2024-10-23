@@ -67,7 +67,7 @@ const CompanyDetailData = ({ company }: Props): React.ReactElement => {
             <h5>Tipo</h5>
             <span
               className={
-                company.plan.billing === "Mensual"
+                company.plan?.billing === "Mensual"
                   ? "plan__mensual"
                   : "plan__trimestral"
               }
