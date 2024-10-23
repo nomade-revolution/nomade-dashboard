@@ -55,6 +55,19 @@ const ReusablePageStyled = styled.main`
         justify-content: flex-end;
       }
     }
+    &__filterContainer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      width: 100%;
+
+      @media (min-width: 880px) {
+        width: 100%;
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-end;
+      }
+    }
 
     &__title {
       padding-right: 20px;
@@ -290,6 +303,11 @@ const ReusablePageStyled = styled.main`
         color: red;
       }
     }
+  }
+  .filterBox {
+    display: flex;
+    min-width: 300px;
+    width: 250px;
   }
 `;
 

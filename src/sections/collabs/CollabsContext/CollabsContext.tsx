@@ -60,7 +60,6 @@ export const CollabsContextProvider = ({
     async (page: number, per_page: number, params: FilterParams) => {
       setLoading(true);
       setError(null);
-
       const response = await collabsGetAll(repository, page, per_page, params);
       if (isHttpSuccessResponse(response)) {
         setLoading(false);

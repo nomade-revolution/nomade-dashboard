@@ -64,3 +64,91 @@ export const getCollabStates = (state_id: number, type: string) => {
 
   return collabStates;
 };
+
+export const collabsFiltersCompany = [
+  {
+    id: COLAB_ACCEPTED_STATE,
+    name: "Aceptado",
+    value: "3",
+  },
+  {
+    id: COLAB_CANCELLED_STATE,
+    name: "Cancelado",
+    value: "7",
+  },
+
+  {
+    id: COLAB_REJECTED_STATE,
+    name: "Rechazado",
+    value: "8",
+  },
+  {
+    id: COLAB_SENT_STATE,
+    name: "Enviado",
+    value: "9",
+  },
+];
+
+export const collabsFiltersNomade = [
+  {
+    id: COLAB_PENDING_NOMADE_STATE,
+    name: "Pendiente (Nomade)",
+    value: "1",
+  },
+  {
+    id: COLAB_PENDING_COMPANY_STATE,
+    name: "Pendiente (Empresa)",
+    value: "2",
+  },
+  {
+    id: COLAB_ACCEPTED_STATE,
+    name: "Aceptado (Empresa)",
+    value: "3",
+  },
+  {
+    id: COLAB_MODIFICATION_IN_PROGRESS_STATE,
+    name: "Modificación en progreso (influencer)",
+    value: "4",
+  },
+  {
+    id: COLAB_DONE_STATE,
+    name: "Completado",
+    value: "5",
+  },
+  {
+    id: COLAB_FINISHED_STATE,
+    name: "Finalizado",
+    value: "6",
+  },
+  {
+    id: COLAB_CANCELLED_STATE,
+    name: "Cancelado (Empresa)",
+    value: "7",
+  },
+
+  {
+    id: COLAB_REJECTED_STATE,
+    name: "Rechazado (Empresa)",
+    value: "8",
+  },
+  {
+    id: COLAB_SENT_STATE,
+    name: "Enviado",
+    value: "9",
+  },
+  {
+    id: COLAB_RECEIVED_STATE,
+    name: "Recibido(Influencer)",
+    value: "10",
+  },
+  {
+    id: COLAB_INCIDENT_STATE,
+    name: "Incidencia (influencer)",
+    value: "11",
+  },
+  {
+    id: COLAB_PUBLISHED_STATE,
+    name: "Publicado (influencer)",
+    value: "12",
+  },
+];
