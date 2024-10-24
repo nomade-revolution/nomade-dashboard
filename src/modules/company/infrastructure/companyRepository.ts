@@ -2,6 +2,7 @@ import { COMPANY_BASE } from "@company/application/routes";
 import { Http } from "@core/application";
 import { HttpResponseInterface } from "@core/domain";
 import { Company } from "modules/user/domain/User";
+import { FilterParams } from "sections/shared/interfaces/interfaces";
 
 export class CompanyRepository {
   private readonly http: Http = Http.getInstance();
@@ -49,6 +50,19 @@ export class CompanyRepository {
   public async getCompaniesBadge(): Promise<HttpResponseInterface<number>> {
     try {
       const resp = await this.http.get<number>(`${COMPANY_BASE}/status/badge`);
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  public async getCompanies(
+    filters: FilterParams,
+  ): Promise<HttpResponseInterface<Company>> {
+    try {
+      const resp = await this.http.get<Company>(COMPANY_BASE, {
+        ...filters,
+      });
       return resp;
     } catch (error) {
       return Promise.reject(error);
