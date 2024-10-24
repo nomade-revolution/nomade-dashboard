@@ -295,6 +295,27 @@ const DashboardContentSections = ({
         </span>
       );
 
+    case "start_date":
+      return (
+        <span>
+          {(section as Plan).start_date ? (section as Plan).start_date : "-"}
+        </span>
+      );
+
+    case "end_date":
+      return (
+        <span>
+          {(section as Plan).end_date ? (section as Plan).end_date : "-"}
+        </span>
+      );
+
+    case "remaining":
+      return (
+        <span>
+          {(section as Plan).remaining ? (section as Plan).remaining : "-"}
+        </span>
+      );
+
     default:
       return (
         <section>
