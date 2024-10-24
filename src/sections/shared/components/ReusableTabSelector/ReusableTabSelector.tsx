@@ -5,9 +5,14 @@ import ReusableTabSelectorStyled from "./ReusableTabSelectorStyled";
 interface Props {
   tabs: string[];
   content: React.ReactElement[];
+  onClick: (value: number) => void;
 }
 
-const ReusableTabSelector = ({ tabs, content }: Props): React.ReactElement => {
+const ReusableTabSelector = ({
+  tabs,
+  content,
+  onClick,
+}: Props): React.ReactElement => {
   const [activeTab, setActiveTab] = useState(0);
 
   const handleTabChange = (index: number) => {
@@ -18,8 +23,11 @@ const ReusableTabSelector = ({ tabs, content }: Props): React.ReactElement => {
     <ReusableTabSelectorStyled>
       <Tabs selectedIndex={activeTab} onSelect={handleTabChange}>
         <TabList>
-          {tabs.map((tab) => (
-            <Tab key={tab}>
+          {tabs.map((tab, index) => (
+            <Tab
+              key={tab}
+              onClick={() => (index === 0 ? onClick(1) : onClick(2))}
+            >
               <span className="tab__text">{tab}</span>
             </Tab>
           ))}

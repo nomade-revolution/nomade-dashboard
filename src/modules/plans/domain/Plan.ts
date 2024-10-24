@@ -10,9 +10,12 @@ export interface Plan {
   billing: string;
   colabs: number;
   percentage: number;
+  remaining: string;
+  start_date: string | null;
+  end_date: string | null;
 }
 
 export interface PlansApiResponse {
-  plans: Plan[];
+  companies: Plan[];
   pagination: PaginationStucture;
 }

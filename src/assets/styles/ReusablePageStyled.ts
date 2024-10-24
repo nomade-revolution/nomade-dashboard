@@ -309,6 +309,14 @@ const ReusablePageStyled = styled.main`
     min-width: 300px;
     width: 250px;
   }
+
+  .plans-page {
+    &__mensual {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
 `;
 
 export default ReusablePageStyled;
