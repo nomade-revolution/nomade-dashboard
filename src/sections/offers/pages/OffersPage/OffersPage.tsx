@@ -53,8 +53,8 @@ const OffersPage = (): React.ReactElement => {
               onReset={() => {
                 getOffers();
               }}
-              pageName={SectionTypes.users}
-              pageTypes={SectionTypes.users}
+              pageName={SectionTypes.offers}
+              pageTypes={SectionTypes.offers}
               searchText={searchText!}
               setSearchText={setSearchText}
               onSearchSubmit={() => {

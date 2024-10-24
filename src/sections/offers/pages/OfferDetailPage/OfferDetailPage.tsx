@@ -7,7 +7,6 @@ import ImageCustom from "sections/shared/components/ImageCustom/ImageCustom";
 import { getTypesClassNames } from "sections/shared/components/DashboardContentSections/utils/getClassNames/getClassNames";
 import { MdOutlineLibraryAdd, MdOutlineLocationOn } from "react-icons/md";
 import NoDataHandler from "sections/shared/components/NoDataHandler/NoDataHandler";
-import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
 import { FaEdit } from "react-icons/fa";
 import OffersForm from "sections/offers/components/OffersForm/OffersForm";
@@ -17,7 +16,6 @@ const OfferDetailsPage = () => {
 
   const { id } = useParams();
   const { offer, loading, getOffer } = useOffersContext();
-  const { user } = useAuthContext();
 
   const handleIsModalOpen = () => {
     setIsModalOpen(true);
@@ -47,15 +45,14 @@ const OfferDetailsPage = () => {
           <section className="offer-detail__data">
             <div className="offer-detail__heading">
               <h3 className="offer-detail__title">{offer.company}</h3>
-              {user.type === "Company" && (
-                <button
-                  onClick={handleIsModalOpen}
-                  className="offer-detail__edit-btn"
-                >
-                  <FaEdit />
-                  Editar oferta
-                </button>
-              )}
+
+              <button
+                onClick={handleIsModalOpen}
+                className="offer-detail__edit-btn"
+              >
+                <FaEdit />
+                Editar oferta
+              </button>
             </div>
             <span className={getTypesClassNames(offer, "offer-detail")}>
               {offer.type}
