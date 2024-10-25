@@ -14,6 +14,8 @@ import { Contact } from "modules/contact/domain/Contact";
 import SuccessFeedback from "sections/shared/components/Feedbacks/components/SuccessFeedback/SuccessFeedback";
 import { Link } from "react-router-dom";
 import CustomCheckbox from "sections/shared/components/CustomCheckbox/CustomCheckbox";
+import ReusableSelect from "sections/shared/components/ReusableSelect/ReusableSelect";
+import { offersCategories } from "sections/offers/utils/offersCategories";
 
 interface Props {
   lead: CompanyRegisterStructure;
@@ -44,6 +46,7 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
   const [isAddressModalOpen, setIsAddressModalOpen] = useState<boolean>(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState<boolean>(false);
   const [isCheked, setIsChecked] = useState<boolean>(false);
+  const [type_id, setTypeId] = useState<string>("");
   const { postCompany, isSuccess } = useCompanyContext();
 
   const handleIsChecked = () => {
@@ -73,6 +76,7 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
 
     formData.append("name", values.company_name);
     formData.append("checked", JSON.stringify(isCheked));
+    formData.append("type", JSON.stringify(type_id));
 
     await postCompany(formData);
     setSubmitting(false);
@@ -337,6 +341,12 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                   </span>
                 )}
               </div>
+              <ReusableSelect
+                label="Tipo"
+                options={offersCategories}
+                setValue={setTypeId}
+                value={type_id}
+              />
             </div>
           </section>
           <section className="datasheet-form__section">
