@@ -2,6 +2,7 @@ import { Http } from "@core/application";
 import { HttpResponseInterface } from "@core/domain";
 import { INFLUENCER_BASE } from "@influencer/application/routes";
 import { Influencer } from "@influencer/domain";
+import { FilterParams } from "sections/shared/interfaces/interfaces";
 
 export class InfluencerRepository {
   private readonly http: Http = Http.getInstance();
@@ -37,6 +38,17 @@ export class InfluencerRepository {
       const resp = await this.http.get<number>(
         `${INFLUENCER_BASE}/status/badge`,
       );
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  public async getInfluencers(
+    params: FilterParams,
+  ): Promise<HttpResponseInterface<Influencer[]>> {
+    try {
+      const resp = await this.http.get<Influencer[]>(INFLUENCER_BASE, params);
       return resp;
     } catch (error) {
       return Promise.reject(error);

@@ -110,16 +110,16 @@ export const collabsFiltersNomade = [
     name: "Modificación en progreso (influencer)",
     value: "4",
   },
-  {
-    id: COLAB_DONE_STATE,
-    name: "Completado",
-    value: "5",
-  },
-  {
-    id: COLAB_FINISHED_STATE,
-    name: "Finalizado",
-    value: "6",
-  },
+  // {
+  //   id: COLAB_DONE_STATE,
+  //   name: "Completado",
+  //   value: "5",
+  // },
+  // {
+  //   id: COLAB_FINISHED_STATE,
+  //   name: "Finalizado",
+  //   value: "6",
+  // },
   {
     id: COLAB_CANCELLED_STATE,
     name: "Cancelado (Empresa)",

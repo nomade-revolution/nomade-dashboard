@@ -5,15 +5,19 @@ import {
   getCompaniesBadge,
   getCompanyById,
   registerCompany,
+  getCompanies,
 } from "@company/application/company";
 import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
 import { Company } from "modules/user/domain/User";
+import { FilterParams } from "sections/shared/interfaces/interfaces";
 
 interface ContextState {
   loading: boolean;
   isSuccess: boolean;
   company: Company;
   badgeCount: number;
+  companies: Company[];
+  getCompaniesWithParams: (params: FilterParams) => void;
   deleteCompanyById: (company_id: number) => void;
   getCompany: (company_id: number) => void;
   postCompany: (company: FormData) => void;
@@ -32,7 +36,7 @@ export const CompanyContextProvider = ({
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [company, setCompany] = useState<Company>({} as Company);
   const [badgeCount, setBadgeCount] = useState<number>(0);
-
+  const [companies, setCompanies] = useState<Company[]>([]);
   const deleteCompanyById = async (company_id: number) => {
     setLoading(true);
     const response = await deleteCompany(repository, company_id);
@@ -85,6 +89,22 @@ export const CompanyContextProvider = ({
     return response;
   }, [repository]);
 
+  const getCompaniesWithParams = useCallback(
+    async (params: FilterParams) => {
+      const response = await getCompanies(repository, params);
+
+      if (isHttpSuccessResponse(response)) {
+        setCompanies(
+          (response.data as unknown as { companies: Company[] })?.companies ??
+            [],
+        );
+      }
+
+      return response;
+    },
+    [repository],
+  );
+
   return (
     <CompanyContext.Provider
       value={{
@@ -92,6 +112,8 @@ export const CompanyContextProvider = ({
         isSuccess,
         company,
         badgeCount,
+        companies,
+        getCompaniesWithParams,
         getCompany,
         deleteCompanyById,
         postCompany,

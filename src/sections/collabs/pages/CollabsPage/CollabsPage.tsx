@@ -17,9 +17,15 @@ import {
   collabsFiltersCompany,
   collabsFiltersNomade,
 } from "sections/collabs/utils/collabsStates";
+import TypeAhead from "sections/shared/components/TypeAhead/TypeAhead";
+import { useInfluencerContext } from "sections/influencer/InfluencerContext/useInfluencerContext";
+import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
 
 const CollabsPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
+
+  const [influencerSelect, setInfluencerSelect] = useState<number | null>(null);
+  const [companySelect, setCompanySelect] = useState<number | null>(null);
   const [collabStateActionType, setCollabStateActionType] =
     useState<CollabActionTypes | null>(null);
 
@@ -28,7 +34,8 @@ const CollabsPage = (): React.ReactElement => {
   const { user } = useAuthContext();
   const { page } = useParams();
   const [filterId, setFilterId] = useState<string>("");
-
+  const { getInfluencersWithParams, influencers } = useInfluencerContext();
+  const { getCompaniesWithParams, companies } = useCompanyContext();
   const handleSearch = (text: string) => {
     getCollabs(text);
   };
@@ -49,6 +56,13 @@ const CollabsPage = (): React.ReactElement => {
       if (filterId !== "") {
         filters.filters = { states: [filterId] };
       }
+      if (influencerSelect) {
+        filters.filters = { influencer_id: influencerSelect };
+      }
+      if (companySelect) {
+        filters.filters = { company_id: companySelect };
+      }
+
       getAllCollabs(+page!, 12, filters);
     },
     [
@@ -59,8 +73,28 @@ const CollabsPage = (): React.ReactElement => {
       page,
       user.id,
       user.type,
+      influencerSelect,
+      companySelect,
     ],
   );
+  const getInfluencersSearch = async (text: string) => {
+    await getInfluencersWithParams({
+      page: 1,
+      per_page: 10,
+      filters: {
+        search: text,
+      },
+    });
+  };
+  const getCompanySearch = async (text: string) => {
+    await getCompaniesWithParams({
+      page: 1,
+      per_page: 10,
+      filters: {
+        search: text,
+      },
+    });
+  };
 
   useEffect(() => {
     getCollabs();
@@ -81,6 +115,39 @@ const CollabsPage = (): React.ReactElement => {
                 setSearchText={setSearchText}
                 onReset={() => getCollabs()}
                 onSearchSubmit={() => handleSearch(searchText)}
+              />
+            </div>
+
+            <div className="dashboard__searchContainer">
+              <TypeAhead
+                options={companies.map((company) => {
+                  return {
+                    id: company.id,
+                    name: company.company + " / " + company.company_name,
+                    value: company.id,
+                  };
+                })}
+                label="Filtrar por empresa"
+                setValue={setCompanySelect}
+                value={companySelect}
+                searchText={""}
+                getFunctions={getCompanySearch}
+              />
+            </div>
+            <div className="dashboard__searchContainer">
+              <TypeAhead
+                label="Filtrar por influencer"
+                setValue={setInfluencerSelect}
+                value={influencerSelect}
+                options={influencers.map((influencer) => {
+                  return {
+                    id: influencer.id,
+                    name: influencer.name + " / " + influencer.user_name,
+                    value: influencer.id,
+                  };
+                })}
+                searchText={""}
+                getFunctions={getInfluencersSearch}
               />
             </div>
             <div className="dashboard__filterContainer">

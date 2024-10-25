@@ -8,7 +8,7 @@ const LoaderStyled = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-top: 40px;
+  padding-top: 0px;
 `;
 
 export default LoaderStyled;

@@ -307,7 +307,7 @@ const ReusablePageStyled = styled.main`
   .filterBox {
     display: flex;
     min-width: 300px;
-    width: 250px;
+    width: 300px;
   }
 `;
 

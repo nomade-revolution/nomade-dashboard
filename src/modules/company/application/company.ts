@@ -1,6 +1,7 @@
 import { CompanyRepository } from "@company/domain/CompanyRepository";
 import { HttpResponseInterface } from "@core/domain/HttpResponseInterface";
 import { Company } from "modules/user/domain/User";
+import { FilterParams } from "sections/shared/interfaces/interfaces";
 
 export const deleteCompany = (
   companyRepo: CompanyRepository<{ succes: boolean }>,
@@ -25,4 +26,11 @@ export const registerCompany = (
 
 export const getCompaniesBadge = (companyRepo: CompanyRepository<number>) => {
   return companyRepo.getCompaniesBadge();
+};
+
+export const getCompanies = (
+  companyRepo: CompanyRepository<Company[]>,
+  params: FilterParams,
+) => {
+  return companyRepo.getCompanies(params);
 };
