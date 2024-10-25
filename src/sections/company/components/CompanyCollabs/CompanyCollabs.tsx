@@ -32,7 +32,7 @@ const CompanyCollabs = ({ company_id }: Props): React.ReactElement => {
           <DashboardTable
             bodySections={collabs}
             headerSections={companyCollabsHeaderSections}
-            pageName=""
+            pageName={SectionTypes.collabs}
           />
           <PaginationComponent
             current_page={pagination.current_page}

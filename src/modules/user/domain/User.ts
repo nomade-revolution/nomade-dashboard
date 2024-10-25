@@ -1,6 +1,8 @@
 import { Influencer } from "@influencer";
 import { SocialMedia } from "@influencer/domain/InfluencerSocialMedia";
-import { FullAddress } from "modules/address/domain/Address";
+import { Address, FullAddress } from "modules/address/domain/Address";
+import { Contact } from "modules/contact/domain/Contact";
+import { Plan } from "modules/plans/domain/Plan";
 import { PaginationStucture } from "sections/shared/interfaces/interfaces";
 
 export interface User {
@@ -20,6 +22,12 @@ export interface Company extends User {
   image: string;
   socialMedia: SocialMedia[];
   user_id: number;
+  address: Address;
+  contacts: Array<
+    Pick<Contact, "email" | "name" | "phone" | "surname"> & { type: string }
+  >;
+  percentage: number;
+  plan: Pick<Plan, "billing"> & { plan_name: string; start_date: string };
 }
 
 export interface Account {
