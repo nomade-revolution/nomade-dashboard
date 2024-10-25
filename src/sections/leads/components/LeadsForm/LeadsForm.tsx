@@ -8,10 +8,14 @@ import { IoAddCircle } from "react-icons/io5";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
 import AddressForm from "sections/shared/components/AddressForm/AddressForm";
 import ReusableFormStyled from "assets/styles/ReusableFormStyled";
-import { FaCheckCircle, FaEdit } from "react-icons/fa";
+import { FaCheckCircle, FaEdit, FaLink } from "react-icons/fa";
 import ContactForm from "sections/shared/components/ContactForm/ContactForm";
 import { Contact } from "modules/contact/domain/Contact";
 import SuccessFeedback from "sections/shared/components/Feedbacks/components/SuccessFeedback/SuccessFeedback";
+import { Link } from "react-router-dom";
+import CustomCheckbox from "sections/shared/components/CustomCheckbox/CustomCheckbox";
+import ReusableSelect from "sections/shared/components/ReusableSelect/ReusableSelect";
+import { offersCategories } from "sections/offers/utils/offersCategories";
 
 interface Props {
   lead: CompanyRegisterStructure;
@@ -41,7 +45,13 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
   const [registerContact, setRegisterContact] = useState<Contact | null>(null);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState<boolean>(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState<boolean>(false);
+  const [isCheked, setIsChecked] = useState<boolean>(false);
+  const [type_id, setTypeId] = useState<string>("");
   const { postCompany, isSuccess } = useCompanyContext();
+
+  const handleIsChecked = () => {
+    setIsChecked(!isCheked);
+  };
 
   const handleSubmitForm = async (
     values: CompanyRegisterStructure,
@@ -65,6 +75,8 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
       formData.append("contacts", JSON.stringify([registerContact]));
 
     formData.append("name", values.company_name);
+    formData.append("checked", JSON.stringify(isCheked));
+    formData.append("type", JSON.stringify(type_id));
 
     await postCompany(formData);
     setSubmitting(false);
@@ -100,83 +112,131 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
         <ReusableFormStyled onSubmit={handleSubmit} className="datasheet-form">
           <h3>Alta cliente</h3>
           <section className="datasheet-form__section">
-            <div className="form-subsection">
-              <label htmlFor="company_name" className="form-subsection__label">
-                Nombre de la empresa
-              </label>
-              <Field
-                type="text"
-                id="company_name"
-                className="form-subsection__field-large"
-                aria-label="Nombre del laboratorio"
-                {...getFieldProps("company_name")}
-              />
-              {errors.company_name && touched.company_name && (
-                <ErrorMessage
-                  className="form-subsection__error-message"
-                  component="span"
-                  name="company_name"
-                />
-              )}
-            </div>
-            <div className="form-subsection">
-              <label htmlFor="company" className="form-subsection__label">
-                Empresa
-              </label>
-              <Field
-                type="text"
-                id="company"
-                className="form-subsection__field-large"
-                aria-label="Alias"
-                {...getFieldProps("company")}
-              />
-              {errors.company && touched.company && (
-                <ErrorMessage
-                  className="form-subsection__error-message"
-                  component="span"
-                  name="company"
-                />
-              )}
+            <div className="datasheet-form__section--lead-form lead-form">
+              <h4 className="lead-form__title">Información de facturación</h4>
+              <div className="lead-form__section">
+                <div className="form-subsection">
+                  <label htmlFor="company" className="form-subsection__label">
+                    Denominación fiscal
+                  </label>
+                  <Field
+                    type="text"
+                    id="company"
+                    className="form-subsection__field-large"
+                    aria-label="Nombre del laboratorio"
+                    {...getFieldProps("company")}
+                  />
+                  {errors.company && touched.company && (
+                    <ErrorMessage
+                      className="form-subsection__error-message"
+                      component="span"
+                      name="company"
+                    />
+                  )}
+                </div>
+                <div className="form-subsection">
+                  <label htmlFor="nif" className="form-subsection__label">
+                    NIF
+                  </label>
+                  <Field
+                    type="text"
+                    id="nif"
+                    className="form-subsection__field-large"
+                    aria-label="nif"
+                    {...getFieldProps("nif")}
+                  />
+                  {errors.nif && touched.nif && (
+                    <ErrorMessage
+                      className="form-subsection__error-message"
+                      component="span"
+                      name="nif"
+                    />
+                  )}
+                </div>
+                <div className="datasheet-form__address-section">
+                  <button
+                    type="button"
+                    className="datasheet-form__add-address"
+                    onClick={handleIsAddressModalOpen}
+                  >
+                    {registerAddress ? (
+                      <FaEdit className="datasheet-form__create--icon" />
+                    ) : (
+                      <IoAddCircle className="datasheet-form__create--icon" />
+                    )}
+                    {registerAddress
+                      ? "Modificar dirección"
+                      : "Añadir dirección"}
+                  </button>
+                  {registerAddress && (
+                    <span className="datasheet-form__address-mssg">
+                      <FaCheckCircle />
+                      Dirección añadida
+                    </span>
+                  )}
+                </div>
+                <div>
+                  <span className="lead-form__thirdparty-link">
+                    Completar vuestros datos de facturación el siguiente enlace:
+                  </span>
+                  <Link
+                    to={" https://pay.gocardless.com/AL0005R1W7RZ3V"}
+                    target="_blank"
+                    className="lead-form__link"
+                  >
+                    <FaLink size={12} />
+                    GoCardless - Nomade
+                  </Link>
+                </div>
+              </div>
             </div>
           </section>
           <section className="datasheet-form__section">
-            <div className="form-subsection">
-              <label htmlFor="web" className="form-subsection__label">
-                Web
-              </label>
-              <Field
-                type="text"
-                id="web"
-                className="form-subsection__field-large"
-                aria-label="Razón social"
-                {...getFieldProps("web")}
-              />
-              {errors.web && touched.web && (
-                <ErrorMessage
-                  className="form-subsection__error-message"
-                  component="span"
-                  name="web"
-                />
-              )}
-            </div>
-            <div className="form-subsection">
-              <label htmlFor="nif" className="form-subsection__label">
-                NIF
-              </label>
-              <Field
-                type="text"
-                id="nif"
-                className="form-subsection__field-large"
-                aria-label="nif"
-                {...getFieldProps("nif")}
-              />
-              {errors.nif && touched.nif && (
-                <ErrorMessage
-                  className="form-subsection__error-message"
-                  component="span"
-                  name="nif"
-                />
-              )}
+            <div className="datasheet-form__section--lead-form lead-form">
+              <h4 className="lead-form__title">Información general</h4>
+              <div className="lead-form__section">
+                <div className="form-subsection">
+                  <label
+                    htmlFor="company_name"
+                    className="form-subsection__label"
+                  >
+                    Nombre de la empresa
+                  </label>
+                  <Field
+                    type="text"
+                    id="company_name"
+                    className="form-subsection__field-large"
+                    aria-label="Nombre del laboratorio"
+                    {...getFieldProps("company_name")}
+                  />
+                  {errors.company_name && touched.company_name && (
+                    <ErrorMessage
+                      className="form-subsection__error-message"
+                      component="span"
+                      name="company_name"
+                    />
+                  )}
+                </div>
+                <div className="form-subsection">
+                  <label htmlFor="web" className="form-subsection__label">
+                    Web
+                  </label>
+                  <Field
+                    type="text"
+                    id="web"
+                    className="form-subsection__field-large"
+                    aria-label="Razón social"
+                    {...getFieldProps("web")}
+                  />
+                  {errors.web && touched.web && (
+                    <ErrorMessage
+                      className="form-subsection__error-message"
+                      component="span"
+                      name="web"
+                    />
+                  )}
+                </div>
+              </div>
             </div>
           </section>
           <section className="datasheet-form__section">
@@ -260,26 +320,7 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                   />
                 )}
               </div>
-              <div className="datasheet-form__address-section">
-                <button
-                  type="button"
-                  className="datasheet-form__add-address"
-                  onClick={handleIsAddressModalOpen}
-                >
-                  {registerAddress ? (
-                    <FaEdit className="datasheet-form__create--icon" />
-                  ) : (
-                    <IoAddCircle className="datasheet-form__create--icon" />
-                  )}
-                  {registerAddress ? "Modificar dirección" : "Añadir dirección"}
-                </button>
-                {registerAddress && (
-                  <span className="datasheet-form__address-mssg">
-                    <FaCheckCircle />
-                    Dirección añadida
-                  </span>
-                )}
-              </div>
+
               <div className="datasheet-form__contact-section">
                 <button
                   type="button"
@@ -300,6 +341,12 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                   </span>
                 )}
               </div>
+              <ReusableSelect
+                label="Tipo"
+                options={offersCategories}
+                setValue={setTypeId}
+                value={type_id}
+              />
             </div>
           </section>
           <section className="datasheet-form__section">
@@ -354,16 +401,28 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
               value={hash}
             />
           </section>
-          <button
-            type="submit"
-            className="datasheet-form__submit"
-            disabled={isSubmitting}
-          >
-            Enviar
-          </button>
-          {isSuccess && (
-            <SuccessFeedback text="Te has registrado correctamente" />
-          )}
+          <div className="lead-form__checkbox-container">
+            <CustomCheckbox onChange={handleIsChecked} checked={isCheked} />
+            <span>He rellenado la información en Gocardless.com</span>
+          </div>
+          <section className="datasheet-form__footer">
+            <button
+              type="submit"
+              className="datasheet-form__submit"
+              disabled={isSubmitting || !isCheked}
+            >
+              Enviar
+            </button>
+            {isSuccess && (
+              <SuccessFeedback text="Te has registrado correctamente" />
+            )}
+          </section>
+          <span className="lead-form__footer-mssg">
+            **No se realizará ningún cargo si no se ha efectuado ninguna
+            colaboración, y solo se cobrará el plan acorde al número de
+            colaboraciones realizadas durante el periodo. Queremos ser flexibles
+            y transparentes.{" "}
+          </span>
           <ReusableModal
             children={
               <AddressForm

@@ -3,7 +3,7 @@ import styled from "styled-components";
 const ReusableFormStyled = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
   align-items: flex-start;
   width: 100%;
   background: ${(props) => props.theme.colors.light};
@@ -39,6 +39,11 @@ const ReusableFormStyled = styled.form`
 
       @media (min-width: 1000px) {
         width: ${(props) => props.theme.widths.datasheetLargeInputs};
+      }
+
+      &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
       }
     }
 
@@ -81,6 +86,12 @@ const ReusableFormStyled = styled.form`
       display: flex;
       align-items: center;
       gap: 5px;
+    }
+
+    &__footer {
+      display: flex;
+      width: 100%;
+      gap: 30px;
     }
   }
 
@@ -135,7 +146,7 @@ const ReusableFormStyled = styled.form`
     }
 
     &__field-textarea {
-      height: 200px;
+      height: 150px;
       padding: 10px;
       font-family: inherit;
     }
@@ -165,6 +176,58 @@ const ReusableFormStyled = styled.form`
     box-shadow: none;
 
     resize: none;
+  }
+
+  .lead-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    &__section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+
+      @media (min-width: 1000px) {
+        flex-direction: unset;
+        flex-wrap: wrap;
+      }
+    }
+
+    &__title {
+      color: ${(props) => props.theme.colors.mainColor};
+    }
+
+    &__thirdparty-link {
+      display: flex;
+      flex-direction: column;
+      font-size: ${(props) => props.theme.fontsSize.__SM};
+    }
+
+    &__link {
+      color: #4287f5;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    &__checkbox-container {
+      font-size: ${(props) => props.theme.fontsSize.__SM};
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    &__footer-mssg {
+      font-size: ${(props) => props.theme.fontsSize.__S};
+    }
   }
 `;
 

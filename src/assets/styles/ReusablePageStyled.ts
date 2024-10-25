@@ -303,7 +303,20 @@ const ReusablePageStyled = styled.main`
         color: red;
       }
     }
+
+    &__start-date {
+      color: green;
+      font-weight: 700;
+      opacity: 0.6;
+    }
+
+    &__end-date {
+      color: red;
+      font-weight: 700;
+      opacity: 0.6;
+    }
   }
+
   .filterBox {
     display: flex;
     min-width: 300px;

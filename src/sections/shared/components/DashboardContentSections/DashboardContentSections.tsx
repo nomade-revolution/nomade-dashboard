@@ -297,23 +297,28 @@ const DashboardContentSections = ({
 
     case "start_date":
       return (
-        <span>
+        <span className="dashboard__start-date">
           {(section as Plan).start_date ? (section as Plan).start_date : "-"}
         </span>
       );
 
     case "end_date":
       return (
-        <span>
+        <span className="dashboard__end-date">
           {(section as Plan).end_date ? (section as Plan).end_date : "-"}
         </span>
       );
 
     case "remaining":
       return (
-        <span>
-          {(section as Plan).remaining ? (section as Plan).remaining : "-"}
-        </span>
+        <section className="dashboard__progress">
+          <LinearBuffer
+            progress={+(section as Plan).remaining.replace("%", "")}
+          />
+          <span className="dashboard__progress-percentage">
+            {(section as Plan).remaining}
+          </span>
+        </section>
       );
 
     default:
