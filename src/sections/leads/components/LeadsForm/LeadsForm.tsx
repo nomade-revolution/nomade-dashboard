@@ -180,7 +180,7 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                     Completar vuestros datos de facturación el siguiente enlace:
                   </span>
                   <Link
-                    to={" https://pay.gocardless.com/AL0005R1W7RZ3V"}
+                    to="https://pay.gocardless.com/AL0005R1W7RZ3V"
                     target="_blank"
                     className="lead-form__link"
                   >
