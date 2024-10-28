@@ -321,6 +321,7 @@ const ReusablePageStyled = styled.main`
     display: flex;
     min-width: 300px;
     width: 300px;
+    margin-top: 5px;
   }
 
   .plans-page {
