@@ -79,6 +79,9 @@ export const AuthContextProvider = ({
 
   const getLoggedUser = useCallback(
     async (token: string) => {
+      if (!token) {
+        return {} as User;
+      }
       const response = await authGetLoggedUser(token, repository);
       if (isHttpSuccessResponse(response)) {
         return response.data;
