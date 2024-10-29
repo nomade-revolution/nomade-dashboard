@@ -1,6 +1,20 @@
 import ReusableFormStyled from "assets/styles/ReusableFormStyled";
-import { Formik, Field, ErrorMessage, FormikHelpers } from "formik";
-import { OfferFormStructure } from "modules/offers/domain/Offer";
+import {
+  Formik,
+  Field,
+  ErrorMessage,
+  FormikHelpers,
+  FormikErrors,
+  FormikTouched,
+} from "formik";
+import {
+  OfferableActivity,
+  OfferableBrand,
+  OfferableDelivery,
+  OfferableLodging,
+  OfferableRestaurant,
+  OfferFormStructure,
+} from "modules/offers/domain/Offer";
 import { initialValues, offerSchema } from "./utils/validations";
 import ReusableSelect from "sections/shared/components/ReusableSelect/ReusableSelect";
 import { categories, locationTypes } from "./utils/options";
@@ -36,7 +50,6 @@ const OffersForm = (): React.ReactElement => {
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
   const [citiesFormat, setCitiesFormat] = useState<OptionsStructure[]>([]);
   const [file, setFile] = useState<File[] | null>(null);
-  const [address, setAddress] = useState<string>("");
 
   const [formState, setFormState] = useState<{
     country: string;
@@ -44,12 +57,14 @@ const OffersForm = (): React.ReactElement => {
     location: string;
     category: string;
     offerable_type: string;
+    address: string;
   }>({
     country: "",
     city: "",
     location: "",
     category: "",
     offerable_type: "",
+    address: "",
   });
 
   const handleFormStateChange = (field: string, value: string) => {
@@ -118,20 +133,29 @@ const OffersForm = (): React.ReactElement => {
       case RESTAURANT_OFFER_ID:
         handleFormStateChange(
           "offerable_type",
-          "App/Models/OfferableRestaurant",
+          "App\\Models\\OfferableRestaurant",
         );
         break;
       case BRAND_OFFER_ID:
-        handleFormStateChange("offerable_type", "App/Models/OfferableBrand");
+        handleFormStateChange("offerable_type", "App\\Models\\OfferableBrand");
         break;
       case LODGING_OFFER_ID:
-        handleFormStateChange("offerable_type", "App/Models/OfferableLodging");
+        handleFormStateChange(
+          "offerable_type",
+          "App\\Models\\OfferableLodging",
+        );
         break;
       case DELIVERY_OFFER_ID:
-        handleFormStateChange("offerable_type", "App/Models/OfferableActivity");
+        handleFormStateChange(
+          "offerable_type",
+          "App\\Models\\OfferableActivity",
+        );
         break;
       case ACTIVITY_OFFER_ID:
-        handleFormStateChange("offerable_type", "App/Models/OfferableDelivery");
+        handleFormStateChange(
+          "offerable_type",
+          "App\\Models\\OfferableDelivery",
+        );
         break;
     }
   }, [formState.category, formState.offerable_type]);
@@ -147,12 +171,12 @@ const OffersForm = (): React.ReactElement => {
           <h3>Oferta</h3>
           <div className="datasheet-form__content">
             <div className="form-subsection">
-              <label htmlFor="name" className="form-subsection__label">
+              <label htmlFor="company" className="form-subsection__label">
                 Empresa
               </label>
               <Field
                 type="text"
-                id="name"
+                id="company"
                 className="form-subsection__field-large--offer"
                 aria-label="Nombre del laboratorio"
                 {...getFieldProps("company")}
@@ -182,73 +206,82 @@ const OffersForm = (): React.ReactElement => {
                   )}
                 </ul>
               )}
-              {errors.description && touched.description && (
+              {errors.company_id && touched.company_id && (
                 <ErrorMessage
                   className="form-subsection__error-message"
                   component="span"
-                  name="name"
+                  name="company"
                 />
               )}
             </div>
             <div className="form-offer">
               <section className="form-offer__texts">
                 <div className="form-subsection">
-                  <label htmlFor="name" className="form-subsection__label">
+                  <label
+                    htmlFor="description"
+                    className="form-subsection__label"
+                  >
                     Descripción
                   </label>
                   <Field
                     type="text"
-                    id="name"
+                    id="description"
                     className="form-subsection__field-textarea--offer"
                     aria-label="Nombre del laboratorio"
                     as={"textarea"}
-                    {...getFieldProps("name")}
+                    {...getFieldProps("description")}
                   />
                   {errors.description && touched.description && (
                     <ErrorMessage
                       className="form-subsection__error-message"
                       component="span"
-                      name="name"
+                      name="description"
                     />
                   )}
                 </div>
                 <div className="form-subsection">
-                  <label htmlFor="surname" className="form-subsection__label">
+                  <label
+                    htmlFor="conditions"
+                    className="form-subsection__label"
+                  >
                     Condiciones
                   </label>
                   <Field
                     type="text"
-                    id="surname"
+                    id="conditions"
                     className="form-subsection__field-textarea--offer"
                     aria-label="Alias"
                     as={"textarea"}
-                    {...getFieldProps("surname")}
+                    {...getFieldProps("conditions")}
                   />
                   {errors.conditions && touched.conditions && (
                     <ErrorMessage
                       className="form-subsection__error-message"
                       component="span"
-                      name="surname"
+                      name="conditions"
                     />
                   )}
                 </div>
                 <div className="form-subsection">
-                  <label htmlFor="phone" className="form-subsection__label">
+                  <label
+                    htmlFor="in_exchange"
+                    className="form-subsection__label"
+                  >
                     A cambio
                   </label>
                   <Field
-                    type="phone"
-                    id="phone"
+                    type="in_exchange"
+                    id="in_exchange"
                     as={"textarea"}
                     className="form-subsection__field-textarea--offer"
                     aria-label="Correo electrónico"
-                    {...getFieldProps("phone")}
+                    {...getFieldProps("in_exchange")}
                   />
                   {errors.in_exchange && touched.in_exchange && (
                     <ErrorMessage
                       className="form-subsection__error-message"
                       component="span"
-                      name="email"
+                      name="in_exchange"
                     />
                   )}
                 </div>
@@ -283,23 +316,16 @@ const OffersForm = (): React.ReactElement => {
                           htmlFor="type_id"
                           className="form-subsection__label"
                         >
-                          Localización
+                          Área
                         </label>
                         <ReusableSelect
-                          label="Localización"
+                          label="Área"
                           options={locationTypes}
                           setValue={(value) =>
                             handleFormStateChange("location", value)
                           }
                           value={formState.location}
                         />
-                        {errors.location_id && touched.location_id && (
-                          <ErrorMessage
-                            className="form-subsection__error-message"
-                            component="span"
-                            name="type_id"
-                          />
-                        )}
                       </div>
                       <section className="form-offer__locations">
                         <div className="form-subsection">
@@ -317,15 +343,8 @@ const OffersForm = (): React.ReactElement => {
                             }
                             value={formState.country}
                           />
-                          {errors.company_id && touched.company_id && (
-                            <ErrorMessage
-                              className="form-subsection__error-message"
-                              component="span"
-                              name="type_id"
-                            />
-                          )}
                         </div>
-                        {formState.location === "App/Models/City" && (
+                        {formState.location === "App\\Models\\City" && (
                           <div className="form-subsection">
                             <label
                               htmlFor="type_id"
@@ -341,13 +360,6 @@ const OffersForm = (): React.ReactElement => {
                               }
                               value={formState.city}
                             />
-                            {errors.location_id && touched.location_id && (
-                              <ErrorMessage
-                                className="form-subsection__error-message"
-                                component="span"
-                                name="type_id"
-                              />
-                            )}
                           </div>
                         )}
                       </section>
@@ -358,12 +370,30 @@ const OffersForm = (): React.ReactElement => {
                   </div>
                   <OffersScheduling
                     category={+formState.category}
-                    errors={errors}
+                    errors={
+                      errors as FormikErrors<
+                        | OfferableRestaurant
+                        | OfferableActivity
+                        | OfferableBrand
+                        | OfferableDelivery
+                        | OfferableLodging
+                      >
+                    }
                     getFieldProps={getFieldProps}
-                    touched={touched}
+                    touched={
+                      touched as FormikTouched<
+                        | OfferableRestaurant
+                        | OfferableActivity
+                        | OfferableBrand
+                        | OfferableDelivery
+                        | OfferableLodging
+                      >
+                    }
                     company={company}
-                    address={address}
-                    setAddress={setAddress}
+                    address={formState.address}
+                    setAddress={(value) =>
+                      handleFormStateChange("address", value)
+                    }
                   />
                 </section>
               </section>

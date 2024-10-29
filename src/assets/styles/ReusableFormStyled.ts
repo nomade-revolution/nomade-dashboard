@@ -104,6 +104,7 @@ const ReusableFormStyled = styled.form`
     display: flex;
     flex-direction: column;
     gap: 10px;
+    width: 100%;
 
     &__label {
       font-size: small;
@@ -175,6 +176,18 @@ const ReusableFormStyled = styled.form`
       @media (min-width: 1000px) {
         width: 100%;
       }
+    }
+
+    &__field--small,
+    &__field--small-time {
+      display: flex;
+      align-items: center;
+      height: 40px;
+      border-radius: ${(props) => props.theme.borderRadius.inputs};
+      border: 1px solid ${(props) => props.theme.borders.lightGrey};
+      padding: 0 8px;
+      width: 70%;
+      gap: 40px;
     }
   }
 

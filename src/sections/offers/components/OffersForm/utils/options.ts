@@ -11,12 +11,12 @@ export const locationTypes: OptionsStructure[] = [
   {
     id: 1,
     name: "País",
-    value: "App/Models/Country",
+    value: "App\\Models\\Country",
   },
   {
     id: 2,
     name: "Ciudad",
-    value: "App/Models/City",
+    value: "App\\Models\\City",
   },
 ];
 

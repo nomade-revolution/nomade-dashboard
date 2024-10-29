@@ -73,8 +73,67 @@ export type PartialOffer = Pick<
   | "images"
 >;
 
-export interface OfferFormStructure extends PartialOffer {
+export interface TimeSlot {
+  from_time: string;
+  to_time: string;
+}
+
+export interface WeekDay {
+  day_of_week: number;
+  time_slot: TimeSlot[];
+}
+
+export interface OfferableRestaurant {
+  address_id: number;
+  min_guests: number;
+  max_guests: number;
+  week: WeekDay[];
+}
+
+export interface OfferableLodging {
+  address_id: number;
+  min_guests: number;
+  max_guests: number;
+}
+
+export interface OfferableActivity {
+  address_id: number;
+  min_guests: number;
+  max_guests: number;
+  week: WeekDay[];
+}
+
+export interface OfferableDelivery {
+  advance_notice_time: number;
+  week: WeekDay[];
+}
+
+export interface OfferableBrand {
+  advance_notice_time: number;
+}
+
+export interface OfferFormStructure {
+  description: string;
+  conditions: string;
+  in_exchange: string;
+  offer_category_id: number;
+  company_id: number;
+  active: boolean;
+  offerable_type:
+    | "OfferableRestaurant"
+    | "OfferableLodging"
+    | "OfferableActivity"
+    | "OfferableDelivery"
+    | "OfferableBrand"
+    | string;
   location_id: number;
-  location_type: string;
-  offerable: object;
+  location_type: "App\\Models\\Country" | "App\\Models\\City" | string;
+  images: string[];
+  offerable:
+    | OfferableRestaurant
+    | OfferableLodging
+    | OfferableActivity
+    | OfferableDelivery
+    | OfferableBrand
+    | Record<string, unknown>;
 }
