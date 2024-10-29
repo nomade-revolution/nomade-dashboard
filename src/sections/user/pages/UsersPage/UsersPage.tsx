@@ -43,6 +43,7 @@ const UsersPage = (): React.ReactElement => {
     },
     [getUsers, order.direction, order.sortTag, page],
   );
+  const handleCreateUser = () => {};
 
   useEffect(() => {
     getUsersData();
@@ -55,7 +56,7 @@ const UsersPage = (): React.ReactElement => {
       ) : (
         <ReusablePageStyled className="dashboard">
           <div className="dashboard__search-user">
-            <button className="dashboard__create">
+            <button className="dashboard__create" onClick={handleCreateUser}>
               <IoAddCircle className="dashboard__create--icon" />
               Crear usuario
             </button>

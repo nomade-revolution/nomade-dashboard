@@ -20,4 +20,5 @@ export const appPaths = {
   offerDetail: "/oferta/:id",
   collabsReservations: "/collabs-reservations/:id/page/:page",
   plans: "/planes/page/:page",
+  logout: "/logout",
 };

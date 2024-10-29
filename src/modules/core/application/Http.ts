@@ -3,7 +3,9 @@ import {
   HttpInterface,
   HttpResponseInterface,
 } from "@core/domain";
+import Cookies from "js-cookie";
 import { HttpImplementation } from "@core/infrastructure";
+import environments from "@environments";
 
 export class Http implements HttpInterface {
   private static instance: Http;
@@ -31,6 +33,14 @@ export class Http implements HttpInterface {
     if ("success" in response && response.success) {
       return response as HttpResponseInterface<T>;
     } else {
+      if (response.statusText === "Unauthorized") {
+        const token = await Cookies.get(environments.cookies!);
+        if (token) {
+          await Cookies.remove(environments.cookies!);
+          window.location.href = "logout";
+        }
+      }
+
       return {
         code: response.status,
         ...response.data,

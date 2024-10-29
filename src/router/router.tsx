@@ -20,6 +20,7 @@ import CategoriesPage from "sections/categories/pages/CategoriesPage";
 import CollabsReservationsPage from "sections/collabs/pages/CollabsReservations/CollabsReservationsPage";
 import OfferDetailsPage from "sections/offers/pages/OfferDetailPage/OfferDetailPage";
 import PlansPage from "sections/plans/pages/PlansPage/PlansPage";
+import LogoutPage from "sections/auth/pages/LogooutPage/LogoutPage";
 
 const routes: RouteObject[] = [
   {
@@ -27,6 +28,10 @@ const routes: RouteObject[] = [
     element: <ProtectedRoute element={<App />} />,
     errorElement: <NotFound />,
     children: [
+      {
+        path: appPaths.logout,
+        element: <LogoutPage />,
+      },
       {
         path: appPaths.login,
         element: <LoginPage />,
