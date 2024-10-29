@@ -6,5 +6,5 @@ export interface CompanyRepository<I> {
   getCompanyById(influencer_id: number): Promise<HttpResponseInterface<I>>;
   registerCompany(company: FormData): Promise<HttpResponseInterface<I>>;
   getCompaniesBadge(): Promise<HttpResponseInterface<I>>;
-  getAllCompanies(params: FilterParams): Promise<HttpResponseInterface<I>>;
+  getCompanies: (params: FilterParams) => Promise<HttpResponseInterface<I>>;
 }

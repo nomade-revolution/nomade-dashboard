@@ -3,6 +3,14 @@ import { User, UserTypes } from "modules/user/domain/User";
 import {
   COLAB_ACCEPTED_STATE,
   COLAB_CANCELLED_STATE,
+  COLAB_DONE_STATE,
+  COLAB_FINISHED_STATE,
+  COLAB_INCIDENT_STATE,
+  COLAB_MODIFICATION_IN_PROGRESS_STATE,
+  COLAB_PENDING_COMPANY_STATE,
+  COLAB_PENDING_NOMADE_STATE,
+  COLAB_PUBLISHED_STATE,
+  COLAB_RECEIVED_STATE,
   COLAB_REJECTED_STATE,
   COLAB_SENT_STATE,
 } from "sections/collabs/utils/collabsStates";
@@ -33,15 +41,48 @@ export const getCollabStateClassname = (
   state_id: number,
   className: string,
 ) => {
-  return `${className}__state-section ${
-    state_id === COLAB_ACCEPTED_STATE
-      ? `${className}__state-section--accepted`
-      : state_id === COLAB_REJECTED_STATE
-        ? `${className}__state-section--rejected`
-        : state_id === COLAB_CANCELLED_STATE
-          ? `${className}__state-section--cancelled`
-          : state_id === COLAB_SENT_STATE
-            ? `${className}__state-section--sent`
-            : ""
-  }`;
+  let stateClass = "";
+
+  switch (state_id) {
+    case COLAB_ACCEPTED_STATE:
+      stateClass = `${className}__state-section--accepted`;
+      break;
+    case COLAB_REJECTED_STATE:
+      stateClass = `${className}__state-section--rejected`;
+      break;
+    case COLAB_CANCELLED_STATE:
+      stateClass = `${className}__state-section--cancelled`;
+      break;
+    case COLAB_SENT_STATE:
+      stateClass = `${className}__state-section--sent`;
+      break;
+    case COLAB_PENDING_NOMADE_STATE:
+      stateClass = `${className}__state-section--pending-nomade`;
+      break;
+    case COLAB_PENDING_COMPANY_STATE:
+      stateClass = `${className}__state-section--pending-company`;
+      break;
+    case COLAB_DONE_STATE:
+      stateClass = `${className}__state-section--done`;
+      break;
+    case COLAB_FINISHED_STATE:
+      stateClass = `${className}__state-section--finished`;
+      break;
+    case COLAB_INCIDENT_STATE:
+      stateClass = `${className}__state-section--incident`;
+      break;
+    case COLAB_MODIFICATION_IN_PROGRESS_STATE:
+      stateClass = `${className}__state-section--modification`;
+      break;
+    case COLAB_RECEIVED_STATE:
+      stateClass = `${className}__state-section--received`;
+      break;
+    case COLAB_PUBLISHED_STATE:
+      stateClass = `${className}__state-section--published`;
+      break;
+    default:
+      stateClass = "";
+  }
+
+  return stateClass;
 };

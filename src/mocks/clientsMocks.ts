@@ -1,3 +1,4 @@
+/*
 import { Customer } from "../modules/customers/domain/Customers";
 
 export const mockClients: Customer[] = [
@@ -108,3 +109,4 @@ export const mockClients: Customer[] = [
     location: "Calle de las Tapas, 3456, Ciudad Ejemplo",
   },
 ];
+*/

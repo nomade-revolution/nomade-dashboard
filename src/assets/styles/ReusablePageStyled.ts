@@ -3,7 +3,6 @@ import styled from "styled-components";
 const ReusablePageStyled = styled.main`
   background: ${(props) => props.theme.colors.backgroundPages};
   justify-content: center;
-  align-items: center;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -29,7 +28,6 @@ const ReusablePageStyled = styled.main`
         display: flex;
         flex-direction: column;
         gap: 20px;
-        align-items: center;
         justify-content: center;
       }
     }
@@ -54,6 +52,19 @@ const ReusablePageStyled = styled.main`
       @media (min-width: 880px) {
         width: 100%;
         display: flex;
+        justify-content: flex-end;
+      }
+    }
+    &__filterContainer {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      width: 100%;
+
+      @media (min-width: 880px) {
+        width: 100%;
+        display: flex;
+        align-items: flex-end;
         justify-content: flex-end;
       }
     }
@@ -149,6 +160,7 @@ const ReusablePageStyled = styled.main`
       font-weight: bold;
 
       &--accepted {
+        font-weight: bold;
         color: ${(props) => props.theme.colors.softGreen};
       }
 
@@ -163,6 +175,40 @@ const ReusablePageStyled = styled.main`
       &--sent {
         color: ${(props) => props.theme.colors.darkBlue};
       }
+
+      &--pending-nomade {
+        font-weight: bold;
+        color: blue;
+      }
+
+      &--pending-company {
+        font-weight: bold;
+        color: fuchsia;
+      }
+
+      &--done {
+        color: green;
+      }
+
+      &--finished {
+        color: ${(props) => props.theme.colors.purple};
+      }
+
+      &--incident {
+        color: brown;
+      }
+    }
+
+    &--modification {
+      color: teal;
+    }
+
+    &--received {
+      color: lightBlue;
+    }
+
+    &--published {
+      color: gold;
     }
 
     &__create {
@@ -224,6 +270,65 @@ const ReusablePageStyled = styled.main`
     &__country,
     &__influencer {
       font-weight: bold;
+    }
+
+    &__progress {
+      position: relative;
+    }
+
+    &__progress-percentage {
+      position: absolute;
+      top: 0;
+      font-weight: 700;
+    }
+
+    &__plan {
+      &--basic {
+        font-weight: 700;
+        color: fuchsia;
+      }
+
+      &--standard {
+        font-weight: 700;
+        color: blue;
+      }
+
+      &--premium {
+        font-weight: 700;
+        color: orange;
+      }
+
+      &--pending {
+        font-weight: 700;
+        color: red;
+      }
+    }
+
+    &__start-date {
+      color: green;
+      font-weight: 700;
+      opacity: 0.6;
+    }
+
+    &__end-date {
+      color: red;
+      font-weight: 700;
+      opacity: 0.6;
+    }
+  }
+
+  .filterBox {
+    display: flex;
+    min-width: 300px;
+    width: 300px;
+    margin-top: 5px;
+  }
+
+  .plans-page {
+    &__mensual {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
   }
 `;

@@ -13,6 +13,7 @@ interface Props {
 
 const InfluencerCollabs = ({ influencer_id }: Props): React.ReactElement => {
   const [page, setPage] = useState<number>(1);
+
   const { getAllCollabs, collabs, pagination, loading } = useCollabsContext();
 
   useEffect(() => {
@@ -31,7 +32,7 @@ const InfluencerCollabs = ({ influencer_id }: Props): React.ReactElement => {
           <DashboardTable
             bodySections={collabs}
             headerSections={influencerCollabsHeaderSections}
-            pageName=""
+            pageName={SectionTypes.collabs}
           />
           <PaginationComponent
             current_page={pagination.current_page}

@@ -3,7 +3,7 @@ import { Customer } from "../../../../modules/customers/domain/Customers";
 import { HeaderSection } from "../../interfaces/interfaces";
 import ImageCustom from "../ImageCustom/ImageCustom";
 import { FaEye } from "react-icons/fa";
-import { FaLocationDot } from "react-icons/fa6";
+import { FaCheckDouble, FaLocationDot } from "react-icons/fa6";
 import { FullOffer, Offer } from "../../../../modules/offers/domain/Offer";
 import { Switch } from "@mui/material";
 import { TimeSlot } from "modules/offers/domain/OfferCalendar";
@@ -16,10 +16,22 @@ import {
 import Actions from "../Actions/Actions";
 import { Influencer } from "@influencer";
 import { Lead } from "modules/leads/domain/Leads";
+import { Plan } from "modules/plans/domain/Plan";
+import LinearBuffer from "../LinearBuffer/LinearBuffer";
+import { COLAB_PUBLISHED_STATE } from "sections/collabs/utils/collabsStates";
+import formatDate from "sections/shared/utils/formatDate/formatDate";
 
 interface Props {
   headerSection: HeaderSection;
-  section: object | Customer | Offer | FullCollab | User | Company | Lead;
+  section:
+    | object
+    | Customer
+    | Offer
+    | FullCollab
+    | User
+    | Company
+    | Lead
+    | Plan;
   pageName: string;
   setIsDialogOpen: (value: boolean) => void;
   setCollabStateActionType?: (value: CollabActionTypes) => void;
@@ -232,6 +244,81 @@ const DashboardContentSections = ({
             ].name
           }
         </span>
+      );
+
+    case "published":
+      return (
+        <>
+          {(section as FullCollab).history[
+            (section as FullCollab).history.length - 1
+          ].id === COLAB_PUBLISHED_STATE ? (
+            <span className="dashboard__published">
+              <FaCheckDouble />
+              {formatDate(
+                (section as FullCollab).history[
+                  (section as FullCollab).history.length - 1
+                ].created_at,
+              )}
+            </span>
+          ) : (
+            <span className="dashboard__not-published">No publicada</span>
+          )}
+        </>
+      );
+
+    case "percentage":
+      return (
+        <section className="dashboard__progress">
+          <LinearBuffer progress={(section as Plan).percentage} />
+          <span className="dashboard__progress-percentage">
+            {(section as Plan).percentage}%
+          </span>
+        </section>
+      );
+
+    case "plan":
+      return (
+        <span
+          className={`dashboard__plan${
+            (section as Plan).plan === "Básico"
+              ? "--basic"
+              : (section as Plan).plan === "Estandar"
+                ? "--standard"
+                : (section as Plan).plan === "Premium"
+                  ? "--premium"
+                  : (section as Plan).plan === "Pendiente"
+                    ? "--pending"
+                    : ""
+          }`}
+        >
+          {(section as Plan).plan}
+        </span>
+      );
+
+    case "start_date":
+      return (
+        <span className="dashboard__start-date">
+          {(section as Plan).start_date ? (section as Plan).start_date : "-"}
+        </span>
+      );
+
+    case "end_date":
+      return (
+        <span className="dashboard__end-date">
+          {(section as Plan).end_date ? (section as Plan).end_date : "-"}
+        </span>
+      );
+
+    case "remaining":
+      return (
+        <section className="dashboard__progress">
+          <LinearBuffer
+            progress={+(section as Plan).remaining.replace("%", "")}
+          />
+          <span className="dashboard__progress-percentage">
+            {(section as Plan).remaining}
+          </span>
+        </section>
       );
 
     default:

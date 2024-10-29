@@ -60,7 +60,6 @@ export const CollabsContextProvider = ({
     async (page: number, per_page: number, params: FilterParams) => {
       setLoading(true);
       setError(null);
-
       const response = await collabsGetAll(repository, page, per_page, params);
       if (isHttpSuccessResponse(response)) {
         setLoading(false);
@@ -72,10 +71,7 @@ export const CollabsContextProvider = ({
   );
 
   const deleteCollabById = async (collab_id: number) => {
-    setLoading(true);
     const response = await deleteCollab(repository, collab_id);
-
-    setLoading(false);
 
     setIsSuccess(response.success);
 

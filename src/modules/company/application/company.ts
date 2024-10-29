@@ -29,8 +29,8 @@ export const getCompaniesBadge = (companyRepo: CompanyRepository<number>) => {
 };
 
 export const getCompanies = (
-  companyRepo: CompanyRepository<Company>,
-  filters: FilterParams,
-): Promise<HttpResponseInterface<Company>> => {
-  return companyRepo.getAllCompanies(filters);
+  companyRepo: CompanyRepository<Company[]>,
+  params: FilterParams,
+) => {
+  return companyRepo.getCompanies(params);
 };

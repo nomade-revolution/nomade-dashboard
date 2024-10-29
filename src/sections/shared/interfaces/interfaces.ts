@@ -23,6 +23,7 @@ export enum SectionTypes {
   leads = "leads",
   categories = "categories",
   collabsReservations = "collabsReservations",
+  plans = "planes",
 }
 
 export interface OptionsStructure {

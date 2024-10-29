@@ -36,7 +36,8 @@ const UsersPage = (): React.ReactElement => {
         filters.order = [{ by: order.sortTag, dir: order.direction }];
       }
       if (text) {
-        filters.search = text;
+        (filters as unknown as { filters: { search: string } }).filters.search =
+          text;
       }
       getUsers(+page!, 12, filters, UserTypes.nomade);
     },
@@ -44,8 +45,8 @@ const UsersPage = (): React.ReactElement => {
   );
 
   useEffect(() => {
-    getUsersData(searchText);
-  }, [page, order, getUsersData, searchText]);
+    getUsersData();
+  }, [getUsersData]);
 
   return (
     <>

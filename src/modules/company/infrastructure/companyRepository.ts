@@ -55,14 +55,11 @@ export class CompanyRepository {
       return Promise.reject(error);
     }
   }
-
   public async getCompanies(
-    filters: FilterParams,
-  ): Promise<HttpResponseInterface<Company>> {
+    params: FilterParams,
+  ): Promise<HttpResponseInterface<Company[]>> {
     try {
-      const resp = await this.http.get<Company>(COMPANY_BASE, {
-        ...filters,
-      });
+      const resp = await this.http.get<Company[]>(COMPANY_BASE, params);
       return resp;
     } catch (error) {
       return Promise.reject(error);

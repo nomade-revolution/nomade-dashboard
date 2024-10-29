@@ -3,7 +3,7 @@ import styled from "styled-components";
 const ReusableFormStyled = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
   align-items: flex-start;
   width: 100%;
   background: ${(props) => props.theme.colors.light};
@@ -15,10 +15,8 @@ const ReusableFormStyled = styled.form`
     &__content {
       display: flex;
       flex-direction: column;
-      width: 100%;
-      gap: 20px;
+      gap: 10px;
     }
-
     &__section {
       display: flex;
       flex-direction: column;
@@ -46,6 +44,11 @@ const ReusableFormStyled = styled.form`
 
       @media (min-width: 1000px) {
         width: ${(props) => props.theme.widths.datasheetLargeInputs};
+      }
+
+      &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
       }
     }
 
@@ -89,6 +92,12 @@ const ReusableFormStyled = styled.form`
       align-items: center;
       gap: 5px;
     }
+
+    &__footer {
+      display: flex;
+      width: 100%;
+      gap: 30px;
+    }
   }
 
   .form-subsection {
@@ -104,6 +113,7 @@ const ReusableFormStyled = styled.form`
     &__field,
     &__field-large,
     &__field-textarea,
+    &__field-large--offer,
     &__field-textarea--offer {
       display: flex;
       align-items: center;
@@ -131,6 +141,16 @@ const ReusableFormStyled = styled.form`
         width: ${(props) => props.theme.widths.datasheetLargeInputs};
       }
     }
+
+    &__field-textarea--offer {
+      height: 200px;
+      width: 400px;
+    }
+
+    &__field-large--offer {
+      width: 400px;
+    }
+
     &__taxes-item {
       font-size: ${(props) => props.theme.fontsSize.__SMM};
     }
@@ -143,27 +163,10 @@ const ReusableFormStyled = styled.form`
       gap: 20px;
     }
 
-    &__field-textarea,
-    &__field-textarea--offer {
-      height: 200px;
+    &__field-textarea {
+      height: 150px;
       padding: 10px;
       font-family: inherit;
-    }
-
-    &__field-textarea--offer {
-      width: 100%;
-
-      @media (min-width: 1000px) {
-        width: ${(props) => props.theme.widths.datasheetSmallerInputs};
-      }
-
-      @media (min-width: 1200px) {
-        width: 400px;
-      }
-
-      @media (min-width: 1600px) {
-        width: 500px;
-      }
     }
 
     &__field-image {
@@ -191,6 +194,87 @@ const ReusableFormStyled = styled.form`
     box-shadow: none;
 
     resize: none;
+  }
+
+  .lead-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    &__section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+
+      @media (min-width: 1000px) {
+        flex-direction: unset;
+        flex-wrap: wrap;
+      }
+    }
+
+    &__title {
+      color: ${(props) => props.theme.colors.mainColor};
+    }
+
+    &__thirdparty-link {
+      display: flex;
+      flex-direction: column;
+      font-size: ${(props) => props.theme.fontsSize.__SM};
+    }
+
+    &__link {
+      color: #4287f5;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    &__checkbox-container {
+      font-size: ${(props) => props.theme.fontsSize.__SM};
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    &__footer-mssg {
+      font-size: ${(props) => props.theme.fontsSize.__S};
+    }
+  }
+  .form-offer {
+    display: flex;
+    gap: 30px;
+    width: 100%;
+    justify-content: space-between;
+
+    &__texts {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    &__select-data {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    &__selects {
+      display: flex;
+      gap: 30px;
+    }
+
+    &__locations {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
   }
 `;
 
