@@ -1,3 +1,4 @@
+import { AuthRegisterInterface } from "@auth";
 import { HttpResponseInterface } from "@core";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
 
@@ -9,4 +10,7 @@ export interface UserRepository<I> {
   ): Promise<HttpResponseInterface<I>>;
   deleteUser(user_id: number): Promise<HttpResponseInterface<I>>;
   getUsersBadge(): Promise<HttpResponseInterface<I>>;
+  registerUser: (
+    data: AuthRegisterInterface,
+  ) => Promise<HttpResponseInterface<I>>;
 }

@@ -1,8 +1,9 @@
 import { Http } from "@core/application";
 import { HttpResponseInterface } from "@core/domain";
-import { UserApiResponse } from "../domain/User";
+import { User, UserApiResponse } from "../domain/User";
 import { GET_USERS } from "../application/routes";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
+import { AuthRegisterInterface } from "@auth";
 
 export class UsersRepository {
   private readonly http: Http = Http.getInstance();
@@ -43,6 +44,23 @@ export class UsersRepository {
         `${GET_USERS}/status/badge`,
       );
       return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  public async registerUser(
+    data: AuthRegisterInterface,
+  ): Promise<HttpResponseInterface<User>> {
+    try {
+      const response = await this.http.post<UserApiResponse>(`${GET_USERS}`, {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        roles: [1],
+      });
+
+      return response;
     } catch (error) {
       return Promise.reject(error);
     }

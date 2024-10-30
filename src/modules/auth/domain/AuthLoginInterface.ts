@@ -6,3 +6,9 @@ export interface AuthLoginInterface {
 export interface AuthRecoverPasswordInterface {
   email: string;
 }
+export interface AuthRegisterInterface {
+  name: string;
+  email: string;
+  password: string;
+  repeatPassword: string;
+}

@@ -21,6 +21,7 @@ import CollabsReservationsPage from "sections/collabs/pages/CollabsReservations/
 import OfferDetailsPage from "sections/offers/pages/OfferDetailPage/OfferDetailPage";
 import PlansPage from "sections/plans/pages/PlansPage/PlansPage";
 import LogoutPage from "sections/auth/pages/LogooutPage/LogoutPage";
+import CreateUserPage from "sections/user/pages/CreateUserPage/CreateUserPage";
 
 const routes: RouteObject[] = [
   {
@@ -99,6 +100,10 @@ const routes: RouteObject[] = [
       {
         path: appPaths.plans,
         element: <PlansPage />,
+      },
+      {
+        path: appPaths.createUser,
+        element: <CreateUserPage />,
       },
     ],
   },

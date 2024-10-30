@@ -21,4 +21,5 @@ export const appPaths = {
   collabsReservations: "/collabs-reservations/:id/page/:page",
   plans: "/planes/page/:page",
   logout: "/logout",
+  createUser: "/create-user",
 };

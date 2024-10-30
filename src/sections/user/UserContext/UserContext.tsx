@@ -17,6 +17,8 @@ import {
   getUsersFiltered,
 } from "modules/user/application/user";
 import { Influencer } from "@influencer";
+import { AuthRegisterInterface } from "@auth";
+import { HttpResponseInterface } from "../../../modules/core/domain/HttpResponseInterface";
 
 export interface OrderItem {
   sortTag: string;
@@ -41,6 +43,9 @@ interface ContextState {
   deleteUserById: (user_id: number) => void;
   setOrder: (order: OrderItem) => void;
   getUsersStatusBadge: () => void;
+  registerUser: (
+    data: AuthRegisterInterface,
+  ) => Promise<HttpResponseInterface<User>>;
 }
 
 export const UserContext = createContext<ContextState>({} as ContextState);
@@ -116,9 +121,15 @@ export const UserContextProvider = ({
     return response;
   }, [repository]);
 
+  const registerUser = async (data: AuthRegisterInterface) => {
+    const response = await repository.registerUser(data);
+
+    return response;
+  };
   return (
     <UserContext.Provider
       value={{
+        registerUser,
         users_nomade,
         users_company,
         users_influencer,

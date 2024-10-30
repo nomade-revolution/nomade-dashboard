@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Loader from "../../../shared/components/Loader/Loader";
 import DashboardTable from "../../../shared/components/DashboardTable/DashboardTable";
 import DashboardCardListMobile from "../../../shared/components/DashboardCardListMobile/DashboardCardListMobile";
@@ -14,13 +14,14 @@ import { usersTableHeaderSections } from "../../utils/userTableSections";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
 import { UserTypes } from "modules/user/domain/User";
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
+import { appPaths } from "sections/shared/utils/appPaths/appPaths";
 
 const UsersPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
   const { page } = useParams();
   const { getUsers, users_nomade, pagination, loading, order } =
     useUserContext();
-
+  const navigate = useNavigate();
   const handleSearch = (searchText: string) => {
     getUsersData(searchText);
   };
@@ -43,7 +44,9 @@ const UsersPage = (): React.ReactElement => {
     },
     [getUsers, order.direction, order.sortTag, page],
   );
-  const handleCreateUser = () => {};
+  const handleCreateUser = () => {
+    navigate(appPaths.createUser);
+  };
 
   useEffect(() => {
     getUsersData();
