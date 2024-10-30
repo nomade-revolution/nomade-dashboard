@@ -6,7 +6,7 @@ export interface AuthLoginInterface {
 export interface AuthRecoverPasswordInterface {
   email: string;
 }
-export interface AuthRegisterInterface {
+export interface AuthRegisterNomadeInterface {
   name: string;
   email: string;
   password: string;

@@ -17,7 +17,7 @@ import {
   getUsersFiltered,
 } from "modules/user/application/user";
 import { Influencer } from "@influencer";
-import { AuthRegisterInterface } from "@auth";
+import { AuthRegisterNomadeInterface } from "@auth";
 import { HttpResponseInterface } from "../../../modules/core/domain/HttpResponseInterface";
 
 export interface OrderItem {
@@ -44,7 +44,7 @@ interface ContextState {
   setOrder: (order: OrderItem) => void;
   getUsersStatusBadge: () => void;
   registerUser: (
-    data: AuthRegisterInterface,
+    data: AuthRegisterNomadeInterface,
   ) => Promise<HttpResponseInterface<User>>;
 }
 
@@ -121,7 +121,7 @@ export const UserContextProvider = ({
     return response;
   }, [repository]);
 
-  const registerUser = async (data: AuthRegisterInterface) => {
+  const registerUser = async (data: AuthRegisterNomadeInterface) => {
     const response = await repository.registerUser(data);
 
     return response;

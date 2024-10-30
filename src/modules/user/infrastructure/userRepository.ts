@@ -3,7 +3,7 @@ import { HttpResponseInterface } from "@core/domain";
 import { User, UserApiResponse } from "../domain/User";
 import { GET_USERS } from "../application/routes";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
-import { AuthRegisterInterface } from "@auth";
+import { AuthRegisterNomadeInterface } from "@auth";
 
 export class UsersRepository {
   private readonly http: Http = Http.getInstance();
@@ -50,7 +50,7 @@ export class UsersRepository {
   }
 
   public async registerUser(
-    data: AuthRegisterInterface,
+    data: AuthRegisterNomadeInterface,
   ): Promise<HttpResponseInterface<User>> {
     try {
       const response = await this.http.post<UserApiResponse>(`${GET_USERS}`, {

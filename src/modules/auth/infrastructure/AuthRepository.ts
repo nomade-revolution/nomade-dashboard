@@ -2,7 +2,7 @@ import { Http } from "@core/application";
 import {
   SessionInterface,
   AuthLoginInterface,
-  AuthRegisterInterface,
+  AuthRegisterNomadeInterface,
   SignInInterface,
   SignOutInterface,
   SignUpInterface,
@@ -42,7 +42,7 @@ export class AuthRepository
   implements
     SignInInterface<AuthLoginInterface, SessionInterface>,
     SignOutInterface<null, MessageInterface>,
-    SignUpInterface<AuthRegisterInterface, unknown>
+    SignUpInterface<AuthRegisterNomadeInterface, unknown>
 {
   private readonly http: Http = Http.getInstance();
 
@@ -68,7 +68,7 @@ export class AuthRepository
 
   // TODO: Promise<HttpResponseInterface<unknown>> el back ha de formatear la respuesta
   public async signUp(
-    data: AuthRegisterInterface,
+    data: AuthRegisterNomadeInterface,
   ): Promise<HttpResponseInterface<SignUpResponseInterface>> {
     try {
       const resp = await this.http.post<SignUpResponseInterface>(

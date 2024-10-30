@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AuthRegisterInterface } from "@auth";
+import { AuthRegisterNomadeInterface } from "@auth";
 import { ErrorMessage, Field, Formik } from "formik";
 import LoginFormStyled from "sections/auth/components/LoginForm/LoginFormStyled";
 import { registerScheme } from "sections/auth/components/validations/validations";
@@ -9,7 +9,7 @@ import GoBackButton from "sections/shared/components/GoBackButton/GoBackButton";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
 import { useNavigate } from "react-router-dom";
 
-const initialState: AuthRegisterInterface = {
+const initialState: AuthRegisterNomadeInterface = {
   name: "",
   email: "",
   password: "",
@@ -22,7 +22,7 @@ const CreateUserPage = () => {
   const { registerUser } = useUserContext();
   const navigate = useNavigate();
   const [loading, setIsLoading] = useState<boolean>(false);
-  const handleSubmitForm = async (values: AuthRegisterInterface) => {
+  const handleSubmitForm = async (values: AuthRegisterNomadeInterface) => {
     setIsLoading(true);
     setIsFormSubmitted(true);
     const resp = await registerUser(values);

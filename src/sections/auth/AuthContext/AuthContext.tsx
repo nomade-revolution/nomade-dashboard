@@ -3,7 +3,7 @@ import { AuthRepository } from "@auth/domain/AuthRepository";
 import {
   AuthLoginInterface,
   AuthRecoverPasswordInterface,
-  AuthRegisterInterface,
+  AuthRegisterNomadeInterface,
   SessionInterface,
 } from "@auth";
 import {
@@ -42,7 +42,9 @@ export const AuthContextProvider = ({
   repository,
 }: React.PropsWithChildren<{
   repository: AuthRepository<
-    AuthLoginInterface | AuthRegisterInterface | AuthRecoverPasswordInterface,
+    | AuthLoginInterface
+    | AuthRegisterNomadeInterface
+    | AuthRecoverPasswordInterface,
     SessionInterface
   >;
 }>) => {

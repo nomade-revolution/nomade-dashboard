@@ -1,4 +1,4 @@
-import { AuthRegisterInterface } from "@auth";
+import { AuthRegisterNomadeInterface } from "@auth";
 import { HttpResponseInterface } from "@core";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
 
@@ -11,6 +11,6 @@ export interface UserRepository<I> {
   deleteUser(user_id: number): Promise<HttpResponseInterface<I>>;
   getUsersBadge(): Promise<HttpResponseInterface<I>>;
   registerUser: (
-    data: AuthRegisterInterface,
+    data: AuthRegisterNomadeInterface,
   ) => Promise<HttpResponseInterface<I>>;
 }
