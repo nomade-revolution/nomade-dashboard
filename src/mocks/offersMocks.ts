@@ -3,6 +3,8 @@ import { FullOffer } from "../modules/offers/domain/Offer";
 export const mockOffers: FullOffer[] = [
   {
     id: 1,
+    active: true,
+    offerable_type: "",
     images: [
       {
         id: 1,
@@ -50,6 +52,8 @@ export const mockOffers: FullOffer[] = [
   },
   {
     id: 2,
+    active: true,
+    offerable_type: "",
     images: [
       {
         id: 2,
@@ -98,6 +102,8 @@ export const mockOffers: FullOffer[] = [
   },
   {
     id: 3,
+    active: true,
+    offerable_type: "",
     images: [
       {
         id: 3,
@@ -173,6 +179,8 @@ export const mockOffers: FullOffer[] = [
   },
   {
     id: 4,
+    active: true,
+    offerable_type: "",
     images: [
       {
         id: 4,
@@ -220,6 +228,8 @@ export const mockOffers: FullOffer[] = [
   },
   {
     id: 5,
+    active: true,
+    offerable_type: "",
     images: [
       {
         id: 5,
@@ -267,6 +277,8 @@ export const mockOffers: FullOffer[] = [
   },
   {
     id: 6,
+    active: true,
+    offerable_type: "",
     images: [
       {
         id: 6,
@@ -314,6 +326,8 @@ export const mockOffers: FullOffer[] = [
   },
   {
     id: 7,
+    active: true,
+    offerable_type: "",
     images: [
       {
         id: 7,
@@ -362,6 +376,8 @@ export const mockOffers: FullOffer[] = [
   },
   {
     id: 8,
+    active: true,
+    offerable_type: "",
     images: [
       {
         id: 8,
@@ -437,6 +453,8 @@ export const mockOffers: FullOffer[] = [
   },
   {
     id: 9,
+    active: true,
+    offerable_type: "",
     images: [
       {
         id: 9,

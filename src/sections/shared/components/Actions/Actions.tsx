@@ -101,7 +101,9 @@ const Actions = ({
           {user.type === "Company" &&
             state_id !== collabStates.COLAB_CANCELLED_STATE &&
             state_id !== collabStates.COLAB_REJECTED_STATE &&
-            state_id !== collabStates.COLAB_SENT_STATE && (
+            state_id !== collabStates.COLAB_SENT_STATE &&
+            state_id !== collabStates.COLAB_RECEIVED_STATE &&
+            state_id !== collabStates.COLAB_PUBLISHED_STATE && (
               <>
                 <Tooltip title={"Estados collab"}>
                   <button aria-label="Estados" onClick={handleClick}>

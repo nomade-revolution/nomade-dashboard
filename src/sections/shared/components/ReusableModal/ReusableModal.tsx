@@ -5,12 +5,14 @@ interface ReusableModalProps {
   openModal: boolean;
   setIsModalOpen: (value: boolean) => void;
   children: React.ReactNode;
+  type?: string;
 }
 
 const ReusableModal = ({
   openModal,
   setIsModalOpen,
   children,
+  type,
 }: ReusableModalProps): React.ReactElement => {
   const handleClose = () => setIsModalOpen(false);
   const matches = useMediaQuery("(max-width:1000px)");
@@ -20,8 +22,8 @@ const ReusableModal = ({
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: matches ? "90%" : "40%",
-    height: matches ? "80%" : "fit-content",
+    width: type === "offer" && !matches ? "70%" : matches ? "90%" : "40%",
+    height: matches || type === "offer" ? "80%" : "fit-content",
     bgcolor: "background.paper",
     boxShadow: 24,
     padding: "20px",

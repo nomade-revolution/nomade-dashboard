@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useState } from "react";
 import { isHttpSuccessResponse } from "../../shared/utils/typeGuards/typeGuardsFunctions";
 import {
+  createOffer,
   deleteOffer,
   getOfferById,
   offersGetAll,
@@ -22,6 +23,7 @@ interface ContextState {
   getAllOffers: (page: number, per_page: number, params: FilterParams) => void;
   deleteOfferById: (offer_id: number) => void;
   getOffer: (offer_id: number) => void;
+  createNewOffer: (offer: FormData) => void;
 }
 
 export const OffersContext = createContext<ContextState>({} as ContextState);
@@ -74,6 +76,24 @@ export const OffersContextProvider = ({
     [repository],
   );
 
+  const createNewOffer = async (offer: FormData) => {
+    const response = await createOffer(repository, offer);
+
+    if (isHttpSuccessResponse(response)) {
+      setOffer(response.data.data);
+      setIsSuccess(true);
+    } else {
+      setError(response.error as never);
+    }
+
+    setTimeout(() => {
+      setIsSuccess(false);
+      setError("");
+    }, 3000);
+
+    return response;
+  };
+
   return (
     <OffersContext.Provider
       value={{
@@ -86,6 +106,7 @@ export const OffersContextProvider = ({
         getAllOffers,
         deleteOfferById,
         getOffer,
+        createNewOffer,
       }}
     >
       {children}

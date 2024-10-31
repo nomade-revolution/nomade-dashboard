@@ -8,8 +8,8 @@ const OfferDetailPageStyled = styled.div`
   align-self: center;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  padding: 0 50px;
+  height: 100%;
+  padding: 50px;
 
   .images-container {
     display: flex;
@@ -33,8 +33,15 @@ const OfferDetailPageStyled = styled.div`
   .offer-detail {
     &__section {
       display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
       width: 100%;
-      justify-content: space-between;
+
+      @media (min-width: 1000px) {
+        flex-direction: row;
+        justify-content: space-between;
+      }
     }
 
     &__participants {
@@ -51,7 +58,15 @@ const OfferDetailPageStyled = styled.div`
       font-size: ${(props) => props.theme.fontsSize.__XXL};
       border-bottom: 2px solid ${(props) => props.theme.colors.mainColor};
       padding-bottom: 10px;
-      width: 25%;
+      width: 100%;
+
+      @media (min-width: 1000px) and (max-width: 1600px) {
+        width: 30%;
+      }
+
+      @media (min-width: 1600px) {
+        width: 25%;
+      }
     }
 
     &__participant {
@@ -119,10 +134,14 @@ const OfferDetailPageStyled = styled.div`
     &__data-section {
       display: flex;
       gap: 8px;
-      width: 40%;
       align-items: flex-start;
       justify-content: center;
       flex-direction: column;
+      width: 100%;
+
+      @media (min-width: 1000px) {
+        width: 40%;
+      }
     }
 
     &__data-title {
@@ -168,6 +187,30 @@ const OfferDetailPageStyled = styled.div`
 
     &__text {
       font-size: ${(props) => props.theme.fontsSize.__SMM};
+    }
+
+    &__heading {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      width: 100%;
+
+      @media (min-width: 1000px) {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+
+    &__edit-btn {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: ${(props) => props.theme.colors.darkBlue};
+      color: ${(props) => props.theme.colors.light};
+      padding: 10px;
+      border-radius: 5px;
+      font-weight: 700;
     }
   }
 `;

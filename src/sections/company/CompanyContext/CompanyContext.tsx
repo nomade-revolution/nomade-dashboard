@@ -91,10 +91,7 @@ export const CompanyContextProvider = ({
       const response = await getCompanies(repository, params);
 
       if (isHttpSuccessResponse(response)) {
-        setCompanies(
-          (response.data as unknown as { companies: Company[] })?.companies ??
-            [],
-        );
+        setCompanies(response.data);
       }
 
       return response;

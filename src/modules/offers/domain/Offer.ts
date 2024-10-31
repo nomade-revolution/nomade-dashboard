@@ -10,7 +10,7 @@ export type OfferType =
   | "Lodging"
   | "Restaurant";
 export interface Offer {
-  id: number;
+  id?: number;
   images: ImageStructure[];
   company: string;
   company_id: number;
@@ -22,6 +22,7 @@ export interface Offer {
   advance_notice_time: number | null;
   favorite: boolean;
   reserves?: number;
+  active: boolean;
 }
 
 export interface ActivityOffer extends Offer {
@@ -47,6 +48,7 @@ export interface FullOffer extends Offer {
   addresses: Address[];
   images: ImageStructure[];
   limitDate: string;
+  offerable_type: string;
 }
 
 export interface OffersApiResponse {
@@ -57,4 +59,98 @@ export interface OffersApiResponse {
 export interface FavsOffersApiResponse {
   offers: FullOffer[];
   pagination: PaginationStucture;
+}
+
+export type PartialOffer = Pick<
+  FullOffer,
+  | "company_id"
+  | "description"
+  | "conditions"
+  | "in_exchange"
+  | "offer_category_id"
+  | "active"
+  | "offerable_type"
+  | "images"
+>;
+
+export interface TimeSlot {
+  from_time: string;
+  to_time: string;
+}
+
+export interface WeekDay {
+  day_of_week: number;
+  time_slot: TimeSlot[];
+}
+
+export interface OfferableRestaurant {
+  address_id: number;
+  min_guests: number;
+  max_guests: number;
+  week: WeekDay[];
+}
+
+export interface OfferableLodging {
+  address_id: number;
+  min_guests: number;
+  max_guests: number;
+}
+
+export interface OfferableActivity {
+  address_id: number;
+  min_guests: number;
+  max_guests: number;
+  week: WeekDay[];
+}
+
+export interface OfferableDelivery {
+  advance_notice_time: number;
+  week: WeekDay[];
+}
+
+export interface OfferableBrand {
+  advance_notice_time: number;
+}
+
+export interface OfferFormStructure {
+  description: string;
+  conditions: string;
+  in_exchange: string;
+  offer_category_id: number;
+  company_id: number;
+  active: boolean;
+  offerable_type:
+    | "OfferableRestaurant"
+    | "OfferableLodging"
+    | "OfferableActivity"
+    | "OfferableDelivery"
+    | "OfferableBrand"
+    | string;
+  location_id: number;
+  location_type: "App\\Models\\Country" | "App\\Models\\City" | string;
+  images: string[];
+  offerable:
+    | OfferableRestaurant
+    | OfferableLodging
+    | OfferableActivity
+    | OfferableDelivery
+    | OfferableBrand
+    | Record<string, unknown>;
+}
+
+export interface SelectedDay {
+  day_number: number;
+  day_name: string;
+  shifts: {
+    firstShift: { from_time: string; to_time: string };
+    secondShift: { from_time: string; to_time: string };
+  };
+}
+
+export const enum OfferTypes {
+  restaurant = "restaurant",
+  activity = "activity",
+  lodging = "lodginh",
+  delivery = "delivery",
+  brand = "brand",
 }
