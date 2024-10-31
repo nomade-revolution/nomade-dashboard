@@ -12,11 +12,20 @@ import { useOffersContext } from "sections/offers/OffersContext/useOffersContext
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import SearchBar from "sections/shared/components/SearchBar/SearchBar";
+import OffersButton from "sections/offers/components/OffersButton/OffersButton";
+import OffersForm from "sections/offers/components/OffersForm/OffersForm";
+import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
 
 const OffersPage = (): React.ReactElement => {
   const { getAllOffers, offers, pagination, loading } = useOffersContext();
   const { page } = useParams();
   const [searchText, setSearchText] = useState<string>("");
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const handleIsModalOpen = () => {
+    setIsModalOpen(true);
+  };
 
   const handleSearch = (text: string) => {
     if (text === "") {
@@ -49,12 +58,17 @@ const OffersPage = (): React.ReactElement => {
       ) : (
         <OffersPageStyled>
           <div className="dashboard__searchContainer">
+            <OffersButton
+              onClick={handleIsModalOpen}
+              text="Crear oferta"
+              type="create"
+            />
             <SearchBar
               onReset={() => {
                 getOffers();
               }}
-              pageName={SectionTypes.users}
-              pageTypes={SectionTypes.users}
+              pageName={SectionTypes.offers}
+              pageTypes={SectionTypes.offers}
               searchText={searchText!}
               setSearchText={setSearchText}
               onSearchSubmit={() => {
@@ -93,6 +107,12 @@ const OffersPage = (): React.ReactElement => {
               filterParams=""
             />
           </div>
+          <ReusableModal
+            children={<OffersForm />}
+            openModal={isModalOpen}
+            setIsModalOpen={setIsModalOpen}
+            type="offer"
+          />
         </OffersPageStyled>
       )}
     </>

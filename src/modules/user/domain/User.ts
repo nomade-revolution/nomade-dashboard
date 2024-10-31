@@ -1,6 +1,6 @@
 import { Influencer } from "@influencer";
 import { SocialMedia } from "@influencer/domain/InfluencerSocialMedia";
-import { Address, FullAddress } from "modules/address/domain/Address";
+import { FullAddress } from "modules/address/domain/Address";
 import { Contact } from "modules/contact/domain/Contact";
 import { Plan } from "modules/plans/domain/Plan";
 import { PaginationStucture } from "sections/shared/interfaces/interfaces";
@@ -22,7 +22,7 @@ export interface Company extends User {
   image: string;
   socialMedia: SocialMedia[];
   user_id: number;
-  address: Address;
+  address: FullAddress;
   contacts: Array<
     Pick<Contact, "email" | "name" | "phone" | "surname"> & { type: string }
   >;

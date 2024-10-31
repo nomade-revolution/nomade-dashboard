@@ -9,4 +9,5 @@ export interface OffersRepository<I> {
   ): Promise<HttpResponseInterface<I>>;
   deleteOffer(offer_id: number): Promise<HttpResponseInterface<I>>;
   getOfferById(offer_id: number): Promise<HttpResponseInterface<I>>;
+  createOffer(offer: FormData): Promise<HttpResponseInterface<I>>;
 }

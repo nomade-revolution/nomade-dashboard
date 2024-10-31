@@ -47,12 +47,6 @@ const OffersPageStyled = styled.main`
       align-items: center;
       justify-content: space-between;
       width: 100%;
-
-      @media (min-width: 880px) {
-        width: 100%;
-        display: flex;
-        justify-content: flex-end;
-      }
     }
 
     &__title {

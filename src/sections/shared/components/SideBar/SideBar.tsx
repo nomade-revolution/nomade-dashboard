@@ -51,7 +51,7 @@ const SideBar = ({
   return (
     <SideBarStyled className="side-bar">
       <ImageCustom
-        alt="Fresatitan logo"
+        alt="Nomade logo"
         className="side-bar__image"
         height={50}
         width={200}

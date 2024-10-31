@@ -17,4 +17,5 @@ export interface FullAddress {
   zip_code: string;
   contact_name: string;
   contact_phone: string;
+  id: number;
 }
