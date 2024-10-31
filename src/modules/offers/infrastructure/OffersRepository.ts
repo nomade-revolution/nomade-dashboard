@@ -48,4 +48,21 @@ export class OffersRepository {
       return Promise.reject(error);
     }
   }
+
+  public async createOffer(
+    offer: FormData,
+  ): Promise<
+    HttpResponseInterface<{ data: FullOffer; success: boolean; error: string }>
+  > {
+    try {
+      const resp = await this.http.post<{
+        data: FullOffer;
+        success: boolean;
+        error: string;
+      }>(`${OFFERS_BASE}`, offer);
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 }

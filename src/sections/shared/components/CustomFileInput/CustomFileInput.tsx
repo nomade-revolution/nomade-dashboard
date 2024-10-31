@@ -88,12 +88,14 @@ const CustomFileInput = ({
           style={{ display: "none" }}
           multiple={multiple}
         />
-        {fileNames.length > 0 &&
-          fileNames.map((name, index) => (
-            <span key={index} className="file-name">
-              {name}
-            </span>
-          ))}
+        <div>
+          {fileNames.length > 0 &&
+            fileNames.map((name, index) => (
+              <span key={index} className="file-name">
+                {name}
+              </span>
+            ))}
+        </div>
       </section>
     </FileInputWrapper>
   );

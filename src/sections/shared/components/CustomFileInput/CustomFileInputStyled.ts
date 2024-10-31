@@ -28,7 +28,8 @@ const FileInputWrapper = styled.div`
   .file-name {
     margin-left: 15px;
     font-size: ${(props) => props.theme.fontsSize.__SSM};
-    color: ${(props) => props.theme.colors.light};
+    color: ${(props) => props.theme.colors.dark};
+    font-weight: 700;
   }
 
   input[type="file"] {
@@ -59,6 +60,8 @@ const FileInputWrapper = styled.div`
   .file-images {
     display: flex;
     gap: 10px;
+    flex-wrap: wrap;
+    max-width: 100%;
   }
 `;
 

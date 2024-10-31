@@ -137,3 +137,20 @@ export interface OfferFormStructure {
     | OfferableBrand
     | Record<string, unknown>;
 }
+
+export interface SelectedDay {
+  day_number: number;
+  day_name: string;
+  shifts: {
+    firstShift: { from_time: string; to_time: string };
+    secondShift: { from_time: string; to_time: string };
+  };
+}
+
+export const enum OfferTypes {
+  restaurant = "restaurant",
+  activity = "activity",
+  lodging = "lodginh",
+  delivery = "delivery",
+  brand = "brand",
+}

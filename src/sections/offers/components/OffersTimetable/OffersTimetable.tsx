@@ -7,7 +7,8 @@ import {
   Field,
   ErrorMessage,
 } from "formik";
-import { TimeSlot } from "modules/offers/domain/Offer";
+import { SelectedDay, TimeSlot, WeekDay } from "modules/offers/domain/Offer";
+import { useEffect } from "react";
 
 import {
   RESTAURANT_OFFER_ID,
@@ -24,6 +25,9 @@ interface Props {
     props: string | FieldConfig<Value>,
   ) => FieldInputProps<Value>;
   touched: FormikTouched<TimeSlot>;
+  setWeek: (value: WeekDay[]) => void;
+  selectedDays: SelectedDay[];
+  setSelectedDays: React.Dispatch<React.SetStateAction<SelectedDay[]>>;
 }
 
 const OffersTimetable = ({
@@ -31,7 +35,75 @@ const OffersTimetable = ({
   errors,
   getFieldProps,
   touched,
+  setWeek,
+  selectedDays,
+  setSelectedDays,
 }: Props): React.ReactElement => {
+  const handleCheckboxChange = (selectedDay: (typeof offersTimetable)[0]) => {
+    setSelectedDays((prevDays: SelectedDay[]) => {
+      const isSelected = prevDays.some(
+        (day) => day.day_number === selectedDay.day_number,
+      );
+
+      if (isSelected) {
+        return prevDays.filter(
+          (day) => day.day_number !== selectedDay.day_number,
+        );
+      } else {
+        return [
+          ...prevDays,
+          {
+            day_number: selectedDay.day_number,
+            day_name: selectedDay.name,
+            shifts: {
+              firstShift: { from_time: "", to_time: "" },
+              secondShift: { from_time: "", to_time: "" },
+            },
+          },
+        ];
+      }
+    });
+  };
+
+  useEffect(() => {
+    const updatedWeek = selectedDays.reduce((acc: WeekDay[], day) => {
+      const timeSlot = [
+        {
+          from_time:
+            String(
+              getFieldProps(`from_time_day_${day.day_number}_1`).value + ":00",
+            ) || "",
+          to_time:
+            String(
+              getFieldProps(`to_time_day_${day.day_number}_1`).value + ":00",
+            ) || "",
+        },
+        {
+          from_time:
+            String(
+              getFieldProps(`from_time_day_${day.day_number}_2`).value + ":00",
+            ) || "",
+          to_time:
+            String(
+              getFieldProps(`to_time_day_${day.day_number}_2`).value + ":00",
+            ) || "",
+        },
+      ];
+
+      if (!acc.some((entry: WeekDay) => entry.day_of_week === day.day_number)) {
+        acc.push({
+          day_of_week: day.day_number,
+          time_slot: timeSlot,
+        });
+      }
+
+      return acc;
+    }, []);
+
+    setWeek(updatedWeek);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getFieldProps, selectedDays, setWeek]);
+
   return (
     <section>
       {(category === RESTAURANT_OFFER_ID ||
@@ -42,111 +114,125 @@ const OffersTimetable = ({
             {offersTimetable.map((time, index) => (
               <li key={time.id} className="scheduling__timetable">
                 <section className="scheduling__timetable-check">
-                  <CustomCheckbox />
+                  <CustomCheckbox
+                    onChange={() => handleCheckboxChange(time)}
+                    checked={selectedDays.some(
+                      (d) => d.day_number === time.day_number,
+                    )}
+                  />
                   {time.name}
                 </section>
-
-                <section className="scheduling__timetable-column">
-                  {index === 0 && <h4>Primer turno</h4>}
-                  <div className="scheduling__timetable-time">
-                    <div className="form-subsection">
-                      <label
-                        htmlFor={`from_time_day_${index + 1}_1`}
-                        className="form-subsection__label"
-                      >
-                        Entrada
-                      </label>
-                      <Field
-                        type="time"
-                        id={`from_time_day_${index + 1}_1`}
-                        className="form-subsection__field--small-time"
-                        aria-label="Entrada primer turno"
-                        {...getFieldProps(`from_time_day_${index + 1}_1`)}
-                      />
-                      {errors.from_time && touched.from_time && (
-                        <ErrorMessage
-                          className="form-subsection__error-message"
-                          component="span"
-                          name={`from_time_day_${index + 1}_1`}
+                <div className="scheduling__times">
+                  <section className="scheduling__timetable-column">
+                    {index === 0 && (
+                      <h4 className="scheduling__title">Primer turno</h4>
+                    )}
+                    <div className="scheduling__timetable-time">
+                      <div className="form-subsection">
+                        <label
+                          htmlFor={`from_time_day_${time.day_number}_1`}
+                          className="form-subsection__label"
+                        >
+                          Entrada
+                        </label>
+                        <Field
+                          type="time"
+                          id={`from_time_day_${index + 1}_1`}
+                          className="form-subsection__field--small-time"
+                          aria-label="Entrada primer turno"
+                          {...getFieldProps(
+                            `from_time_day_${time.day_number}_1`,
+                          )}
                         />
-                      )}
-                    </div>
+                        {errors.from_time && touched.from_time && (
+                          <ErrorMessage
+                            className="form-subsection__error-message"
+                            component="span"
+                            name={`from_time_day_${time.day_number}_1`}
+                          />
+                        )}
+                      </div>
 
-                    <div className="form-subsection">
-                      <label
-                        htmlFor={`to_time_day_${index + 1}_1`}
-                        className="form-subsection__label"
-                      >
-                        Salida
-                      </label>
-                      <Field
-                        type="time"
-                        id={`to_time_day_${index + 1}_1`}
-                        className="form-subsection__field--small-time"
-                        aria-label="Salida primer turno"
-                        {...getFieldProps(`to_time_day_${index + 1}_1`)}
-                      />
-                      {errors.to_time && touched.to_time && (
-                        <ErrorMessage
-                          className="form-subsection__error-message"
-                          component="span"
-                          name={`to_time_day_${index + 1}_1`}
+                      <div className="form-subsection">
+                        <label
+                          htmlFor={`to_time_day_${time.day_number}_1`}
+                          className="form-subsection__label"
+                        >
+                          Salida
+                        </label>
+                        <Field
+                          type="time"
+                          id={`to_time_day_${time.day_number}_1`}
+                          className="form-subsection__field--small-time"
+                          aria-label="Salida primer turno"
+                          {...getFieldProps(`to_time_day_${time.day_number}_1`)}
                         />
-                      )}
+                        {errors.to_time && touched.to_time && (
+                          <ErrorMessage
+                            className="form-subsection__error-message"
+                            component="span"
+                            name={`to_time_day_${time.day_number}_1`}
+                          />
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </section>
+                  </section>
 
-                <section className="scheduling__timetable-column">
-                  {index === 0 && <h4>Segundo turno</h4>}
-                  <div className="scheduling__timetable-time">
-                    <div className="form-subsection">
-                      <label
-                        htmlFor={`from_time_day_${index + 1}_2`}
-                        className="form-subsection__label"
-                      >
-                        Entrada
-                      </label>
-                      <Field
-                        type="time"
-                        id={`from_time_day_${index + 1}_2`}
-                        className="form-subsection__field--small-time"
-                        aria-label="Entrada segundo turno"
-                        {...getFieldProps(`from_time_day_${index + 1}_2`)}
-                      />
-                      {errors.from_time && touched.from_time && (
-                        <ErrorMessage
-                          className="form-subsection__error-message"
-                          component="span"
-                          name={`from_time_day_${index + 1}_2`}
+                  <section className="scheduling__timetable-column">
+                    {index === 0 && (
+                      <h4 className="scheduling__title">Segundo turno</h4>
+                    )}
+                    <div className="scheduling__timetable-time">
+                      <div className="form-subsection">
+                        <label
+                          htmlFor={`from_time_day_${time.day_number}_2`}
+                          className="form-subsection__label"
+                        >
+                          Entrada
+                        </label>
+                        <Field
+                          type="time"
+                          id={`from_time_day_${time.day_number}_2`}
+                          className="form-subsection__field--small-time"
+                          aria-label="Entrada segundo turno"
+                          {...getFieldProps(
+                            `from_time_day_${time.day_number}_2`,
+                          )}
                         />
-                      )}
-                    </div>
+                        {errors.from_time && touched.from_time && (
+                          <ErrorMessage
+                            className="form-subsection__error-message"
+                            component="span"
+                            name={`from_time_day_${time.day_number}_2`}
+                          />
+                        )}
+                      </div>
 
-                    <div className="form-subsection">
-                      <label
-                        htmlFor={`to_time_day_${index + 1}_2`}
-                        className="form-subsection__label"
-                      >
-                        Salida
-                      </label>
-                      <Field
-                        type="time"
-                        id={`to_time_day_${index + 1}_2`}
-                        className="form-subsection__field--small-time"
-                        aria-label="Salida segundo turno"
-                        {...getFieldProps(`to_time_day_${index + 1}_2`)}
-                      />
-                      {errors.to_time && touched.to_time && (
-                        <ErrorMessage
-                          className="form-subsection__error-message"
-                          component="span"
-                          name={`to_time_day_${index + 1}_2`}
+                      <div className="form-subsection">
+                        <label
+                          htmlFor={`to_time_day_${time.day_number}_2`}
+                          className="form-subsection__label"
+                        >
+                          Salida
+                        </label>
+                        <Field
+                          type="time"
+                          id={`to_time_day_${time.day_number}_2`}
+                          className="form-subsection__field--small-time"
+                          aria-label="Salida segundo turno"
+                          {...getFieldProps(`to_time_day_${index + 1}_2`)}
                         />
-                      )}
+                        {errors.to_time && touched.to_time && (
+                          <ErrorMessage
+                            className="form-subsection__error-message"
+                            component="span"
+                            name={`to_time_day_${index + 1}_2`}
+                          />
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </section>
+                  </section>
+                </div>
               </li>
             ))}
           </ul>

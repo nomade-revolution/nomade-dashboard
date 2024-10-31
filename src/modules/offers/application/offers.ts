@@ -25,3 +25,16 @@ export const getOfferById = (
 ): Promise<HttpResponseInterface<FullOffer>> => {
   return offersRepo.getOfferById(offer_id);
 };
+
+export const createOffer = (
+  offersRepo: OffersRepository<{
+    data: FullOffer;
+    success: boolean;
+    error: string;
+  }>,
+  offer: FormData,
+): Promise<
+  HttpResponseInterface<{ data: FullOffer; success: boolean; error: string }>
+> => {
+  return offersRepo.createOffer(offer);
+};

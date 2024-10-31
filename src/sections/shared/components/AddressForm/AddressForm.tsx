@@ -4,7 +4,7 @@ import { addressSchema } from "./validations/validations";
 import ReusableSelect from "../ReusableSelect/ReusableSelect";
 import ReusableFormStyled from "assets/styles/ReusableFormStyled";
 import { useCountryContext } from "sections/country/CountryContext/useCountryContext";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   FilterParams,
   OptionsStructure,
@@ -12,7 +12,7 @@ import {
 import { useCitiesContext } from "sections/city/CityContext/useCitiesContext";
 
 interface Props {
-  setAddress: (value: FullAddress) => void;
+  setAddress: Dispatch<SetStateAction<FullAddress | null>>;
   address: FullAddress;
 }
 

@@ -36,11 +36,20 @@ import {
 } from "sections/offers/utils/offersCategories";
 import OffersScheduling from "../OffersScheduling/OffersScheduling";
 import { Company } from "modules/user/domain/User";
+import OfferResume from "../OfferResume/OfferResume";
+import useOffers from "sections/offers/hooks/useOffers";
+import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
+import { useNavigate } from "react-router-dom";
+import Loader from "sections/shared/components/Loader/Loader";
 
 const OffersForm = (): React.ReactElement => {
   const { getAllCountries, countries } = useCountryContext();
   const { cities, getAllCities } = useCitiesContext();
   const { companies, getCompaniesWithParams } = useCompanyContext();
+  const { createNewOffer, isSuccess, error } = useOffersContext();
+  const { handleOfferFormData } = useOffers();
+
+  const navigate = useNavigate();
 
   const [companySearch, setCompanySearch] = useState<string>("");
   const [company, setCompany] = useState<Company>({} as Company);
@@ -50,6 +59,12 @@ const OffersForm = (): React.ReactElement => {
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
   const [citiesFormat, setCitiesFormat] = useState<OptionsStructure[]>([]);
   const [file, setFile] = useState<File[] | null>(null);
+  const [offerResume, setOfferResume] = useState<
+    | OfferableRestaurant[]
+    | OfferableLodging[]
+    | OfferableActivity[]
+    | OfferableDelivery[]
+  >([]);
 
   const [formState, setFormState] = useState<{
     country: string;
@@ -67,8 +82,33 @@ const OffersForm = (): React.ReactElement => {
     address: "",
   });
 
+  const [schedulingState, setSchedulingState] = useState<{
+    restaurant: OfferableRestaurant[];
+    delivery: OfferableDelivery[];
+    activity: OfferableActivity[];
+    brand: object;
+    lodging: OfferableLodging[];
+  }>({
+    restaurant: [],
+    delivery: [],
+    activity: [],
+    brand: {},
+    lodging: [],
+  });
+
   const handleFormStateChange = (field: string, value: string) => {
     setFormState((prevState) => ({ ...prevState, [field]: value }));
+  };
+
+  const handleSchedulingStateChange = (
+    field: string,
+    value:
+      | OfferableRestaurant[]
+      | OfferableActivity[]
+      | OfferableDelivery[]
+      | OfferableLodging[],
+  ) => {
+    setSchedulingState((prevState) => ({ ...prevState, [field]: value }));
   };
 
   const handleSubmitForm = async (
@@ -76,7 +116,24 @@ const OffersForm = (): React.ReactElement => {
     { setSubmitting }: FormikHelpers<OfferFormStructure>,
   ) => {
     setSubmitting(true);
-    values.conditions.at(0);
+    const location_id =
+      formState.location === "App\\Models\\Country"
+        ? +formState.country
+        : +formState.city;
+    const formData = handleOfferFormData(
+      values,
+      offerResume as never,
+      formState.offerable_type,
+      formState.location,
+      location_id,
+      true,
+      company.id,
+      file!,
+      +formState.category,
+    );
+
+    await createNewOffer(formData);
+
     setSubmitting(false);
   };
 
@@ -129,36 +186,35 @@ const OffersForm = (): React.ReactElement => {
   }, [companySearch, getCompaniesWithParams]);
 
   useEffect(() => {
-    switch (+formState.category) {
-      case RESTAURANT_OFFER_ID:
-        handleFormStateChange(
-          "offerable_type",
-          "App\\Models\\OfferableRestaurant",
-        );
-        break;
-      case BRAND_OFFER_ID:
-        handleFormStateChange("offerable_type", "App\\Models\\OfferableBrand");
-        break;
-      case LODGING_OFFER_ID:
-        handleFormStateChange(
-          "offerable_type",
-          "App\\Models\\OfferableLodging",
-        );
-        break;
-      case DELIVERY_OFFER_ID:
-        handleFormStateChange(
-          "offerable_type",
-          "App\\Models\\OfferableActivity",
-        );
-        break;
-      case ACTIVITY_OFFER_ID:
-        handleFormStateChange(
-          "offerable_type",
-          "App\\Models\\OfferableDelivery",
-        );
-        break;
+    const offerTypeMap: { [key: number]: string } = {
+      [RESTAURANT_OFFER_ID]: "App\\Models\\OfferableRestaurant",
+      [BRAND_OFFER_ID]: "App\\Models\\OfferableBrand",
+      [LODGING_OFFER_ID]: "App\\Models\\OfferableLodging",
+      [DELIVERY_OFFER_ID]: "App\\Models\\OfferableActivity",
+      [ACTIVITY_OFFER_ID]: "App\\Models\\OfferableDelivery",
+    };
+
+    if (formState.category) {
+      handleFormStateChange(
+        "offerable_type",
+        offerTypeMap[+formState.category],
+      );
     }
-  }, [formState.category, formState.offerable_type]);
+  }, [formState.category]);
+
+  useEffect(() => {
+    const offerSchedule = Object.values(schedulingState).find((state) => {
+      return Array.isArray(state) && state.length > 0;
+    });
+
+    setOfferResume(offerSchedule as never);
+  }, [schedulingState]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setTimeout(() => navigate(0), 2000);
+    }
+  }, [isSuccess, navigate]);
 
   return (
     <Formik
@@ -285,6 +341,11 @@ const OffersForm = (): React.ReactElement => {
                     />
                   )}
                 </div>
+                <OfferResume
+                  company={company}
+                  offerResume={offerResume}
+                  category={formState.category}
+                />
               </section>
               <section className="datasheet-form__section">
                 <section className="form-offer__select-data">
@@ -365,9 +426,7 @@ const OffersForm = (): React.ReactElement => {
                       </section>
                     </section>
                   </div>
-                  <div className="form-subsection">
-                    <CustomFileInput setFile={setFile} file={file!} multiple />
-                  </div>
+                  <CustomFileInput setFile={setFile} file={file!} multiple />
                   <OffersScheduling
                     category={+formState.category}
                     errors={
@@ -394,20 +453,35 @@ const OffersForm = (): React.ReactElement => {
                     setAddress={(value) =>
                       handleFormStateChange("address", value)
                     }
+                    handleScheduling={handleSchedulingStateChange}
+                    schedulingState={schedulingState}
                   />
                 </section>
               </section>
             </div>
           </div>
-          <div className="form-actions">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="form-actions__button"
-            >
-              {isSubmitting ? "Loading..." : "Enviar"}
-            </button>
-          </div>
+
+          <button
+            type="submit"
+            disabled={isSubmitting || !offerResume}
+            className={
+              isSuccess
+                ? "datasheet-form__success"
+                : error
+                  ? "datasheet-form__error"
+                  : "datasheet-form__submit"
+            }
+          >
+            {isSubmitting ? (
+              <Loader width="20px" height="20px" />
+            ) : isSuccess ? (
+              "Oferta creada"
+            ) : error ? (
+              "Revisa los datos e intentalo de nuevo"
+            ) : (
+              "Crear oferta"
+            )}
+          </button>
         </ReusableFormStyled>
       )}
     </Formik>

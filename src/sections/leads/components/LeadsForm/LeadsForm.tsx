@@ -427,7 +427,7 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
             children={
               <AddressForm
                 address={registerAddress!}
-                setAddress={setRegisterAddress}
+                setAddress={setRegisterAddress as never}
               />
             }
             openModal={isAddressModalOpen}
