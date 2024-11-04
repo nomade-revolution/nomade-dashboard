@@ -11,6 +11,7 @@ import {
 import { Company } from "modules/user/domain/User";
 import {
   ACTIVITY_OFFER_ID,
+  BRAND_OFFER_ID,
   DELIVERY_OFFER_ID,
   LODGING_OFFER_ID,
   RESTAURANT_OFFER_ID,
@@ -57,12 +58,12 @@ interface Props {
     value:
       | OfferableRestaurant[]
       | OfferableActivity[]
-      | OfferableDelivery[]
+      | OfferableDelivery
       | OfferableLodging[],
   ) => void;
   schedulingState: {
     restaurant: OfferableRestaurant[];
-    delivery: OfferableDelivery[];
+    delivery: OfferableDelivery;
     activity: OfferableActivity[];
     brand: object;
     lodging: OfferableLodging[];
@@ -137,10 +138,7 @@ const OffersScheduling = ({
           week: week,
         };
 
-        handleScheduling("delivery", [
-          ...schedulingState.delivery,
-          newOfferableDelivery,
-        ]);
+        handleScheduling("delivery", newOfferableDelivery);
         break;
       }
     }
@@ -276,7 +274,7 @@ const OffersScheduling = ({
         setSelectedDays={setSelectedDays}
       />
       <div className="scheduling__btn-container">
-        {category ? (
+        {category && category !== BRAND_OFFER_ID ? (
           <button
             type="button"
             className="scheduling__save-btn"

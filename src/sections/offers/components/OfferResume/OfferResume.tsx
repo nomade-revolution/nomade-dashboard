@@ -33,13 +33,18 @@ const OfferResume = ({
   company,
   category,
 }: Props): React.ReactElement => {
+  const resume =
+    offerResume && Array.isArray(offerResume)
+      ? offerResume
+      : offerResume && Array(offerResume);
+
   return (
     <OfferResumeStyled className="offer-resume">
       <h4>Horarios</h4>
       {!offerResume ? (
         <span>No has configurado nada</span>
       ) : (
-        offerResume?.map((schedule) => (
+        resume?.map((schedule) => (
           <div className="offer-resume__content">
             {(+category === RESTAURANT_OFFER_ID ||
               +category === LODGING_OFFER_ID ||
@@ -94,7 +99,8 @@ const OfferResume = ({
             )}
             {(+category === RESTAURANT_OFFER_ID ||
               +category === LODGING_OFFER_ID ||
-              +category === ACTIVITY_OFFER_ID) &&
+              +category === ACTIVITY_OFFER_ID ||
+              +category === DELIVERY_OFFER_ID) &&
               (
                 schedule as
                   | OfferableRestaurant
