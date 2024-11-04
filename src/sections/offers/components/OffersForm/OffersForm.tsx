@@ -63,7 +63,8 @@ const OffersForm = (): React.ReactElement => {
     | OfferableRestaurant[]
     | OfferableLodging[]
     | OfferableActivity[]
-    | OfferableDelivery[]
+    | OfferableDelivery
+    | object
   >([]);
 
   const [formState, setFormState] = useState<{
@@ -84,13 +85,13 @@ const OffersForm = (): React.ReactElement => {
 
   const [schedulingState, setSchedulingState] = useState<{
     restaurant: OfferableRestaurant[];
-    delivery: OfferableDelivery[];
+    delivery: OfferableDelivery;
     activity: OfferableActivity[];
     brand: object;
     lodging: OfferableLodging[];
   }>({
     restaurant: [],
-    delivery: [],
+    delivery: {} as OfferableDelivery,
     activity: [],
     brand: {},
     lodging: [],
@@ -105,7 +106,7 @@ const OffersForm = (): React.ReactElement => {
     value:
       | OfferableRestaurant[]
       | OfferableActivity[]
-      | OfferableDelivery[]
+      | OfferableDelivery
       | OfferableLodging[],
   ) => {
     setSchedulingState((prevState) => ({ ...prevState, [field]: value }));
@@ -190,8 +191,8 @@ const OffersForm = (): React.ReactElement => {
       [RESTAURANT_OFFER_ID]: "App\\Models\\OfferableRestaurant",
       [BRAND_OFFER_ID]: "App\\Models\\OfferableBrand",
       [LODGING_OFFER_ID]: "App\\Models\\OfferableLodging",
-      [DELIVERY_OFFER_ID]: "App\\Models\\OfferableActivity",
-      [ACTIVITY_OFFER_ID]: "App\\Models\\OfferableDelivery",
+      [DELIVERY_OFFER_ID]: "App\\Models\\OfferableDelivery",
+      [ACTIVITY_OFFER_ID]: "App\\Models\\OfferableActivity",
     };
 
     if (formState.category) {
@@ -207,8 +208,18 @@ const OffersForm = (): React.ReactElement => {
       return Array.isArray(state) && state.length > 0;
     });
 
-    setOfferResume(offerSchedule as never);
-  }, [schedulingState]);
+    switch (+formState.category) {
+      case BRAND_OFFER_ID:
+        setOfferResume({});
+        break;
+      case DELIVERY_OFFER_ID:
+        setOfferResume(schedulingState["delivery"]);
+        break;
+      default:
+        setOfferResume(offerSchedule as never);
+        break;
+    }
+  }, [formState.category, schedulingState]);
 
   useEffect(() => {
     if (isSuccess) {
@@ -343,7 +354,7 @@ const OffersForm = (): React.ReactElement => {
                 </div>
                 <OfferResume
                   company={company}
-                  offerResume={offerResume}
+                  offerResume={offerResume as never}
                   category={formState.category}
                 />
               </section>
