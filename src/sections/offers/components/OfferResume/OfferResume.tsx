@@ -3,6 +3,7 @@ import {
   OfferableActivity,
   OfferableLodging,
   OfferableDelivery,
+  FullOffer,
 } from "modules/offers/domain/Offer";
 import { Company } from "modules/user/domain/User";
 import { offersTimetable } from "sections/offers/utils/offersTimetable";
@@ -26,15 +27,18 @@ interface Props {
     | OfferableLodging[];
   company: Company;
   category: string;
+  offer?: FullOffer;
 }
 
 const OfferResume = ({
   offerResume,
   company,
   category,
+  offer,
 }: Props): React.ReactElement => {
-  const resume =
-    offerResume && Array.isArray(offerResume)
+  const resume = offer
+    ? offer.calendar
+    : offerResume && Array.isArray(offerResume)
       ? offerResume
       : offerResume && Array(offerResume);
 
@@ -123,11 +127,11 @@ const OfferResume = ({
                     <div>
                       <span className="offer-resume__text-icon">
                         <MdLogin color={"green"} />
-                        {day.time_slot[0].from_time}h
+                        {day?.time_slot[0].from_time}h
                       </span>
                       <span className="offer-resume__text-icon">
                         <BiLogOut color="red" />
-                        {day.time_slot[0].to_time}h
+                        {day?.time_slot[0].to_time}h
                       </span>
                     </div>
                   </div>
@@ -135,11 +139,12 @@ const OfferResume = ({
                     <span className="offer-resume__text-bold">2o turno</span>
                     <div>
                       <span className="offer-resume__text-icon">
-                        <MdLogin color={"green"} /> {day.time_slot[1].from_time}
+                        <MdLogin color={"green"} />{" "}
+                        {day?.time_slot[1].from_time}
                       </span>
                       <span className="offer-resume__text-icon">
                         {" "}
-                        <BiLogOut color="red" /> {day.time_slot[1].to_time}
+                        <BiLogOut color="red" /> {day?.time_slot[1].to_time}
                       </span>
                     </div>
                   </div>

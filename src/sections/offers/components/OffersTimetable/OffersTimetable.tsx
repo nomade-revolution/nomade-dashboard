@@ -140,6 +140,7 @@ const OffersTimetable = ({
                           id={`from_time_day_${index + 1}_1`}
                           className="form-subsection__field--small-time"
                           aria-label="Entrada primer turno"
+                          step="1800"
                           {...getFieldProps(
                             `from_time_day_${time.day_number}_1`,
                           )}

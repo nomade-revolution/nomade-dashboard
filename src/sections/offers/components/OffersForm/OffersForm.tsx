@@ -8,6 +8,7 @@ import {
   FormikTouched,
 } from "formik";
 import {
+  FullOffer,
   OfferableActivity,
   OfferableBrand,
   OfferableDelivery,
@@ -15,7 +16,7 @@ import {
   OfferableRestaurant,
   OfferFormStructure,
 } from "modules/offers/domain/Offer";
-import { initialValues, offerSchema } from "./utils/validations";
+import { initialData, offerSchema } from "./utils/validations";
 import ReusableSelect from "sections/shared/components/ReusableSelect/ReusableSelect";
 import { categories, locationTypes } from "./utils/options";
 import { useEffect, useState } from "react";
@@ -42,7 +43,11 @@ import { useOffersContext } from "sections/offers/OffersContext/useOffersContext
 import { useNavigate } from "react-router-dom";
 import Loader from "sections/shared/components/Loader/Loader";
 
-const OffersForm = (): React.ReactElement => {
+interface Props {
+  offer?: FullOffer;
+}
+
+const OffersForm = ({ offer }: Props): React.ReactElement => {
   const { getAllCountries, countries } = useCountryContext();
   const { cities, getAllCities } = useCitiesContext();
   const { companies, getCompaniesWithParams } = useCompanyContext();
@@ -51,7 +56,9 @@ const OffersForm = (): React.ReactElement => {
 
   const navigate = useNavigate();
 
-  const [companySearch, setCompanySearch] = useState<string>("");
+  const [companySearch, setCompanySearch] = useState<string>(
+    offer?.company ?? "",
+  );
   const [company, setCompany] = useState<Company>({} as Company);
   const [countriesFormat, setCountriesFormat] = useState<OptionsStructure[]>(
     [],
@@ -78,9 +85,9 @@ const OffersForm = (): React.ReactElement => {
     country: "",
     city: "",
     location: "",
-    category: "",
+    category: String(offer?.offer_category_id) ?? "",
     offerable_type: "",
-    address: "",
+    address: String(offer?.calendar[0].address_id) ?? "",
   });
 
   const [schedulingState, setSchedulingState] = useState<{
@@ -227,9 +234,14 @@ const OffersForm = (): React.ReactElement => {
     }
   }, [isSuccess, navigate]);
 
+  const initialValues = {
+    ...initialData,
+    ...offer,
+  };
+
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={initialValues as OfferFormStructure}
       validationSchema={offerSchema}
       onSubmit={handleSubmitForm}
     >
@@ -356,6 +368,7 @@ const OffersForm = (): React.ReactElement => {
                   company={company}
                   offerResume={offerResume as never}
                   category={formState.category}
+                  offer={offer}
                 />
               </section>
               <section className="datasheet-form__section">
