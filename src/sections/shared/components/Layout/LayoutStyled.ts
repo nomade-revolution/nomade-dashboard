@@ -32,6 +32,7 @@ const LayoutStyled = styled.div`
       z-index: 100;
       position: sticky;
       width: 100%;
+      background: ${(props) => `${props.theme.colors.mainColor}60`};
 
       @media (min-width: 1000px) {
         display: none;

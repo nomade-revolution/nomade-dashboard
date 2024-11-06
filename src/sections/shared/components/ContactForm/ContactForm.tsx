@@ -3,14 +3,15 @@ import ReusableSelect from "../ReusableSelect/ReusableSelect";
 import ReusableFormStyled from "assets/styles/ReusableFormStyled";
 import { useEffect, useState } from "react";
 
-import { Contact } from "modules/contact/domain/Contact";
+import { Contact, ContactType } from "modules/contact/domain/Contact";
 import { contactSchema } from "./validations/validations";
-import { useContactContext } from "sections/contact/ContactContext/useContactContext";
 import { OptionsStructure } from "sections/shared/interfaces/interfaces";
 
 interface Props {
   setContact: (value: Contact) => void;
   contact: Contact;
+  setIsModalOpen: (value: boolean) => void;
+  contact_types: ContactType[];
 }
 
 const initialState: Contact = {
@@ -21,12 +22,16 @@ const initialState: Contact = {
   type_id: 0,
 };
 
-const ContactForm = ({ setContact, contact }: Props): React.ReactElement => {
+const ContactForm = ({
+  setContact,
+  contact,
+  setIsModalOpen,
+  contact_types,
+}: Props): React.ReactElement => {
   const [registerContact, setRegisterContact] = useState<string>("");
   const [contactTypesFormat, setContactTypesFormat] = useState<
     OptionsStructure[]
   >([]);
-  const { contact_types, getAllContactTypes } = useContactContext();
 
   const handleSubmitForm = async (
     values: Contact,
@@ -35,16 +40,13 @@ const ContactForm = ({ setContact, contact }: Props): React.ReactElement => {
     setSubmitting(true);
     setContact({ ...values, type_id: +registerContact });
     setSubmitting(false);
+    setIsModalOpen(false);
   };
 
   const initialValues = {
     ...initialState,
     ...contact,
   };
-
-  useEffect(() => {
-    getAllContactTypes();
-  }, [getAllContactTypes]);
 
   useEffect(() => {
     const contactTypes: OptionsStructure[] = contact_types.map((type) => ({
