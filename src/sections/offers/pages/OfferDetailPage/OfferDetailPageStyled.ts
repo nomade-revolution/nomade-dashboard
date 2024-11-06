@@ -7,7 +7,6 @@ const OfferDetailPageStyled = styled.div`
   gap: 20px;
   align-self: center;
   justify-content: center;
-  align-items: center;
   height: 100%;
   padding: 50px;
 
@@ -112,6 +111,7 @@ const OfferDetailPageStyled = styled.div`
       box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
       padding: 20px 40px;
       border-radius: 10px;
+      min-width: 90vh;
     }
 
     &__offer {

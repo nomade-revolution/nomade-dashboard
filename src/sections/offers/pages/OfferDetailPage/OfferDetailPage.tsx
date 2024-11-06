@@ -10,6 +10,7 @@ import NoDataHandler from "sections/shared/components/NoDataHandler/NoDataHandle
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
 import { FaEdit } from "react-icons/fa";
 import OffersForm from "sections/offers/components/OffersForm/OffersForm";
+import GoBackButton from "sections/shared/components/GoBackButton/GoBackButton";
 
 const OfferDetailsPage = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -42,10 +43,11 @@ const OfferDetailsPage = () => {
         </>
       ) : (
         <OfferDetailPageStyled>
+          <GoBackButton />
+
           <section className="offer-detail__data">
             <div className="offer-detail__heading">
               <h3 className="offer-detail__title">{offer.company}</h3>
-
               <button
                 onClick={handleIsModalOpen}
                 className="offer-detail__edit-btn"
