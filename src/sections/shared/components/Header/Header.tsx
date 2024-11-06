@@ -46,7 +46,7 @@ const Header = ({
         alt="Fresatitan logo"
         className="header__image"
         height={30}
-        width={200}
+        width={120}
         image="/main_logo.png"
       />
       {pathname !== appPaths.login &&

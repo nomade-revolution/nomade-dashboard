@@ -14,6 +14,7 @@ import { useCitiesContext } from "sections/city/CityContext/useCitiesContext";
 interface Props {
   setAddress: Dispatch<SetStateAction<FullAddress | null>>;
   address: FullAddress;
+  setIsModalOpen: (value: boolean) => void;
 }
 
 const initialState: FullAddress = {
@@ -28,7 +29,11 @@ const initialState: FullAddress = {
   zip_code: "",
 };
 
-const AddressForm = ({ setAddress, address }: Props): React.ReactElement => {
+const AddressForm = ({
+  setAddress,
+  address,
+  setIsModalOpen,
+}: Props): React.ReactElement => {
   const { getAllCountries, countries } = useCountryContext();
   const { cities, getAllCities } = useCitiesContext();
   const [countriesFormat, setCountriesFormat] = useState<OptionsStructure[]>(
@@ -45,6 +50,7 @@ const AddressForm = ({ setAddress, address }: Props): React.ReactElement => {
     setSubmitting(true);
     setAddress({ ...values, city_id: city, country_id: +country });
     setSubmitting(false);
+    setIsModalOpen(false);
   };
 
   useEffect(() => {
