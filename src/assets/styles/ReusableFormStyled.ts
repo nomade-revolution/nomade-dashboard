@@ -277,6 +277,18 @@ const ReusableFormStyled = styled.form`
     resize: none;
   }
 
+  .leads-form {
+    overflow-y: scroll;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    @media (min-width: 1000px) {
+      height: 800px;
+    }
+  }
+
   .lead-form {
     width: 100%;
     display: flex;
@@ -288,11 +300,6 @@ const ReusableFormStyled = styled.form`
       flex-direction: column;
       gap: 20px;
       width: 100%;
-
-      @media (min-width: 1000px) {
-        flex-direction: unset;
-        flex-wrap: wrap;
-      }
     }
 
     &__title {
@@ -306,7 +313,7 @@ const ReusableFormStyled = styled.form`
     }
 
     &__link {
-      color: #4287f5;
+      color: ${(props) => props.theme.colors.mainColor};
       font-weight: 700;
       display: flex;
       align-items: center;
@@ -326,6 +333,38 @@ const ReusableFormStyled = styled.form`
 
     &__footer-mssg {
       font-size: ${(props) => props.theme.fontsSize.__S};
+    }
+
+    &__field,
+    &__field-textarea {
+      display: flex;
+      align-items: center;
+      height: 40px;
+      border-radius: ${(props) => props.theme.borderRadius.inputs};
+      border: 1px solid ${(props) => props.theme.borders.lightGrey};
+      padding: 0 8px;
+      width: 90%;
+      gap: 40px;
+    }
+
+    &__field-textarea {
+      height: 150px;
+      padding: 10px;
+      font-family: inherit;
+    }
+
+    &__select {
+      width: 90%;
+    }
+
+    &__address {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: ${(props) => props.theme.fontsSize.__SM};
+      border-radius: 10px;
+      width: fit-content;
+      font-weight: 700;
     }
   }
 
