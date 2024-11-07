@@ -314,14 +314,11 @@ const ReusableFormStyled = styled.form`
 
     &__link {
       color: ${(props) => props.theme.colors.mainColor};
-      font-weight: 700;
       display: flex;
       align-items: center;
       gap: 5px;
-
-      &:hover {
-        text-decoration: underline;
-      }
+      text-decoration: underline;
+      padding-top: 10px;
     }
 
     &__checkbox-container {
