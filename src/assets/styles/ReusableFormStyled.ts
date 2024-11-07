@@ -1,6 +1,10 @@
 import styled from "styled-components";
 
-const ReusableFormStyled = styled.form`
+interface Props {
+  $isMultiple?: boolean;
+}
+
+const ReusableFormStyled = styled.form<Props>`
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -67,7 +71,8 @@ const ReusableFormStyled = styled.form`
     }
 
     &__add-address,
-    &__add-contact {
+    &__add-contact,
+    &__save-contact {
       display: flex;
       align-items: center;
       gap: 8px;
@@ -81,6 +86,10 @@ const ReusableFormStyled = styled.form`
       &--icon {
         font-size: large;
       }
+    }
+
+    &__save-contact {
+      background: ${(props) => props.theme.colors.mainColor};
     }
 
     &__address-mssg,
@@ -145,6 +154,26 @@ const ReusableFormStyled = styled.form`
         opacity: 0.7;
         cursor: not-allowed;
       }
+    }
+
+    &__contact {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-bottom: ${(props) =>
+        props.$isMultiple ? "2px solid black" : "none"};
+      padding-bottom: 20px;
+      width: 100%;
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+
+    &__btns {
+      display: flex;
+      align-items: center;
+      gap: 20px;
     }
   }
 
@@ -302,6 +331,12 @@ const ReusableFormStyled = styled.form`
       width: 100%;
     }
 
+    &__section-link {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
     &__title {
       color: ${(props) => props.theme.colors.mainColor};
     }
@@ -318,7 +353,6 @@ const ReusableFormStyled = styled.form`
       align-items: center;
       gap: 5px;
       text-decoration: underline;
-      padding-top: 10px;
     }
 
     &__checkbox-container {

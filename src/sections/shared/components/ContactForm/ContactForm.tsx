@@ -1,15 +1,14 @@
-import { Formik, Field, ErrorMessage, FormikHelpers } from "formik";
+import { Formik, Field, ErrorMessage, FormikProps } from "formik";
 import ReusableSelect from "../ReusableSelect/ReusableSelect";
 import ReusableFormStyled from "assets/styles/ReusableFormStyled";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Contact, ContactType } from "modules/contact/domain/Contact";
 import { contactSchema } from "./validations/validations";
-import { OptionsStructure } from "sections/shared/interfaces/interfaces";
 
 interface Props {
-  setContact: (value: Contact) => void;
-  contact: Contact;
+  setContacts: (value: Contact[]) => void;
+  contacts: Contact[];
   setIsModalOpen: (value: boolean) => void;
   contact_types: ContactType[];
 }
@@ -23,161 +22,168 @@ const initialState: Contact = {
 };
 
 const ContactForm = ({
-  setContact,
-  contact,
+  contacts,
+  setContacts,
   setIsModalOpen,
   contact_types,
 }: Props): React.ReactElement => {
-  const [registerContact, setRegisterContact] = useState<string>("");
-  const [contactTypesFormat, setContactTypesFormat] = useState<
-    OptionsStructure[]
-  >([]);
+  const [contactForms, setContactForms] = useState<Contact[]>(
+    contacts.length > 0 ? contacts : [{ ...initialState }],
+  );
 
-  const handleSubmitForm = async (
-    values: Contact,
-    { setSubmitting }: FormikHelpers<Contact>,
-  ) => {
-    setSubmitting(true);
-    setContact({ ...values, type_id: +registerContact });
-    setSubmitting(false);
+  const [types_id, setTypesId] = useState<string[]>(
+    contacts.map((contact) => contact.type_id.toString()),
+  );
+
+  const formRefs = useRef<FormikProps<Contact>[]>([]);
+
+  const handleAddContactForm = () => {
+    setContactForms([...contactForms, { ...initialState }]);
+    setTypesId([...types_id, "0"]);
+  };
+
+  const handleSaveContacts = () => {
+    const updatedContacts = formRefs.current.map((formik) => formik.values);
+
+    const contacts = updatedContacts.map((contact, index) => ({
+      ...contact,
+      type_id: +types_id[index],
+    }));
+
+    setContacts(contacts);
     setIsModalOpen(false);
   };
 
-  const initialValues = {
-    ...initialState,
-    ...contact,
+  const handleSelectChange = (index: number, value: string) => {
+    setTypesId((prev) => {
+      const updated = [...prev];
+      updated[index] = value;
+      return updated;
+    });
   };
 
   useEffect(() => {
-    const contactTypes: OptionsStructure[] = contact_types.map((type) => ({
-      id: type.id,
-      name: type.name,
-      value: type.id,
-    }));
-
-    setContactTypesFormat(contactTypes);
-  }, [contact, contact_types]);
+    if (contacts.length > 0) {
+      setContactForms(contacts);
+      setTypesId(contacts.map((contact) => contact.type_id.toString()));
+    }
+  }, [contacts]);
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validationSchema={contactSchema}
-      onSubmit={handleSubmitForm}
+    <ReusableFormStyled
+      className="contact-form-modal"
+      $isMultiple={contacts.length > 0}
     >
-      {({ errors, touched, handleSubmit, getFieldProps, isSubmitting }) => (
-        <ReusableFormStyled onSubmit={handleSubmit} className="datasheet-form">
-          <h3>Dirección</h3>
-          <section className="datasheet-form__section">
-            <div className="form-subsection">
-              <label htmlFor="name" className="form-subsection__label">
-                Nombre
-              </label>
-              <Field
-                type="text"
-                id="name"
-                className="form-subsection__field"
-                aria-label="Nombre del laboratorio"
-                {...getFieldProps("name")}
-              />
-              {errors.name && touched.name && (
-                <ErrorMessage
-                  className="form-subsection__error-message"
-                  component="span"
-                  name="name"
+      <h3>Gestión de Contactos</h3>
+      {contactForms.map((contact, index) => (
+        <Formik
+          key={index}
+          innerRef={(ref) => (formRefs.current[index] = ref!)}
+          initialValues={contact}
+          validationSchema={contactSchema}
+          onSubmit={() => {}}
+        >
+          {({ getFieldProps, errors, touched }) => (
+            <form className="datasheet-form__contact">
+              <div className="form-subsection">
+                <label
+                  htmlFor={`name-${index}`}
+                  className="form-subsection__label"
+                >
+                  Nombre
+                </label>
+                <Field
+                  type="text"
+                  id={`name-${index}`}
+                  className="form-subsection__field-large"
+                  {...getFieldProps("name")}
                 />
-              )}
-            </div>
-            <div className="form-subsection">
-              <label htmlFor="surname" className="form-subsection__label">
-                Apellidos
-              </label>
-              <Field
-                type="text"
-                id="surname"
-                className="form-subsection__field-large"
-                aria-label="Alias"
-                {...getFieldProps("surname")}
-              />
-              {errors.surname && touched.surname && (
-                <ErrorMessage
-                  className="form-subsection__error-message"
-                  component="span"
-                  name="surname"
+                {errors.name && touched.name && <ErrorMessage name="name" />}
+              </div>
+              <div className="form-subsection">
+                <label
+                  htmlFor={`surname-${index}`}
+                  className="form-subsection__label"
+                >
+                  Apellidos
+                </label>
+                <Field
+                  type="text"
+                  id={`surname-${index}`}
+                  className="form-subsection__field-large"
+                  {...getFieldProps("surname")}
                 />
-              )}
-            </div>
-          </section>
-          <section className="datasheet-form__section">
-            <div className="form-subsection">
-              <label htmlFor="phone" className="form-subsection__label">
-                Teléfono
-              </label>
-              <Field
-                type="phone"
-                id="phone"
-                className="form-subsection__field"
-                aria-label="Correo electrónico"
-                {...getFieldProps("phone")}
-              />
-              {errors.phone && touched.phone && (
-                <ErrorMessage
-                  className="form-subsection__error-message"
-                  component="span"
-                  name="email"
+                {errors.surname && touched.surname && (
+                  <ErrorMessage name="surname" />
+                )}
+              </div>
+              <div className="form-subsection">
+                <label
+                  htmlFor={`email-${index}`}
+                  className="form-subsection__label"
+                >
+                  Email
+                </label>
+                <Field
+                  type="email"
+                  id={`email-${index}`}
+                  className="form-subsection__field-large"
+                  {...getFieldProps("email")}
                 />
-              )}
-            </div>
-            <div className="form-subsection">
-              <label htmlFor="email" className="form-subsection__label">
-                Email
-              </label>
-              <Field
-                type="email"
-                id="email"
-                className="form-subsection__field-large"
-                aria-label="Teléfono de contacto"
-                {...getFieldProps("email")}
-              />
-              {errors.email && touched.email && (
-                <ErrorMessage
-                  className="form-subsection__error-message"
-                  component="span"
-                  name="email"
+                {errors.email && touched.email && <ErrorMessage name="email" />}
+              </div>
+              <div className="form-subsection">
+                <label
+                  htmlFor={`phone-${index}`}
+                  className="form-subsection__label"
+                >
+                  Teléfono
+                </label>
+                <Field
+                  type="phone"
+                  id={`phone-${index}`}
+                  className="form-subsection__field-large"
+                  {...getFieldProps("phone")}
                 />
-              )}
-            </div>
-          </section>
-          <section className="datasheet-form__section">
-            <div className="form-subsection">
-              <label htmlFor="type_id" className="form-subsection__label">
-                Tipo de contacto
-              </label>
-              <ReusableSelect
-                label="Tipo de contacto"
-                options={contactTypesFormat}
-                setValue={setRegisterContact}
-                value={registerContact}
-              />
-              {errors.type_id && touched.type_id && (
-                <ErrorMessage
-                  className="form-subsection__error-message"
-                  component="span"
-                  name="type_id"
+                {errors.phone && touched.phone && <ErrorMessage name="phone" />}
+              </div>
+              <div className="form-subsection">
+                <label
+                  htmlFor={`type_id-${index}`}
+                  className="form-subsection__label"
+                >
+                  Tipo de Contacto
+                </label>
+                <ReusableSelect
+                  label="Tipos"
+                  options={contact_types.map((type) => ({
+                    id: type.id,
+                    name: type.name,
+                    value: type.id,
+                  }))}
+                  value={types_id[index]}
+                  setValue={(value) => handleSelectChange(index, value)}
                 />
-              )}
-            </div>
-          </section>
-
-          <button
-            type="submit"
-            className="datasheet-form__submit"
-            disabled={isSubmitting}
-          >
-            Guardar
-          </button>
-        </ReusableFormStyled>
-      )}
-    </Formik>
+              </div>
+            </form>
+          )}
+        </Formik>
+      ))}
+      <section className="datasheet-form__btns">
+        <button
+          onClick={handleAddContactForm}
+          className="datasheet-form__add-contact"
+        >
+          Añadir contacto
+        </button>
+        <button
+          onClick={handleSaveContacts}
+          className="datasheet-form__save-contact"
+        >
+          Guardar contactos
+        </button>
+      </section>
+    </ReusableFormStyled>
   );
 };
 
