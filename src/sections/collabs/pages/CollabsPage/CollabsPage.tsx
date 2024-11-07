@@ -106,64 +106,58 @@ const CollabsPage = (): React.ReactElement => {
         <Loader width="20px" height="20px" />
       ) : (
         <ReusablePageStyled>
-          <div className="dashboard__table">
-            <div className="dashboard__searchContainer">
-              <SearchBar
-                pageName={SectionTypes.collabs}
-                pageTypes={SectionTypes.collabs}
-                searchText={searchText!}
-                setSearchText={setSearchText}
-                onReset={() => getCollabs()}
-                onSearchSubmit={() => handleSearch(searchText)}
-              />
-            </div>
+          <div className="dashboard__filtersContainer">
+            <TypeAhead
+              options={companies.map((company) => {
+                return {
+                  id: company.id,
+                  name: company.company + " / " + company.company_name,
+                  value: company.id,
+                };
+              })}
+              label="Filtrar por empresa"
+              setValue={setCompanySelect}
+              value={companySelect}
+              searchText={""}
+              getFunctions={getCompanySearch}
+            />
 
-            <div className="dashboard__searchContainer">
-              <TypeAhead
-                options={companies.map((company) => {
-                  return {
-                    id: company.id,
-                    name: company.company + " / " + company.company_name,
-                    value: company.id,
-                  };
-                })}
-                label="Filtrar por empresa"
-                setValue={setCompanySelect}
-                value={companySelect}
-                searchText={""}
-                getFunctions={getCompanySearch}
-              />
-            </div>
-            <div className="dashboard__searchContainer">
-              <TypeAhead
-                label="Filtrar por influencer"
-                setValue={setInfluencerSelect}
-                value={influencerSelect}
-                options={influencers.map((influencer) => {
-                  return {
-                    id: influencer.id,
-                    name: influencer.name + " / " + influencer.user_name,
-                    value: influencer.id,
-                  };
-                })}
-                searchText={""}
-                getFunctions={getInfluencersSearch}
-              />
-            </div>
-            <div className="dashboard__filterContainer">
-              <div className="filterBox">
-                <ReusableSelect
-                  label="Filtrar por estado"
-                  options={
-                    user.type === "Company"
-                      ? collabsFiltersCompany
-                      : collabsFiltersNomade
-                  }
-                  setValue={setFilterId}
-                  value={filterId}
-                />
-              </div>
-            </div>
+            <TypeAhead
+              label="Filtrar por influencer"
+              setValue={setInfluencerSelect}
+              value={influencerSelect}
+              options={influencers.map((influencer) => {
+                return {
+                  id: influencer.id,
+                  name: influencer.name + " / " + influencer.user_name,
+                  value: influencer.id,
+                };
+              })}
+              searchText={""}
+              getFunctions={getInfluencersSearch}
+            />
+
+            <ReusableSelect
+              label="Filtrar por estado"
+              options={
+                user.type === "Company"
+                  ? collabsFiltersCompany
+                  : collabsFiltersNomade
+              }
+              setValue={setFilterId}
+              value={filterId}
+            />
+
+            <SearchBar
+              pageName={SectionTypes.collabs}
+              pageTypes={SectionTypes.collabs}
+              searchText={searchText!}
+              setSearchText={setSearchText}
+              onReset={() => getCollabs()}
+              onSearchSubmit={() => handleSearch(searchText)}
+            />
+          </div>
+          <div className="dashboard__table">
             <DashboardTable
               bodySections={collabs}
               headerSections={collabsHeaderSections}
@@ -173,9 +167,8 @@ const CollabsPage = (): React.ReactElement => {
             />
           </div>
           <div className="dashboard__mobile">
-            <div className="dashboard__searchContainer">
-              <h3 className="dashboard__title">Collabs</h3>
-            </div>
+            <h3 className="dashboard__title">Collabs</h3>
+
             <DashboardCardListMobile
               bodySections={collabs}
               headerSections={collabsHeaderSections}

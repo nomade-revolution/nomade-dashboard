@@ -2,7 +2,7 @@ import { Formik, Field, ErrorMessage, FormikHelpers } from "formik";
 import { leadsScheme } from "./validations/validations";
 import { CompanyRegisterStructure } from "modules/user/domain/User";
 import { FullAddress } from "modules/address/domain/Address";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
 import { IoAddCircle } from "react-icons/io5";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
@@ -14,8 +14,7 @@ import { Contact } from "modules/contact/domain/Contact";
 import SuccessFeedback from "sections/shared/components/Feedbacks/components/SuccessFeedback/SuccessFeedback";
 import { Link } from "react-router-dom";
 import CustomCheckbox from "sections/shared/components/CustomCheckbox/CustomCheckbox";
-import ReusableSelect from "sections/shared/components/ReusableSelect/ReusableSelect";
-import { offersCategories } from "sections/offers/utils/offersCategories";
+
 import { useContactContext } from "sections/contact/ContactContext/useContactContext";
 
 interface Props {
@@ -39,15 +38,14 @@ const initialState: CompanyRegisterStructure = {
 };
 
 const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
-  const [file, setFile] = useState<File | null>(null);
+  // const [file, setFile] = useState<File | null>(null);
   const [registerAddress, setRegisterAddress] = useState<FullAddress | null>(
     null,
   );
-  const [registerContact, setRegisterContact] = useState<Contact | null>(null);
+  const [registerContacts, setRegisterContacts] = useState<Contact[]>([]);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState<boolean>(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState<boolean>(false);
   const [isCheked, setIsChecked] = useState<boolean>(false);
-  const [type_id, setTypeId] = useState<string>("");
   const { postCompany, isSuccess } = useCompanyContext();
   const { contact_types, getAllContactTypes } = useContactContext();
 
@@ -66,28 +64,18 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
       key !== "id" && formData.append(key, (values as never)[key as never]);
     });
 
-    if (file) {
-      formData.append("image", file);
-    }
-
     registerAddress &&
       formData.append("address", JSON.stringify(registerAddress));
 
-    registerContact &&
-      formData.append("contacts", JSON.stringify([registerContact]));
+    if (registerContacts.length > 0) {
+      formData.append("contacts", JSON.stringify(registerContacts));
+    }
 
     formData.append("name", values.company_name);
     formData.append("checked", JSON.stringify(isCheked));
-    formData.append("type", JSON.stringify(type_id));
 
     await postCompany(formData);
     setSubmitting(false);
-  };
-
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.currentTarget.files) {
-      setFile(event.currentTarget.files[0]);
-    }
   };
 
   const handleIsAddressModalOpen = () => {
@@ -97,6 +85,10 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
   const handleIsContactModalOpen = () => {
     setIsContactModalOpen(true);
   };
+
+  useEffect(() => {
+    getAllContactTypes();
+  }, [getAllContactTypes]);
 
   const initialValues = {
     ...initialState,
@@ -115,7 +107,11 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
       onSubmit={handleSubmitForm}
     >
       {({ errors, touched, handleSubmit, getFieldProps, isSubmitting }) => (
-        <ReusableFormStyled onSubmit={handleSubmit} className="datasheet-form">
+        <ReusableFormStyled
+          onSubmit={handleSubmit}
+          className="datasheet-form"
+          $isMultiple={false}
+        >
           <div className="leads-form">
             <h3>Alta cliente</h3>
             <section className="datasheet-form__section">
@@ -195,7 +191,7 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
 
             <section className="lead-form__section">
               <h4 className="lead-form__title">Información de facturación</h4>
-              <div>
+              <div className="lead-form__section-link">
                 <span className="lead-form__thirdparty-link">
                   Completar vuestros datos de facturación el siguiente enlace:
                 </span>
@@ -212,6 +208,12 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                 <CustomCheckbox onChange={handleIsChecked} checked={isCheked} />
                 <span>He rellenado la información en Gocardless.com</span>
               </div>
+              <span className="lead-form__footer-mssg">
+                **No se realizará ningún cargo si no se ha efectuado ninguna
+                colaboración, y solo se cobrará el plan acorde al número de
+                colaboraciones realizadas durante el periodo. Queremos ser
+                flexibles y transparentes.{" "}
+              </span>
             </section>
             <section className="datasheet-form__section">
               <div className="datasheet-form__section--lead-form lead-form">
@@ -323,7 +325,7 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                 )}
               </div>
               <div className="datasheet-form__addresses">
-                <div className="form-subsection">
+                {/* <div className="form-subsection">
                   <label htmlFor="image" className="form-subsection__label">
                     Imágen
                   </label>
@@ -341,24 +343,25 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                       name="image"
                     />
                   )}
-                </div>
-                {registerContact && (
-                  <section className="lead-form__address">
-                    <div>
-                      <span>{registerContact.name}</span>
-                      <span>{registerContact.surname}</span>
-                    </div>
-                    <span>{registerContact.email}</span>
-                    <span>{registerContact.phone}</span>
-                    <span>
-                      {
-                        contact_types.find(
-                          (contact) => contact.id === registerContact.type_id,
-                        )?.name
-                      }
-                    </span>
-                  </section>
-                )}
+                </div> */}
+                {registerContacts &&
+                  registerContacts.map((contact) => (
+                    <section className="lead-form__address">
+                      <div>
+                        <span>{contact.name}</span>
+                        <span>{contact.surname}</span>
+                      </div>
+                      <span>{contact.email}</span>
+                      <span>{contact.phone}</span>
+                      <span>
+                        {
+                          contact_types.find(
+                            (type) => type.id === contact.type_id,
+                          )?.name
+                        }
+                      </span>
+                    </section>
+                  ))}
 
                 <div className="datasheet-form__contact-section">
                   <button
@@ -366,27 +369,21 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                     className="datasheet-form__add-contact"
                     onClick={handleIsContactModalOpen}
                   >
-                    {registerContact ? (
+                    {registerContacts.length > 0 ? (
                       <FaEdit className="datasheet-form__create--icon" />
                     ) : (
                       <IoAddCircle className="datasheet-form__create--icon" />
                     )}
-                    {registerContact ? "Modificar contacto" : "Añadir contacto"}
+                    {registerContacts.length > 0
+                      ? "Modificar contacto"
+                      : "Añadir contacto"}
                   </button>
-                  {registerContact && (
+                  {registerContacts.length > 0 && (
                     <span className="datasheet-form__contact-mssg">
                       <FaCheckCircle />
                       Contacto añadido
                     </span>
                   )}
-                </div>
-                <div className="lead-form__select">
-                  <ReusableSelect
-                    label="Tipo"
-                    options={offersCategories}
-                    setValue={setTypeId}
-                    value={type_id}
-                  />
                 </div>
               </div>
             </section>
@@ -455,12 +452,7 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                 <SuccessFeedback text="Te has registrado correctamente" />
               )}
             </section>
-            <span className="lead-form__footer-mssg">
-              **No se realizará ningún cargo si no se ha efectuado ninguna
-              colaboración, y solo se cobrará el plan acorde al número de
-              colaboraciones realizadas durante el periodo. Queremos ser
-              flexibles y transparentes.{" "}
-            </span>
+
             <ReusableModal
               children={
                 <AddressForm
@@ -473,16 +465,16 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
               setIsModalOpen={setIsAddressModalOpen}
             />
             <ReusableModal
+              openModal={isContactModalOpen}
+              setIsModalOpen={setIsContactModalOpen}
               children={
                 <ContactForm
-                  contact={registerContact!}
-                  setContact={setRegisterContact}
+                  contacts={registerContacts}
+                  setContacts={setRegisterContacts}
                   setIsModalOpen={setIsContactModalOpen}
                   contact_types={contact_types}
                 />
               }
-              openModal={isContactModalOpen}
-              setIsModalOpen={setIsContactModalOpen}
             />
           </div>
         </ReusableFormStyled>
