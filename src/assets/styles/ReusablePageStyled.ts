@@ -171,14 +171,17 @@ const ReusablePageStyled = styled.main`
       }
 
       &--rejected {
+        font-weight: bold;
         color: ${(props) => props.theme.colors.darkRed};
       }
 
       &--cancelled {
+        font-weight: bold;
         color: ${(props) => props.theme.colors.red};
       }
 
       &--sent {
+        font-weight: bold;
         color: ${(props) => props.theme.colors.darkBlue};
       }
 
@@ -193,15 +196,23 @@ const ReusablePageStyled = styled.main`
       }
 
       &--done {
+        font-weight: bold;
         color: green;
       }
 
       &--finished {
+        font-weight: bold;
         color: ${(props) => props.theme.colors.purple};
       }
 
       &--incident {
+        font-weight: bold;
         color: brown;
+      }
+
+      &--published {
+        font-weight: bold;
+        color: ${(props) => props.theme.colors.softGreen};
       }
     }
 
@@ -334,6 +345,26 @@ const ReusablePageStyled = styled.main`
       display: flex;
       flex-direction: column;
       gap: 10px;
+    }
+  }
+
+  .filters {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    width: 100%;
+
+    &__filter {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: ${(props) => props.theme.colors.mainColor};
+      padding: 5px 10px;
+      color: ${(props) => props.theme.colors.light};
+      font-size: ${(props) => props.theme.fontsSize.__SM};
+      width: fit-content;
+      border-radius: 5px;
     }
   }
 `;

@@ -20,6 +20,8 @@ import {
 import TypeAhead from "sections/shared/components/TypeAhead/TypeAhead";
 import { useInfluencerContext } from "sections/influencer/InfluencerContext/useInfluencerContext";
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
+import { LuFilter } from "react-icons/lu";
+import { IoMdClose } from "react-icons/io";
 
 const CollabsPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
@@ -39,6 +41,7 @@ const CollabsPage = (): React.ReactElement => {
   const handleSearch = (text: string) => {
     getCollabs(text);
   };
+  const [totalFilters, setTotalFilters] = useState<FilterParams>({});
 
   const getCollabs = useCallback(
     (text?: string) => {
@@ -51,17 +54,28 @@ const CollabsPage = (): React.ReactElement => {
         filters.order = [{ by: order.sortTag, dir: order.direction }];
       }
       if (text) {
-        filters.filters = { search: text };
+        filters.filters = { ...(filters.filters as object), search: text };
       }
       if (filterId !== "") {
-        filters.filters = { states: [filterId] };
+        filters.filters = {
+          ...(filters.filters as object),
+          states: [+filterId],
+        };
       }
       if (influencerSelect) {
-        filters.filters = { influencer_id: influencerSelect };
+        filters.filters = {
+          ...(filters.filters as object),
+          influencer_id: influencerSelect,
+        };
       }
       if (companySelect) {
-        filters.filters = { company_id: companySelect };
+        filters.filters = {
+          ...(filters.filters as object),
+          company_id: companySelect,
+        };
       }
+
+      setTotalFilters(filters);
 
       getAllCollabs(+page!, 12, filters);
     },
@@ -94,6 +108,30 @@ const CollabsPage = (): React.ReactElement => {
         search: text,
       },
     });
+  };
+
+  const handleRemoveFilter = (key: string) => {
+    setTotalFilters((prevFilters) => {
+      const updatedFilters = { ...prevFilters };
+      if (updatedFilters.filters && updatedFilters.filters[key as never]) {
+        delete updatedFilters.filters[key as never];
+      }
+      return updatedFilters;
+    });
+
+    if (!(totalFilters.filters as FilterParams).states) {
+      setFilterId("");
+    }
+
+    if (!(totalFilters.filters as FilterParams).influencer_id) {
+      setInfluencerSelect(null);
+    }
+
+    if (!(totalFilters.filters as FilterParams).company_id) {
+      setCompanySelect(null);
+    }
+
+    getAllCollabs(+page!, 12, totalFilters);
   };
 
   useEffect(() => {
@@ -157,6 +195,53 @@ const CollabsPage = (): React.ReactElement => {
               onSearchSubmit={() => handleSearch(searchText)}
             />
           </div>
+
+          <div className="dashboard__filters filters">
+            {Object.values(totalFilters).map((filter) => (
+              <>
+                {Object.entries(filter as object).map(([key, value]) => (
+                  <div>
+                    <span>
+                      <div className={"filters__filter"}>
+                        <LuFilter />
+                        <span>
+                          {" "}
+                          {key === "states"
+                            ? "Estado"
+                            : key === "influencer_id"
+                              ? "Influencer"
+                              : key === "company_id"
+                                ? "Empresa"
+                                : key}
+                          :{" "}
+                        </span>
+                        <span>
+                          {key === "states"
+                            ? collabsFiltersNomade.find(
+                                (state) => +state.id === +value,
+                              )?.name
+                            : key === "influencer_id"
+                              ? influencers.find(
+                                  (influencer) =>
+                                    influencer.id === +influencerSelect!,
+                                )?.name
+                              : key === "company_id"
+                                ? companies.find(
+                                    (company) => company.id === +companySelect!,
+                                  )?.name
+                                : value}
+                        </span>
+                        <button onClick={() => handleRemoveFilter(key)}>
+                          <IoMdClose size={20} color="#fff" />
+                        </button>
+                      </div>
+                    </span>
+                  </div>
+                ))}
+              </>
+            ))}
+          </div>
+
           <div className="dashboard__table">
             <DashboardTable
               bodySections={collabs}

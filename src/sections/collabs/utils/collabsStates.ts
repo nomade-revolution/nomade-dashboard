@@ -128,7 +128,7 @@ export const collabsFiltersNomade = [
 
   {
     id: COLAB_REJECTED_STATE,
-    name: "Rechazado (Empresa)",
+    name: "No aceptada (Empresa)",
     value: "8",
   },
   {

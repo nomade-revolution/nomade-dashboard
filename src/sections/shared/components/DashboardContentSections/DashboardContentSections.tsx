@@ -238,11 +238,13 @@ const DashboardContentSections = ({
             "dashboard",
           )}
         >
-          {
-            (section as FullCollab).history[
-              (section as FullCollab).history.length - 1
-            ].name
-          }
+          {(section as FullCollab).history[
+            (section as FullCollab).history.length - 1
+          ].name === "Rechazada"
+            ? "No aceptada"
+            : (section as FullCollab).history[
+                (section as FullCollab).history.length - 1
+              ].name}
         </span>
       );
 
