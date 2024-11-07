@@ -25,8 +25,10 @@ export default function ReusableSelect({
 
   return (
     <FormControl
-      sx={{ minWidth: 200, width: breakpoint ? "300px" : "100%" }}
-      size="small"
+      sx={{
+        minWidth: 200,
+        width: breakpoint ? "100%" : "250px",
+      }}
     >
       <InputLabel id="select-label">{label}</InputLabel>
       <Select

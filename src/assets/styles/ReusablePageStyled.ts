@@ -51,22 +51,28 @@ const ReusablePageStyled = styled.main`
 
       @media (min-width: 880px) {
         width: 100%;
-        display: flex;
         justify-content: flex-end;
       }
     }
-    &__filterContainer {
+
+    &__filtersContainer {
       display: flex;
-      align-items: center;
-      justify-content: flex-end;
+      flex-direction: column-reverse;
+      align-items: flex-end;
+      gap: 10px;
       width: 100%;
 
       @media (min-width: 880px) {
         width: 100%;
-        display: flex;
-        align-items: flex-end;
-        justify-content: flex-end;
+        flex-direction: row;
+
+        justify-content: space-between;
       }
+    }
+
+    &__filter {
+      display: flex;
+      align-items: flex-start;
     }
 
     &__title {
@@ -319,9 +325,8 @@ const ReusablePageStyled = styled.main`
 
   .filterBox {
     display: flex;
-    min-width: 300px;
-    width: 300px;
-    margin-top: 5px;
+    align-items: center;
+    width: 250px;
   }
 
   .plans-page {
