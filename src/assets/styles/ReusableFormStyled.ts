@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 interface Props {
-  $isMultiple: boolean;
+  $isMultiple?: boolean;
 }
 
 const ReusableFormStyled = styled.form<Props>`
