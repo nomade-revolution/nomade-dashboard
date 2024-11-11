@@ -67,10 +67,7 @@ export const InfluencerContextProvider = ({
 
       const response = await getInfluencers(repository, params);
       if (isHttpSuccessResponse(response)) {
-        setInfluencers(
-          (response.data as unknown as { influencers: Influencer[] })
-            .influencers,
-        );
+        setInfluencers(response.data);
         setLoading(false);
       }
       setLoading(false);

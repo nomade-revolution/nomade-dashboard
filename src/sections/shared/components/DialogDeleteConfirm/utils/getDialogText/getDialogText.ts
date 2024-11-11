@@ -9,7 +9,9 @@ const getDialogText = (pageName: string, type?: string) => {
         ? dialogTexts.acceptCollab
         : type === CollabActionTypes.refuse
           ? dialogTexts.refuseCollab
-          : dialogTexts.deleteCollab;
+          : type === CollabActionTypes.cancel
+            ? dialogTexts.cancelCollab
+            : dialogTexts.deleteCollab;
     case SectionTypes.offers:
       return dialogTexts.deleteOffer;
     case SectionTypes.users:
