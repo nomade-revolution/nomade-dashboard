@@ -7,10 +7,12 @@ import CompanyDetailPageStyled from "./CompanyDetailPageStyled";
 import CompanyDetailData from "sections/company/components/CompanyDetailData/CompanyDetailData";
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
 import CompanyCollabs from "sections/company/components/CompanyCollabs/CompanyCollabs";
-import DeleteButton from "sections/shared/components/DeleteButton/DeleteButton";
+import ActionButton from "sections/shared/components/ActionButton/ActionButton";
 import useActions from "sections/shared/hooks/useActions/useActions";
 import { SectionTypes } from "sections/shared/interfaces/interfaces";
 import DialogDeleteConfirm from "sections/shared/components/DialogDeleteConfirm/DialogDeleteConfirm";
+import theme from "assets/styles/theme";
+import { FaRegTrashCan } from "react-icons/fa6";
 
 const InfluencerDetailPage = (): React.ReactElement => {
   const { getCompany, company, loading } = useCompanyContext();
@@ -38,7 +40,12 @@ const InfluencerDetailPage = (): React.ReactElement => {
             <div className="company-detail__title">
               <h2>Cliente</h2>
             </div>
-            <DeleteButton onClick={handleDeleteButton} />
+            <ActionButton
+              onClick={handleDeleteButton}
+              text="Borrar"
+              icon={<FaRegTrashCan />}
+              color={theme.colors.red}
+            />
           </section>
 
           <section className="company-detail__info">

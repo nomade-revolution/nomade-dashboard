@@ -10,23 +10,51 @@ import { useOffersContext } from "sections/offers/OffersContext/useOffersContext
 import { useAddressContext } from "sections/address/AddressContext/useAddressContext";
 import ReusableStepper from "sections/shared/components/ReusableStepper/ReusableStepper";
 import { CollabActionTypes } from "modules/collabs/domain/Collabs";
-import DeleteButton from "sections/shared/components/DeleteButton/DeleteButton";
+import ActionButton from "sections/shared/components/ActionButton/ActionButton";
 import useActions from "sections/shared/hooks/useActions/useActions";
 import DialogDeleteConfirm from "sections/shared/components/DialogDeleteConfirm/DialogDeleteConfirm";
 import { SectionTypes } from "sections/shared/interfaces/interfaces";
+import { FaRegTrashCan } from "react-icons/fa6";
+import { MdDoNotDisturbOn } from "react-icons/md";
+import theme from "assets/styles/theme";
+import { FaCheckCircle } from "react-icons/fa";
+import { IoMdCloseCircleOutline } from "react-icons/io";
+import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
+import {
+  COLAB_PENDING_COMPANY_STATE,
+  COLAB_PENDING_NOMADE_STATE,
+} from "sections/collabs/utils/collabsStates";
 
 const CollabDetailPage = (): React.ReactElement => {
   const { getCollabById, collab, loading } = useCollabsContext();
   const { getInfluencer, influencer } = useInfluencerContext();
   const { getOffer, offer } = useOffersContext();
   const { getAddress } = useAddressContext();
+  const { user } = useAuthContext();
   const { handleIsDialogOpen } = useActions();
   const { id } = useParams();
 
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [isAcceptOrRefuse, setIsAcceptOrRefuse] = useState<string>("");
 
-  const handleDeleteButton = () => {
+  const handleOpenDialogDelete = () => {
     handleIsDialogOpen(setIsDialogOpen);
+    setIsAcceptOrRefuse("");
+  };
+
+  const handleOpenDialogRefuse = () => {
+    handleIsDialogOpen(setIsDialogOpen);
+    setIsAcceptOrRefuse(CollabActionTypes.refuse);
+  };
+
+  const handleOpenDialogAccept = () => {
+    handleIsDialogOpen(setIsDialogOpen);
+    setIsAcceptOrRefuse(CollabActionTypes.accept);
+  };
+
+  const handleOpenDialogCancel = () => {
+    handleIsDialogOpen(setIsDialogOpen);
+    setIsAcceptOrRefuse(CollabActionTypes.cancel);
   };
 
   const [collabStateActionType, setCollabStateActionType] =
@@ -57,7 +85,43 @@ const CollabDetailPage = (): React.ReactElement => {
           <GoBackButton />
           <header className="detail-collab__header">
             <h2>Collab</h2>
-            <DeleteButton onClick={handleDeleteButton} />
+            <section className="detail-collab__actions">
+              {user.type === "Nomade" && (
+                <ActionButton
+                  icon={<IoMdCloseCircleOutline size={15} />}
+                  onClick={handleOpenDialogCancel}
+                  text="Cancelar"
+                  color={theme.colors.black}
+                />
+              )}
+              {collab &&
+                (collab?.history[collab.history?.length - 1]?.id ===
+                  COLAB_PENDING_COMPANY_STATE ||
+                  (collab?.history[collab.history?.length - 1]?.id ===
+                    COLAB_PENDING_NOMADE_STATE &&
+                    user.type === "Nomade")) && (
+                  <>
+                    <ActionButton
+                      icon={<FaCheckCircle />}
+                      onClick={handleOpenDialogAccept}
+                      text="Aceptar"
+                      color={theme.colors.softGreen}
+                    />
+                    <ActionButton
+                      icon={<MdDoNotDisturbOn />}
+                      onClick={handleOpenDialogRefuse}
+                      text="Rechazar"
+                      color={theme.colors.darkRed}
+                    />
+                  </>
+                )}
+              <ActionButton
+                onClick={handleOpenDialogDelete}
+                text="Borrar"
+                icon={<FaRegTrashCan />}
+                color={theme.colors.red}
+              />
+            </section>
           </header>
           <div className="detail-collab__data">
             <CollabDetail
@@ -80,6 +144,7 @@ const CollabDetailPage = (): React.ReactElement => {
             open={isDialogOpen}
             sectionId={collab.id!}
             pageName={SectionTypes.collabs}
+            type={isAcceptOrRefuse}
           />
         </CollabsDetailPageStyled>
       )}

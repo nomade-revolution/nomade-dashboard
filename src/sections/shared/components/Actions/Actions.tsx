@@ -70,9 +70,12 @@ const Actions = ({
             </Link>
           </Tooltip>
 
-          {(section as FullCollab).history[
+          {((section as FullCollab).history[
             (section as FullCollab).history.length - 1
-          ].id === collabStates.COLAB_PENDING_NOMADE_STATE && (
+          ].id === collabStates.COLAB_PENDING_NOMADE_STATE ||
+            (section as FullCollab).history[
+              (section as FullCollab).history.length - 1
+            ].id === collabStates.COLAB_PENDING_COMPANY_STATE) && (
             <>
               <Tooltip title="Aceptar">
                 <button

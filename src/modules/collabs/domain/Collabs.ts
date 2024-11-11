@@ -71,6 +71,7 @@ export enum CollabTypes {
 export enum CollabActionTypes {
   accept = "accept",
   refuse = "refuse",
+  cancel = "cancel",
 }
 
 export const enum CollabType {

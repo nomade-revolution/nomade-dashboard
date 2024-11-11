@@ -7,10 +7,12 @@ import InfluencerDetailPageStyled from "./InfluencerDetailPageStyled";
 import InfluencerCollabs from "sections/influencer/components/InfluencerCollabs/InfluencerCollabs";
 import Loader from "sections/shared/components/Loader/Loader";
 import GoBackButton from "sections/shared/components/GoBackButton/GoBackButton";
-import DeleteButton from "sections/shared/components/DeleteButton/DeleteButton";
+import ActionButton from "sections/shared/components/ActionButton/ActionButton";
 import useActions from "sections/shared/hooks/useActions/useActions";
 import DialogDeleteConfirm from "sections/shared/components/DialogDeleteConfirm/DialogDeleteConfirm";
 import { SectionTypes } from "sections/shared/interfaces/interfaces";
+import { FaRegTrashCan } from "react-icons/fa6";
+import theme from "assets/styles/theme";
 
 const InfluencerDetailPage = (): React.ReactElement => {
   const { getInfluencer, influencer, loading } = useInfluencerContext();
@@ -38,7 +40,12 @@ const InfluencerDetailPage = (): React.ReactElement => {
             <div className="influencer-detail__title">
               <h2>Influencer</h2>
             </div>
-            <DeleteButton onClick={handleDeleteButton} />
+            <ActionButton
+              onClick={handleDeleteButton}
+              text="Borrar"
+              icon={<FaRegTrashCan />}
+              color={theme.colors.red}
+            />
           </section>
           <section className="influencer-detail__info">
             <ImageCustom

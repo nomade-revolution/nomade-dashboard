@@ -41,6 +41,11 @@ const useActions = () => {
     setTimeout(() => navigate(0), 1500);
   };
 
+  const cancelCollab = async (collabId: number) => {
+    await updateCollabState(collabId, collabStates.COLAB_CANCELLED_STATE);
+    setTimeout(() => navigate(0), 1500);
+  };
+
   const handleCollabStateUpdate = (
     state_id: number,
     setIsDialogOpen: (value: boolean) => void,
@@ -65,6 +70,7 @@ const useActions = () => {
     rejectCollab,
     handleSendLeadLink,
     handleCollabStateUpdate,
+    cancelCollab,
   };
 };
 

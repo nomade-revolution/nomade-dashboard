@@ -93,8 +93,6 @@ const CollabsPage = (): React.ReactElement => {
   );
   const getInfluencersSearch = async (text: string) => {
     await getInfluencersWithParams({
-      page: 1,
-      per_page: 10,
       filters: {
         search: text,
       },
@@ -102,8 +100,6 @@ const CollabsPage = (): React.ReactElement => {
   };
   const getCompanySearch = async (text: string) => {
     await getCompaniesWithParams({
-      page: 1,
-      per_page: 10,
       filters: {
         search: text,
       },
@@ -145,26 +141,28 @@ const CollabsPage = (): React.ReactElement => {
       ) : (
         <ReusablePageStyled>
           <div className="dashboard__filtersContainer">
-            <TypeAhead
-              options={companies.map((company) => {
-                return {
-                  id: company.id,
-                  name: company.company + " / " + company.company_name,
-                  value: company.id,
-                };
-              })}
-              label="Filtrar por empresa"
-              setValue={setCompanySelect}
-              value={companySelect}
-              searchText={""}
-              getFunctions={getCompanySearch}
-            />
+            {user.type === "Nomade" && (
+              <TypeAhead
+                options={companies?.map((company) => {
+                  return {
+                    id: company.id,
+                    name: company.company + " / " + company.company_name,
+                    value: company.id,
+                  };
+                })}
+                label="Filtrar por empresa"
+                setValue={setCompanySelect}
+                value={companySelect}
+                searchText={""}
+                getFunctions={getCompanySearch}
+              />
+            )}
 
             <TypeAhead
               label="Filtrar por influencer"
               setValue={setInfluencerSelect}
               value={influencerSelect}
-              options={influencers.map((influencer) => {
+              options={influencers?.map((influencer) => {
                 return {
                   id: influencer.id,
                   name: influencer.name + " / " + influencer.user_name,
@@ -200,43 +198,39 @@ const CollabsPage = (): React.ReactElement => {
             {Object.values(totalFilters).map((filter) => (
               <>
                 {Object.entries(filter as object).map(([key, value]) => (
-                  <div>
-                    <span>
-                      <div className={"filters__filter"}>
-                        <LuFilter />
+                  <>
+                    {user.type === "Company" && key === "company_id" ? (
+                      <></>
+                    ) : (
+                      <div>
                         <span>
-                          {" "}
-                          {key === "states"
-                            ? "Estado"
-                            : key === "influencer_id"
-                              ? "Influencer"
-                              : key === "company_id"
-                                ? "Empresa"
-                                : key}
-                          :{" "}
-                        </span>
-                        <span>
-                          {key === "states"
-                            ? collabsFiltersNomade.find(
-                                (state) => +state.id === +value,
-                              )?.name
-                            : key === "influencer_id"
-                              ? influencers.find(
-                                  (influencer) =>
-                                    influencer.id === +influencerSelect!,
-                                )?.name
-                              : key === "company_id"
-                                ? companies.find(
-                                    (company) => company.id === +companySelect!,
+                          <div className={"filters__filter"}>
+                            <LuFilter />
+                            <span>
+                              {" "}
+                              {key === "states"
+                                ? "Estado:"
+                                : key === "influencer_id"
+                                  ? "Influencer"
+                                  : key === "company_id"
+                                    ? "Empresa"
+                                    : key}{" "}
+                            </span>
+                            <span>
+                              {key === "states"
+                                ? collabsFiltersNomade.find(
+                                    (state) => +state.id === +value,
                                   )?.name
-                                : value}
+                                : ""}
+                            </span>
+                            <button onClick={() => handleRemoveFilter(key)}>
+                              <IoMdClose size={20} color="#fff" />
+                            </button>
+                          </div>
                         </span>
-                        <button onClick={() => handleRemoveFilter(key)}>
-                          <IoMdClose size={20} color="#fff" />
-                        </button>
                       </div>
-                    </span>
-                  </div>
+                    )}
+                  </>
                 ))}
               </>
             ))}

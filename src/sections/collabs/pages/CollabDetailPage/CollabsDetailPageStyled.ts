@@ -55,6 +55,11 @@ const CollabsDetailPageStyled = styled.main`
       align-items: center;
       justify-content: space-between;
     }
+
+    &__actions {
+      display: flex;
+      gap: 10px;
+    }
   }
 `;
 
