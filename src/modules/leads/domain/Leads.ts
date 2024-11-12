@@ -8,6 +8,7 @@ export interface Lead {
   email: string;
   message: string;
   created_at: string;
+  sent_at: string;
   link_sent: boolean;
 }
 

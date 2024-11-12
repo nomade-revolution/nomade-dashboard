@@ -1,10 +1,12 @@
 import { HeaderSection } from "sections/shared/interfaces/interfaces";
 import { StyledTableCell } from "../DashboardTable/DashboardTable";
 import { useState } from "react";
-import { FaArrowUp, FaArrowDown, FaArrowsAltV } from "react-icons/fa";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
 import { OrderItem } from "sections/user/UserContext/UserContext";
 import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
+import { BsFilterLeft } from "react-icons/bs";
+import theme from "assets/styles/theme";
+import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
 
 interface Props {
   section: HeaderSection;
@@ -90,11 +92,11 @@ const DashBoardHeaderCell = ({ section }: Props) => {
       >
         {section.name}
         {isSort === null && section.sortTag !== "" ? (
-          <FaArrowsAltV color={"grey"} size={10} />
+          <BsFilterLeft color={theme.colors.mainColor} size={15} />
         ) : isSort === "ASC" ? (
-          <FaArrowUp color={"black"} size={10} />
+          <BiSolidUpArrow color={theme.colors.mainColor} size={10} />
         ) : isSort === "DESC" ? (
-          <FaArrowDown color={"black"} size={10} />
+          <BiSolidDownArrow color={theme.colors.mainColor} size={10} />
         ) : null}
       </button>
     </StyledTableCell>

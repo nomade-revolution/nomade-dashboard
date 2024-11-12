@@ -8,6 +8,7 @@ import CreateUserPageStyled from "./CreateUserPageStyled";
 import GoBackButton from "sections/shared/components/GoBackButton/GoBackButton";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
 import { useNavigate } from "react-router-dom";
+import ReusableSelect from "sections/shared/components/ReusableSelect/ReusableSelect";
 
 const initialState: AuthRegisterNomadeInterface = {
   name: "",
@@ -128,6 +129,12 @@ const CreateUserPage = () => {
                 />
               )}
             </div>
+            <ReusableSelect
+              value={""}
+              setValue={() => {}}
+              options={[]}
+              label={"Rol"}
+            />
             <button
               type="submit"
               disabled={loading}

@@ -3,11 +3,10 @@ import styled from "styled-components";
 const CreateUserPageStyled = styled.div`
   display: flex;
   width: 100%;
-  height: 100%;
-  justify-content: center;
+  height: 100vh;
+  justify-content: flex-start;
   align-items: flex-start;
   flex-direction: column;
-  background-color: #f2f2f2;
   padding-top: 40px;
   gap: 30px;
 
