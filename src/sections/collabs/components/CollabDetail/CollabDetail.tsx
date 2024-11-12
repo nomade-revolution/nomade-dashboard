@@ -1,5 +1,5 @@
 import { Influencer } from "@influencer";
-import { FullCollab } from "modules/collabs/domain/Collabs";
+import { CollabTypes, FullCollab } from "modules/collabs/domain/Collabs";
 import { Link } from "react-router-dom";
 import ImageCustom from "sections/shared/components/ImageCustom/ImageCustom";
 import CollabsDetailStyled from "./CollabsDetailStyled";
@@ -10,6 +10,12 @@ import { FullOffer } from "modules/offers/domain/Offer";
 import { useAddressContext } from "sections/address/AddressContext/useAddressContext";
 import { BsCalendarEvent } from "react-icons/bs";
 import { MdOutlineLocationOn } from "react-icons/md";
+import formatDate from "sections/shared/utils/formatDate/formatDate";
+import {
+  HiMiniArrowLeftOnRectangle,
+  HiMiniArrowRightOnRectangle,
+} from "react-icons/hi2";
+import theme from "assets/styles/theme";
 
 interface Props {
   collab: FullCollab;
@@ -80,7 +86,7 @@ const CollabDetail = ({
               <div className="collab-detail__data-section">
                 <FaUsers size={20} />
                 <span className="collab-detail__offer-data">
-                  {collab.guests}
+                  {collab.guests} pax.
                 </span>
               </div>
             )}
@@ -97,7 +103,7 @@ const CollabDetail = ({
             )}
             {address.address && (
               <div className="collab-detail__data-section">
-                <MdOutlineLocationOn size={20} />
+                <MdOutlineLocationOn size={20} color={theme.colors.mainColor} />
                 <article className="collab-detail__address">
                   <span className="collab-detail__offer-data">
                     {address.address}
@@ -107,6 +113,19 @@ const CollabDetail = ({
                   </span>
                 </article>
               </div>
+            )}
+            {collab.type === CollabTypes.lodging && (
+              <section className="collab-detail__dates">
+                <h4>Fechas</h4>
+                <div className="collab-detail__data-section">
+                  <HiMiniArrowRightOnRectangle color={theme.colors.softGreen} />
+                  <span>{formatDate(collab.from_day!)}</span>
+                </div>
+                <div className="collab-detail__data-section">
+                  <HiMiniArrowLeftOnRectangle color={theme.colors.red} />
+                  <span>{formatDate(collab.to_day!)}</span>
+                </div>
+              </section>
             )}
             <Link to={`/oferta/${offer.id}`} className="collab-detail__link">
               Ver orferta

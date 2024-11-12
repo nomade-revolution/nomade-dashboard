@@ -1,4 +1,8 @@
-import { Collab, CollabActionTypes } from "modules/collabs/domain/Collabs";
+import {
+  Collab,
+  CollabActionTypes,
+  FullCollab,
+} from "modules/collabs/domain/Collabs";
 import { Customer } from "modules/customers/domain/Customers";
 import { Offer } from "modules/offers/domain/Offer";
 import { User } from "modules/user/domain/User";
@@ -8,6 +12,11 @@ import DialogDeleteConfirm from "../DialogDeleteConfirm/DialogDeleteConfirm";
 import DashboardContentSections from "../DashboardContentSections/DashboardContentSections";
 import { Influencer } from "@influencer";
 import { Lead } from "modules/leads/domain/Leads";
+import {
+  COLAB_PENDING_NOMADE_STATE,
+  COLAB_PENDING_COMPANY_STATE,
+  COLAB_ACCEPTED_STATE,
+} from "sections/collabs/utils/collabsStates";
 
 interface ReusableTableBodyCellProps {
   section: Offer | Customer | Collab | User | Influencer | Lead;
@@ -51,6 +60,13 @@ const DashboardTableCellContent = ({
           sectionId={section.id!}
           pageName={pageName}
           type={type}
+          accept_state_id={
+            (section as FullCollab).history[
+              (section as FullCollab).history.length - 1
+            ].id === COLAB_PENDING_NOMADE_STATE
+              ? COLAB_PENDING_COMPANY_STATE
+              : COLAB_ACCEPTED_STATE
+          }
         />
       )}
     </>

@@ -6,6 +6,7 @@ import { FaPhoneAlt } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import { TbWorld } from "react-icons/tb";
 import CircularWithValueLabel from "sections/shared/components/CircularProgressWithLabel/CircularProgressWithLabel";
+import formatDate from "sections/shared/utils/formatDate/formatDate";
 
 interface Props {
   company: Company;
@@ -92,7 +93,9 @@ const CompanyDetailData = ({ company }: Props): React.ReactElement => {
           </div>
           <div className="plan__section">
             <h5>Fecha de inicio</h5>
-            <span>{company.plan?.start_date}</span>
+            <span className="plan__date">
+              {formatDate(company.plan?.start_date)}
+            </span>
           </div>
           <div className="plan__section">
             <CircularWithValueLabel progress={company.percentage} />

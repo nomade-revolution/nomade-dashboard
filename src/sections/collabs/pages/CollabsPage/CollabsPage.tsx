@@ -22,6 +22,7 @@ import { useInfluencerContext } from "sections/influencer/InfluencerContext/useI
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
 import { LuFilter } from "react-icons/lu";
 import { IoMdClose } from "react-icons/io";
+import NoDataHandler from "sections/shared/components/NoDataHandler/NoDataHandler";
 
 const CollabsPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
@@ -138,6 +139,8 @@ const CollabsPage = (): React.ReactElement => {
     <>
       {loading ? (
         <Loader width="20px" height="20px" />
+      ) : collabs.length === 0 ? (
+        <NoDataHandler pageName="collabs" search={searchText} />
       ) : (
         <ReusablePageStyled>
           <div className="dashboard__filtersContainer">

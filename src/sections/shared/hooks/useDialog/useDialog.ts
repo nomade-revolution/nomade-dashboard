@@ -52,6 +52,7 @@ const useDialog = () => {
   const getFunctionForDialog = (
     sectionId: number,
     pageName: string,
+    accept_state_id: number,
     type?: string,
     rejected_colab_reason_id?: number,
   ) => {
@@ -60,7 +61,7 @@ const useDialog = () => {
         return handleDeleteOffer(sectionId);
       case SectionTypes.collabs:
         return type === CollabActionTypes.accept
-          ? acceptCollab(sectionId)
+          ? acceptCollab(sectionId, accept_state_id)
           : type === CollabActionTypes.refuse
             ? rejectCollab(sectionId, rejected_colab_reason_id!)
             : type === CollabActionTypes.cancel
