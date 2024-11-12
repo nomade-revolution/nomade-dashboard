@@ -332,6 +332,20 @@ const ReusablePageStyled = styled.main`
       font-weight: 700;
       opacity: 0.6;
     }
+
+    &__link-sent {
+      color: ${(props) => props.theme.colors.softGreen};
+      font-weight: 700;
+    }
+
+    &__link-pending {
+      font-weight: 700;
+      color: ${(props) => props.theme.colors.red};
+    }
+
+    &__date {
+      font-weight: 700;
+    }
   }
 
   .filterBox {

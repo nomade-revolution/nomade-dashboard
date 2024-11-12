@@ -32,6 +32,20 @@ export const leadsHeaderSection: HeaderSection[] = [
   },
   {
     id: 7,
+    name: "Fecha de creacion",
+    property: "created_at",
+    sortTag: "",
+    pageName: "leads",
+  },
+  {
+    id: 8,
+    name: "Estado",
+    property: "link_sent",
+    sortTag: "",
+    pageName: "leads",
+  },
+  {
+    id: 9,
     name: "Acciones",
     property: "actions",
     sortTag: "",
