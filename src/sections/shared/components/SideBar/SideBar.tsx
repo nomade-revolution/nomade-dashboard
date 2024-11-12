@@ -8,6 +8,8 @@ import ImageCustom from "../ImageCustom/ImageCustom";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { Company, User } from "modules/user/domain/User";
 import { FullOffer } from "modules/offers/domain/Offer";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
+import { Tooltip } from "@mui/material";
 
 interface SideBarProps {
   badgeUsers: number;
@@ -15,6 +17,8 @@ interface SideBarProps {
   badgeCompanies: number;
   user: Company | User;
   offer: FullOffer;
+  isMinimized: boolean;
+  setIsMinimized: (value: boolean) => void;
 }
 
 const SideBar = ({
@@ -23,6 +27,8 @@ const SideBar = ({
   badgeCompanies,
   user,
   offer,
+  isMinimized,
+  setIsMinimized,
 }: SideBarProps): React.ReactElement => {
   const { pathname } = useLocation();
 
@@ -49,15 +55,25 @@ const SideBar = ({
   };
 
   return (
-    <SideBarStyled className="side-bar">
-      <ImageCustom
-        alt="Nomade logo"
-        className="side-bar__image"
-        height={50}
-        width={200}
-        image="/main_logo.png"
-      />
+    <SideBarStyled className="side-bar" $isMinimized={isMinimized}>
+      {!isMinimized && (
+        <ImageCustom
+          alt="Nomade logo"
+          className="side-bar__image"
+          height={50}
+          width={200}
+          image="/main_logo.png"
+        />
+      )}
       <div className="side-bar__actions actions">
+        <Tooltip title={isMinimized ? "Expandir menú" : "Ocultar menú"}>
+          <button
+            onClick={() => setIsMinimized(!isMinimized)}
+            className="actions__hide"
+          >
+            {isMinimized ? <FaChevronRight /> : <FaChevronLeft />}
+          </button>
+        </Tooltip>
         {sideBarUpperSections.map((section) => (
           <Link to={section.path} key={section.id}>
             <div
@@ -69,26 +85,30 @@ const SideBar = ({
               }
             >
               <div className="actions__subsection">
-                <span
-                  className={
-                    pathname.includes(section.path) ||
-                    pathname.includes(section.pathname!)
-                      ? "actions__icon--selected"
-                      : "actions__icon"
-                  }
-                >
-                  {section.icon}
-                </span>
-                <span
-                  className={
-                    pathname.includes(section.path) ||
-                    pathname.includes(section.pathname!)
-                      ? "actions__name--selected"
-                      : "actions__name"
-                  }
-                >
-                  {section.name}
-                </span>
+                <Tooltip title={isMinimized ? section.name : ""}>
+                  <span
+                    className={
+                      pathname.includes(section.path) ||
+                      pathname.includes(section.pathname!)
+                        ? "actions__icon--selected"
+                        : "actions__icon"
+                    }
+                  >
+                    {section.icon}
+                  </span>
+                </Tooltip>
+                {!isMinimized && (
+                  <span
+                    className={
+                      pathname.includes(section.path) ||
+                      pathname.includes(section.pathname!)
+                        ? "actions__name--selected"
+                        : "actions__name"
+                    }
+                  >
+                    {section.name}
+                  </span>
+                )}
               </div>
               {section.quantity > 0 && (
                 <span className="actions__quantity">{section.quantity}</span>
@@ -105,34 +125,31 @@ const SideBar = ({
               : "user-actions__section"
           }
         >
-          <span
-            className={
-              location.pathname.includes("mi-cuenta")
-                ? "user-actions__icon--selected"
-                : "user-actions__icon"
-            }
-          >
-            <IoIosSettings />
-          </span>
-          <Link
-            to={appPaths.account}
-            className={
-              location.pathname.includes("mi-cuenta")
-                ? "user-actions__name--selected"
-                : "user-actions__name"
-            }
-            aria-label={"Mi cuenta"}
-          >
-            Mi cuenta
-          </Link>
+          <Tooltip title={isMinimized ? "Mi cuenta" : ""}>
+            <Link
+              to={appPaths.account}
+              className={
+                location.pathname.includes("mi-cuenta")
+                  ? "user-actions__name--selected"
+                  : "user-actions__name"
+              }
+              aria-label={"Mi cuenta"}
+            >
+              <IoIosSettings size={20} />
+              {!isMinimized && "Mi cuenta"}
+            </Link>
+          </Tooltip>
         </div>
         <div className="user-actions__section">
-          <span className="user-actions__icon">
-            <CiLogout />
-          </span>
-          <button className="user-actions__name-logout" onClick={handleLogout}>
-            Cerrar sesión
-          </button>
+          <Tooltip title={isMinimized ? "Cerrar sesión" : ""}>
+            <button
+              className="user-actions__name-logout"
+              onClick={handleLogout}
+            >
+              <CiLogout size={20} />
+              {!isMinimized && "Cerrar sesión"}
+            </button>
+          </Tooltip>
         </div>
       </div>
     </SideBarStyled>
