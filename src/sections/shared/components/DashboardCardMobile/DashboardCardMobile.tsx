@@ -82,6 +82,14 @@ const DashboardCardMobile = ({
         sectionId={(bodySection as FullCollab).id!}
         pageName={pageName}
         type={type}
+        accept_state_id={
+          (bodySection as FullCollab)?.history &&
+          (bodySection as FullCollab)?.history[
+            (bodySection as FullCollab).history?.length - 1
+          ].id === collabStates.COLAB_PENDING_NOMADE_STATE
+            ? collabStates.COLAB_PENDING_COMPANY_STATE
+            : collabStates.COLAB_ACCEPTED_STATE
+        }
       />
     </DashboardCardMobileStyled>
   );

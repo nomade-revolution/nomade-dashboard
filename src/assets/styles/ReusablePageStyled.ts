@@ -360,6 +360,54 @@ const ReusablePageStyled = styled.main`
       flex-direction: column;
       gap: 10px;
     }
+
+    &__show-calendar {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      width: 100%;
+      align-items: flex-end;
+    }
+
+    &__calendar {
+      position: absolute;
+      right: 30px;
+      top: 215px;
+      background: white;
+      width: 90%;
+      z-index: 10;
+      box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.3);
+
+      @media (min-width: 1000px) {
+        width: 20%;
+        right: 20px;
+        top: 110px;
+      }
+    }
+
+    &__filter-btn {
+      background: ${(props) => props.theme.colors.darkBlue};
+      padding: 10px;
+      border-radius: 5px;
+      color: ${(props) => props.theme.colors.light};
+      font-weight: 700;
+    }
+
+    &__filter-active {
+      background: ${(props) => props.theme.colors.mainColor};
+      padding: 2px 5px;
+      width: fit-content;
+      font-size: ${(props) => props.theme.fontsSize.__SM};
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      border-radius: 3px;
+    }
+
+    &__filter-close {
+      display: flex;
+      align-items: center;
+    }
   }
 
   .filters {

@@ -30,7 +30,7 @@ interface DialogDeleteConfirmProps {
   handleClose: () => void;
   sectionId: number;
   pageName: string;
-  accept_state_id: number;
+  accept_state_id?: number;
   type?: string;
 }
 
@@ -86,7 +86,7 @@ export default function DialogDeleteConfirm({
               getFunctionForDialog(
                 sectionId,
                 pageName,
-                accept_state_id,
+                accept_state_id!,
                 type,
                 reason!,
               )
