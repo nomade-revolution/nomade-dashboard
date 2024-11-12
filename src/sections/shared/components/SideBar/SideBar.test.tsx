@@ -14,6 +14,8 @@ describe("Given a SideBar component", () => {
           badgeCompanies={1}
           offer={mockOffers[0]}
           user={mockUsers[1]}
+          isMinimized={false}
+          setIsMinimized={() => {}}
         />,
       );
 

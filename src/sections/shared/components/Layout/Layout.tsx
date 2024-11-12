@@ -4,7 +4,7 @@ import LayoutStyled from "./LayoutStyled";
 
 import { appPaths } from "../../utils/appPaths/appPaths";
 import Header from "../Header/Header";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
 import { Company } from "modules/user/domain/User";
@@ -13,6 +13,7 @@ import { useCompanyContext } from "sections/company/CompanyContext/useCompanyCon
 
 const Layout = (): React.ReactElement => {
   const location = useLocation();
+  const [isMinimized, setIsMinimized] = useState<boolean>(false);
 
   const { setSessionToken, token, getLoggedUser, user, logoutUser } =
     useAuthContext();
@@ -61,7 +62,7 @@ const Layout = (): React.ReactElement => {
   }, [logoutUser, navigate, user]);
 
   return (
-    <LayoutStyled>
+    <LayoutStyled $isMinimized={isMinimized}>
       <div
         className={
           location.pathname !== appPaths.login &&
@@ -95,6 +96,8 @@ const Layout = (): React.ReactElement => {
                 badgeCompanies={badgeCountCompanies}
                 user={user}
                 offer={offers[0]}
+                isMinimized={isMinimized}
+                setIsMinimized={setIsMinimized}
               />
             )}
         </section>

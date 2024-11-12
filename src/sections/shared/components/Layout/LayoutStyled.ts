@@ -1,6 +1,10 @@
 import styled from "styled-components";
 
-const LayoutStyled = styled.div`
+interface Props {
+  $isMinimized: boolean;
+}
+
+const LayoutStyled = styled.div<Props>`
   width: 100%;
 
   .layout {
@@ -17,11 +21,10 @@ const LayoutStyled = styled.div`
 
       @media (min-width: 1000px) {
         padding: 30px 20px;
-        box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
         display: block;
         z-index: 1;
         padding: 0;
-        width: 15%;
+        width: 100%;
         position: fixed;
       }
     }
@@ -50,11 +53,11 @@ const LayoutStyled = styled.div`
       overflow-y: auto;
 
       @media (min-width: 1000px) and (max-width: 1600px) {
-        padding-left: 16rem;
+        padding-left: ${(props) => (props.$isMinimized ? "5rem" : "16rem")};
       }
 
       @media (min-width: 1600px) {
-        padding-left: 17.5rem;
+        padding-left: ${(props) => (props.$isMinimized ? "5rem" : "17.5rem")};
       }
     }
 
