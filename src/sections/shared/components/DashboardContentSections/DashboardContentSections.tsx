@@ -323,6 +323,26 @@ const DashboardContentSections = ({
         </section>
       );
 
+    case "created_at":
+      return (
+        <span className="dashboard__date">
+          {(section as Lead).created_at.split(" ")[0]}
+        </span>
+      );
+
+    case "link_sent":
+      return (
+        <span
+          className={`${
+            (section as Lead).link_sent
+              ? "dashboard__link-sent"
+              : "dashboard__link-pending"
+          } `}
+        >
+          {(section as Lead).link_sent ? "Enviado" : "Pendiente"}
+        </span>
+      );
+
     default:
       return (
         <section>

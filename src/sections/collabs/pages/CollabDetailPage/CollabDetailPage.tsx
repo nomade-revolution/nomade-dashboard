@@ -24,11 +24,16 @@ import {
   COLAB_PENDING_COMPANY_STATE,
   COLAB_PENDING_NOMADE_STATE,
 } from "sections/collabs/utils/collabsStates";
+import * as collabStates from "../../utils/collabsStates";
 
 const CollabDetailPage = (): React.ReactElement => {
   const { getCollabById, collab, loading } = useCollabsContext();
-  const { getInfluencer, influencer } = useInfluencerContext();
-  const { getOffer, offer } = useOffersContext();
+  const {
+    getInfluencer,
+    influencer,
+    loading: loadingInfluencer,
+  } = useInfluencerContext();
+  const { getOffer, offer, loading: loadingOffer } = useOffersContext();
   const { getAddress } = useAddressContext();
   const { user } = useAuthContext();
   const { handleIsDialogOpen } = useActions();
@@ -78,7 +83,7 @@ const CollabDetailPage = (): React.ReactElement => {
 
   return (
     <>
-      {loading ? (
+      {loading || loadingInfluencer || loadingOffer ? (
         <Loader height="20px" width="20px" />
       ) : (
         <CollabsDetailPageStyled className="detail-collab">
@@ -94,12 +99,13 @@ const CollabDetailPage = (): React.ReactElement => {
                   color={theme.colors.black}
                 />
               )}
-              {collab &&
-                (collab?.history[collab.history?.length - 1]?.id ===
+              {collab.history &&
+                collab.history.length > 0 &&
+                (collab.history[collab.history?.length - 1]?.id ===
                   COLAB_PENDING_COMPANY_STATE ||
-                  (collab?.history[collab.history?.length - 1]?.id ===
-                    COLAB_PENDING_NOMADE_STATE &&
-                    user.type === "Nomade")) && (
+                  collab.history[collab.history?.length - 1]?.id ===
+                    COLAB_PENDING_NOMADE_STATE) &&
+                user.type === "Nomade" && (
                   <>
                     <ActionButton
                       icon={<FaCheckCircle />}
@@ -115,6 +121,7 @@ const CollabDetailPage = (): React.ReactElement => {
                     />
                   </>
                 )}
+
               <ActionButton
                 onClick={handleOpenDialogDelete}
                 text="Borrar"
@@ -145,6 +152,13 @@ const CollabDetailPage = (): React.ReactElement => {
             sectionId={collab.id!}
             pageName={SectionTypes.collabs}
             type={isAcceptOrRefuse}
+            accept_state_id={
+              collab?.history &&
+              collab?.history[collab.history?.length - 1].id ===
+                collabStates.COLAB_PENDING_NOMADE_STATE
+                ? collabStates.COLAB_PENDING_COMPANY_STATE
+                : collabStates.COLAB_ACCEPTED_STATE
+            }
           />
         </CollabsDetailPageStyled>
       )}

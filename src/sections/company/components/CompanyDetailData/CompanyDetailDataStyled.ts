@@ -132,6 +132,11 @@ const CompanyDetailDataStyled = styled.section`
       font-weight: 700;
       color: red;
     }
+
+    &__date {
+      color: ${(props) => props.theme.colors.mainColor};
+      font-weight: 700;
+    }
   }
 `;
 
