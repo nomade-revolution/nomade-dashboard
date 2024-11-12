@@ -4,6 +4,7 @@ export interface SocialMedia {
   url: string;
   account_name: string;
   followers: number;
+  main: boolean;
 }
 
 export enum SocialMediaTypes {

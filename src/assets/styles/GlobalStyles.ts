@@ -9,6 +9,9 @@ body {
   font-family: "Roboto";
   padding: 0;
   margin: 0;
+  background: ${(props) => props.theme.colors.backgroundPages};
+  
+
 }
 
 h1,h2{

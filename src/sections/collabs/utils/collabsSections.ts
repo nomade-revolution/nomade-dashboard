@@ -3,7 +3,7 @@ import { HeaderSection } from "../../shared/interfaces/interfaces";
 export const collabsHeaderSections: HeaderSection[] = [
   {
     id: 1,
-    name: "Empresa",
+    name: "Cliente",
     property: "company",
     sortTag: "company",
     pageName: "collabs",
@@ -37,8 +37,16 @@ export const collabsHeaderSections: HeaderSection[] = [
     sortTag: "",
     pageName: "collabs",
   },
+
   {
     id: 7,
+    name: "Última modificación",
+    property: "history_update",
+    sortTag: "",
+    pageName: "collabs",
+  },
+  {
+    id: 8,
     name: "Acciones",
     property: "actions",
     sortTag: "",

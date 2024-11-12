@@ -21,7 +21,7 @@ const LayoutStyled = styled.div`
         display: block;
         z-index: 1;
         padding: 0;
-        width: 20%;
+        width: 15%;
         position: fixed;
       }
     }
@@ -54,7 +54,7 @@ const LayoutStyled = styled.div`
       }
 
       @media (min-width: 1600px) {
-        padding-left: 23.5rem;
+        padding-left: 17.5rem;
       }
     }
 

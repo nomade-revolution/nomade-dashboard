@@ -144,48 +144,49 @@ const CollabsPage = (): React.ReactElement => {
       ) : (
         <ReusablePageStyled>
           <div className="dashboard__filtersContainer">
-            {user.type === "Nomade" && (
+            <section className="dashboard__selectsContainer">
+              {user.type === "Nomade" && (
+                <TypeAhead
+                  options={companies?.map((company) => {
+                    return {
+                      id: company.id,
+                      name: company.company + " / " + company.company_name,
+                      value: company.id,
+                    };
+                  })}
+                  label="Filtrar por empresa"
+                  setValue={setCompanySelect}
+                  value={companySelect}
+                  searchText={""}
+                  getFunctions={getCompanySearch}
+                />
+              )}
+
               <TypeAhead
-                options={companies?.map((company) => {
+                label="Filtrar por influencer"
+                setValue={setInfluencerSelect}
+                value={influencerSelect}
+                options={influencers?.map((influencer) => {
                   return {
-                    id: company.id,
-                    name: company.company + " / " + company.company_name,
-                    value: company.id,
+                    id: influencer.id,
+                    name: influencer.name + " / " + influencer.user_name,
+                    value: influencer.id,
                   };
                 })}
-                label="Filtrar por empresa"
-                setValue={setCompanySelect}
-                value={companySelect}
                 searchText={""}
-                getFunctions={getCompanySearch}
+                getFunctions={getInfluencersSearch}
               />
-            )}
-
-            <TypeAhead
-              label="Filtrar por influencer"
-              setValue={setInfluencerSelect}
-              value={influencerSelect}
-              options={influencers?.map((influencer) => {
-                return {
-                  id: influencer.id,
-                  name: influencer.name + " / " + influencer.user_name,
-                  value: influencer.id,
-                };
-              })}
-              searchText={""}
-              getFunctions={getInfluencersSearch}
-            />
-
-            <ReusableSelect
-              label="Filtrar por estado"
-              options={
-                user.type === "Company"
-                  ? collabsFiltersCompany
-                  : collabsFiltersNomade
-              }
-              setValue={setFilterId}
-              value={filterId}
-            />
+              <ReusableSelect
+                label="Filtrar por estado"
+                options={
+                  user.type === "Company"
+                    ? collabsFiltersCompany
+                    : collabsFiltersNomade
+                }
+                setValue={setFilterId}
+                value={filterId}
+              />
+            </section>
 
             <SearchBar
               pageName={SectionTypes.collabs}

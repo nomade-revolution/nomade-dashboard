@@ -10,7 +10,7 @@ export const companyTableHeaderSections: HeaderSection[] = [
   },
   {
     id: 2,
-    name: "Empresa",
+    name: "Cliente",
     property: "company_name",
     sortTag: "company_name",
     pageName: "company",

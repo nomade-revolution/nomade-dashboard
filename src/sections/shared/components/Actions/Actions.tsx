@@ -22,6 +22,7 @@ import * as collabStates from "../../../collabs/utils/collabsStates";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { MdOutlineHistory } from "react-icons/md";
 import CustomDropdown from "../CustomDropdown/CustomDropdown";
+import theme from "assets/styles/theme";
 
 interface ActionsProps {
   pageName: string;
@@ -213,7 +214,9 @@ const Actions = ({
             aria-label="Verificar usuario"
             onClick={() => handleSendLeadLink((section as Lead).id)}
             style={{
-              background: "#8C9B6E",
+              background: (section as Lead).link_sent
+                ? theme.colors.darkBlue
+                : theme.colors.mainColor,
               display: "flex",
               alignItems: "center",
               gap: "8px",
@@ -224,7 +227,9 @@ const Actions = ({
             }}
           >
             <BsSendCheckFill />
-            <span>Enviar link</span>
+            <span>
+              {(section as Lead).link_sent ? "Volver a enviar" : "Enviar link"}
+            </span>
           </button>
         </Tooltip>
       );
