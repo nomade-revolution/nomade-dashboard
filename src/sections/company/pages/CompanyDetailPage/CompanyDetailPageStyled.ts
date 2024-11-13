@@ -60,6 +60,28 @@ const CompanyDetailPageStyled = styled.main`
         top: -20px;
       }
     }
+
+    &__actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    &__create {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px;
+      font-weight: 700;
+      background: ${(props) => props.theme.colors.darkBlue};
+      color: ${(props) => props.theme.fontsColors.light};
+      border-radius: ${(props) => props.theme.borderRadius.badges};
+      width: fit-content;
+
+      &--icon {
+        font-size: large;
+      }
+    }
   }
 
   .dashboard {

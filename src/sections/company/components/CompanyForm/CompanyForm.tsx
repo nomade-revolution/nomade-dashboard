@@ -3,7 +3,7 @@ import { Formik, Field, ErrorMessage, FormikHelpers } from "formik";
 import { useEffect, useState } from "react";
 import CustomFileInput from "sections/shared/components/CustomFileInput/CustomFileInput";
 import ReusableSelect from "sections/shared/components/ReusableSelect/ReusableSelect";
-import { clientSchema, initialValues } from "./utils/validations/validations";
+import { clientSchema, initialData } from "./utils/validations/validations";
 import { PartialCompany } from "@company";
 import { FullAddress } from "modules/address/domain/Address";
 import {
@@ -25,25 +25,45 @@ import CustomCheckbox from "sections/shared/components/CustomCheckbox/CustomChec
 import Loader from "sections/shared/components/Loader/Loader";
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
 import { formatDateWithDash } from "sections/shared/utils/formatDate/formatDate";
+import { Company } from "modules/user/domain/User";
 
-const CompanyForm = (): React.ReactElement => {
+interface Props {
+  onSubmit: (values: FormData, id?: number) => void;
+  type?: string;
+  client?: Company;
+}
+
+const CompanyForm = ({ onSubmit, client, type }: Props): React.ReactElement => {
   const [formState, setFormState] = useState<{ company_plan_id: string }>({
     company_plan_id: "",
   });
-  const [file, setFile] = useState<File[] | null>(null);
+  const [file, setFile] = useState<File[] | null>(() => {
+    if (client?.image) {
+      const blob = new Blob([client.image], { type: "image/png" });
+      const generatedFile = new File([blob], "uploaded-image.png", {
+        type: "image/png",
+      });
+      return [generatedFile];
+    }
+    return null;
+  });
   const [registerAddress, setRegisterAddress] = useState<FullAddress | null>(
-    null,
+    client ? client.address : null,
   );
-  const [registerContacts, setRegisterContacts] = useState<Contact[]>([]);
+  const [registerContacts, setRegisterContacts] = useState<Contact[]>(
+    client ? (client.contacts as never) : [],
+  );
   const [isAddressModalOpen, setIsAddressModalOpen] = useState<boolean>(false);
   const [isPasswordShown, setIsPasswordShown] = useState<boolean>(false);
   const [isPasswordConfirmationShown, setIsPasswordConfirmationShown] =
     useState<boolean>(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState<boolean>(false);
-  const [isCheked, setIsChecked] = useState<boolean>(false);
+  const [isCheked, setIsChecked] = useState<boolean>(
+    client ? Boolean(client.goCardless) : false,
+  );
 
   const { contact_types, getAllContactTypes } = useContactContext();
-  const { isSuccess, isError, loading, postCompanyCms } = useCompanyContext();
+  const { isSuccess, isError, loading } = useCompanyContext();
   const navigate = useNavigate();
 
   const handleFormStateChange = (field: string, value: string) => {
@@ -94,7 +114,7 @@ const CompanyForm = (): React.ReactElement => {
     formData.append("image", file![0]);
     formData.append("plan_id", formState.company_plan_id);
 
-    await postCompanyCms(formData);
+    await onSubmit(formData, client && client?.id);
 
     if (isSuccess) {
       setTimeout(() => navigate(0), 2000);
@@ -106,6 +126,11 @@ const CompanyForm = (): React.ReactElement => {
   useEffect(() => {
     getAllContactTypes();
   }, [getAllContactTypes]);
+
+  const initialValues = {
+    ...initialData,
+    ...client,
+  };
 
   return (
     <Formik
@@ -524,9 +549,15 @@ const CompanyForm = (): React.ReactElement => {
             {isSubmitting || loading ? (
               <Loader width="20px" height="20px" />
             ) : isSuccess ? (
-              "Cliente creado"
+              type === "edit" ? (
+                "Cliente editado"
+              ) : (
+                "Cliente creado"
+              )
             ) : isError ? (
               "Revisa los datos e intentalo de nuevo"
+            ) : type === "edit" ? (
+              "Editar cliente"
             ) : (
               "Crear cliente"
             )}

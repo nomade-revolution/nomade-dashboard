@@ -42,8 +42,10 @@ const SideBarStyled = styled.div<Props>`
     &__section--active {
       display: flex;
       width: 100%;
-      justify-content: space-between;
-      padding: 10px;
+      justify-content: ${(props) =>
+        props.$isMinimized ? "unset" : "space-between"};
+      gap: ${(props) => (props.$isMinimized ? "8px" : 0)};
+      padding: ${(props) => (props.$isMinimized ? "10px" : "10px")};
       align-items: center;
     }
 
@@ -61,14 +63,18 @@ const SideBarStyled = styled.div<Props>`
     }
 
     &__quantity {
-      padding: 4px 2px;
+      padding: 2px;
       background: ${(props) => props.theme.colors.mainColor};
-      width: 40px;
+      width: ${(props) => (props.$isMinimized ? "15px" : "40px")};
       text-align: center;
       color: ${(props) => props.theme.fontsColors.light};
       font-weight: 700;
-      font-size: ${(props) => props.theme.fontsSize.__SM};
-      border-radius: ${(props) => props.theme.borderRadius.badges};
+      font-size: ${(props) =>
+        props.$isMinimized
+          ? props.theme.fontsSize.__XS
+          : props.theme.fontsSize.__SM};
+      border-radius: ${(props) =>
+        props.$isMinimized ? "50%" : props.theme.borderRadius.badges};
     }
 
     &__icon,

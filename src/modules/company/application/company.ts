@@ -41,3 +41,11 @@ export const postNewCompany = (
 ) => {
   return companyRepo.postNewCompany(company);
 };
+
+export const editCompany = (
+  companyRepo: CompanyRepository<Company>,
+  company: FormData,
+  id: number,
+) => {
+  return companyRepo.editCompany(company, id);
+};

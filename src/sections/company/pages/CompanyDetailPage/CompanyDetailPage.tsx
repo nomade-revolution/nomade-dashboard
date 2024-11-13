@@ -13,10 +13,15 @@ import { SectionTypes } from "sections/shared/interfaces/interfaces";
 import DialogDeleteConfirm from "sections/shared/components/DialogDeleteConfirm/DialogDeleteConfirm";
 import theme from "assets/styles/theme";
 import { FaRegTrashCan } from "react-icons/fa6";
+import { IoAddCircle } from "react-icons/io5";
+import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
+import CompanyForm from "sections/company/components/CompanyForm/CompanyForm";
 
 const InfluencerDetailPage = (): React.ReactElement => {
-  const { getCompany, company, loading } = useCompanyContext();
+  const { getCompany, company, loading, editCompanyCms } = useCompanyContext();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
   const { handleIsDialogOpen } = useActions();
 
   const { id } = useParams();
@@ -40,12 +45,21 @@ const InfluencerDetailPage = (): React.ReactElement => {
             <div className="company-detail__title">
               <h2>Cliente</h2>
             </div>
-            <ActionButton
-              onClick={handleDeleteButton}
-              text="Borrar"
-              icon={<FaRegTrashCan />}
-              color={theme.colors.red}
-            />
+            <div className="company-detail__actions">
+              <button
+                className="company-detail__create"
+                onClick={() => setIsModalOpen(true)}
+              >
+                <IoAddCircle className="dashboard__create--icon" />
+                Editar cliente
+              </button>
+              <ActionButton
+                onClick={handleDeleteButton}
+                text="Borrar"
+                icon={<FaRegTrashCan />}
+                color={theme.colors.red}
+              />
+            </div>
           </section>
 
           <section className="company-detail__info">
@@ -65,6 +79,18 @@ const InfluencerDetailPage = (): React.ReactElement => {
             open={isDialogOpen}
             sectionId={company.id!}
             pageName={SectionTypes.customers}
+          />
+          <ReusableModal
+            children={
+              <CompanyForm
+                onSubmit={editCompanyCms}
+                client={company}
+                type="edit"
+              />
+            }
+            openModal={isModalOpen}
+            setIsModalOpen={setIsModalOpen}
+            type="client"
           />
         </CompanyDetailPageStyled>
       )}

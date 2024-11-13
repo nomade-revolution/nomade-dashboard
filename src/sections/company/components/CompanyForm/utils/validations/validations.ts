@@ -40,7 +40,7 @@ export const clientSchema = yup.object().shape({
     .oneOf([yup.ref("password")], "Las contraseñas deben coincidir"),
 });
 
-export const initialValues: PartialCompany = {
+export const initialData: PartialCompany = {
   nif: "",
   company: "",
   company_name: "",

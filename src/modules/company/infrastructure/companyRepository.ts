@@ -82,4 +82,19 @@ export class CompanyRepository {
       return Promise.reject(error);
     }
   }
+
+  public async editCompany(
+    company: FormData,
+    id: number,
+  ): Promise<HttpResponseInterface<Company>> {
+    try {
+      const resp = await this.http.put<Company>(
+        `${COMPANY_BASE}/${id}`,
+        company,
+      );
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 }
