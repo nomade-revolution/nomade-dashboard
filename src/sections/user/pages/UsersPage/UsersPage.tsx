@@ -44,6 +44,7 @@ const UsersPage = (): React.ReactElement => {
     },
     [getUsers, order.direction, order.sortTag, page],
   );
+
   const handleCreateUser = () => {
     navigate(appPaths.createUser);
   };

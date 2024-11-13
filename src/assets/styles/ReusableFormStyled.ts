@@ -20,7 +20,13 @@ const ReusableFormStyled = styled.form<Props>`
       display: flex;
       flex-direction: column;
       gap: 10px;
+      width: 100%;
     }
+
+    &__title {
+      color: ${(props) => props.theme.colors.mainColor};
+    }
+
     &__section {
       display: flex;
       flex-direction: column;
@@ -193,7 +199,10 @@ const ReusableFormStyled = styled.form<Props>`
     &__field-large,
     &__field-textarea,
     &__field-large--offer,
-    &__field-textarea--offer {
+    &__field-textarea--offer,
+    &__field-date,
+    &__field-large--company,
+    &__field-textarea--company {
       display: flex;
       align-items: center;
       height: 40px;
@@ -221,7 +230,8 @@ const ReusableFormStyled = styled.form<Props>`
       }
     }
 
-    &__field-textarea--offer {
+    &__field-textarea--offer,
+    &__field-textarea--company {
       height: 200px;
 
       width: 100%;
@@ -233,6 +243,11 @@ const ReusableFormStyled = styled.form<Props>`
       }
     }
 
+    &__field-large--company,
+    &__field-textarea--company {
+      width: 100%;
+    }
+
     &__field-large--offer {
       font-weight: 700;
       font-family: inherit;
@@ -241,6 +256,10 @@ const ReusableFormStyled = styled.form<Props>`
       @media (min-width: 1000px) {
         width: 400px;
       }
+    }
+
+    &__field-date {
+      height: 55px;
     }
 
     &__taxes-item {
@@ -279,6 +298,16 @@ const ReusableFormStyled = styled.form<Props>`
       padding: 0 8px;
       width: 70%;
       gap: 40px;
+    }
+
+    &__password {
+      position: relative;
+    }
+
+    &__password-btn {
+      position: absolute;
+      top: 12px;
+      right: 5px;
     }
 
     &__error-message {
@@ -419,6 +448,7 @@ const ReusableFormStyled = styled.form<Props>`
     &__select-data {
       display: flex;
       flex-direction: column;
+
       gap: 20px;
     }
 

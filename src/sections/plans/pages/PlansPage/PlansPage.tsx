@@ -20,7 +20,7 @@ import {
   SectionTypes,
 } from "sections/shared/interfaces/interfaces";
 import formatCalendarDate from "sections/shared/utils/formatCalendarDate/formatCalendarDate";
-import formatDate from "sections/shared/utils/formatDate/formatDate";
+import { formatDateWithSlash } from "sections/shared/utils/formatDate/formatDate";
 
 const PlansPage = (): React.ReactElement => {
   const tabs = ["Mensual", "Trimestral"];
@@ -65,7 +65,10 @@ const PlansPage = (): React.ReactElement => {
         </button>
         {value && (
           <div className="plans-page__filter-active">
-            <span> {formatDate(formatCalendarDate(value.toString()))}</span>
+            <span>
+              {" "}
+              {formatDateWithSlash(formatCalendarDate(value.toString()))}
+            </span>
             <button
               onClick={() => onChange(null)}
               className="plans-page__filter-close"

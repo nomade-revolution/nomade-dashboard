@@ -22,10 +22,10 @@ const LayoutStyled = styled.div<Props>`
       @media (min-width: 1000px) {
         padding: 30px 20px;
         display: block;
-        z-index: 1;
         padding: 0;
-        width: 100%;
+        width: ${(props) => (props.$isMinimized ? "fit-content" : "15%")};
         position: fixed;
+        z-index: 2;
       }
     }
 
@@ -51,6 +51,7 @@ const LayoutStyled = styled.div<Props>`
     &__pages {
       width: 100%;
       overflow-y: auto;
+      z-index: 1;
 
       @media (min-width: 1000px) and (max-width: 1600px) {
         padding-left: ${(props) => (props.$isMinimized ? "5rem" : "16rem")};

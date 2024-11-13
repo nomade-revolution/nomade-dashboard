@@ -1,4 +1,7 @@
-import { COMPANY_BASE } from "@company/application/routes";
+import {
+  COMPANY_BASE,
+  COMPANY_CMS_REGISTER,
+} from "@company/application/routes";
 import { Http } from "@core/application";
 import { HttpResponseInterface } from "@core/domain";
 import { Company } from "modules/user/domain/User";
@@ -60,6 +63,20 @@ export class CompanyRepository {
   ): Promise<HttpResponseInterface<Company[]>> {
     try {
       const resp = await this.http.get<Company[]>(COMPANY_BASE, params);
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  public async postNewCompany(
+    company: FormData,
+  ): Promise<HttpResponseInterface<Company>> {
+    try {
+      const resp = await this.http.post<Company>(
+        `${COMPANY_CMS_REGISTER}`,
+        company,
+      );
       return resp;
     } catch (error) {
       return Promise.reject(error);

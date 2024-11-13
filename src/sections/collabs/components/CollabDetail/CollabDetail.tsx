@@ -10,12 +10,12 @@ import { FullOffer } from "modules/offers/domain/Offer";
 import { useAddressContext } from "sections/address/AddressContext/useAddressContext";
 import { BsCalendarEvent } from "react-icons/bs";
 import { MdOutlineLocationOn } from "react-icons/md";
-import formatDate from "sections/shared/utils/formatDate/formatDate";
 import {
   HiMiniArrowLeftOnRectangle,
   HiMiniArrowRightOnRectangle,
 } from "react-icons/hi2";
 import theme from "assets/styles/theme";
+import { formatDateWithSlash } from "sections/shared/utils/formatDate/formatDate";
 
 interface Props {
   collab: FullCollab;
@@ -119,11 +119,11 @@ const CollabDetail = ({
                 <h4>Fechas</h4>
                 <div className="collab-detail__data-section">
                   <HiMiniArrowRightOnRectangle color={theme.colors.softGreen} />
-                  <span>{formatDate(collab.from_day!)}</span>
+                  <span>{formatDateWithSlash(collab.from_day!)}</span>
                 </div>
                 <div className="collab-detail__data-section">
                   <HiMiniArrowLeftOnRectangle color={theme.colors.red} />
-                  <span>{formatDate(collab.to_day!)}</span>
+                  <span>{formatDateWithSlash(collab.to_day!)}</span>
                 </div>
               </section>
             )}

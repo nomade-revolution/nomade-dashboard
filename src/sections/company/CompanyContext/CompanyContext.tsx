@@ -6,6 +6,7 @@ import {
   getCompanyById,
   registerCompany,
   getCompanies,
+  postNewCompany,
 } from "@company/application/company";
 import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
 import { Company } from "modules/user/domain/User";
@@ -14,6 +15,7 @@ import { FilterParams } from "sections/shared/interfaces/interfaces";
 interface ContextState {
   loading: boolean;
   isSuccess: boolean;
+  isError: boolean;
   company: Company;
   badgeCount: number;
   companies: Company[];
@@ -22,6 +24,7 @@ interface ContextState {
   getCompany: (company_id: number) => void;
   postCompany: (company: FormData) => void;
   getCompaniesStatusBadge: () => void;
+  postCompanyCms: (company: FormData) => void;
 }
 
 export const CompanyContext = createContext<ContextState>({} as ContextState);
@@ -34,6 +37,7 @@ export const CompanyContextProvider = ({
 }>) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
   const [company, setCompany] = useState<Company>({} as Company);
   const [badgeCount, setBadgeCount] = useState<number>(0);
   const [companies, setCompanies] = useState<Company[]>([]);
@@ -99,11 +103,29 @@ export const CompanyContextProvider = ({
     [repository],
   );
 
+  const postCompanyCms = async (company: FormData) => {
+    setLoading(true);
+    const response = await postNewCompany(repository, company);
+
+    if (isHttpSuccessResponse(response)) {
+      setCompany(response.data);
+      setLoading(false);
+    } else {
+      setIsError(Boolean(response.error));
+    }
+
+    setLoading(false);
+    setIsSuccess(response.success);
+
+    return response;
+  };
+
   return (
     <CompanyContext.Provider
       value={{
         loading,
         isSuccess,
+        isError,
         company,
         badgeCount,
         companies,
@@ -112,6 +134,7 @@ export const CompanyContextProvider = ({
         deleteCompanyById,
         postCompany,
         getCompaniesStatusBadge,
+        postCompanyCms,
       }}
     >
       {children}
