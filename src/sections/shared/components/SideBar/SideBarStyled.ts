@@ -8,7 +8,7 @@ const SideBarStyled = styled.div<Props>`
   display: none;
 
   @media (min-width: 1000px) {
-    padding: 20px;
+    padding: ${(props) => (props.$isMinimized ? "5px" : "20px")};
     height: 100vh;
     width: 100%;
     display: flex;
@@ -92,8 +92,8 @@ const SideBarStyled = styled.div<Props>`
 
     &__hide {
       position: absolute;
-      right: -20px;
-      top: ${(props) => (props.$isMinimized ? "0px" : "-40px")};
+      right: ${(props) => (props.$isMinimized ? "-5px" : "-20px")};
+      top: ${(props) => (props.$isMinimized ? "5px" : "-40px")};
       padding: 5px;
       box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.2);
       border-radius: 5px 0 0 5px;
