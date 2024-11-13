@@ -7,6 +7,7 @@ import {
   registerCompany,
   getCompanies,
   postNewCompany,
+  editCompany,
 } from "@company/application/company";
 import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
 import { Company } from "modules/user/domain/User";
@@ -25,6 +26,7 @@ interface ContextState {
   postCompany: (company: FormData) => void;
   getCompaniesStatusBadge: () => void;
   postCompanyCms: (company: FormData) => void;
+  editCompanyCms: (company: FormData, id?: number) => void;
 }
 
 export const CompanyContext = createContext<ContextState>({} as ContextState);
@@ -110,6 +112,25 @@ export const CompanyContextProvider = ({
     if (isHttpSuccessResponse(response)) {
       setCompany(response.data);
       setLoading(false);
+      setIsSuccess(true);
+    } else {
+      setIsError(Boolean(response.error));
+    }
+
+    setLoading(false);
+    setIsSuccess(response.success);
+
+    return response;
+  };
+
+  const editCompanyCms = async (company: FormData, id?: number) => {
+    setLoading(true);
+    const response = await editCompany(repository, company, id!);
+
+    if (isHttpSuccessResponse(response)) {
+      setCompany(response.data);
+      setLoading(false);
+      setIsSuccess(true);
     } else {
       setIsError(Boolean(response.error));
     }
@@ -135,6 +156,7 @@ export const CompanyContextProvider = ({
         postCompany,
         getCompaniesStatusBadge,
         postCompanyCms,
+        editCompanyCms,
       }}
     >
       {children}

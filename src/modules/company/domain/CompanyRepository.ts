@@ -8,4 +8,8 @@ export interface CompanyRepository<I> {
   getCompaniesBadge(): Promise<HttpResponseInterface<I>>;
   getCompanies: (params: FilterParams) => Promise<HttpResponseInterface<I>>;
   postNewCompany: (company: FormData) => Promise<HttpResponseInterface<I>>;
+  editCompany: (
+    company: FormData,
+    id: number,
+  ) => Promise<HttpResponseInterface<I>>;
 }

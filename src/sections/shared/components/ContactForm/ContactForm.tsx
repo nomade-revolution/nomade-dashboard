@@ -18,6 +18,7 @@ const initialState: Contact = {
   surname: "",
   email: "",
   phone: "",
+  type: "",
   type_id: 0,
 };
 
@@ -31,8 +32,13 @@ const ContactForm = ({
     contacts.length > 0 ? contacts : [{ ...initialState }],
   );
 
-  const [types_id, setTypesId] = useState<string[]>(
-    contacts.map((contact) => contact.type_id.toString()),
+  const [types_id, setTypesId] = useState<string[]>(() =>
+    contacts.map((contact) => {
+      const matchingType = contact_types.find(
+        (type) => type.name === contact.type,
+      );
+      return matchingType ? matchingType.id.toString() : "0";
+    }),
   );
 
   const formRefs = useRef<FormikProps<Contact>[]>([]);
@@ -65,9 +71,21 @@ const ContactForm = ({
   useEffect(() => {
     if (contacts.length > 0) {
       setContactForms(contacts);
-      setTypesId(contacts.map((contact) => contact.type_id.toString()));
+
+      setTypesId(
+        contacts.map((contact) => {
+          if (contact.type_id) {
+            return contact.type_id.toString();
+          }
+
+          const matchingType = contact_types.find(
+            (type) => type.name === contact.type,
+          );
+          return matchingType ? matchingType.id.toString() : "0";
+        }),
+      );
     }
-  }, [contacts]);
+  }, [contacts, contact_types]);
 
   return (
     <ReusableFormStyled

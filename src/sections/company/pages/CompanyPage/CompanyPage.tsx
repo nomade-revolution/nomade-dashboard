@@ -17,6 +17,7 @@ import { companyTableHeaderSections } from "../../utils/companySections";
 import { IoAddCircle } from "react-icons/io5";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
 import CompanyForm from "sections/company/components/CompanyForm/CompanyForm";
+import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
 
 const CompaniesPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
@@ -25,6 +26,7 @@ const CompaniesPage = (): React.ReactElement => {
   const { getUsers, users_company, pagination, loading, order } =
     useUserContext();
   const { page } = useParams();
+  const { postCompanyCms } = useCompanyContext();
 
   const handleSearch = (searchText: string) => {
     getUsersData(searchText);
@@ -97,7 +99,7 @@ const CompaniesPage = (): React.ReactElement => {
             filterParams={""}
           />
           <ReusableModal
-            children={<CompanyForm />}
+            children={<CompanyForm onSubmit={postCompanyCms} />}
             openModal={isModalOpen}
             setIsModalOpen={setIsModalOpen}
             type="client"

@@ -94,7 +94,7 @@ const CompanyDetailData = ({ company }: Props): React.ReactElement => {
           <div className="plan__section">
             <h5>Fecha de inicio</h5>
             <span className="plan__date">
-              {formatDateWithSlash(company.plan?.start_date)}
+              {formatDateWithSlash(company.plan && company.plan.start_date!)}
             </span>
           </div>
           <div className="plan__section">

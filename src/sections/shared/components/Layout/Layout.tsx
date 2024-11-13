@@ -10,10 +10,12 @@ import { useOffersContext } from "sections/offers/OffersContext/useOffersContext
 import { Company } from "modules/user/domain/User";
 import { useInfluencerContext } from "sections/influencer/InfluencerContext/useInfluencerContext";
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
+import { useMediaQuery } from "@mui/material";
 
 const Layout = (): React.ReactElement => {
   const location = useLocation();
-  const [isMinimized, setIsMinimized] = useState<boolean>(false);
+  const matches = useMediaQuery("(max-width: 1200px)");
+  const [isMinimized, setIsMinimized] = useState<boolean>(matches);
 
   const { setSessionToken, token, getLoggedUser, user, logoutUser } =
     useAuthContext();
@@ -60,6 +62,10 @@ const Layout = (): React.ReactElement => {
       logoutUser(), navigate(0);
     }
   }, [logoutUser, navigate, user]);
+
+  useEffect(() => {
+    setIsMinimized(matches);
+  }, [matches]);
 
   return (
     <LayoutStyled $isMinimized={isMinimized}>

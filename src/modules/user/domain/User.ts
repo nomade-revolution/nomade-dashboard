@@ -24,10 +24,18 @@ export interface Company extends User {
   user_id: number;
   address: FullAddress;
   contacts: Array<
-    Pick<Contact, "email" | "name" | "phone" | "surname"> & { type: string }
+    Pick<Contact, "email" | "name" | "phone" | "surname"> & {
+      type: string;
+      type_id: number;
+    }
   >;
   percentage: number;
-  plan: Pick<Plan, "billing"> & { plan_name: string; start_date: string };
+  plan: Pick<Plan, "billing" | "start_date"> & {
+    plan_name: string;
+    plan_id: number;
+    plan_coments: string;
+  };
+  goCardless: number;
 }
 
 export interface Account {
