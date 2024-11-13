@@ -14,9 +14,13 @@ import {
 
 import { useUserContext } from "sections/user/UserContext/useUserContext";
 import { companyTableHeaderSections } from "../../utils/companySections";
+import { IoAddCircle } from "react-icons/io5";
+import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
+import CompanyForm from "sections/company/components/CompanyForm/CompanyForm";
 
 const CompaniesPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const { getUsers, users_company, pagination, loading, order } =
     useUserContext();
@@ -53,7 +57,14 @@ const CompaniesPage = (): React.ReactElement => {
         <Loader width="20px" height="20px" />
       ) : (
         <ReusablePageStyled className="dashboard">
-          <div className="dashboard__search">
+          <div className="dashboard__searchContainer">
+            <button
+              className="dashboard__create"
+              onClick={() => setIsModalOpen(true)}
+            >
+              <IoAddCircle className="dashboard__create--icon" />
+              Crear cliente
+            </button>
             <SearchBar
               pageName={SectionTypes.customers}
               pageTypes={SectionTypes.customers}
@@ -84,6 +95,12 @@ const CompaniesPage = (): React.ReactElement => {
             per_page={pagination.per_page}
             pageName={SectionTypes.customers}
             filterParams={""}
+          />
+          <ReusableModal
+            children={<CompanyForm />}
+            openModal={isModalOpen}
+            setIsModalOpen={setIsModalOpen}
+            type="client"
           />
         </ReusablePageStyled>
       )}

@@ -7,4 +7,5 @@ export interface CompanyRepository<I> {
   registerCompany(company: FormData): Promise<HttpResponseInterface<I>>;
   getCompaniesBadge(): Promise<HttpResponseInterface<I>>;
   getCompanies: (params: FilterParams) => Promise<HttpResponseInterface<I>>;
+  postNewCompany: (company: FormData) => Promise<HttpResponseInterface<I>>;
 }

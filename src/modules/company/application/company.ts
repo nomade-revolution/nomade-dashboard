@@ -34,3 +34,10 @@ export const getCompanies = (
 ) => {
   return companyRepo.getCompanies(params);
 };
+
+export const postNewCompany = (
+  companyRepo: CompanyRepository<Company>,
+  company: FormData,
+) => {
+  return companyRepo.postNewCompany(company);
+};

@@ -26,10 +26,10 @@ import { Lead } from "modules/leads/domain/Leads";
 import { Plan } from "modules/plans/domain/Plan";
 import LinearBuffer from "../LinearBuffer/LinearBuffer";
 import { COLAB_PUBLISHED_STATE } from "sections/collabs/utils/collabsStates";
-import formatDate from "sections/shared/utils/formatDate/formatDate";
 import getDateIntoHourFormat from "sections/shared/utils/getDateIntoHourFormat/getDateIntoHourFormat";
 import { SocialMediaTypes } from "@influencer/domain/InfluencerSocialMedia";
 import theme from "assets/styles/theme";
+import { formatDateWithSlash } from "sections/shared/utils/formatDate/formatDate";
 
 interface Props {
   headerSection: HeaderSection;
@@ -75,11 +75,13 @@ const DashboardContentSections = ({
 
     case "name":
       return (
-        <span>{`${(section as Influencer).name} ${
-          (section as Influencer).surnames
-            ? (section as Influencer).surnames
-            : ""
-        }`}</span>
+        <Link to={`/influencer/${(section as Influencer).id}`}>
+          <span>{`${(section as Influencer).name} ${
+            (section as Influencer).surnames
+              ? (section as Influencer).surnames
+              : ""
+          }`}</span>
+        </Link>
       );
 
     case "image":
@@ -317,7 +319,7 @@ const DashboardContentSections = ({
           ].id === COLAB_PUBLISHED_STATE ? (
             <span className="dashboard__published">
               <FaCheckDouble />
-              {formatDate(
+              {formatDateWithSlash(
                 (section as FullCollab).history[
                   (section as FullCollab).history.length - 1
                 ].created_at,

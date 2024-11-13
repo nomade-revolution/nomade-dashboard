@@ -10,7 +10,7 @@ const SideBarStyled = styled.div<Props>`
   @media (min-width: 1000px) {
     padding: 20px;
     height: 100vh;
-    width: ${(props) => (props.$isMinimized ? "fit-content" : "15%")};
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 40px;
