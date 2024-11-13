@@ -20,7 +20,7 @@ import { billingOptions } from "./utils/options/options";
 import { Contact, ContactType } from "modules/contact/domain/Contact";
 import ContactForm from "sections/shared/components/ContactForm/ContactForm";
 import { useContactContext } from "sections/contact/ContactContext/useContactContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CustomCheckbox from "sections/shared/components/CustomCheckbox/CustomCheckbox";
 import Loader from "sections/shared/components/Loader/Loader";
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
@@ -44,6 +44,7 @@ const CompanyForm = (): React.ReactElement => {
 
   const { contact_types, getAllContactTypes } = useContactContext();
   const { isSuccess, isError, loading, postCompanyCms } = useCompanyContext();
+  const navigate = useNavigate();
 
   const handleFormStateChange = (field: string, value: string) => {
     setFormState((prevState) => ({ ...prevState, [field]: value }));
@@ -94,6 +95,11 @@ const CompanyForm = (): React.ReactElement => {
     formData.append("plan_id", formState.company_plan_id);
 
     await postCompanyCms(formData);
+
+    if (isSuccess) {
+      setTimeout(() => navigate(0), 2000);
+    }
+
     setSubmitting(false);
   };
 
