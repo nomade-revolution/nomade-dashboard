@@ -35,6 +35,7 @@ export const theme = {
     grey: "#ABABB4",
   },
   fontsSize: {
+    __XS: "0.5rem",
     __S: "0.6rem",
     __SSM: "0.7rem",
     __SM: "0.8rem",
