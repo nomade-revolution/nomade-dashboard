@@ -67,7 +67,8 @@ const CompanyDetailPageStyled = styled.main`
       gap: 10px;
     }
 
-    &__create {
+    &__create,
+    &__plan-modify {
       display: flex;
       align-items: center;
       gap: 8px;
@@ -81,6 +82,10 @@ const CompanyDetailPageStyled = styled.main`
       &--icon {
         font-size: large;
       }
+    }
+
+    &__plan-modify {
+      background: ${(props) => props.theme.colors.mainColor};
     }
   }
 

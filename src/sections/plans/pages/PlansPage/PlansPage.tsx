@@ -7,9 +7,7 @@ import {
   monthPlansTableSections,
   trimestralPlansTableSections,
 } from "sections/plans/utils/plansTableSections";
-import CustomCalendar, {
-  Value,
-} from "sections/shared/components/CustomCalendar/CustomCalendar";
+
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
 import Loader from "sections/shared/components/Loader/Loader";
 import PaginationComponent from "sections/shared/components/Pagination/PaginationComponent";
@@ -26,8 +24,7 @@ const PlansPage = (): React.ReactElement => {
   const tabs = ["Mensual", "Trimestral"];
   const [billing_id, setBillingId] = useState<number>(1);
   const [isCalendarShown, setIsCalendarShown] = useState<boolean>(false);
-  const [value, onChange] = useState<Value>(null);
-
+  const [date, setDate] = useState<string>("");
   const { getPlans, plans, loading, pagination } = usePlansContext();
   const { page } = useParams();
 
@@ -37,12 +34,13 @@ const PlansPage = (): React.ReactElement => {
     });
   };
 
-  const handleCalendarChange = (selectedDate: Value) => {
-    onChange(selectedDate);
-    setIsCalendarShown(false);
-
-    if (selectedDate) {
-      handleSearch(formatCalendarDate(selectedDate.toString()));
+  const handleCalendarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedMonth = event.target.value;
+    if (selectedMonth) {
+      const formattedDate = `${selectedMonth}-01`;
+      setIsCalendarShown(false);
+      setDate(selectedMonth);
+      handleSearch(formattedDate);
     }
   };
 
@@ -52,37 +50,12 @@ const PlansPage = (): React.ReactElement => {
     };
 
     getPlans(+page!, 12, filters);
-  }, [billing_id, getPlans, page, value]);
+  }, [billing_id, getPlans, page]);
+
+  const maxMonth = formatCalendarDate(new Date().toString());
 
   return (
     <ReusablePageStyled className="plans-page">
-      <div className="plans-page__show-calendar">
-        <button
-          onClick={() => setIsCalendarShown(!isCalendarShown)}
-          className="plans-page__filter-btn"
-        >
-          Filtrar por fechas
-        </button>
-        {value && (
-          <div className="plans-page__filter-active">
-            <span>
-              {" "}
-              {formatDateWithSlash(formatCalendarDate(value.toString()))}
-            </span>
-            <button
-              onClick={() => onChange(null)}
-              className="plans-page__filter-close"
-            >
-              <IoClose />
-            </button>
-          </div>
-        )}
-        {isCalendarShown && (
-          <div className="plans-page__calendar">
-            <CustomCalendar onChange={handleCalendarChange} value={value} />
-          </div>
-        )}
-      </div>
       <ReusableTabSelector
         tabs={tabs}
         content={[
@@ -91,6 +64,40 @@ const PlansPage = (): React.ReactElement => {
               <Loader width="20px" height="20px" />
             ) : (
               <section className="plans-page__mensual">
+                <div className="plans-page__show-calendar">
+                  <div className="plans-page__filter-btnSection">
+                    <button
+                      onClick={() => setIsCalendarShown(!isCalendarShown)}
+                      className="plans-page__filter-btn"
+                    >
+                      Selector de fechas
+                    </button>
+                  </div>
+                  {date && (
+                    <div className="plans-page__filter-active">
+                      <span>
+                        {" "}
+                        {formatDateWithSlash(
+                          formatCalendarDate(date.toString()),
+                        )}
+                      </span>
+                      <button
+                        onClick={() => setDate("")}
+                        className="plans-page__filter-close"
+                      >
+                        <IoClose color="#fff" />
+                      </button>
+                    </div>
+                  )}
+                  {isCalendarShown && (
+                    <input
+                      type="month"
+                      className="plans-page__date-picker"
+                      max={maxMonth}
+                      onChange={handleCalendarChange}
+                    />
+                  )}
+                </div>
                 <DashboardTable
                   bodySections={plans}
                   headerSections={monthPlansTableSections}
@@ -111,6 +118,40 @@ const PlansPage = (): React.ReactElement => {
               <Loader width="20px" height="20px" />
             ) : (
               <section className="plans-page__mensual">
+                <div className="plans-page__show-calendar">
+                  <div className="plans-page__filter-btnSection">
+                    <button
+                      onClick={() => setIsCalendarShown(!isCalendarShown)}
+                      className="plans-page__filter-btn"
+                    >
+                      Selector de fechas
+                    </button>
+                  </div>
+                  {date && (
+                    <div className="plans-page__filter-active">
+                      <span>
+                        {" "}
+                        {formatDateWithSlash(
+                          formatCalendarDate(date.toString()),
+                        )}
+                      </span>
+                      <button
+                        onClick={() => setDate("")}
+                        className="plans-page__filter-close"
+                      >
+                        <IoClose />
+                      </button>
+                    </div>
+                  )}
+                  {isCalendarShown && (
+                    <input
+                      type="month"
+                      className="plans-page__date-picker"
+                      max={maxMonth}
+                      onChange={handleCalendarChange}
+                    />
+                  )}
+                </div>
                 <DashboardTable
                   bodySections={plans}
                   headerSections={trimestralPlansTableSections}

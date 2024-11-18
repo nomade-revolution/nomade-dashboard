@@ -457,6 +457,12 @@ const ReusablePageStyled = styled.main`
       }
     }
 
+    &__filter-btnSection {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+    }
+
     &__filter-btn {
       background: ${(props) => props.theme.colors.darkBlue};
       padding: 10px;
@@ -474,6 +480,14 @@ const ReusablePageStyled = styled.main`
       display: flex;
       align-items: center;
       border-radius: 3px;
+      color: ${(props) => props.theme.colors.light};
+    }
+
+    &__date-picker {
+      border-radius: 10px;
+      height: 40px;
+      padding: 10px;
+      border: 1px solid ${(props) => props.theme.colors.mainColor};
     }
 
     &__filter-close {
