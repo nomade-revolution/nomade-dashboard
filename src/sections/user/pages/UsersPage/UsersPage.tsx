@@ -52,7 +52,6 @@ const UsersPage = (): React.ReactElement => {
   useEffect(() => {
     getUsersData();
   }, [getUsersData]);
-
   return (
     <>
       {loading ? (

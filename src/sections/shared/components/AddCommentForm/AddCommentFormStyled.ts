@@ -1,12 +1,16 @@
 import styled from "styled-components";
 
-const LoginFormStyled = styled.form`
+const AddCommentFormStyled = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
   font-size: ${(props) => props.theme.fontsSize.__SM};
   width: 85%;
+  padding: 20px;
+  min-height: 200px;
+  min-width: 400px;
+
   @media (min-width: 1000px) {
     width: 60%;
   }
@@ -22,6 +26,7 @@ const LoginFormStyled = styled.form`
       border: 1px solid ${(props) => props.theme.colors.inputsBorderColors};
       height: ${(props) => props.theme.heights.inputs};
       padding: 0 10px;
+      height: 50px;
     }
   }
 
@@ -49,4 +54,4 @@ const LoginFormStyled = styled.form`
   }
 `;
 
-export default LoginFormStyled;
+export default AddCommentFormStyled;

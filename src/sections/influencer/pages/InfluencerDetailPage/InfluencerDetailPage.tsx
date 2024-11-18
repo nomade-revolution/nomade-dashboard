@@ -28,7 +28,6 @@ const InfluencerDetailPage = (): React.ReactElement => {
   useEffect(() => {
     getInfluencer(+id!);
   }, [getInfluencer, id]);
-
   return (
     <>
       {loading ? (

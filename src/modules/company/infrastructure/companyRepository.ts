@@ -30,6 +30,7 @@ export class CompanyRepository {
       const resp = await this.http.get<Company>(
         `${COMPANY_BASE}/${company_id}`,
       );
+
       return resp;
     } catch (error) {
       return Promise.reject(error);
