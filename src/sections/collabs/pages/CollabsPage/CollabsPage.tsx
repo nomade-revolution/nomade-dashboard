@@ -23,6 +23,9 @@ import { useCompanyContext } from "sections/company/CompanyContext/useCompanyCon
 import { LuFilter } from "react-icons/lu";
 import { IoMdClose } from "react-icons/io";
 import NoDataHandler from "sections/shared/components/NoDataHandler/NoDataHandler";
+import { IoAddCircle } from "react-icons/io5";
+import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
+import CollabsForm from "sections/collabs/components/CollabsForm/CollabsForm";
 
 const CollabsPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
@@ -31,6 +34,7 @@ const CollabsPage = (): React.ReactElement => {
   const [companySelect, setCompanySelect] = useState<number | null>(null);
   const [collabStateActionType, setCollabStateActionType] =
     useState<CollabActionTypes | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const { getAllCollabs, collabs, pagination, loading, order } =
     useCollabsContext();
@@ -145,6 +149,14 @@ const CollabsPage = (): React.ReactElement => {
         <ReusablePageStyled>
           <div className="dashboard__filtersContainer">
             <section className="dashboard__selectsContainer">
+              <button
+                className="dashboard__create"
+                onClick={() => setIsModalOpen(true)}
+              >
+                <IoAddCircle className="dashboard__create--icon" />
+                Crear collab
+              </button>
+
               {user.type === "Nomade" && (
                 <TypeAhead
                   options={companies?.map((company) => {
@@ -176,16 +188,18 @@ const CollabsPage = (): React.ReactElement => {
                 searchText={""}
                 getFunctions={getInfluencersSearch}
               />
-              <ReusableSelect
-                label="Filtrar por estado"
-                options={
-                  user.type === "Company"
-                    ? collabsFiltersCompany
-                    : collabsFiltersNomade
-                }
-                setValue={setFilterId}
-                value={filterId}
-              />
+              <div className="dashboard__select">
+                <ReusableSelect
+                  label="Filtrar por estado"
+                  options={
+                    user.type === "Company"
+                      ? collabsFiltersCompany
+                      : collabsFiltersNomade
+                  }
+                  setValue={setFilterId}
+                  value={filterId}
+                />
+              </div>
             </section>
 
             <SearchBar
@@ -266,6 +280,11 @@ const CollabsPage = (): React.ReactElement => {
             per_page={pagination.per_page}
             pageName={SectionTypes.collabs}
             filterParams=""
+          />
+          <ReusableModal
+            children={<CollabsForm />}
+            openModal={isModalOpen}
+            setIsModalOpen={setIsModalOpen}
           />
         </ReusablePageStyled>
       )}

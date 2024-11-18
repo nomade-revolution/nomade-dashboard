@@ -48,3 +48,10 @@ export const getCollab = (
 ): Promise<HttpResponseInterface<FullCollab>> => {
   return collabsRepo.getCollab(collab_id);
 };
+
+export const createCollab = (
+  collabsRepo: CollabsRepository<FullCollab>,
+  collab: FormData,
+): Promise<HttpResponseInterface<FullCollab>> => {
+  return collabsRepo.createCollab(collab);
+};

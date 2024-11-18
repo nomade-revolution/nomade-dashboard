@@ -49,6 +49,7 @@ export const mockOffers: FullOffer[] = [
       },
     ],
     limitDate: "2024-08-30",
+    user_id: 2,
   },
   {
     id: 2,
@@ -99,6 +100,7 @@ export const mockOffers: FullOffer[] = [
       },
     ],
     limitDate: "2024-12-31",
+    user_id: 2,
   },
   {
     id: 3,
@@ -176,6 +178,7 @@ export const mockOffers: FullOffer[] = [
       },
     ],
     limitDate: "2024-08-31",
+    user_id: 2,
   },
   {
     id: 4,
@@ -225,6 +228,7 @@ export const mockOffers: FullOffer[] = [
       },
     ],
     limitDate: "2024-12-30",
+    user_id: 2,
   },
   {
     id: 5,
@@ -274,6 +278,7 @@ export const mockOffers: FullOffer[] = [
       },
     ],
     limitDate: "2024-09-30",
+    user_id: 2,
   },
   {
     id: 6,
@@ -323,6 +328,7 @@ export const mockOffers: FullOffer[] = [
       },
     ],
     limitDate: "2024-12-31",
+    user_id: 2,
   },
   {
     id: 7,
@@ -373,6 +379,7 @@ export const mockOffers: FullOffer[] = [
       },
     ],
     limitDate: "2024-12-31",
+    user_id: 2,
   },
   {
     id: 8,
@@ -450,6 +457,7 @@ export const mockOffers: FullOffer[] = [
       },
     ],
     limitDate: "2024-08-31",
+    user_id: 2,
   },
   {
     id: 9,
@@ -528,5 +536,6 @@ export const mockOffers: FullOffer[] = [
       },
     ],
     limitDate: "2024-12-31",
+    user_id: 2,
   },
 ];

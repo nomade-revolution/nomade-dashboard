@@ -84,4 +84,15 @@ export class CollabsRepository {
       return Promise.reject(error);
     }
   }
+
+  public async createCollab(
+    collab: FormData,
+  ): Promise<HttpResponseInterface<FullCollab>> {
+    try {
+      const resp = await this.http.post<FullCollab>(`${COLLABS_BASE}`, collab);
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 }

@@ -77,10 +77,13 @@ const ReusablePageStyled = styled.main`
       width: 100%;
 
       @media (min-width: 880px) {
-        width: 100%;
+        width: 90%;
         flex-direction: row;
-        padding-right: 10px;
       }
+    }
+
+    &__select {
+      padding-left: 40px;
     }
 
     &__filter {

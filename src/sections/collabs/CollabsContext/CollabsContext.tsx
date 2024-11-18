@@ -4,6 +4,7 @@ import { FullOffer } from "modules/offers/domain/Offer";
 import { CollabsRepository } from "modules/collabs/domain/CollabsRepository";
 import {
   collabsGetAll,
+  createCollab,
   deleteCollab,
   getCollab,
   getRejectedCollabReasons,
@@ -24,6 +25,7 @@ interface ContextState {
   error: string | null;
   isSuccess: boolean;
   pagination: PaginationStucture;
+  createLoading: boolean;
   getAllCollabs: (page: number, per_page: number, params: FilterParams) => void;
   deleteCollabById: (influencer_id: number) => void;
   updateCollabState: (
@@ -35,6 +37,7 @@ interface ContextState {
   setOrder: (order: OrderItem) => void;
   order: OrderItem;
   getCollabById: (collab_id: number) => void;
+  addNewCollab: (collab: FormData) => void;
 }
 
 export const CollabsContext = createContext<ContextState>({} as ContextState);
@@ -55,6 +58,7 @@ export const CollabsContextProvider = ({
   );
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [order, setOrder] = useState<OrderItem>({} as OrderItem);
+  const [createLoading, setCreateLoading] = useState<boolean>(false);
 
   const getAllCollabs = useCallback(
     async (page: number, per_page: number, params: FilterParams) => {
@@ -120,6 +124,28 @@ export const CollabsContextProvider = ({
     [repository],
   );
 
+  const addNewCollab = async (collab: FormData) => {
+    setCreateLoading(true);
+    const response = await createCollab(repository, collab);
+
+    if (isHttpSuccessResponse(response)) {
+      setCollab(response.data);
+      setCreateLoading(false);
+      setIsSuccess(true);
+
+      setTimeout(() => setLoading(true), 3000);
+    } else {
+      setError(response.error as unknown as string);
+    }
+
+    setCreateLoading(false);
+    setIsSuccess(response.success);
+
+    return response;
+  };
+
+  setTimeout(() => setIsSuccess(false), 3000);
+
   return (
     <CollabsContext.Provider
       value={{
@@ -127,6 +153,7 @@ export const CollabsContextProvider = ({
         collab,
         collabRejectedReasons,
         loading,
+        createLoading,
         error,
         isSuccess,
         pagination,
@@ -137,6 +164,7 @@ export const CollabsContextProvider = ({
         order,
         setOrder,
         getCollabById,
+        addNewCollab,
       }}
     >
       {children}

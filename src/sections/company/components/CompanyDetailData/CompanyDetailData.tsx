@@ -22,6 +22,7 @@ const CompanyDetailData = ({ company }: Props): React.ReactElement => {
               <span className="company-data__name">
                 {company?.company_name}
               </span>
+              <span className="company-data__company">{company.company}</span>
               <div>
                 <span>NIF - </span>
                 <span>{company?.nif}</span>

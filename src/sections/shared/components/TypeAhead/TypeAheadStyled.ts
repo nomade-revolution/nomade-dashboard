@@ -6,7 +6,7 @@ const TypeAheadStyled = styled.div`
   align-items: center;
 
   .input {
-    width: 250px;
+    width: 200px;
   }
 
   .loaderContainer {
