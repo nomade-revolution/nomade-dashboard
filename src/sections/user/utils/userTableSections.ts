@@ -15,7 +15,7 @@ export const usersTableHeaderSections: HeaderSection[] = [
     sortTag: "email",
     pageName: "user",
   },
-  { id: 3, name: "Tipo", property: "type", sortTag: "", pageName: "user" },
+  { id: 3, name: "Rol", property: "roles", sortTag: "", pageName: "user" },
   {
     id: 4,
     name: "Acciones",

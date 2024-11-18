@@ -9,12 +9,14 @@ import GoBackButton from "sections/shared/components/GoBackButton/GoBackButton";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
 import { useNavigate } from "react-router-dom";
 import ReusableSelect from "sections/shared/components/ReusableSelect/ReusableSelect";
+import { userRoleOptions } from "sections/user/utils/userRoleOptions";
 
 const initialState: AuthRegisterNomadeInterface = {
   name: "",
   email: "",
   password: "",
   repeatPassword: "",
+  roles: [],
 };
 
 const CreateUserPage = () => {
@@ -23,10 +25,12 @@ const CreateUserPage = () => {
   const { registerUser } = useUserContext();
   const navigate = useNavigate();
   const [loading, setIsLoading] = useState<boolean>(false);
+  const [role, setRole] = useState<string>("");
+
   const handleSubmitForm = async (values: AuthRegisterNomadeInterface) => {
     setIsLoading(true);
     setIsFormSubmitted(true);
-    const resp = await registerUser(values);
+    const resp = await registerUser({ ...values, roles: [+role] });
     setIsSuccess(Boolean(resp.success));
     setIsLoading(false);
     if (isSuccess) {
@@ -130,9 +134,9 @@ const CreateUserPage = () => {
               )}
             </div>
             <ReusableSelect
-              value={""}
-              setValue={() => {}}
-              options={[]}
+              value={role}
+              setValue={setRole}
+              options={userRoleOptions}
               label={"Rol"}
             />
             <button
