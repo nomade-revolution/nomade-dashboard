@@ -220,6 +220,25 @@ const DashboardContentSections = ({
         </span>
       );
 
+    case "roles":
+      return (
+        <span
+          className={`dashboard__role${
+            (section as User).roles[0] === 1
+              ? "--admin"
+              : (section as User).roles[0] === 2
+                ? "--manager"
+                : ""
+          }`}
+        >
+          {(section as User).roles[0] === 1
+            ? "Administrador"
+            : (section as User).roles[0] === 2
+              ? "Gestor"
+              : "-"}
+        </span>
+      );
+
     case "calendar":
       if (!calendar || !Array.isArray(calendar)) {
         return <></>;

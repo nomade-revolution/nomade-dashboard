@@ -406,6 +406,18 @@ const ReusablePageStyled = styled.main`
         color: yellowgreen;
       }
     }
+
+    &__role {
+      &--admin {
+        font-weight: 700;
+        color: ${(props) => props.theme.colors.mainColor};
+      }
+
+      &--manager {
+        font-weight: 700;
+        color: ${(props) => props.theme.colors.darkRed};
+      }
+    }
   }
 
   .filterBox {

@@ -10,6 +10,7 @@ export interface User {
   name: string;
   email: string;
   type: "Company" | "Influencer" | "Nomade";
+  roles: number[];
 }
 
 export interface Company extends User {
