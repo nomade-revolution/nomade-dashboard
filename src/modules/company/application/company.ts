@@ -1,6 +1,6 @@
 import { CompanyRepository } from "@company/domain/CompanyRepository";
 import { HttpResponseInterface } from "@core/domain/HttpResponseInterface";
-import { Company } from "modules/user/domain/User";
+import { CompaniesApiResponse, Company } from "modules/user/domain/User";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
 
 export const deleteCompany = (
@@ -33,6 +33,15 @@ export const getCompanies = (
   params: FilterParams,
 ) => {
   return companyRepo.getCompanies(params);
+};
+
+export const getCompaniesWithPagination = (
+  companyRepo: CompanyRepository<CompaniesApiResponse>,
+  page: number,
+  per_page: number,
+  filters: FilterParams,
+) => {
+  return companyRepo.getCompaniesWithPagination(page, per_page, filters);
 };
 
 export const postNewCompany = (

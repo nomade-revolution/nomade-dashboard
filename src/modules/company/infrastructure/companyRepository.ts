@@ -4,7 +4,7 @@ import {
 } from "@company/application/routes";
 import { Http } from "@core/application";
 import { HttpResponseInterface } from "@core/domain";
-import { Company } from "modules/user/domain/User";
+import { CompaniesApiResponse, Company } from "modules/user/domain/User";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
 
 export class CompanyRepository {
@@ -63,6 +63,23 @@ export class CompanyRepository {
   ): Promise<HttpResponseInterface<Company[]>> {
     try {
       const resp = await this.http.get<Company[]>(COMPANY_BASE, params);
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  public async getCompaniesWithPagination(
+    page: number,
+    per_page: number,
+    filters: FilterParams,
+  ): Promise<HttpResponseInterface<CompaniesApiResponse>> {
+    try {
+      const resp = await this.http.get<CompaniesApiResponse>(COMPANY_BASE, {
+        page,
+        per_page,
+        filters,
+      });
       return resp;
     } catch (error) {
       return Promise.reject(error);

@@ -1,4 +1,7 @@
-import { HeaderSection } from "sections/shared/interfaces/interfaces";
+import {
+  HeaderSection,
+  SectionTypes,
+} from "sections/shared/interfaces/interfaces";
 import { StyledTableCell } from "../DashboardTable/DashboardTable";
 import { useState } from "react";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
@@ -7,6 +10,7 @@ import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsCon
 import { BsFilterLeft } from "react-icons/bs";
 import theme from "assets/styles/theme";
 import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
+import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
 
 interface Props {
   section: HeaderSection;
@@ -16,6 +20,7 @@ const DashBoardHeaderCell = ({ section }: Props) => {
   const { setOrder, order } = useUserContext();
   const { order: orderCollabs, setOrder: setOrderCollabs } =
     useCollabsContext();
+  const { orderCompanies, setOrderCompanies } = useCompanyContext();
 
   const getOrder = (section: HeaderSection) => {
     if (section.pageName === "collabs") {
@@ -26,11 +31,15 @@ const DashBoardHeaderCell = ({ section }: Props) => {
       }
     }
 
-    if (
-      section.pageName === "user" ||
-      section.pageName === "influencer" ||
-      section.pageName === "company"
-    ) {
+    if (section.pageName === SectionTypes.customers) {
+      if (orderCompanies.sortTag === section.sortTag) {
+        return orderCompanies.direction;
+      } else {
+        return null;
+      }
+    }
+
+    if (section.pageName === "user" || section.pageName === "influencer") {
       if (order?.sortTag === section?.sortTag) {
         return order.direction;
       } else {
@@ -44,32 +53,28 @@ const DashBoardHeaderCell = ({ section }: Props) => {
   );
 
   const handlePressSort = () => {
-    if (section.pageName === "collabs") {
-      if (isSort === null) {
-        setIsSort("ASC");
-        setOrderCollabs({ sortTag: section.sortTag!, direction: "ASC" });
-      } else if (isSort === "ASC") {
-        setIsSort("DESC");
-        setOrderCollabs({ sortTag: section.sortTag!, direction: "DESC" });
-      } else {
-        setIsSort(null);
-        setOrderCollabs({} as OrderItem);
-      }
-    } else if (
-      section.pageName === "user" ||
-      section.pageName === "influencer" ||
-      section.pageName === "company"
-    ) {
-      if (isSort === null) {
-        setIsSort("ASC");
-        setOrder({ sortTag: section.sortTag!, direction: "ASC" });
-      } else if (isSort === "ASC") {
-        setIsSort("DESC");
-        setOrder({ sortTag: section.sortTag!, direction: "DESC" });
-      } else {
-        setIsSort(null);
-        setOrder({} as OrderItem);
-      }
+    const sortActions: Record<
+      string,
+      (sortTag: string, direction: "ASC" | "DESC" | null) => void
+    > = {
+      collabs: (sortTag, direction) =>
+        setOrderCollabs(direction ? { sortTag, direction } : ({} as OrderItem)),
+      [SectionTypes.customers]: (sortTag, direction) =>
+        setOrderCompanies(
+          direction ? { sortTag, direction } : ({} as OrderItem),
+        ),
+      user: (sortTag, direction) =>
+        setOrder(direction ? { sortTag, direction } : ({} as OrderItem)),
+      influencer: (sortTag, direction) =>
+        setOrder(direction ? { sortTag, direction } : ({} as OrderItem)),
+    };
+
+    const nextSort = isSort === null ? "ASC" : isSort === "ASC" ? "DESC" : null;
+    setIsSort(nextSort);
+
+    const action = sortActions[section.pageName];
+    if (action && section.sortTag) {
+      action(section.sortTag, nextSort);
     }
   };
 

@@ -372,6 +372,40 @@ const ReusablePageStyled = styled.main`
       justify-content: center;
       gap: 5px;
     }
+
+    &__status {
+      &--active {
+        color: green;
+        font-weight: 700;
+      }
+
+      &--inactive {
+        color: red;
+        font-weight: 700;
+      }
+
+      &--pending {
+        color: orange;
+        font-weight: 700;
+      }
+
+      &--standby {
+        color: blueviolet;
+        font-weight: 700;
+      }
+    }
+
+    &__plan {
+      &--mensual {
+        font-weight: 700;
+        color: chocolate;
+      }
+
+      &--trimestral {
+        font-weight: 700;
+        color: yellowgreen;
+      }
+    }
   }
 
   .filterBox {

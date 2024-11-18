@@ -1,4 +1,7 @@
-import { HeaderSection } from "../../shared/interfaces/interfaces";
+import {
+  HeaderSection,
+  SectionTypes,
+} from "../../shared/interfaces/interfaces";
 
 export const companyTableHeaderSections: HeaderSection[] = [
   {
@@ -6,38 +9,77 @@ export const companyTableHeaderSections: HeaderSection[] = [
     name: "Imágen",
     property: "image",
     sortTag: "",
-    pageName: "company",
+    pageName: SectionTypes.customers,
   },
   {
     id: 2,
     name: "Cliente",
     property: "company_name",
     sortTag: "company_name",
-    pageName: "company",
+    pageName: SectionTypes.customers,
   },
-  { id: 3, name: "Web", property: "web", sortTag: "web", pageName: "company" },
+  {
+    id: 3,
+    name: "Web",
+    property: "web",
+    sortTag: "web",
+    pageName: SectionTypes.customers,
+  },
   {
     id: 4,
     name: "Teléfono",
     property: "phone",
     sortTag: "",
-    pageName: "company",
+    pageName: SectionTypes.customers,
   },
   {
     id: 5,
     name: "Porcentaje",
     property: "percentage",
     sortTag: "",
-    pageName: "company",
+    pageName: SectionTypes.customers,
   },
-  { id: 6, name: "NIF", property: "nif", sortTag: "", pageName: "company" },
-  { id: 7, name: "Tipo", property: "type", sortTag: "", pageName: "company" },
+  {
+    id: 6,
+    name: "NIF",
+    property: "nif",
+    sortTag: "",
+    pageName: SectionTypes.customers,
+  },
+  {
+    id: 7,
+    name: "Plan",
+    property: "company_plan",
+    sortTag: "",
+    pageName: SectionTypes.customers,
+  },
+  {
+    id: 7,
+    name: "Tipo de pago",
+    property: "company_billing",
+    sortTag: "",
+    pageName: SectionTypes.customers,
+  },
   {
     id: 8,
+    name: "Status",
+    property: "status",
+    sortTag: "",
+    pageName: SectionTypes.customers,
+  },
+  {
+    id: 9,
+    name: "Comentarios",
+    property: "company_comments",
+    sortTag: "",
+    pageName: SectionTypes.customers,
+  },
+  {
+    id: 10,
     name: "Acciones",
     property: "actions",
     sortTag: "",
-    pageName: "company",
+    pageName: SectionTypes.customers,
   },
 ];
 
@@ -47,11 +89,29 @@ export const companyCollabsHeaderSections: HeaderSection[] = [
     name: "Influencer",
     property: "influencer_name",
     sortTag: "name",
-    pageName: "company",
+    pageName: SectionTypes.customers,
   },
-  { id: 3, name: "Día", property: "day", sortTag: "", pageName: "company" },
-  { id: 4, name: "Hora", property: "time", sortTag: "", pageName: "company" },
-  { id: 5, name: "Tipo", property: "type", sortTag: "", pageName: "company" },
+  {
+    id: 3,
+    name: "Día",
+    property: "day",
+    sortTag: "",
+    pageName: SectionTypes.customers,
+  },
+  {
+    id: 4,
+    name: "Hora",
+    property: "time",
+    sortTag: "",
+    pageName: SectionTypes.customers,
+  },
+  {
+    id: 5,
+    name: "Tipo",
+    property: "type",
+    sortTag: "",
+    pageName: SectionTypes.customers,
+  },
   {
     id: 6,
     name: "Estado",

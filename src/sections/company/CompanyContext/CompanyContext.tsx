@@ -8,10 +8,15 @@ import {
   getCompanies,
   postNewCompany,
   editCompany,
+  getCompaniesWithPagination,
 } from "@company/application/company";
 import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
 import { Company } from "modules/user/domain/User";
-import { FilterParams } from "sections/shared/interfaces/interfaces";
+import {
+  FilterParams,
+  PaginationStucture,
+} from "sections/shared/interfaces/interfaces";
+import { OrderItem } from "sections/user/UserContext/UserContext";
 
 interface ContextState {
   loading: boolean;
@@ -20,7 +25,15 @@ interface ContextState {
   company: Company;
   badgeCount: number;
   companies: Company[];
+  pagination: PaginationStucture;
+  orderCompanies: OrderItem;
+  setOrderCompanies: (order: OrderItem) => void;
   getCompaniesWithParams: (params: FilterParams) => void;
+  getCompaniesPaginated: (
+    page: number,
+    per_page: number,
+    params?: FilterParams,
+  ) => void;
   deleteCompanyById: (company_id: number) => void;
   getCompany: (company_id: number) => void;
   postCompany: (company: FormData) => void;
@@ -43,6 +56,13 @@ export const CompanyContextProvider = ({
   const [company, setCompany] = useState<Company>({} as Company);
   const [badgeCount, setBadgeCount] = useState<number>(0);
   const [companies, setCompanies] = useState<Company[]>([]);
+  const [pagination, setPagination] = useState<PaginationStucture>(
+    {} as PaginationStucture,
+  );
+  const [orderCompanies, setOrderCompanies] = useState<OrderItem>(
+    {} as OrderItem,
+  );
+
   const deleteCompanyById = async (company_id: number) => {
     const response = await deleteCompany(repository, company_id);
 
@@ -105,6 +125,28 @@ export const CompanyContextProvider = ({
     [repository],
   );
 
+  const getCompaniesPaginated = useCallback(
+    async (page: number, per_page: number, filters?: FilterParams) => {
+      setLoading(true);
+      const response = await getCompaniesWithPagination(
+        repository,
+        page,
+        per_page,
+        filters!,
+      );
+
+      if (isHttpSuccessResponse(response)) {
+        setCompanies(response.data.companies);
+        setPagination(response.data.pagination);
+      }
+
+      setLoading(false);
+
+      return response;
+    },
+    [repository],
+  );
+
   const postCompanyCms = async (company: FormData) => {
     setLoading(true);
     const response = await postNewCompany(repository, company);
@@ -150,6 +192,10 @@ export const CompanyContextProvider = ({
         company,
         badgeCount,
         companies,
+        pagination,
+        orderCompanies,
+        setOrderCompanies,
+        getCompaniesPaginated,
         getCompaniesWithParams,
         getCompany,
         deleteCompanyById,

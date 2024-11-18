@@ -36,6 +36,8 @@ export interface Company extends User {
     plan_coments: string;
   };
   goCardless: number;
+  status: string;
+  company_comments: string;
 }
 
 export interface Account {
@@ -90,6 +92,11 @@ export enum UserTypes {
 
 export interface UserApiResponse {
   users: User[] | Influencer[] | Company[];
+  pagination: PaginationStucture;
+}
+
+export interface CompaniesApiResponse {
+  companies: Company[];
   pagination: PaginationStucture;
 }
 

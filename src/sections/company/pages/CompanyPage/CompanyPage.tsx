@@ -1,5 +1,4 @@
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
-import { UserTypes } from "modules/user/domain/User";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import DashboardCardListMobile from "sections/shared/components/DashboardCardListMobile/DashboardCardListMobile";
@@ -11,8 +10,6 @@ import {
   FilterParams,
   SectionTypes,
 } from "sections/shared/interfaces/interfaces";
-
-import { useUserContext } from "sections/user/UserContext/useUserContext";
 import { companyTableHeaderSections } from "../../utils/companySections";
 import { IoAddCircle } from "react-icons/io5";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
@@ -23,35 +20,44 @@ const CompaniesPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const { getUsers, users_company, pagination, loading, order } =
-    useUserContext();
   const { page } = useParams();
-  const { postCompanyCms } = useCompanyContext();
+  const {
+    postCompanyCms,
+    getCompaniesPaginated,
+    companies,
+    pagination,
+    loading,
+    orderCompanies,
+  } = useCompanyContext();
 
   const handleSearch = (searchText: string) => {
-    getUsersData(searchText);
+    gteCompaniesData(searchText);
   };
-  const getUsersData = useCallback(
+  const gteCompaniesData = useCallback(
     (text?: string) => {
-      const filters: FilterParams = {
-        filters: {
-          types: ["Company"],
-        },
-      };
-      if (order?.sortTag) {
-        filters.order = [{ by: order.sortTag, dir: order.direction }];
+      const filters: FilterParams = {};
+      if (orderCompanies?.sortTag) {
+        filters.order = [
+          { by: orderCompanies.sortTag, dir: orderCompanies.direction },
+        ];
       }
+
       if (text) {
         filters.search = text;
       }
-      getUsers(+page!, 12, filters, UserTypes.company);
+      getCompaniesPaginated(+page!, 12, filters);
     },
-    [getUsers, order.direction, order.sortTag, page],
+    [
+      getCompaniesPaginated,
+      orderCompanies.direction,
+      orderCompanies.sortTag,
+      page,
+    ],
   );
 
   useEffect(() => {
-    getUsersData();
-  }, [page, order, getUsersData]);
+    gteCompaniesData();
+  }, [page, gteCompaniesData]);
 
   return (
     <>
@@ -73,12 +79,12 @@ const CompaniesPage = (): React.ReactElement => {
               searchText={searchText!}
               setSearchText={setSearchText}
               onSearchSubmit={() => handleSearch(searchText)}
-              onReset={() => getUsersData()}
+              onReset={() => gteCompaniesData()}
             />
           </div>
           <div className="dashboard__table">
             <DashboardTable
-              bodySections={users_company}
+              bodySections={companies}
               headerSections={companyTableHeaderSections}
               pageName={SectionTypes.customers}
             />
@@ -86,7 +92,7 @@ const CompaniesPage = (): React.ReactElement => {
           <div className="dashboard__mobile">
             <h3>Clientes</h3>
             <DashboardCardListMobile
-              bodySections={users_company}
+              bodySections={companies}
               headerSections={companyTableHeaderSections}
               pageName={SectionTypes.customers}
             />

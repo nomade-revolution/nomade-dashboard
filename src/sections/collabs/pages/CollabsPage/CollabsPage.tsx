@@ -213,45 +213,40 @@ const CollabsPage = (): React.ReactElement => {
           </div>
 
           <div className="dashboard__filters filters">
-            {Object.values(totalFilters).map((filter) => (
-              <>
-                {Object.entries(filter as object).map(([key, value]) => (
-                  <>
-                    {user.type === "Company" && key === "company_id" ? (
-                      <></>
-                    ) : (
-                      <div>
-                        <span>
-                          <div className={"filters__filter"}>
-                            <LuFilter />
-                            <span>
-                              {" "}
-                              {key === "states"
-                                ? "Estado:"
-                                : key === "influencer_id"
-                                  ? "Influencer"
-                                  : key === "company_id"
-                                    ? "Empresa"
-                                    : key}{" "}
-                            </span>
-                            <span>
-                              {key === "states"
-                                ? collabsFiltersNomade.find(
-                                    (state) => +state.id === +value,
-                                  )?.name
-                                : ""}
-                            </span>
-                            <button onClick={() => handleRemoveFilter(key)}>
-                              <IoMdClose size={20} color="#fff" />
-                            </button>
-                          </div>
-                        </span>
-                      </div>
-                    )}
-                  </>
-                ))}
-              </>
-            ))}
+            {Object.entries(totalFilters.filters || {})
+              .filter(([key]) =>
+                ["influencer_id", "company_id", "search", "states"].includes(
+                  key,
+                ),
+              )
+              .map(([key, value]) => (
+                <div key={key} className="filters__filter">
+                  <LuFilter />
+                  <span>
+                    {key === "states"
+                      ? "Estado:"
+                      : key === "influencer_id"
+                        ? "Influencer:"
+                        : key === "company_id"
+                          ? "Empresa:"
+                          : "Búsqueda:"}
+                  </span>
+                  <span>
+                    {key === "states"
+                      ? collabsFiltersNomade.find(
+                          (state) => +state.id === +value,
+                        )?.name
+                      : key === "influencer_id"
+                        ? influencers.find((inf) => inf.id === value)?.name
+                        : key === "company_id"
+                          ? companies.find((comp) => comp.id === value)?.company
+                          : value}
+                  </span>
+                  <button onClick={() => handleRemoveFilter(key)}>
+                    <IoMdClose size={20} color="#fff" />
+                  </button>
+                </div>
+              ))}
           </div>
 
           <div className="dashboard__table">
