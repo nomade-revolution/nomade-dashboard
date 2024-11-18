@@ -13,14 +13,16 @@ import { SectionTypes } from "sections/shared/interfaces/interfaces";
 import DialogDeleteConfirm from "sections/shared/components/DialogDeleteConfirm/DialogDeleteConfirm";
 import theme from "assets/styles/theme";
 import { FaRegTrashCan } from "react-icons/fa6";
-import { IoAddCircle } from "react-icons/io5";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
 import CompanyForm from "sections/company/components/CompanyForm/CompanyForm";
+import { FaEdit } from "react-icons/fa";
+import PlanForm from "sections/plans/components/PlanForm/PlanForm";
 
 const InfluencerDetailPage = (): React.ReactElement => {
   const { getCompany, company, loading, editCompanyCms } = useCompanyContext();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isPlanModalOpen, setIsPlanModalOpen] = useState<boolean>(false);
 
   const { handleIsDialogOpen } = useActions();
 
@@ -46,11 +48,20 @@ const InfluencerDetailPage = (): React.ReactElement => {
               <h2>Cliente</h2>
             </div>
             <div className="company-detail__actions">
+              {company.plan?.plan_name !== "Pendiente" && (
+                <button
+                  className="company-detail__plan-modify"
+                  onClick={() => setIsPlanModalOpen(true)}
+                >
+                  <FaEdit className="dashboard__create--icon" />
+                  Modificar plan
+                </button>
+              )}
               <button
                 className="company-detail__create"
                 onClick={() => setIsModalOpen(true)}
               >
-                <IoAddCircle className="dashboard__create--icon" />
+                <FaEdit className="dashboard__create--icon" />
                 Editar cliente
               </button>
               <ActionButton
@@ -91,6 +102,12 @@ const InfluencerDetailPage = (): React.ReactElement => {
             openModal={isModalOpen}
             setIsModalOpen={setIsModalOpen}
             type="client"
+          />
+          <ReusableModal
+            children={<PlanForm company_id={company.id} />}
+            openModal={isPlanModalOpen}
+            setIsModalOpen={setIsPlanModalOpen}
+            type="plan"
           />
         </CompanyDetailPageStyled>
       )}

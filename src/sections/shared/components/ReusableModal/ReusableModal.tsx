@@ -23,7 +23,7 @@ const ReusableModal = ({
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: type === "offer" && !matches ? "70%" : matches ? "90%" : "40%",
-    height: "80%",
+    height: type === "plan" ? "fit-content" : "80%",
     bgcolor: "background.paper",
     boxShadow: 24,
     padding: "20px",
