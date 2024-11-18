@@ -13,9 +13,9 @@ import { SectionTypes } from "sections/shared/interfaces/interfaces";
 import DialogDeleteConfirm from "sections/shared/components/DialogDeleteConfirm/DialogDeleteConfirm";
 import theme from "assets/styles/theme";
 import { FaRegTrashCan } from "react-icons/fa6";
-import { IoAddCircle } from "react-icons/io5";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
 import CompanyForm from "sections/company/components/CompanyForm/CompanyForm";
+import { FaEdit } from "react-icons/fa";
 
 const InfluencerDetailPage = (): React.ReactElement => {
   const { getCompany, company, loading, editCompanyCms } = useCompanyContext();
@@ -47,10 +47,17 @@ const InfluencerDetailPage = (): React.ReactElement => {
             </div>
             <div className="company-detail__actions">
               <button
+                className="company-detail__plan-modify"
+                onClick={() => setIsModalOpen(true)}
+              >
+                <FaEdit className="dashboard__create--icon" />
+                Modificar plan
+              </button>
+              <button
                 className="company-detail__create"
                 onClick={() => setIsModalOpen(true)}
               >
-                <IoAddCircle className="dashboard__create--icon" />
+                <FaEdit className="dashboard__create--icon" />
                 Editar cliente
               </button>
               <ActionButton

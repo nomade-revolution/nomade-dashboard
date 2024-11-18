@@ -1,8 +1,15 @@
 import React, { createContext, useCallback, useState } from "react";
 import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
-import { Plan, PlansApiResponse } from "modules/plans/domain/Plan";
+import {
+  Plan,
+  PlansApiResponse,
+  PlanUpdateStructure,
+} from "modules/plans/domain/Plan";
 import { PlansRepository } from "modules/plans/domain/PlansRepository";
-import { getCompaniesPlans } from "modules/plans/application/plans";
+import {
+  getCompaniesPlans,
+  updateCompanyPlan,
+} from "modules/plans/application/plans";
 import {
   FilterParams,
   PaginationStucture,
@@ -12,10 +19,15 @@ interface ContextState {
   loading: boolean;
   plans: Plan[];
   pagination: PaginationStucture;
+  isSuccess: boolean;
   getPlans: (
     page: number,
     per_page: number,
     filterParams?: FilterParams,
+  ) => void;
+  updateCompanyPlanPeriod: (
+    company_id: number,
+    data: PlanUpdateStructure,
   ) => void;
 }
 
@@ -32,6 +44,7 @@ export const PlansContextProvider = ({
   const [pagination, setPagination] = useState<PaginationStucture>(
     {} as PaginationStucture,
   );
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
   const getPlans = useCallback(
     async (page: number, per_page: number, filterParams?: FilterParams) => {
@@ -55,13 +68,28 @@ export const PlansContextProvider = ({
     [repository],
   );
 
+  const updateCompanyPlanPeriod = async (
+    company_id: number,
+    data: PlanUpdateStructure,
+  ) => {
+    setLoading(true);
+    const response = await updateCompanyPlan(repository, company_id, data);
+
+    setIsSuccess(response.success);
+    setLoading(false);
+
+    return response;
+  };
+
   return (
     <PlansContext.Provider
       value={{
         loading,
         plans,
         pagination,
+        isSuccess,
         getPlans,
+        updateCompanyPlanPeriod,
       }}
     >
       {children}
