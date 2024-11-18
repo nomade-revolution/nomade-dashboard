@@ -8,9 +8,14 @@ export type Value = ValuePiece | [ValuePiece, ValuePiece];
 interface Props {
   value: Value;
   onChange: (value: Value) => void;
+  selectRange?: boolean;
 }
 
-const CustomCalendar = ({ value, onChange }: Props): React.ReactElement => {
+const CustomCalendar = ({
+  value,
+  onChange,
+  selectRange,
+}: Props): React.ReactElement => {
   return (
     <CustomCalendarStyled>
       <Calendar
@@ -18,6 +23,7 @@ const CustomCalendar = ({ value, onChange }: Props): React.ReactElement => {
         value={value}
         prev2Label={null}
         next2Label={null}
+        selectRange={selectRange}
       />
     </CustomCalendarStyled>
   );

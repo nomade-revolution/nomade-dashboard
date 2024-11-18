@@ -141,12 +141,20 @@ const DashboardContentSections = ({
       return (
         <Link
           to={`/cliente/${
-            pageName === SectionTypes.customers
+            pageName === SectionTypes.customers ||
+            pageName === SectionTypes.plans
               ? (section as Company).id
-              : (section as FullCollab).company
+              : (section as Offer).user_id
           }`}
         >
           {(section as Company | FullCollab).company}
+        </Link>
+      );
+
+    case "company_name":
+      return (
+        <Link to={`/cliente/${(section as Company).id}`}>
+          {(section as Company).company_name}
         </Link>
       );
 

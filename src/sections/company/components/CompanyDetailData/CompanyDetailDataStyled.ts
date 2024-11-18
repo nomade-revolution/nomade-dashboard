@@ -20,6 +20,7 @@ const CompanyDetailDataStyled = styled.section`
       justify-content: space-between;
       gap: 10px;
     }
+
     &__data {
       display: flex;
       flex-direction: column;
@@ -32,6 +33,11 @@ const CompanyDetailDataStyled = styled.section`
       align-items: flex-start;
       gap: 5px;
       font-weight: bold;
+    }
+
+    &__company {
+      font-weight: 400;
+      font-size: ${(props) => props.theme.fontsSize.__SM};
     }
 
     &__country {

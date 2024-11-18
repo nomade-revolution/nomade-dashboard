@@ -49,8 +49,8 @@ interface CollabableDelivery {
 interface CollabableBrand {}
 
 export interface CollabsRequestStructure {
-  offer_id: number;
-  influencer_id: number;
+  offer_id: string;
+  influencer_id: string;
   comment?: string;
   collabable: CollabableRestaurant | CollabableDelivery | CollabableBrand;
 }
@@ -78,4 +78,23 @@ export const enum CollabType {
   company = "Company",
   nomade = "Nomade",
   influencer = "Influencer",
+}
+
+export interface CollabCollabableCreateDefault {
+  address_id: number;
+  guests: number;
+  day: string;
+  time: string;
+}
+
+export interface CollabCollabableCreateLodging {
+  address_id: number;
+  guests: number;
+  from_day: string;
+  to_day: string;
+}
+
+export interface CollabCollabableCreateDelivery {
+  day: string;
+  time: string;
 }
