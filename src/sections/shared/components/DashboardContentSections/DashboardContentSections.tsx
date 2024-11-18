@@ -452,14 +452,18 @@ const DashboardContentSections = ({
     case "start_date":
       return (
         <span className="dashboard__start-date">
-          {(section as Plan).start_date ? (section as Plan).start_date : "-"}
+          {(section as Plan).start_date
+            ? (section as Plan).start_date?.split(" ")[0]
+            : "-"}
         </span>
       );
 
     case "end_date":
       return (
         <span className="dashboard__end-date">
-          {(section as Plan).end_date ? (section as Plan).end_date : "-"}
+          {(section as Plan).end_date
+            ? (section as Plan).end_date?.split(" ")[0]
+            : "-"}
         </span>
       );
 
