@@ -158,6 +158,68 @@ const DashboardContentSections = ({
         </Link>
       );
 
+    case "company_plan":
+      return (
+        <span
+          className={`dashboard__plan${
+            (section as Company).plan.plan_name === "Básico"
+              ? "--basic"
+              : (section as Company).plan.plan_name === "Estandar"
+                ? "--standard"
+                : (section as Company).plan.plan_name === "Premium"
+                  ? "--premium"
+                  : (section as Company).plan.plan_name === "Pendiente"
+                    ? "--pending"
+                    : ""
+          }`}
+        >
+          {(section as Company).plan.plan_name}
+        </span>
+      );
+
+    case "company_billing":
+      return (
+        <span
+          className={`dashboard__plan${
+            (section as Company).plan.billing === "Mensual"
+              ? "--mensual"
+              : "--trimestral"
+          }`}
+        >
+          {(section as Company).plan.billing
+            ? (section as Company).plan.billing
+            : "-"}
+        </span>
+      );
+
+    case "status":
+      return (
+        <span
+          className={`dashboard__status${
+            (section as Company).status === "Activo"
+              ? "--active"
+              : (section as Company).status === "Inactivo"
+                ? "--inactive"
+                : (section as Company).status === "Pendiente"
+                  ? "--pending"
+                  : (section as Company).status === "En pausa"
+                    ? "--standby"
+                    : ""
+          }`}
+        >
+          {(section as Company).status}
+        </span>
+      );
+
+    case "company_comments":
+      return (
+        <span className="dashboard__comments">
+          {(section as Company).company_comments
+            ? (section as Company).company_comments
+            : "-"}
+        </span>
+      );
+
     case "calendar":
       if (!calendar || !Array.isArray(calendar)) {
         return <></>;
@@ -230,7 +292,7 @@ const DashboardContentSections = ({
     case "categories":
       return (
         <span className="dashboard__category">
-          {(section as Influencer).categories[0].name}
+          {(section as Influencer).categories[0]?.name}
         </span>
       );
 

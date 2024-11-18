@@ -116,7 +116,7 @@ const CompanyDetailDataStyled = styled.section`
 
     &__trimestral {
       font-weight: 700;
-      color: darkorange;
+      color: yellowgreen;
     }
 
     &--basic {
