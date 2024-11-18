@@ -13,9 +13,9 @@ export const getCompaniesPlans = (
 };
 
 export const updateCompanyPlan = (
-  plansRepo: PlansRepository<PlansApiResponse>,
+  plansRepo: PlansRepository<boolean>,
   company_id: number,
   data: PlanUpdateStructure,
-): Promise<HttpResponseInterface<PlansApiResponse>> => {
-  return plansRepo.upadteCompanyPlan(company_id, data);
+): Promise<HttpResponseInterface<boolean>> => {
+  return plansRepo.updateCompanyPlan(company_id, data);
 };

@@ -23,5 +23,5 @@ export interface PlansApiResponse {
 export interface PlanUpdateStructure {
   date: string;
   extension: number;
-  comments: string;
+  comments?: string;
 }

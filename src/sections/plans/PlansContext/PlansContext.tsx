@@ -1,10 +1,6 @@
 import React, { createContext, useCallback, useState } from "react";
 import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
-import {
-  Plan,
-  PlansApiResponse,
-  PlanUpdateStructure,
-} from "modules/plans/domain/Plan";
+import { Plan, PlanUpdateStructure } from "modules/plans/domain/Plan";
 import { PlansRepository } from "modules/plans/domain/PlansRepository";
 import {
   getCompaniesPlans,
@@ -20,6 +16,7 @@ interface ContextState {
   plans: Plan[];
   pagination: PaginationStucture;
   isSuccess: boolean;
+  error: string;
   getPlans: (
     page: number,
     per_page: number,
@@ -37,7 +34,7 @@ export const PlansContextProvider = ({
   children,
   repository,
 }: React.PropsWithChildren<{
-  repository: PlansRepository<PlansApiResponse>;
+  repository: PlansRepository<Plan[]>;
 }>) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [plans, setPlans] = useState<Plan[]>([]);
@@ -45,6 +42,7 @@ export const PlansContextProvider = ({
     {} as PaginationStucture,
   );
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
   const getPlans = useCallback(
     async (page: number, per_page: number, filterParams?: FilterParams) => {
@@ -75,11 +73,19 @@ export const PlansContextProvider = ({
     setLoading(true);
     const response = await updateCompanyPlan(repository, company_id, data);
 
-    setIsSuccess(response.success);
+    if (isHttpSuccessResponse(response)) {
+      setIsSuccess(response.success);
+      setLoading(false);
+    } else {
+      setError(response.error as never);
+    }
+
     setLoading(false);
 
     return response;
   };
+
+  setTimeout(() => setIsSuccess(false), 2000);
 
   return (
     <PlansContext.Provider
@@ -88,6 +94,7 @@ export const PlansContextProvider = ({
         plans,
         pagination,
         isSuccess,
+        error,
         getPlans,
         updateCompanyPlanPeriod,
       }}

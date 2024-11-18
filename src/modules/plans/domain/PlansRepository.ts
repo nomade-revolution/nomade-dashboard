@@ -8,7 +8,7 @@ export interface PlansRepository<I> {
     per_page: number,
     filterParams?: FilterParams,
   ): Promise<HttpResponseInterface<I>>;
-  upadteCompanyPlan(
+  updateCompanyPlan(
     company_id: number,
     data: PlanUpdateStructure,
   ): Promise<HttpResponseInterface<I>>;
