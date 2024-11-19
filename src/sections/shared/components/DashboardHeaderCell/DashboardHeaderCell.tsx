@@ -11,6 +11,7 @@ import { BsFilterLeft } from "react-icons/bs";
 import theme from "assets/styles/theme";
 import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
+import { usePlansContext } from "sections/plans/PlansContext/usePlansContext";
 
 interface Props {
   section: HeaderSection;
@@ -20,12 +21,20 @@ const DashBoardHeaderCell = ({ section }: Props) => {
   const { setOrder, order } = useUserContext();
   const { order: orderCollabs, setOrder: setOrderCollabs } =
     useCollabsContext();
+  const { setOrderPlans, orderPlans } = usePlansContext();
   const { orderCompanies, setOrderCompanies } = useCompanyContext();
 
   const getOrder = (section: HeaderSection) => {
     if (section.pageName === "collabs") {
       if (orderCollabs.sortTag === section.sortTag) {
         return orderCollabs.direction;
+      } else {
+        return null;
+      }
+    }
+    if (section.pageName === SectionTypes.plans) {
+      if (orderPlans.sortTag === section.sortTag) {
+        return orderPlans.direction;
       } else {
         return null;
       }
@@ -57,12 +66,16 @@ const DashBoardHeaderCell = ({ section }: Props) => {
       string,
       (sortTag: string, direction: "ASC" | "DESC" | null) => void
     > = {
+      [SectionTypes.plans]: (sortTag, direction) =>
+        setOrderPlans(direction ? { sortTag, direction } : ({} as OrderItem)),
+
       collabs: (sortTag, direction) =>
         setOrderCollabs(direction ? { sortTag, direction } : ({} as OrderItem)),
       [SectionTypes.customers]: (sortTag, direction) =>
         setOrderCompanies(
           direction ? { sortTag, direction } : ({} as OrderItem),
         ),
+
       user: (sortTag, direction) =>
         setOrder(direction ? { sortTag, direction } : ({} as OrderItem)),
       influencer: (sortTag, direction) =>

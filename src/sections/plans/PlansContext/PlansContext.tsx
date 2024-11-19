@@ -10,6 +10,7 @@ import {
   FilterParams,
   PaginationStucture,
 } from "sections/shared/interfaces/interfaces";
+import { OrderItem } from "sections/user/UserContext/UserContext";
 
 interface ContextState {
   loading: boolean;
@@ -26,6 +27,8 @@ interface ContextState {
     company_id: number,
     data: PlanUpdateStructure,
   ) => void;
+  orderPlans: OrderItem;
+  setOrderPlans: (order: OrderItem) => void;
 }
 
 export const PlansContext = createContext<ContextState>({} as ContextState);
@@ -43,7 +46,7 @@ export const PlansContextProvider = ({
   );
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-
+  const [orderPlans, setOrderPlans] = useState<OrderItem>({} as OrderItem);
   const getPlans = useCallback(
     async (page: number, per_page: number, filterParams?: FilterParams) => {
       setLoading(true);
@@ -97,6 +100,8 @@ export const PlansContextProvider = ({
         error,
         getPlans,
         updateCompanyPlanPeriod,
+        orderPlans,
+        setOrderPlans,
       }}
     >
       {children}

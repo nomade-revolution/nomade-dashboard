@@ -1,4 +1,7 @@
-import { HeaderSection } from "sections/shared/interfaces/interfaces";
+import {
+  HeaderSection,
+  SectionTypes,
+} from "sections/shared/interfaces/interfaces";
 
 export const monthPlansTableSections: HeaderSection[] = [
   {
@@ -42,6 +45,13 @@ export const monthPlansTableSections: HeaderSection[] = [
     property: "percentage",
     sortTag: "",
     pageName: "offers",
+  },
+  {
+    id: 8,
+    name: "Status",
+    property: "status",
+    sortTag: "company_status",
+    pageName: SectionTypes.plans,
   },
 ];
 
@@ -108,5 +118,12 @@ export const trimestralPlansTableSections: HeaderSection[] = [
     property: "percentage",
     sortTag: "",
     pageName: "offers",
+  },
+  {
+    id: 11,
+    name: "Status",
+    property: "status",
+    sortTag: "company_status",
+    pageName: SectionTypes.plans,
   },
 ];

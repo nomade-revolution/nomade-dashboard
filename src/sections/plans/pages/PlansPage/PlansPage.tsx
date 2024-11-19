@@ -25,9 +25,9 @@ const PlansPage = (): React.ReactElement => {
   const [billing_id, setBillingId] = useState<number>(1);
   const [isCalendarShown, setIsCalendarShown] = useState<boolean>(false);
   const [date, setDate] = useState<string>("");
-  const { getPlans, plans, loading, pagination } = usePlansContext();
+  const { getPlans, plans, loading, pagination, orderPlans } =
+    usePlansContext();
   const { page } = useParams();
-
   const handleSearch = (searchText: string) => {
     getPlans(+page!, 12, {
       filters: { date: searchText, billing_id: billing_id },
@@ -48,9 +48,18 @@ const PlansPage = (): React.ReactElement => {
     const filters: FilterParams = {
       filters: { billing_id },
     };
-
+    if (orderPlans?.sortTag) {
+      filters.order = [{ by: orderPlans.sortTag, dir: orderPlans.direction }];
+    }
     getPlans(+page!, 12, filters);
-  }, [billing_id, getPlans, page]);
+  }, [
+    billing_id,
+    getPlans,
+    page,
+    orderPlans.direction,
+    orderPlans.sortTag,
+    orderPlans,
+  ]);
 
   const maxMonth = formatCalendarDate(new Date().toString());
 
@@ -73,6 +82,7 @@ const PlansPage = (): React.ReactElement => {
                       Selector de fechas
                     </button>
                   </div>
+
                   {date && (
                     <div className="plans-page__filter-active">
                       <span>
@@ -127,6 +137,7 @@ const PlansPage = (): React.ReactElement => {
                       Selector de fechas
                     </button>
                   </div>
+
                   {date && (
                     <div className="plans-page__filter-active">
                       <span>

@@ -17,9 +17,10 @@ import {
   COLAB_PENDING_COMPANY_STATE,
   COLAB_ACCEPTED_STATE,
 } from "sections/collabs/utils/collabsStates";
+import { Plan } from "modules/plans/domain/Plan";
 
 interface ReusableTableBodyCellProps {
-  section: Offer | Customer | Collab | User | Influencer | Lead;
+  section: Offer | Customer | Collab | User | Influencer | Lead | Plan;
   headerSection: HeaderSection;
   pageName: string;
   type?: string;

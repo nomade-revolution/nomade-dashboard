@@ -13,7 +13,7 @@ export class PlansRepository {
     filterParams?: FilterParams,
   ): Promise<HttpResponseInterface<PlansApiResponse>> {
     try {
-      const resp = await this.http.get<Plan[]>(`${COMPANIES_PLANS}`, {
+      const resp = await this.http.get<Plan[]>(COMPANIES_PLANS, {
         page,
         per_page,
         ...filterParams,
