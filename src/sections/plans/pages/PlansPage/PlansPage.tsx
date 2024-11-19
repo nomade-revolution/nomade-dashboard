@@ -18,7 +18,6 @@ import {
   SectionTypes,
 } from "sections/shared/interfaces/interfaces";
 import formatCalendarDate from "sections/shared/utils/formatCalendarDate/formatCalendarDate";
-import { formatDateWithSlash } from "sections/shared/utils/formatDate/formatDate";
 
 const PlansPage = (): React.ReactElement => {
   const tabs = ["Mensual", "Trimestral"];
@@ -36,6 +35,7 @@ const PlansPage = (): React.ReactElement => {
 
   const handleCalendarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedMonth = event.target.value;
+
     if (selectedMonth) {
       const formattedDate = `${selectedMonth}-01`;
       setIsCalendarShown(false);
@@ -50,7 +50,7 @@ const PlansPage = (): React.ReactElement => {
     };
 
     getPlans(+page!, 12, filters);
-  }, [billing_id, getPlans, page]);
+  }, [billing_id, getPlans, page, date]);
 
   const maxMonth = formatCalendarDate(new Date().toString());
 
@@ -75,12 +75,7 @@ const PlansPage = (): React.ReactElement => {
                   </div>
                   {date && (
                     <div className="plans-page__filter-active">
-                      <span>
-                        {" "}
-                        {formatDateWithSlash(
-                          formatCalendarDate(date.toString()),
-                        )}
-                      </span>
+                      <span> {date}</span>
                       <button
                         onClick={() => setDate("")}
                         className="plans-page__filter-close"
@@ -129,17 +124,12 @@ const PlansPage = (): React.ReactElement => {
                   </div>
                   {date && (
                     <div className="plans-page__filter-active">
-                      <span>
-                        {" "}
-                        {formatDateWithSlash(
-                          formatCalendarDate(date.toString()),
-                        )}
-                      </span>
+                      <span> {date}</span>
                       <button
                         onClick={() => setDate("")}
                         className="plans-page__filter-close"
                       >
-                        <IoClose />
+                        <IoClose color="#fff" />
                       </button>
                     </div>
                   )}
