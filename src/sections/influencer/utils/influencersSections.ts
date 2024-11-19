@@ -69,7 +69,7 @@ export const influencersTableHeaderSections: HeaderSection[] = [
 export const influencerCollabsHeaderSections: HeaderSection[] = [
   {
     id: 1,
-    name: "Empresa",
+    name: "Cliente",
     property: "company",
     sortTag: "company_name",
     pageName: "influencer",

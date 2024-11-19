@@ -4,6 +4,7 @@ const InfluecerDetailDataStyled = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
   gap: 40px;
   letter-spacing: 0.6px;
   border-radius: 10px;
@@ -12,6 +13,7 @@ const InfluecerDetailDataStyled = styled.section`
     box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
     background-color: ${(props) => props.theme.colors.lightGrey};
     padding: 20px 120px;
+    align-items: unset;
   }
 
   .influencer-data {
