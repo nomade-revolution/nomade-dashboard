@@ -6,19 +6,22 @@ const ReusablePageStyled = styled.main`
   flex-direction: column;
   gap: 20px;
   padding: 40px 20px;
-  max-width: fit-content;
   color: ${(props) => props.theme.fontsColors.dashBoard};
+  width: 100%;
 
   @media (min-width: 1000px) and (max-width: 1600px) {
     padding: 40px 40px;
+    max-width: fit-content;
   }
 
   @media (min-width: 1600px) {
     padding: 40px 50px;
     height: 100%;
+    max-width: fit-content;
   }
 
   .dashboard {
+    width: 100%;
     &__table {
       display: none;
 
@@ -80,6 +83,11 @@ const ReusablePageStyled = styled.main`
         width: 90%;
         flex-direction: row;
       }
+    }
+
+    &__name {
+      font-size: ${(props) => props.theme.fontsSize.__SM};
+      font-weight: 700;
     }
 
     &__select {
@@ -417,6 +425,23 @@ const ReusablePageStyled = styled.main`
         font-weight: 700;
         color: ${(props) => props.theme.colors.darkRed};
       }
+    }
+
+    &__link-icon {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 2px;
+    }
+
+    &__icon {
+      width: 30px;
+      height: 20px;
+      color: ${(props) => props.theme.colors.mainColor};
+    }
+
+    &__email {
+      font-size: ${(props) => props.theme.fontsSize.__SM};
     }
   }
 
