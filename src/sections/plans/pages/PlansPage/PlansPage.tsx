@@ -1,5 +1,5 @@
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { useParams } from "react-router-dom";
 import { usePlansContext } from "sections/plans/PlansContext/usePlansContext";
@@ -12,6 +12,7 @@ import DashboardTable from "sections/shared/components/DashboardTable/DashboardT
 import Loader from "sections/shared/components/Loader/Loader";
 import PaginationComponent from "sections/shared/components/Pagination/PaginationComponent";
 import ReusableTabSelector from "sections/shared/components/ReusableTabSelector/ReusableTabSelector";
+import SearchBar from "sections/shared/components/SearchBar/SearchBar";
 
 import {
   FilterParams,
@@ -22,6 +23,7 @@ import { formatDateWithSlash } from "sections/shared/utils/formatDate/formatDate
 
 const PlansPage = (): React.ReactElement => {
   const tabs = ["Mensual", "Trimestral"];
+  const [textToSearch, setTextToSearch] = useState<string>("");
   const [billing_id, setBillingId] = useState<number>(1);
   const [isCalendarShown, setIsCalendarShown] = useState<boolean>(false);
   const [date, setDate] = useState<string>("");
@@ -33,7 +35,9 @@ const PlansPage = (): React.ReactElement => {
       filters: { date: searchText, billing_id: billing_id },
     });
   };
-
+  const handleSearchByText = async (text: string) => {
+    await getPlansData(text);
+  };
   const handleCalendarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedMonth = event.target.value;
     if (selectedMonth) {
@@ -43,23 +47,26 @@ const PlansPage = (): React.ReactElement => {
       handleSearch(formattedDate);
     }
   };
+  const getPlansData = useCallback(
+    (text?: string) => {
+      const filters: FilterParams = {
+        filters: { billing_id },
+      };
+      if (orderPlans?.sortTag) {
+        filters.order = [{ by: orderPlans.sortTag, dir: orderPlans.direction }];
+      }
+      if (text) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (filters as any).filters.search = text;
+      }
+      getPlans(+page!, 12, filters);
+    },
+    [billing_id, getPlans, orderPlans.direction, orderPlans.sortTag, page],
+  );
 
   useEffect(() => {
-    const filters: FilterParams = {
-      filters: { billing_id },
-    };
-    if (orderPlans?.sortTag) {
-      filters.order = [{ by: orderPlans.sortTag, dir: orderPlans.direction }];
-    }
-    getPlans(+page!, 12, filters);
-  }, [
-    billing_id,
-    getPlans,
-    page,
-    orderPlans.direction,
-    orderPlans.sortTag,
-    orderPlans,
-  ]);
+    getPlansData();
+  }, [page, getPlansData]);
 
   const maxMonth = formatCalendarDate(new Date().toString());
 
@@ -74,6 +81,14 @@ const PlansPage = (): React.ReactElement => {
             ) : (
               <section className="plans-page__mensual">
                 <div className="plans-page__show-calendar">
+                  <SearchBar
+                    pageName={SectionTypes.customers}
+                    pageTypes={SectionTypes.customers}
+                    searchText={textToSearch!}
+                    setSearchText={setTextToSearch}
+                    onSearchSubmit={() => handleSearchByText(textToSearch)}
+                    onReset={() => getPlansData()}
+                  />
                   <div className="plans-page__filter-btnSection">
                     <button
                       onClick={() => setIsCalendarShown(!isCalendarShown)}
@@ -129,6 +144,14 @@ const PlansPage = (): React.ReactElement => {
             ) : (
               <section className="plans-page__mensual">
                 <div className="plans-page__show-calendar">
+                  <SearchBar
+                    pageName={SectionTypes.customers}
+                    pageTypes={SectionTypes.customers}
+                    searchText={textToSearch!}
+                    setSearchText={setTextToSearch}
+                    onSearchSubmit={() => handleSearchByText(textToSearch)}
+                    onReset={() => getPlansData()}
+                  />
                   <div className="plans-page__filter-btnSection">
                     <button
                       onClick={() => setIsCalendarShown(!isCalendarShown)}
