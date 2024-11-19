@@ -7,20 +7,20 @@ import {
   FaYoutube,
 } from "react-icons/fa";
 
-const getSocialMediaIcons = (type: string) => {
+const getSocialMediaIcons = (type: string, size?: number) => {
   switch (type) {
     case SocialMediaTypes.instagram:
       return (
         <Tooltip title={"Instagram"}>
-          <FaInstagramSquare color="#ff38c0" />
+          <FaInstagramSquare color="#ff38c0" size={size} />
         </Tooltip>
       );
     case SocialMediaTypes.tiktok:
-      return <FaTiktok />;
+      return <FaTiktok size={size} />;
     case SocialMediaTypes.twitch:
-      return <FaTwitch color="#8c45f7" />;
+      return <FaTwitch color="#8c45f7" size={size} />;
     case SocialMediaTypes.youtube:
-      return <FaYoutube color="red" />;
+      return <FaYoutube color="red" size={size} />;
   }
 };
 
