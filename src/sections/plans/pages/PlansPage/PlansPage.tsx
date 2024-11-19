@@ -24,6 +24,9 @@ import { formatDateWithSlash } from "sections/shared/utils/formatDate/formatDate
 const PlansPage = (): React.ReactElement => {
   const tabs = ["Mensual", "Trimestral"];
   const [textToSearch, setTextToSearch] = useState<string>("");
+  const [textToSearchTrimestral, setTextToSearchTrimestral] =
+    useState<string>("");
+
   const [billing_id, setBillingId] = useState<number>(1);
   const [isCalendarShown, setIsCalendarShown] = useState<boolean>(false);
   const [date, setDate] = useState<string>("");
@@ -49,6 +52,8 @@ const PlansPage = (): React.ReactElement => {
   };
   const getPlansData = useCallback(
     (text?: string) => {
+      setTextToSearch("");
+      setTextToSearchTrimestral("");
       const filters: FilterParams = {
         filters: { billing_id },
       };
@@ -147,9 +152,11 @@ const PlansPage = (): React.ReactElement => {
                   <SearchBar
                     pageName={SectionTypes.customers}
                     pageTypes={SectionTypes.customers}
-                    searchText={textToSearch!}
-                    setSearchText={setTextToSearch}
-                    onSearchSubmit={() => handleSearchByText(textToSearch)}
+                    searchText={textToSearchTrimestral!}
+                    setSearchText={setTextToSearchTrimestral}
+                    onSearchSubmit={() =>
+                      handleSearchByText(textToSearchTrimestral)
+                    }
                     onReset={() => getPlansData()}
                   />
                   <div className="plans-page__filter-btnSection">
