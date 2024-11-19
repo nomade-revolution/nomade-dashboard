@@ -16,6 +16,7 @@ export const theme = {
     tagsBlue: "#2196F3",
     darkRed: "#AD6975",
     purple: "#7D26CD",
+    softMainColor: "#d1d6c5",
   },
   fonts: {
     primaryFont: "Roboto",

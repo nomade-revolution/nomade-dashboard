@@ -149,13 +149,15 @@ const CollabsPage = (): React.ReactElement => {
         <ReusablePageStyled>
           <div className="dashboard__filtersContainer">
             <section className="dashboard__selectsContainer">
-              <button
-                className="dashboard__create"
-                onClick={() => setIsModalOpen(true)}
-              >
-                <IoAddCircle className="dashboard__create--icon" />
-                Crear collab
-              </button>
+              {user.type === "Nomade" && (
+                <button
+                  className="dashboard__create"
+                  onClick={() => setIsModalOpen(true)}
+                >
+                  <IoAddCircle className="dashboard__create--icon" />
+                  Crear collab
+                </button>
+              )}
 
               {user.type === "Nomade" && (
                 <TypeAhead
@@ -214,10 +216,11 @@ const CollabsPage = (): React.ReactElement => {
 
           <div className="dashboard__filters filters">
             {Object.entries(totalFilters.filters || {})
-              .filter(([key]) =>
-                ["influencer_id", "company_id", "search", "states"].includes(
-                  key,
-                ),
+              .filter(
+                ([key]) =>
+                  ["influencer_id", "company_id", "search", "states"].includes(
+                    key,
+                  ) && !(key === "company_id" && user.type === "Company"),
               )
               .map(([key, value]) => (
                 <div key={key} className="filters__filter">
@@ -226,9 +229,9 @@ const CollabsPage = (): React.ReactElement => {
                     {key === "states"
                       ? "Estado:"
                       : key === "influencer_id"
-                        ? "Influencer:"
+                        ? "Influencer"
                         : key === "company_id"
-                          ? "Empresa:"
+                          ? "Empresa"
                           : "Búsqueda:"}
                   </span>
                   <span>

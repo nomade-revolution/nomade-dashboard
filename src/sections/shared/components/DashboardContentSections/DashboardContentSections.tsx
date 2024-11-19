@@ -6,13 +6,14 @@ import { FaEye } from "react-icons/fa";
 import {
   FaCheckDouble,
   FaInstagram,
+  FaLink,
   FaLocationDot,
   FaTiktok,
   FaTwitch,
   FaYoutube,
 } from "react-icons/fa6";
 import { FullOffer, Offer } from "../../../../modules/offers/domain/Offer";
-import { Switch } from "@mui/material";
+import { Switch, Tooltip } from "@mui/material";
 import { TimeSlot } from "modules/offers/domain/OfferCalendar";
 import { Company, User } from "modules/user/domain/User";
 import { CollabActionTypes, FullCollab } from "modules/collabs/domain/Collabs";
@@ -30,6 +31,9 @@ import getDateIntoHourFormat from "sections/shared/utils/getDateIntoHourFormat/g
 import { SocialMediaTypes } from "@influencer/domain/InfluencerSocialMedia";
 import theme from "assets/styles/theme";
 import { formatDateWithSlash } from "sections/shared/utils/formatDate/formatDate";
+import { ImProfile } from "react-icons/im";
+import { RiMailSendFill } from "react-icons/ri";
+import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 
 interface Props {
   headerSection: HeaderSection;
@@ -60,6 +64,7 @@ const DashboardContentSections = ({
 }: Props) => {
   const calendar = (section as FullOffer).calendar;
   const daysSet = new Set<string>();
+  const { user } = useAuthContext();
 
   switch (headerSection.property) {
     case "images":
@@ -75,13 +80,42 @@ const DashboardContentSections = ({
 
     case "name":
       return (
-        <Link to={`/influencer/${(section as Influencer).id}`}>
-          <span>{`${(section as Influencer).name} ${
-            (section as Influencer).surnames
-              ? (section as Influencer).surnames
-              : ""
-          }`}</span>
-        </Link>
+        <>
+          {pageName !== SectionTypes.users ? (
+            <Tooltip title="Ver perfil">
+              <Link
+                to={`/influencer/${(section as Influencer).id}`}
+                className="dashboard__link-icon"
+              >
+                <ImProfile className="dashboard__icon" />
+                <span className="dashboard__name">{`${
+                  (section as Influencer).name
+                } ${
+                  (section as Influencer).surnames
+                    ? (section as Influencer).surnames
+                    : ""
+                }`}</span>
+              </Link>
+            </Tooltip>
+          ) : (
+            <span>{(section as User).name}</span>
+          )}
+        </>
+      );
+
+    case "email":
+      return (
+        <Tooltip title="Enviar email">
+          <Link
+            to={`mailto:${(section as Influencer).email}`}
+            className="dashboard__link-icon"
+          >
+            <RiMailSendFill className="dashboard__icon" />
+            <span className="dashboard__email">
+              {(section as Influencer).email}
+            </span>
+          </Link>
+        </Tooltip>
       );
 
     case "image":
@@ -139,23 +173,53 @@ const DashboardContentSections = ({
 
     case "company":
       return (
-        <Link
-          to={`/cliente/${
-            pageName === SectionTypes.customers ||
-            pageName === SectionTypes.plans
-              ? (section as Company).id
-              : (section as Offer).user_id
-          }`}
-        >
-          {(section as Company | FullCollab).company}
-        </Link>
+        <>
+          {user.type !== "Company" ? (
+            <Tooltip title="Ver cliente">
+              <Link
+                to={`/cliente/${
+                  pageName === SectionTypes.customers ||
+                  pageName === SectionTypes.plans
+                    ? (section as Company).id
+                    : pageName === SectionTypes.offers
+                      ? (section as Offer).company_id
+                      : (section as Offer).user_id
+                }`}
+                className="dashboard__link-icon"
+              >
+                <ImProfile className="dashboard__icon" />
+                <span className="dashboard__name">
+                  {(section as Company | FullCollab | Offer).company}
+                </span>
+              </Link>
+            </Tooltip>
+          ) : (
+            <span className="dashboard__name">
+              {(section as Company | FullCollab | Offer).company}
+            </span>
+          )}
+        </>
       );
 
     case "company_name":
       return (
-        <Link to={`/cliente/${(section as Company).id}`}>
-          {(section as Company).company_name}
-        </Link>
+        <>
+          {pageName !== SectionTypes.leads ? (
+            <Tooltip title="Ver perfil">
+              <Link
+                to={`/cliente/${(section as Company).id}`}
+                className="dashboard__link-icon"
+              >
+                <ImProfile className="dashboard__icon" />
+                <span className="dashboard__name">
+                  {(section as Company).company_name}
+                </span>
+              </Link>
+            </Tooltip>
+          ) : (
+            <span> {(section as Company).company_name}</span>
+          )}
+        </>
       );
 
     case "company_plan":
@@ -324,20 +388,30 @@ const DashboardContentSections = ({
 
     case "web":
       return (
-        <Link
-          to={(section as Company).web}
-          target="_blank"
-          className="dashboard__web"
-        >
-          {(section as Company).web}
-        </Link>
+        <Tooltip title={(section as Company).web}>
+          <Link
+            to={(section as Company).web}
+            target="_blank"
+            className="dashboard__web"
+          >
+            <FaLink size={20} color="#0a66c2" />
+          </Link>
+        </Tooltip>
       );
 
     case "influencer_name":
       return (
-        <span className="dashboard__influencer">
-          {(section as FullCollab).influencer_name}
-        </span>
+        <Tooltip title="Ver perfil">
+          <Link
+            to={`/influencer/${(section as Influencer).id}`}
+            className="dashboard__link-icon"
+          >
+            <ImProfile className="dashboard__icon" />
+            <span className="dashboard__name">
+              {(section as FullCollab).influencer_name}
+            </span>
+          </Link>
+        </Tooltip>
       );
 
     case "day":

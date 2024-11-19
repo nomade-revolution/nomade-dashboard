@@ -180,19 +180,19 @@ const Actions = ({
       );
       break;
     case SectionTypes.customers:
-      buttons = (
-        <>
-          <Tooltip title="Ver detalles">
-            <Link
-              to={`/cliente/${(section as Company)?.id}`}
-              aria-label="Ver detalles"
-              className="link"
-            >
-              <FaEye className={"icon"} />
-            </Link>
-          </Tooltip>
-        </>
-      );
+      // buttons = (
+      //   <>
+      //     <Tooltip title="Ver detalles">
+      //       <Link
+      //         to={`/cliente/${(section as Company)?.id}`}
+      //         aria-label="Ver detalles"
+      //         className="link"
+      //       >
+      //         <FaEye className={"icon"} />
+      //       </Link>
+      //     </Tooltip>
+      //   </>
+      // );
       break;
     case SectionTypes.users:
       buttons = (
