@@ -16,6 +16,7 @@ import { IoAddCircle } from "react-icons/io5";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
 import CompanyForm from "sections/company/components/CompanyForm/CompanyForm";
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
+import ExportFilesButton from "sections/shared/components/ExportButton/ExportButton";
 
 const CompaniesPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
@@ -29,6 +30,7 @@ const CompaniesPage = (): React.ReactElement => {
     pagination,
     loading,
     orderCompanies,
+    exportCompaniesExcel,
   } = useCompanyContext();
 
   const handleSearch = (searchText: string) => {
@@ -77,6 +79,10 @@ const CompaniesPage = (): React.ReactElement => {
               <IoAddCircle className="dashboard__create--icon" />
               Crear cliente
             </button>
+            <ExportFilesButton
+              action={() => exportCompaniesExcel()}
+              text="Exportar clientes"
+            />
             <SearchBar
               pageName={SectionTypes.customers}
               pageTypes={SectionTypes.customers}

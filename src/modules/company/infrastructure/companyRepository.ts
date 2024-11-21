@@ -70,6 +70,44 @@ export class CompanyRepository {
     }
   }
 
+  public exportCompanies = async (token: string): Promise<Blob> => {
+    try {
+      const response = await fetch(`${COMPANY_BASE}/export`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.blob();
+
+      return data;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+  public exportCompanyBilling = async (token: string): Promise<Blob> => {
+    try {
+      const date = new Date().toISOString().split("T")[0];
+
+      const response = await fetch(
+        `${COMPANY_BASE}/billing?filters%5Bdate%5D=${date}`,
+        {
+          headers: {
+            method: "GET",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      const data = await response.blob();
+
+      return data;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
   public async getCompaniesWithPagination(
     page: number,
     per_page: number,

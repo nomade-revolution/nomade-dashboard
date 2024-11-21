@@ -17,4 +17,6 @@ export interface CompanyRepository<I> {
     company: FormData,
     id: number,
   ) => Promise<HttpResponseInterface<I>>;
+  exportCompanies: (token: string) => Promise<Blob>;
+  exportCompanyBilling: (token: string) => Promise<Blob>;
 }

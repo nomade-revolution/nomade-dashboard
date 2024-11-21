@@ -9,6 +9,7 @@ import {
   getCollab,
   getRejectedCollabReasons,
   updateCollabHistoryState,
+  exportCollabs,
 } from "modules/collabs/application/collabs";
 import { FullCollab, RejectedCollab } from "modules/collabs/domain/Collabs";
 import {
@@ -16,6 +17,7 @@ import {
   PaginationStucture,
 } from "sections/shared/interfaces/interfaces";
 import { OrderItem } from "sections/user/UserContext/UserContext";
+import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 
 interface ContextState {
   collabs: FullCollab[];
@@ -38,6 +40,7 @@ interface ContextState {
   order: OrderItem;
   getCollabById: (collab_id: number) => void;
   addNewCollab: (collab: FormData) => void;
+  exportCollabsExcel: () => void;
 }
 
 export const CollabsContext = createContext<ContextState>({} as ContextState);
@@ -56,6 +59,7 @@ export const CollabsContextProvider = ({
   const [pagination, setPagination] = useState<PaginationStucture>(
     {} as PaginationStucture,
   );
+  const { token } = useAuthContext();
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [order, setOrder] = useState<OrderItem>({} as OrderItem);
   const [createLoading, setCreateLoading] = useState<boolean>(false);
@@ -143,6 +147,22 @@ export const CollabsContextProvider = ({
 
     return response;
   };
+  const exportCollabsExcel = async () => {
+    const response = await exportCollabs(repository, token);
+
+    if (response && response instanceof Blob) {
+      const href = await URL.createObjectURL(response);
+      const link = document.createElement("a");
+      link.href = href;
+      link.download = `collabs`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      URL.revokeObjectURL(href);
+    }
+    return response;
+  };
 
   setTimeout(() => setIsSuccess(false), 3000);
 
@@ -165,6 +185,7 @@ export const CollabsContextProvider = ({
         setOrder,
         getCollabById,
         addNewCollab,
+        exportCollabsExcel,
       }}
     >
       {children}

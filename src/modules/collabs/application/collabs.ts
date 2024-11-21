@@ -55,3 +55,10 @@ export const createCollab = (
 ): Promise<HttpResponseInterface<FullCollab>> => {
   return collabsRepo.createCollab(collab);
 };
+
+export const exportCollabs = (
+  collabsRepo: CollabsRepository<FullCollab>,
+  token: string,
+): Promise<Blob> => {
+  return collabsRepo.exportCollabs(token);
+};

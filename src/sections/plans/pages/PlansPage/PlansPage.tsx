@@ -2,6 +2,7 @@ import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 import { useCallback, useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { useParams } from "react-router-dom";
+import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
 import { usePlansContext } from "sections/plans/PlansContext/usePlansContext";
 import {
   monthPlansTableSections,
@@ -9,6 +10,7 @@ import {
 } from "sections/plans/utils/plansTableSections";
 
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
+import ExportFilesButton from "sections/shared/components/ExportButton/ExportButton";
 import Loader from "sections/shared/components/Loader/Loader";
 import PaginationComponent from "sections/shared/components/Pagination/PaginationComponent";
 import ReusableTabSelector from "sections/shared/components/ReusableTabSelector/ReusableTabSelector";
@@ -31,6 +33,7 @@ const PlansPage = (): React.ReactElement => {
   const [date, setDate] = useState<string>("");
   const { getPlans, plans, loading, pagination, orderPlans } =
     usePlansContext();
+  const { exportCompanyBillingExcel } = useCompanyContext();
   const { page } = useParams();
   const handleSearch = (searchText: string) => {
     getPlans(+page!, 12, {
@@ -77,6 +80,10 @@ const PlansPage = (): React.ReactElement => {
 
   return (
     <ReusablePageStyled className="plans-page">
+      <ExportFilesButton
+        action={() => exportCompanyBillingExcel()}
+        text="Exportar Planes"
+      />
       <ReusableTabSelector
         tabs={tabs}
         content={[

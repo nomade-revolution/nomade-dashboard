@@ -16,4 +16,5 @@ export interface CollabsRepository<I> {
   getRejectedCollabReasons(): Promise<HttpResponseInterface<I>>;
   getCollab(collab_id: number): Promise<HttpResponseInterface<I>>;
   createCollab(collab: FormData): Promise<HttpResponseInterface<I>>;
+  exportCollabs(token: string): Promise<Blob>;
 }

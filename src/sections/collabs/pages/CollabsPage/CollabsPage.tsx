@@ -26,6 +26,7 @@ import NoDataHandler from "sections/shared/components/NoDataHandler/NoDataHandle
 import { IoAddCircle } from "react-icons/io5";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
 import CollabsForm from "sections/collabs/components/CollabsForm/CollabsForm";
+import ExportFilesButton from "sections/shared/components/ExportButton/ExportButton";
 
 const CollabsPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
@@ -36,8 +37,14 @@ const CollabsPage = (): React.ReactElement => {
     useState<CollabActionTypes | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const { getAllCollabs, collabs, pagination, loading, order } =
-    useCollabsContext();
+  const {
+    getAllCollabs,
+    collabs,
+    pagination,
+    loading,
+    order,
+    exportCollabsExcel,
+  } = useCollabsContext();
   const { user } = useAuthContext();
   const { page } = useParams();
   const [filterId, setFilterId] = useState<string>("");
@@ -148,6 +155,10 @@ const CollabsPage = (): React.ReactElement => {
       ) : (
         <ReusablePageStyled>
           <div className="dashboard__filtersContainer">
+            <ExportFilesButton
+              action={() => exportCollabsExcel()}
+              text="Exportar collabs"
+            />
             <section className="dashboard__selectsContainer">
               {user.type === "Nomade" && (
                 <button
