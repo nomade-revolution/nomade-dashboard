@@ -63,7 +63,7 @@ export class CompanyRepository {
     params: FilterParams,
   ): Promise<HttpResponseInterface<Company[]>> {
     try {
-      const resp = await this.http.get<Company[]>(COMPANY_BASE, params);
+      const resp = await this.http.get<Company[]>(COMPANY_BASE, { ...params });
       return resp;
     } catch (error) {
       return Promise.reject(error);
@@ -79,7 +79,7 @@ export class CompanyRepository {
       const resp = await this.http.get<CompaniesApiResponse>(COMPANY_BASE, {
         page,
         per_page,
-        filters,
+        ...filters,
       });
       return resp;
     } catch (error) {

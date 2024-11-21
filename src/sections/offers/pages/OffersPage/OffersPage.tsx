@@ -17,7 +17,8 @@ import OffersForm from "sections/offers/components/OffersForm/OffersForm";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
 
 const OffersPage = (): React.ReactElement => {
-  const { getAllOffers, offers, pagination, loading } = useOffersContext();
+  const { getAllOffers, offers, pagination, loading, order } =
+    useOffersContext();
   const { page } = useParams();
   const [searchText, setSearchText] = useState<string>("");
 
@@ -36,15 +37,19 @@ const OffersPage = (): React.ReactElement => {
   };
   const getOffers = useCallback(
     (search?: string) => {
-      const filters = { filters: {} as FilterParams };
+      const filters: FilterParams = { filters: {} };
 
+      if (order.sortTag) {
+        filters.order = [{ by: order.sortTag, dir: order.direction }];
+      }
       if (search) {
-        filters.filters.search = search;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (filters as any).filters.search = search;
       }
 
-      getAllOffers(+page!, 12, filters as FilterParams);
+      getAllOffers(+page!, 12, filters);
     },
-    [getAllOffers, page],
+    [getAllOffers, page, order],
   );
 
   useEffect(() => {

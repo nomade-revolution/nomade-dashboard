@@ -22,7 +22,7 @@ export const companyTableHeaderSections: HeaderSection[] = [
     id: 3,
     name: "Web",
     property: "web",
-    sortTag: "web",
+    sortTag: "",
     pageName: SectionTypes.customers,
   },
   {
@@ -43,7 +43,7 @@ export const companyTableHeaderSections: HeaderSection[] = [
     id: 6,
     name: "NIF",
     property: "nif",
-    sortTag: "",
+    sortTag: "nif",
     pageName: SectionTypes.customers,
   },
   {
@@ -64,16 +64,16 @@ export const companyTableHeaderSections: HeaderSection[] = [
     id: 9,
     name: "Status",
     property: "status",
-    sortTag: "",
+    sortTag: "company_status",
     pageName: SectionTypes.customers,
   },
-  {
-    id: 10,
-    name: "Comentarios",
-    property: "company_comments",
-    sortTag: "",
-    pageName: SectionTypes.customers,
-  },
+  // {
+  //   id: 10,
+  //   name: "Comentarios",
+  //   property: "company_comments",
+  //   sortTag: "",
+  //   pageName: SectionTypes.customers,
+  // },
   // {
   //   id: 10,
   //   name: "Acciones",

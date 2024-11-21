@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -36,6 +37,7 @@ const CompaniesPage = (): React.ReactElement => {
   const gteCompaniesData = useCallback(
     (text?: string) => {
       const filters: FilterParams = {};
+
       if (orderCompanies?.sortTag) {
         filters.order = [
           { by: orderCompanies.sortTag, dir: orderCompanies.direction },
@@ -43,8 +45,10 @@ const CompaniesPage = (): React.ReactElement => {
       }
 
       if (text) {
-        filters.search = text;
+        (filters as any).filters = {};
+        (filters as any).filters.search = text;
       }
+
       getCompaniesPaginated(+page!, 12, filters);
     },
     [
@@ -58,6 +62,7 @@ const CompaniesPage = (): React.ReactElement => {
   useEffect(() => {
     gteCompaniesData();
   }, [page, gteCompaniesData]);
+
   return (
     <>
       {loading ? (

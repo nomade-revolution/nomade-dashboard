@@ -12,6 +12,7 @@ import {
   FilterParams,
   PaginationStucture,
 } from "sections/shared/interfaces/interfaces";
+import { OrderItem } from "sections/user/UserContext/UserContext";
 
 interface ContextState {
   offers: FullOffer[];
@@ -24,6 +25,8 @@ interface ContextState {
   deleteOfferById: (offer_id: number) => void;
   getOffer: (offer_id: number) => void;
   createNewOffer: (offer: FormData) => void;
+  order: OrderItem;
+  setOrder: (order: OrderItem) => void;
 }
 
 export const OffersContext = createContext<ContextState>({} as ContextState);
@@ -34,6 +37,7 @@ export const OffersContextProvider = ({
 }: React.PropsWithChildren<{ repository: OffersRepository<FullOffer[]> }>) => {
   const [offers, setOffers] = useState<FullOffer[]>([]);
   const [offer, setOffer] = useState<FullOffer>({} as FullOffer);
+  const [order, setOrder] = useState<OrderItem>({} as OrderItem);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [pagination, setPagination] = useState<PaginationStucture>(
@@ -107,6 +111,8 @@ export const OffersContextProvider = ({
         deleteOfferById,
         getOffer,
         createNewOffer,
+        order,
+        setOrder,
       }}
     >
       {children}
