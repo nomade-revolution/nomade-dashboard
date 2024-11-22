@@ -7,6 +7,7 @@ import PaginationComponent from "sections/shared/components/Pagination/Paginatio
 import { SectionTypes } from "sections/shared/interfaces/interfaces";
 import CompanyCollabsStyled from "./CompanyCollabsStyled";
 import { companyCollabsHeaderSections } from "sections/company/utils/companySections";
+import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 
 interface Props {
   company_id: number;
@@ -23,7 +24,7 @@ const CompanyCollabs = ({ company_id }: Props): React.ReactElement => {
   }, [getAllCollabs, company_id]);
 
   return (
-    <>
+    <ReusablePageStyled>
       <h2>Collabs</h2>
       {loading ? (
         <Loader height="40px" width="40px" />
@@ -47,7 +48,7 @@ const CompanyCollabs = ({ company_id }: Props): React.ReactElement => {
       ) : (
         <></>
       )}
-    </>
+    </ReusablePageStyled>
   );
 };
 

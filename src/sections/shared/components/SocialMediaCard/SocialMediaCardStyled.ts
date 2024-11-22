@@ -8,8 +8,31 @@ const SocialMediaCardStyled = styled.article`
   align-items: center;
   width: fit-content;
   padding: 20px;
+  position: relative;
 
   .social-card {
+    &__edit-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      padding: 10px;
+      font-weight: 700;
+      color: ${(props) => props.theme.colors.darkBlue};
+      border-radius: ${(props) => props.theme.borderRadius.inputs};
+      border: 2px solid ${(props) => props.theme.colors.darkBlue};
+      width: fit-content;
+      font-size: ${(props) => props.theme.fontsSize.__SSM};
+
+      &:hover {
+        color: ${(props) => props.theme.colors.light};
+        background: ${(props) => props.theme.colors.darkBlue};
+      }
+    }
+
     &__title {
       letter-spacing: 1px;
     }

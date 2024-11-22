@@ -1,7 +1,11 @@
 import { Http } from "@core/application";
 import { HttpResponseInterface } from "@core/domain";
-import { INFLUENCER_BASE } from "@influencer/application/routes";
+import {
+  INFLUENCER_BASE,
+  INFLUENCER_STATS,
+} from "@influencer/application/routes";
 import { Influencer } from "@influencer/domain";
+import { SocialMedia } from "@influencer/domain/InfluencerSocialMedia";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
 
 export class InfluencerRepository {
@@ -49,6 +53,21 @@ export class InfluencerRepository {
   ): Promise<HttpResponseInterface<Influencer[]>> {
     try {
       const resp = await this.http.get<Influencer[]>(INFLUENCER_BASE, params);
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  public async editInfluencerStats(
+    data: SocialMedia,
+    influencer_id: number,
+  ): Promise<HttpResponseInterface<Influencer>> {
+    try {
+      const resp = await this.http.put<Influencer>(
+        INFLUENCER_STATS(influencer_id),
+        data,
+      );
       return resp;
     } catch (error) {
       return Promise.reject(error);

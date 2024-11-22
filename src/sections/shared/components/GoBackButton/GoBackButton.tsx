@@ -2,7 +2,11 @@ import { MdArrowBackIosNew } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import GoBackButtonStyled from "./GoBackButtonStyled";
 
-const GoBackButton = (): React.ReactElement => {
+interface Props {
+  onClick?: () => void;
+}
+
+const GoBackButton = ({ onClick }: Props): React.ReactElement => {
   const navigate = useNavigate();
 
   const handleGoBack = () => {
@@ -12,7 +16,10 @@ const GoBackButton = (): React.ReactElement => {
   return (
     <GoBackButtonStyled className="goback-button">
       <MdArrowBackIosNew className="goback-button__icon" />
-      <button onClick={handleGoBack} className="goback-button__button">
+      <button
+        onClick={onClick ? onClick : handleGoBack}
+        className="goback-button__button"
+      >
         Volver
       </button>
     </GoBackButtonStyled>

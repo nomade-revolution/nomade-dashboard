@@ -469,6 +469,52 @@ const ReusableFormStyled = styled.form<Props>`
       gap: 10px;
     }
   }
+
+  .stats {
+    &__section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+
+    &__sub-section {
+      display: flex;
+      align-items: flex-end;
+      gap: 20px;
+    }
+
+    &__field {
+      display: flex;
+      align-items: center;
+      height: 57px;
+      border-radius: ${(props) => props.theme.borderRadius.inputs};
+      border: 1px solid ${(props) => props.theme.borders.lightGrey};
+      padding: 0 8px;
+      width: 100%;
+    }
+
+    &__title {
+      color: ${(props) => props.theme.colors.mainColor};
+    }
+
+    &__list {
+      width: 100%;
+    }
+
+    &__list-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    &__list-text {
+      width: 20%;
+      font-weight: 700;
+      color: ${(props) => props.theme.colors.darkBlue};
+    }
+  }
 `;
 
 export default ReusableFormStyled;

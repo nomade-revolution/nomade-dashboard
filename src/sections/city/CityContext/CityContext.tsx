@@ -4,12 +4,15 @@ import { CityInterface } from "@city";
 import { CityRepository } from "@city/domain/CityRepository";
 import { getCities } from "@city/application/city";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
+import { HttpResponseInterface } from "@core";
 
 interface ContextState {
   cities: CityInterface[];
   loading: boolean;
   error: string | null;
-  getAllCities: (filterParams: FilterParams) => void;
+  getAllCities: (
+    filterParams: FilterParams,
+  ) => Promise<HttpResponseInterface<CityInterface[]>>;
 }
 
 export const CityContext = createContext<ContextState>({} as ContextState);
@@ -34,6 +37,8 @@ export const CityContextProvider = ({
         setLoading(false);
         setCities(response.data);
       }
+
+      return response;
     },
     [repository],
   );

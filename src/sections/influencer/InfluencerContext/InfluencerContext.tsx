@@ -4,22 +4,26 @@ import {
   getInfluencerById,
   getInfluencersBadge,
   getInfluencers,
+  editInfluencerStats,
 } from "@influencer/application/influencer";
 import { InfluencerRepository } from "@influencer/domain/InfluencerRepository";
 import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
 import { Influencer } from "@influencer";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
+import { SocialMedia } from "@influencer/domain/InfluencerSocialMedia";
 
 interface ContextState {
   loading: boolean;
   isSuccess: boolean;
   influencer: Influencer;
   badgeCount: number;
+  error: string;
   influencers: Influencer[];
   deleteInfluencerById: (influencer_id: number) => void;
   getInfluencer: (influencer_id: number) => void;
   getInfluencersStatusBadge: () => void;
   getInfluencersWithParams: (params: FilterParams) => void;
+  modifyInfluencerStats: (influencer_id: number, stats: SocialMedia) => void;
 }
 
 export const InfluencerContext = createContext<ContextState>(
@@ -34,6 +38,7 @@ export const InfluencerContextProvider = ({
 }>) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
   const [influencer, setInfluencer] = useState<Influencer>({} as Influencer);
   const [badgeCount, setBadgeCount] = useState<number>(0);
   const [influencers, setInfluencers] = useState<Influencer[]>([]);
@@ -75,6 +80,7 @@ export const InfluencerContextProvider = ({
     },
     [repository],
   );
+
   const getInfluencersStatusBadge = useCallback(async () => {
     const response = await getInfluencersBadge(repository);
 
@@ -84,6 +90,28 @@ export const InfluencerContextProvider = ({
 
     return response;
   }, [repository]);
+
+  const modifyInfluencerStats = useCallback(
+    async (influencer_id: number, stats: SocialMedia) => {
+      const response = await editInfluencerStats(
+        repository,
+        stats,
+        influencer_id,
+      );
+
+      if (isHttpSuccessResponse(response)) {
+        setInfluencer(response.data);
+        setIsSuccess(true);
+      } else {
+        setError(response.error as never);
+      }
+
+      return response;
+    },
+    [repository],
+  );
+
+  setTimeout(() => setIsSuccess(false), 3000);
   return (
     <InfluencerContext.Provider
       value={{
@@ -92,10 +120,12 @@ export const InfluencerContextProvider = ({
         influencer,
         badgeCount,
         influencers,
+        error,
         deleteInfluencerById,
         getInfluencer,
         getInfluencersStatusBadge,
         getInfluencersWithParams,
+        modifyInfluencerStats,
       }}
     >
       {children}
