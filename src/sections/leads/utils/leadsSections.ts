@@ -3,7 +3,7 @@ import { HeaderSection } from "sections/shared/interfaces/interfaces";
 export const leadsHeaderSection: HeaderSection[] = [
   {
     id: 1,
-    name: "Empresa",
+    name: "Cliente",
     property: "company_name",
     sortTag: "",
     pageName: "leads",

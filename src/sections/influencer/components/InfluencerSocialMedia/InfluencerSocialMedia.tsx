@@ -1,20 +1,18 @@
 import { SocialMedia } from "@influencer/domain/InfluencerSocialMedia";
 import getSocialMediaIcons from "../../../shared/utils/getSocialMediaIcons/getSocialMediaIcons";
 import InfluencerSocialMediaStyles from "./InfluencerSocialMediaStyled";
-import { useState } from "react";
-import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
-import SocialMediaCard from "sections/shared/components/SocialMediaCard/SocialMediaCard";
 
 interface Props {
   socialMedia: SocialMedia[];
+  setSocialMediaSelected: (value: SocialMedia) => void;
+  setIsModalOpen: (value: boolean) => void;
 }
 
-const InfluencerSocialMedia = ({ socialMedia }: Props): React.ReactElement => {
-  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
-  const [socialMediaSelected, setSocialMediaSelected] = useState<SocialMedia>(
-    {} as SocialMedia,
-  );
-
+const InfluencerSocialMedia = ({
+  socialMedia,
+  setIsModalOpen,
+  setSocialMediaSelected,
+}: Props): React.ReactElement => {
   return (
     <InfluencerSocialMediaStyles className="social-media">
       {socialMedia?.map((media) => (
@@ -22,7 +20,7 @@ const InfluencerSocialMedia = ({ socialMedia }: Props): React.ReactElement => {
           <button
             className="social-media__data"
             onClick={() => {
-              setIsOpenModal(true);
+              setIsModalOpen(true);
               setSocialMediaSelected(media);
             }}
           >
@@ -34,12 +32,6 @@ const InfluencerSocialMedia = ({ socialMedia }: Props): React.ReactElement => {
           </button>
         </li>
       ))}
-      <ReusableModal
-        children={<SocialMediaCard socialMedia={socialMediaSelected} />}
-        openModal={isOpenModal}
-        setIsModalOpen={setIsOpenModal}
-        type="social"
-      />
     </InfluencerSocialMediaStyles>
   );
 };

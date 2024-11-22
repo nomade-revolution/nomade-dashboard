@@ -2,12 +2,19 @@ import InfluecerDetailDataStyled from "./InfluencerDetailDataStyled";
 import InfluencerCategories from "../InfluencerCategories/InfluencerCategories";
 import InfluencerSocialMedia from "../InfluencerSocialMedia/InfluencerSocialMedia";
 import { Influencer } from "@influencer";
+import { SocialMedia } from "@influencer/domain/InfluencerSocialMedia";
 
 interface Props {
   influencer: Influencer;
+  setSocialMediaSelected: (value: SocialMedia) => void;
+  setIsModalOpen: (value: boolean) => void;
 }
 
-const InfluencerDetailData = ({ influencer }: Props): React.ReactElement => {
+const InfluencerDetailData = ({
+  influencer,
+  setIsModalOpen,
+  setSocialMediaSelected,
+}: Props): React.ReactElement => {
   return (
     <InfluecerDetailDataStyled className="influencer-data">
       <div className="influencer-data__mainData">
@@ -42,7 +49,11 @@ const InfluencerDetailData = ({ influencer }: Props): React.ReactElement => {
           <InfluencerCategories categories={influencer.categories} />
         )}
       </div>
-      <InfluencerSocialMedia socialMedia={influencer.socialMedia} />
+      <InfluencerSocialMedia
+        socialMedia={influencer.socialMedia}
+        setSocialMediaSelected={setSocialMediaSelected}
+        setIsModalOpen={setIsModalOpen}
+      />
     </InfluecerDetailDataStyled>
   );
 };
