@@ -85,6 +85,22 @@ export class CollabsRepository {
     }
   }
 
+  public async exportCollabs(token: string): Promise<Blob> {
+    try {
+      const response = await fetch(`${COLLABS_BASE}/export`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.blob();
+
+      return data;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
   public async createCollab(
     collab: FormData,
   ): Promise<HttpResponseInterface<FullCollab>> {

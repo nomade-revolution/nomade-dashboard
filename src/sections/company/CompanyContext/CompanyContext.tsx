@@ -17,6 +17,11 @@ import {
   PaginationStucture,
 } from "sections/shared/interfaces/interfaces";
 import { OrderItem } from "sections/user/UserContext/UserContext";
+import {
+  exportCompanies,
+  exportCompanyBilling,
+} from "../../../modules/company/application/company";
+import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 
 interface ContextState {
   loading: boolean;
@@ -40,6 +45,8 @@ interface ContextState {
   getCompaniesStatusBadge: () => void;
   postCompanyCms: (company: FormData) => void;
   editCompanyCms: (company: FormData, id?: number) => void;
+  exportCompaniesExcel: () => void;
+  exportCompanyBillingExcel: () => void;
 }
 
 export const CompanyContext = createContext<ContextState>({} as ContextState);
@@ -50,6 +57,7 @@ export const CompanyContextProvider = ({
 }: React.PropsWithChildren<{
   repository: CompanyRepository<{ success: boolean; company: Company }>;
 }>) => {
+  const { token } = useAuthContext();
   const [loading, setLoading] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [isError, setIsError] = useState<boolean>(false);
@@ -87,6 +95,38 @@ export const CompanyContextProvider = ({
     [repository],
   );
 
+  const exportCompaniesExcel = async () => {
+    const response = await exportCompanies(repository, token);
+
+    if (response && response instanceof Blob) {
+      const href = await URL.createObjectURL(response);
+      const link = document.createElement("a");
+      link.href = href;
+      link.download = `companies`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      URL.revokeObjectURL(href);
+    }
+    return response;
+  };
+  const exportCompanyBillingExcel = async () => {
+    const response = await exportCompanyBilling(repository, token);
+
+    if (response && response instanceof Blob) {
+      const href = await URL.createObjectURL(response);
+      const link = document.createElement("a");
+      link.href = href;
+      link.download = `billing`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      URL.revokeObjectURL(href);
+    }
+    return response;
+  };
   const postCompany = async (company: FormData) => {
     setLoading(true);
     const response = await registerCompany(repository, company);
@@ -203,6 +243,8 @@ export const CompanyContextProvider = ({
         getCompaniesStatusBadge,
         postCompanyCms,
         editCompanyCms,
+        exportCompaniesExcel,
+        exportCompanyBillingExcel,
       }}
     >
       {children}

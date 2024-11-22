@@ -37,8 +37,8 @@ const UsersPage = (): React.ReactElement => {
         filters.order = [{ by: order.sortTag, dir: order.direction }];
       }
       if (text) {
-        (filters as unknown as { filters: { search: string } }).filters.search =
-          text;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (filters as any).filters.search = text;
       }
       getUsers(+page!, 12, filters, UserTypes.nomade);
     },

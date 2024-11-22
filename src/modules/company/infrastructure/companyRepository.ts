@@ -63,13 +63,51 @@ export class CompanyRepository {
     params: FilterParams,
   ): Promise<HttpResponseInterface<Company[]>> {
     try {
-      const resp = await this.http.get<Company[]>(COMPANY_BASE, params);
+      const resp = await this.http.get<Company[]>(COMPANY_BASE, { ...params });
       return resp;
     } catch (error) {
       return Promise.reject(error);
     }
   }
 
+  public exportCompanies = async (token: string): Promise<Blob> => {
+    try {
+      const response = await fetch(`${COMPANY_BASE}/export`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.blob();
+
+      return data;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+  public exportCompanyBilling = async (token: string): Promise<Blob> => {
+    try {
+      const date = new Date().toISOString().split("T")[0];
+
+      const response = await fetch(
+        `${COMPANY_BASE}/billing?filters%5Bdate%5D=${date}`,
+        {
+          headers: {
+            method: "GET",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      const data = await response.blob();
+
+      return data;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
   public async getCompaniesWithPagination(
     page: number,
     per_page: number,
@@ -79,7 +117,7 @@ export class CompanyRepository {
       const resp = await this.http.get<CompaniesApiResponse>(COMPANY_BASE, {
         page,
         per_page,
-        filters,
+        ...filters,
       });
       return resp;
     } catch (error) {

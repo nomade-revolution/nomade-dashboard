@@ -12,6 +12,7 @@ import theme from "assets/styles/theme";
 import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
 import { usePlansContext } from "sections/plans/PlansContext/usePlansContext";
+import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
 
 interface Props {
   section: HeaderSection;
@@ -23,11 +24,18 @@ const DashBoardHeaderCell = ({ section }: Props) => {
     useCollabsContext();
   const { setOrderPlans, orderPlans } = usePlansContext();
   const { orderCompanies, setOrderCompanies } = useCompanyContext();
-
+  const { order: orderOffers, setOrder: setOrderOffers } = useOffersContext();
   const getOrder = (section: HeaderSection) => {
     if (section.pageName === "collabs") {
       if (orderCollabs.sortTag === section.sortTag) {
         return orderCollabs.direction;
+      } else {
+        return null;
+      }
+    }
+    if (section.pageName === "offers") {
+      if (orderOffers.sortTag === section.sortTag) {
+        return orderOffers.direction;
       } else {
         return null;
       }
@@ -68,6 +76,9 @@ const DashBoardHeaderCell = ({ section }: Props) => {
     > = {
       [SectionTypes.plans]: (sortTag, direction) =>
         setOrderPlans(direction ? { sortTag, direction } : ({} as OrderItem)),
+
+      offers: (sortTag, direction) =>
+        setOrderOffers(direction ? { sortTag, direction } : ({} as OrderItem)),
 
       collabs: (sortTag, direction) =>
         setOrderCollabs(direction ? { sortTag, direction } : ({} as OrderItem)),

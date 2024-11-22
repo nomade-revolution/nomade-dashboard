@@ -29,8 +29,36 @@ export class Http implements HttpInterface {
       params,
       responseType,
     );
-
     if ("success" in response && response.success) {
+      return response as HttpResponseInterface<T>;
+    } else {
+      if (response.statusText === "Unauthorized") {
+        const token = await Cookies.get(environments.cookies!);
+        if (token) {
+          await Cookies.remove(environments.cookies!);
+          window.location.href = "logout";
+        }
+      }
+
+      return {
+        code: response.status,
+        ...response.data,
+      } as HttpErrorResponseInterface;
+    }
+  }
+
+  public async getFile<T>(
+    url: string,
+    params?: unknown,
+    responseType?: string,
+  ): Promise<HttpResponseInterface<T>> {
+    const response = await this.httpInmplementation.get(
+      url,
+      params,
+      responseType as "json",
+    );
+
+    if (response.data) {
       return response as HttpResponseInterface<T>;
     } else {
       if (response.statusText === "Unauthorized") {

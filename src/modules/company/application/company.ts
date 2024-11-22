@@ -24,6 +24,19 @@ export const registerCompany = (
   return companyRepo.registerCompany(company);
 };
 
+export const exportCompanies = (
+  companyRepo: CompanyRepository<Company>,
+  token: string,
+) => {
+  return companyRepo.exportCompanies(token);
+};
+
+export const exportCompanyBilling = (
+  companyRepo: CompanyRepository<Company>,
+  token: string,
+) => {
+  return companyRepo.exportCompanyBilling(token);
+};
 export const getCompaniesBadge = (companyRepo: CompanyRepository<number>) => {
   return companyRepo.getCompaniesBadge();
 };
