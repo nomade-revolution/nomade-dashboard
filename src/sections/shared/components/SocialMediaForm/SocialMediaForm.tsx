@@ -173,11 +173,16 @@ const SocialMediaForm = ({
     }));
 
     await modifyInfluencerStats(influencer_id, {
-      ...values,
-      cities: cities,
-      countries: countries,
-      genders: genders,
-      ageRanges: ageRanges,
+      socialMedia: [
+        {
+          ...values,
+          social_media_id: social.id,
+          cities: cities,
+          countries: countries,
+          genders: genders,
+          ageRanges: ageRanges,
+        },
+      ],
     });
 
     setSubmitting(false);

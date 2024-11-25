@@ -73,3 +73,7 @@ export interface FullSocialMediaCityData extends CitySocialRequest {
   name: string;
   percentage: number;
 }
+
+export interface EditInfluencerStatsStructure {
+  socialMedia: (Omit<SocialMedia, "id"> & { social_media_id: number })[];
+}
