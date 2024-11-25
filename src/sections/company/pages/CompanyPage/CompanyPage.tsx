@@ -17,6 +17,8 @@ import ReusableModal from "sections/shared/components/ReusableModal/ReusableModa
 import CompanyForm from "sections/company/components/CompanyForm/CompanyForm";
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
 import ExportFilesButton from "sections/shared/components/ExportButton/ExportButton";
+import ActionButton from "sections/shared/components/ActionButton/ActionButton";
+import theme from "assets/styles/theme";
 
 const CompaniesPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
@@ -72,17 +74,18 @@ const CompaniesPage = (): React.ReactElement => {
       ) : (
         <ReusablePageStyled className="dashboard">
           <div className="dashboard__searchContainer">
-            <button
-              className="dashboard__create"
-              onClick={() => setIsModalOpen(true)}
-            >
-              <IoAddCircle className="dashboard__create--icon" />
-              Crear cliente
-            </button>
-            <ExportFilesButton
-              action={() => exportCompaniesExcel()}
-              text="Exportar clientes"
-            />
+            <section className="dashboard__btns-section">
+              <ActionButton
+                color={theme.colors.darkBlue}
+                icon={<IoAddCircle className="dashboard__create--icon" />}
+                onClick={() => setIsModalOpen(true)}
+                text="Crear cliente"
+              />
+              <ExportFilesButton
+                action={() => exportCompaniesExcel()}
+                text="Exportar clientes"
+              />
+            </section>
             <SearchBar
               pageName={SectionTypes.customers}
               pageTypes={SectionTypes.customers}

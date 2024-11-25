@@ -8,10 +8,11 @@ const ExportFileButtonStyled = styled.button`
   border: none;
   color: ${(props) => props.theme.colors.light};
   padding: 7px;
-  border-radius: 5px;
-  text-transform: capitalize;
+  border-radius: 7px;
   width: fit-content;
   font-weight: 700;
+  height: 40px;
+  padding: 10px 20px;
 
   &:active {
     background: var(--darkRed);
@@ -26,14 +27,10 @@ const ExportFileButtonStyled = styled.button`
     background: ${(props) => props.theme.colors.orange};
   }
 
-  &.export__button--order {
-    background: ${(props) => props.theme.colors.blue};
-  }
-
-  &.export__button--backorder:hover,
-  &.export__button--preorder:hover,
-  &.export__button--order:hover {
-    background: ${(props) => props.theme.colors.red};
+  &.export__button--backorder:hover {
+    background: ${(props) => props.theme.colors.light};
+    color: ${(props) => props.theme.colors.black};
+    border: 2px solid ${(props) => props.theme.colors.black};
   }
 `;
 

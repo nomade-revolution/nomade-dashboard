@@ -80,10 +80,6 @@ const PlansPage = (): React.ReactElement => {
 
   return (
     <ReusablePageStyled className="plans-page">
-      <ExportFilesButton
-        action={() => exportCompanyBillingExcel()}
-        text="Exportar Planes"
-      />
       <ReusableTabSelector
         tabs={tabs}
         content={[
@@ -102,6 +98,10 @@ const PlansPage = (): React.ReactElement => {
                     onReset={() => getPlansData()}
                   />
                   <div className="plans-page__filter-btnSection">
+                    <ExportFilesButton
+                      action={() => exportCompanyBillingExcel()}
+                      text="Exportar Planes"
+                    />
                     <button
                       onClick={() => setIsCalendarShown(!isCalendarShown)}
                       className="plans-page__filter-btn"

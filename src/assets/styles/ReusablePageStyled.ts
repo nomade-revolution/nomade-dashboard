@@ -22,6 +22,7 @@ const ReusablePageStyled = styled.main`
 
   .dashboard {
     width: 100%;
+
     &__table {
       display: none;
 
@@ -83,6 +84,12 @@ const ReusablePageStyled = styled.main`
         width: 90%;
         flex-direction: row;
       }
+    }
+
+    &__btns-section {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     &__name {
@@ -486,6 +493,7 @@ const ReusablePageStyled = styled.main`
       width: 100%;
       display: flex;
       justify-content: flex-end;
+      gap: 8px;
     }
 
     &__filter-btn {
