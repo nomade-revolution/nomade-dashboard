@@ -27,6 +27,8 @@ import { IoAddCircle } from "react-icons/io5";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
 import CollabsForm from "sections/collabs/components/CollabsForm/CollabsForm";
 import ExportFilesButton from "sections/shared/components/ExportButton/ExportButton";
+import ActionButton from "sections/shared/components/ActionButton/ActionButton";
+import theme from "assets/styles/theme";
 
 const CollabsPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
@@ -155,19 +157,14 @@ const CollabsPage = (): React.ReactElement => {
       ) : (
         <ReusablePageStyled>
           <div className="dashboard__filtersContainer">
-            <ExportFilesButton
-              action={() => exportCollabsExcel()}
-              text="Exportar collabs"
-            />
             <section className="dashboard__selectsContainer">
               {user.type === "Nomade" && (
-                <button
-                  className="dashboard__create"
+                <ActionButton
                   onClick={() => setIsModalOpen(true)}
-                >
-                  <IoAddCircle className="dashboard__create--icon" />
-                  Crear collab
-                </button>
+                  color={theme.colors.darkBlue}
+                  text="Crear collab"
+                  icon={<IoAddCircle className="dashboard__create--icon" />}
+                />
               )}
 
               {user.type === "Nomade" && (
@@ -261,6 +258,10 @@ const CollabsPage = (): React.ReactElement => {
                   </button>
                 </div>
               ))}
+            <ExportFilesButton
+              action={() => exportCollabsExcel()}
+              text="Exportar collabs"
+            />
           </div>
 
           <div className="dashboard__table">

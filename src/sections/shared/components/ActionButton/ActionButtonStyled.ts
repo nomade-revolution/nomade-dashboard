@@ -14,6 +14,7 @@ const ActionButtonStyled = styled.button<Props>`
   font-weight: 700;
   height: 40px;
   border-radius: 7px;
+  width: 150px;
 
   &:hover {
     color: ${(props) => props.$color};

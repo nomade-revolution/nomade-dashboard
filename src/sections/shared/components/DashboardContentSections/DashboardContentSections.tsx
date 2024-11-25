@@ -403,7 +403,11 @@ const DashboardContentSections = ({
       return (
         <Tooltip title="Ver perfil">
           <Link
-            to={`/influencer/${(section as Influencer).id}`}
+            to={`/influencer/${
+              SectionTypes.collabs
+                ? (section as FullCollab).influencer_id
+                : (section as Influencer).id
+            }`}
             className="dashboard__link-icon"
           >
             <ImProfile className="dashboard__icon" />

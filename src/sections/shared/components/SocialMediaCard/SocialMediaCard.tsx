@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import StadisticsDisplay from "../StatisticsDisplay/StatisticsDisplay";
 import { FaLink, FaUserFriends } from "react-icons/fa";
 import { IoStatsChart } from "react-icons/io5";
+import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 
 interface Props {
   socialMedia: SocialMedia;
@@ -22,18 +23,21 @@ const SocialMediaCard = ({
   setIsModalOpenEdit,
   setIsModalOpen,
 }: Props): React.ReactElement => {
+  const { user } = useAuthContext();
   return (
     <SocialMediaCardStyled className="social-card">
-      <button
-        className="social-card__edit-btn"
-        onClick={() => {
-          setIsModalOpenEdit(true);
-          setIsModalOpen(false);
-        }}
-      >
-        Modificar
-        <IoStatsChart />
-      </button>
+      {user.type === "Nomade" && (
+        <button
+          className="social-card__edit-btn"
+          onClick={() => {
+            setIsModalOpenEdit(true);
+            setIsModalOpen(false);
+          }}
+        >
+          Modificar
+          <IoStatsChart />
+        </button>
+      )}
       {getSocialMediaIcons(socialMedia.name, 100)}
       <h3 className="social-card__title">{socialMedia.name}</h3>
       <section className="social-card__data">
