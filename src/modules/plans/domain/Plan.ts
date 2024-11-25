@@ -19,3 +19,9 @@ export interface PlansApiResponse {
   companies: Plan[];
   pagination: PaginationStucture;
 }
+
+export interface PlanUpdateStructure {
+  date: string;
+  extension: number;
+  comments?: string;
+}

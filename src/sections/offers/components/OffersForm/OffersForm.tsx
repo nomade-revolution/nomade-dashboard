@@ -251,7 +251,7 @@ const OffersForm = ({ offer }: Props): React.ReactElement => {
           <div className="datasheet-form__content">
             <div className="form-subsection">
               <label htmlFor="company" className="form-subsection__label">
-                Empresa
+                Cliente
               </label>
               <Field
                 type="text"

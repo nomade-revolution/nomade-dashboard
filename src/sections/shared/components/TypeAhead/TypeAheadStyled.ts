@@ -4,13 +4,11 @@ const TypeAheadStyled = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  width: 350px;
-  height: 40px;
 
   .input {
-    width: 280px;
-    height: 40px;
+    width: 200px;
   }
+
   .loaderContainer {
     width: 40px;
     height: 30px;

@@ -11,4 +11,5 @@ export interface AuthRegisterNomadeInterface {
   email: string;
   password: string;
   repeatPassword: string;
+  roles: number[];
 }

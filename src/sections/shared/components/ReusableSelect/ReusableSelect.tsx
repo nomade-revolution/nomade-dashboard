@@ -3,7 +3,6 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { OptionsStructure } from "../../interfaces/interfaces";
-import { useMediaQuery } from "@mui/material";
 
 interface ReusableSelectProps {
   value: string;
@@ -18,15 +17,17 @@ export default function ReusableSelect({
   options,
   label,
 }: ReusableSelectProps) {
-  const breakpoint = useMediaQuery("min-width: 1000px");
+  // const breakpoint = useMediaQuery("min-width: 1000px");
   const handleChange = (event: SelectChangeEvent) => {
     setValue(event.target.value);
   };
 
   return (
     <FormControl
-      sx={{ minWidth: 200, width: breakpoint ? "300px" : "100%" }}
-      size="small"
+      sx={{
+        minWidth: 200,
+        width: "100%",
+      }}
     >
       <InputLabel id="select-label">{label}</InputLabel>
       <Select

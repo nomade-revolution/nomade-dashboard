@@ -7,6 +7,9 @@ export interface Lead {
   phone: string;
   email: string;
   message: string;
+  created_at: string;
+  sent_at: string;
+  link_sent: boolean;
 }
 
 export interface LeadsApiResponse {

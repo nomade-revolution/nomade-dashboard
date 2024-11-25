@@ -23,8 +23,8 @@ const useActions = () => {
     await sendLinkForLead(section_id);
   };
 
-  const acceptCollab = async (collabId: number) => {
-    await updateCollabState(collabId, collabStates.COLAB_PENDING_COMPANY_STATE);
+  const acceptCollab = async (collabId: number, state_id: number) => {
+    await updateCollabState(collabId, state_id);
     setTimeout(() => navigate(0), 1500);
   };
 
@@ -38,6 +38,11 @@ const useActions = () => {
       rejected_collab_reason_id,
     );
 
+    setTimeout(() => navigate(0), 1500);
+  };
+
+  const cancelCollab = async (collabId: number) => {
+    await updateCollabState(collabId, collabStates.COLAB_CANCELLED_STATE);
     setTimeout(() => navigate(0), 1500);
   };
 
@@ -65,6 +70,7 @@ const useActions = () => {
     rejectCollab,
     handleSendLeadLink,
     handleCollabStateUpdate,
+    cancelCollab,
   };
 };
 

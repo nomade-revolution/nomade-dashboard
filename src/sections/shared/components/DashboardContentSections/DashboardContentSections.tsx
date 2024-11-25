@@ -1,11 +1,19 @@
 import { Link } from "react-router-dom";
 import { Customer } from "../../../../modules/customers/domain/Customers";
-import { HeaderSection } from "../../interfaces/interfaces";
+import { HeaderSection, SectionTypes } from "../../interfaces/interfaces";
 import ImageCustom from "../ImageCustom/ImageCustom";
 import { FaEye } from "react-icons/fa";
-import { FaCheckDouble, FaLocationDot } from "react-icons/fa6";
+import {
+  FaCheckDouble,
+  FaInstagram,
+  FaLink,
+  FaLocationDot,
+  FaTiktok,
+  FaTwitch,
+  FaYoutube,
+} from "react-icons/fa6";
 import { FullOffer, Offer } from "../../../../modules/offers/domain/Offer";
-import { Switch } from "@mui/material";
+import { Switch, Tooltip } from "@mui/material";
 import { TimeSlot } from "modules/offers/domain/OfferCalendar";
 import { Company, User } from "modules/user/domain/User";
 import { CollabActionTypes, FullCollab } from "modules/collabs/domain/Collabs";
@@ -19,7 +27,13 @@ import { Lead } from "modules/leads/domain/Leads";
 import { Plan } from "modules/plans/domain/Plan";
 import LinearBuffer from "../LinearBuffer/LinearBuffer";
 import { COLAB_PUBLISHED_STATE } from "sections/collabs/utils/collabsStates";
-import formatDate from "sections/shared/utils/formatDate/formatDate";
+import getDateIntoHourFormat from "sections/shared/utils/getDateIntoHourFormat/getDateIntoHourFormat";
+import { SocialMediaTypes } from "@influencer/domain/InfluencerSocialMedia";
+import theme from "assets/styles/theme";
+import { formatDateWithSlash } from "sections/shared/utils/formatDate/formatDate";
+import { ImProfile } from "react-icons/im";
+import { RiMailSendFill } from "react-icons/ri";
+import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 
 interface Props {
   headerSection: HeaderSection;
@@ -50,6 +64,7 @@ const DashboardContentSections = ({
 }: Props) => {
   const calendar = (section as FullOffer).calendar;
   const daysSet = new Set<string>();
+  const { user } = useAuthContext();
 
   switch (headerSection.property) {
     case "images":
@@ -62,6 +77,47 @@ const DashboardContentSections = ({
           width={80}
         />
       );
+
+    case "name":
+      return (
+        <>
+          {pageName !== SectionTypes.users ? (
+            <Tooltip title="Ver perfil">
+              <Link
+                to={`/influencer/${(section as Influencer).id}`}
+                className="dashboard__link-icon"
+              >
+                <ImProfile className="dashboard__icon" />
+                <span className="dashboard__name">{`${
+                  (section as Influencer).name
+                } ${
+                  (section as Influencer).surnames
+                    ? (section as Influencer).surnames
+                    : ""
+                }`}</span>
+              </Link>
+            </Tooltip>
+          ) : (
+            <span>{(section as User).name}</span>
+          )}
+        </>
+      );
+
+    case "email":
+      return (
+        <Tooltip title="Enviar email">
+          <Link
+            to={`mailto:${(section as Influencer).email}`}
+            className="dashboard__link-icon"
+          >
+            <RiMailSendFill className="dashboard__icon" />
+            <span className="dashboard__email">
+              {(section as Influencer).email}
+            </span>
+          </Link>
+        </Tooltip>
+      );
+
     case "image":
       return (
         <ImageCustom
@@ -113,6 +169,138 @@ const DashboardContentSections = ({
             </span>
           ))}
         </div>
+      );
+
+    case "company":
+      return (
+        <>
+          {user.type !== "Company" ? (
+            <Tooltip title="Ver cliente">
+              <Link
+                to={`/cliente/${
+                  pageName === SectionTypes.customers ||
+                  pageName === SectionTypes.plans
+                    ? (section as Company).id
+                    : pageName === SectionTypes.offers
+                      ? (section as Offer).company_id
+                      : (section as Offer).user_id
+                }`}
+                className="dashboard__link-icon"
+              >
+                <ImProfile className="dashboard__icon" />
+                <span className="dashboard__name">
+                  {(section as Company | FullCollab | Offer).company}
+                </span>
+              </Link>
+            </Tooltip>
+          ) : (
+            <span className="dashboard__name">
+              {(section as Company | FullCollab | Offer).company}
+            </span>
+          )}
+        </>
+      );
+
+    case "company_name":
+      return (
+        <>
+          {pageName !== SectionTypes.leads ? (
+            <Tooltip title="Ver perfil">
+              <Link
+                to={`/cliente/${(section as Company).id}`}
+                className="dashboard__link-icon"
+              >
+                <ImProfile className="dashboard__icon" />
+                <span className="dashboard__name">
+                  {(section as Company).company_name}
+                </span>
+              </Link>
+            </Tooltip>
+          ) : (
+            <span> {(section as Company).company_name}</span>
+          )}
+        </>
+      );
+
+    case "company_plan":
+      return (
+        <span
+          className={`dashboard__plan${
+            (section as Company).plan.plan_name === "Básico"
+              ? "--basic"
+              : (section as Company).plan.plan_name === "Estandar"
+                ? "--standard"
+                : (section as Company).plan.plan_name === "Premium"
+                  ? "--premium"
+                  : (section as Company).plan.plan_name === "Pendiente"
+                    ? "--pending"
+                    : ""
+          }`}
+        >
+          {(section as Company).plan.plan_name}
+        </span>
+      );
+
+    case "company_billing":
+      return (
+        <span
+          className={`dashboard__plan${
+            (section as Company).plan.billing === "Mensual"
+              ? "--mensual"
+              : "--trimestral"
+          }`}
+        >
+          {(section as Company).plan.billing
+            ? (section as Company).plan.billing
+            : "-"}
+        </span>
+      );
+
+    case "status":
+      return (
+        <span
+          className={`dashboard__status${
+            (section as Company).status === "Activo"
+              ? "--active"
+              : (section as Company).status === "Inactivo"
+                ? "--inactive"
+                : (section as Company).status === "Pendiente"
+                  ? "--pending"
+                  : (section as Company).status === "En pausa"
+                    ? "--standby"
+                    : ""
+          }`}
+        >
+          {(section as Company).status}
+        </span>
+      );
+
+    case "company_comments":
+      return (
+        <span className="dashboard__comments">
+          {(section as Company).company_comments
+            ? (section as Company).company_comments
+            : "-"}
+        </span>
+      );
+
+    case "roles":
+      return (
+        <span
+          className={`dashboard__role${
+            (section as User).roles[0] === 1
+              ? "--admin"
+              : (section as User).roles[0] === 2
+                ? "--manager"
+                : ""
+          }`}
+        >
+          {(section as User).roles[0] === 1
+            ? "Administrador"
+            : (section as User).roles[0] === 2
+              ? "Gestor"
+              : "-"}
+        </span>
       );
 
     case "calendar":
@@ -177,6 +365,20 @@ const DashboardContentSections = ({
         </span>
       );
 
+    case "living_city":
+      return (
+        <span className="dashboard__country">
+          {(section as Influencer).living_city?.name}
+        </span>
+      );
+
+    case "categories":
+      return (
+        <span className="dashboard__category">
+          {(section as Influencer).categories[0]?.name}
+        </span>
+      );
+
     case "type":
       return (
         <span className={getTypesClassNames(section, "dashboard")}>
@@ -186,20 +388,34 @@ const DashboardContentSections = ({
 
     case "web":
       return (
-        <Link
-          to={(section as Company).web}
-          target="_blank"
-          className="dashboard__web"
-        >
-          {(section as Company).web}
-        </Link>
+        <Tooltip title={(section as Company).web}>
+          <Link
+            to={(section as Company).web}
+            target="_blank"
+            className="dashboard__web"
+          >
+            <FaLink size={20} color="#0a66c2" />
+          </Link>
+        </Tooltip>
       );
 
     case "influencer_name":
       return (
-        <span className="dashboard__influencer">
-          {(section as FullCollab).influencer_name}
-        </span>
+        <Tooltip title="Ver perfil">
+          <Link
+            to={`/influencer/${
+              SectionTypes.collabs
+                ? (section as FullCollab).influencer_id
+                : (section as Influencer).id
+            }`}
+            className="dashboard__link-icon"
+          >
+            <ImProfile className="dashboard__icon" />
+            <span className="dashboard__name">
+              {(section as FullCollab).influencer_name}
+            </span>
+          </Link>
+        </Tooltip>
       );
 
     case "day":
@@ -238,11 +454,27 @@ const DashboardContentSections = ({
             "dashboard",
           )}
         >
-          {
-            (section as FullCollab).history[
-              (section as FullCollab).history.length - 1
-            ].name
-          }
+          {(section as FullCollab).history[
+            (section as FullCollab).history.length - 1
+          ].name === "Rechazada"
+            ? "No aceptada"
+            : (section as FullCollab).history[
+                (section as FullCollab).history.length - 1
+              ].name}
+        </span>
+      );
+
+    case "history_update":
+      return (
+        <span className="dashboard__date">
+          {getDateIntoHourFormat(
+            new Date(
+              (section as FullCollab).history[
+                (section as FullCollab).history.length - 1
+              ].created_at,
+            ),
+          )}
+          {}
         </span>
       );
 
@@ -254,7 +486,7 @@ const DashboardContentSections = ({
           ].id === COLAB_PUBLISHED_STATE ? (
             <span className="dashboard__published">
               <FaCheckDouble />
-              {formatDate(
+              {formatDateWithSlash(
                 (section as FullCollab).history[
                   (section as FullCollab).history.length - 1
                 ].created_at,
@@ -298,14 +530,18 @@ const DashboardContentSections = ({
     case "start_date":
       return (
         <span className="dashboard__start-date">
-          {(section as Plan).start_date ? (section as Plan).start_date : "-"}
+          {(section as Plan).start_date
+            ? (section as Plan).start_date?.split(" ")[0]
+            : "-"}
         </span>
       );
 
     case "end_date":
       return (
         <span className="dashboard__end-date">
-          {(section as Plan).end_date ? (section as Plan).end_date : "-"}
+          {(section as Plan).end_date
+            ? (section as Plan).end_date?.split(" ")[0]
+            : "-"}
         </span>
       );
 
@@ -320,6 +556,75 @@ const DashboardContentSections = ({
           </span>
         </section>
       );
+
+    case "created_at":
+    case "sent_at":
+      return (
+        <span className="dashboard__date">
+          {headerSection.property === "created_at"
+            ? (section as Lead).created_at.split(" ")[0]
+            : (section as Lead).sent_at
+              ? getDateIntoHourFormat(new Date((section as Lead).sent_at))
+              : "No enviado"}
+        </span>
+      );
+
+    case "link_sent":
+      return (
+        <span
+          className={`${
+            (section as Lead).link_sent
+              ? "dashboard__link-sent"
+              : "dashboard__link-pending"
+          } `}
+        >
+          {(section as Lead).link_sent ? "Enviado" : "Pendiente"}
+        </span>
+      );
+
+    case "social_media_mainRRSS": {
+      const main_social = (section as Influencer).socialMedia.find(
+        (social) => social.main,
+      );
+      return (
+        <div className={`dashboard__social-media`}>
+          {main_social?.name === SocialMediaTypes.instagram ? (
+            <FaInstagram color="fuchsia" />
+          ) : main_social?.name === SocialMediaTypes.tiktok ? (
+            <FaTiktok />
+          ) : main_social?.name === SocialMediaTypes.twitch ? (
+            <FaTwitch color="purple" />
+          ) : main_social?.name === SocialMediaTypes.youtube ? (
+            <FaYoutube color={theme.colors.red} />
+          ) : (
+            ""
+          )}
+          <span>{main_social ? main_social?.name : "-"}</span>
+        </div>
+      );
+    }
+
+    case "social_media_followers": {
+      const main_social = (section as Influencer).socialMedia.find(
+        (social) => social.main,
+      );
+      return (
+        <div className={`dashboard__social-media`}>
+          {main_social?.name === SocialMediaTypes.instagram ? (
+            <FaInstagram color="fuchsia" />
+          ) : main_social?.name === SocialMediaTypes.tiktok ? (
+            <FaTiktok />
+          ) : main_social?.name === SocialMediaTypes.twitch ? (
+            <FaTwitch color="purple" />
+          ) : main_social?.name === SocialMediaTypes.youtube ? (
+            <FaYoutube color={theme.colors.red} />
+          ) : (
+            ""
+          )}
+          <span>{main_social ? main_social?.followers : "-"}</span>
+        </div>
+      );
+    }
 
     default:
       return (

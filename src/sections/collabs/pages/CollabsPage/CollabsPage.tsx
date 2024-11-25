@@ -20,6 +20,15 @@ import {
 import TypeAhead from "sections/shared/components/TypeAhead/TypeAhead";
 import { useInfluencerContext } from "sections/influencer/InfluencerContext/useInfluencerContext";
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
+import { LuFilter } from "react-icons/lu";
+import { IoMdClose } from "react-icons/io";
+import NoDataHandler from "sections/shared/components/NoDataHandler/NoDataHandler";
+import { IoAddCircle } from "react-icons/io5";
+import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
+import CollabsForm from "sections/collabs/components/CollabsForm/CollabsForm";
+import ExportFilesButton from "sections/shared/components/ExportButton/ExportButton";
+import ActionButton from "sections/shared/components/ActionButton/ActionButton";
+import theme from "assets/styles/theme";
 
 const CollabsPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
@@ -28,9 +37,16 @@ const CollabsPage = (): React.ReactElement => {
   const [companySelect, setCompanySelect] = useState<number | null>(null);
   const [collabStateActionType, setCollabStateActionType] =
     useState<CollabActionTypes | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const { getAllCollabs, collabs, pagination, loading, order } =
-    useCollabsContext();
+  const {
+    getAllCollabs,
+    collabs,
+    pagination,
+    loading,
+    order,
+    exportCollabsExcel,
+  } = useCollabsContext();
   const { user } = useAuthContext();
   const { page } = useParams();
   const [filterId, setFilterId] = useState<string>("");
@@ -39,6 +55,7 @@ const CollabsPage = (): React.ReactElement => {
   const handleSearch = (text: string) => {
     getCollabs(text);
   };
+  const [totalFilters, setTotalFilters] = useState<FilterParams>({});
 
   const getCollabs = useCallback(
     (text?: string) => {
@@ -51,17 +68,28 @@ const CollabsPage = (): React.ReactElement => {
         filters.order = [{ by: order.sortTag, dir: order.direction }];
       }
       if (text) {
-        filters.filters = { search: text };
+        filters.filters = { ...(filters.filters as object), search: text };
       }
       if (filterId !== "") {
-        filters.filters = { states: [filterId] };
+        filters.filters = {
+          ...(filters.filters as object),
+          states: [+filterId],
+        };
       }
       if (influencerSelect) {
-        filters.filters = { influencer_id: influencerSelect };
+        filters.filters = {
+          ...(filters.filters as object),
+          influencer_id: influencerSelect,
+        };
       }
       if (companySelect) {
-        filters.filters = { company_id: companySelect };
+        filters.filters = {
+          ...(filters.filters as object),
+          company_id: companySelect,
+        };
       }
+
+      setTotalFilters(filters);
 
       getAllCollabs(+page!, 12, filters);
     },
@@ -79,8 +107,6 @@ const CollabsPage = (): React.ReactElement => {
   );
   const getInfluencersSearch = async (text: string) => {
     await getInfluencersWithParams({
-      page: 1,
-      per_page: 10,
       filters: {
         search: text,
       },
@@ -88,12 +114,34 @@ const CollabsPage = (): React.ReactElement => {
   };
   const getCompanySearch = async (text: string) => {
     await getCompaniesWithParams({
-      page: 1,
-      per_page: 10,
       filters: {
         search: text,
       },
     });
+  };
+
+  const handleRemoveFilter = (key: string) => {
+    setTotalFilters((prevFilters) => {
+      const updatedFilters = { ...prevFilters };
+      if (updatedFilters.filters && updatedFilters.filters[key as never]) {
+        delete updatedFilters.filters[key as never];
+      }
+      return updatedFilters;
+    });
+
+    if (!(totalFilters.filters as FilterParams).states) {
+      setFilterId("");
+    }
+
+    if (!(totalFilters.filters as FilterParams).influencer_id) {
+      setInfluencerSelect(null);
+    }
+
+    if (!(totalFilters.filters as FilterParams).company_id) {
+      setCompanySelect(null);
+    }
+
+    getAllCollabs(+page!, 12, totalFilters);
   };
 
   useEffect(() => {
@@ -104,42 +152,43 @@ const CollabsPage = (): React.ReactElement => {
     <>
       {loading ? (
         <Loader width="20px" height="20px" />
+      ) : collabs.length === 0 ? (
+        <NoDataHandler pageName="collabs" search={searchText} />
       ) : (
         <ReusablePageStyled>
-          <div className="dashboard__table">
-            <div className="dashboard__searchContainer">
-              <SearchBar
-                pageName={SectionTypes.collabs}
-                pageTypes={SectionTypes.collabs}
-                searchText={searchText!}
-                setSearchText={setSearchText}
-                onReset={() => getCollabs()}
-                onSearchSubmit={() => handleSearch(searchText)}
-              />
-            </div>
+          <div className="dashboard__filtersContainer">
+            <section className="dashboard__selectsContainer">
+              {user.type === "Nomade" && (
+                <ActionButton
+                  onClick={() => setIsModalOpen(true)}
+                  color={theme.colors.darkBlue}
+                  text="Crear collab"
+                  icon={<IoAddCircle className="dashboard__create--icon" />}
+                />
+              )}
 
-            <div className="dashboard__searchContainer">
-              <TypeAhead
-                options={companies.map((company) => {
-                  return {
-                    id: company.id,
-                    name: company.company + " / " + company.company_name,
-                    value: company.id,
-                  };
-                })}
-                label="Filtrar por empresa"
-                setValue={setCompanySelect}
-                value={companySelect}
-                searchText={""}
-                getFunctions={getCompanySearch}
-              />
-            </div>
-            <div className="dashboard__searchContainer">
+              {user.type === "Nomade" && (
+                <TypeAhead
+                  options={companies?.map((company) => {
+                    return {
+                      id: company.id,
+                      name: company.company + " / " + company.company_name,
+                      value: company.id,
+                    };
+                  })}
+                  label="Filtrar por empresa"
+                  setValue={setCompanySelect}
+                  value={companySelect}
+                  searchText={""}
+                  getFunctions={getCompanySearch}
+                />
+              )}
+
               <TypeAhead
                 label="Filtrar por influencer"
                 setValue={setInfluencerSelect}
                 value={influencerSelect}
-                options={influencers.map((influencer) => {
+                options={influencers?.map((influencer) => {
                   return {
                     id: influencer.id,
                     name: influencer.name + " / " + influencer.user_name,
@@ -149,9 +198,7 @@ const CollabsPage = (): React.ReactElement => {
                 searchText={""}
                 getFunctions={getInfluencersSearch}
               />
-            </div>
-            <div className="dashboard__filterContainer">
-              <div className="filterBox">
+              <div className="dashboard__select">
                 <ReusableSelect
                   label="Filtrar por estado"
                   options={
@@ -163,7 +210,61 @@ const CollabsPage = (): React.ReactElement => {
                   value={filterId}
                 />
               </div>
-            </div>
+            </section>
+
+            <SearchBar
+              pageName={SectionTypes.collabs}
+              pageTypes={SectionTypes.collabs}
+              searchText={searchText!}
+              setSearchText={setSearchText}
+              onReset={() => getCollabs()}
+              onSearchSubmit={() => handleSearch(searchText)}
+            />
+          </div>
+
+          <div className="dashboard__filters filters">
+            {Object.entries(totalFilters.filters || {})
+              .filter(
+                ([key]) =>
+                  ["influencer_id", "company_id", "search", "states"].includes(
+                    key,
+                  ) && !(key === "company_id" && user.type === "Company"),
+              )
+              .map(([key, value]) => (
+                <div key={key} className="filters__filter">
+                  <LuFilter />
+                  <span>
+                    {key === "states"
+                      ? "Estado:"
+                      : key === "influencer_id"
+                        ? "Influencer"
+                        : key === "company_id"
+                          ? "Empresa"
+                          : "Búsqueda:"}
+                  </span>
+                  <span>
+                    {key === "states"
+                      ? collabsFiltersNomade.find(
+                          (state) => +state.id === +value,
+                        )?.name
+                      : key === "influencer_id"
+                        ? influencers.find((inf) => inf.id === value)?.name
+                        : key === "company_id"
+                          ? companies.find((comp) => comp.id === value)?.company
+                          : value}
+                  </span>
+                  <button onClick={() => handleRemoveFilter(key)}>
+                    <IoMdClose size={20} color="#fff" />
+                  </button>
+                </div>
+              ))}
+            <ExportFilesButton
+              action={() => exportCollabsExcel()}
+              text="Exportar collabs"
+            />
+          </div>
+
+          <div className="dashboard__table">
             <DashboardTable
               bodySections={collabs}
               headerSections={collabsHeaderSections}
@@ -173,9 +274,8 @@ const CollabsPage = (): React.ReactElement => {
             />
           </div>
           <div className="dashboard__mobile">
-            <div className="dashboard__searchContainer">
-              <h3 className="dashboard__title">Collabs</h3>
-            </div>
+            <h3 className="dashboard__title">Collabs</h3>
+
             <DashboardCardListMobile
               bodySections={collabs}
               headerSections={collabsHeaderSections}
@@ -190,6 +290,11 @@ const CollabsPage = (): React.ReactElement => {
             per_page={pagination.per_page}
             pageName={SectionTypes.collabs}
             filterParams=""
+          />
+          <ReusableModal
+            children={<CollabsForm />}
+            openModal={isModalOpen}
+            setIsModalOpen={setIsModalOpen}
           />
         </ReusablePageStyled>
       )}

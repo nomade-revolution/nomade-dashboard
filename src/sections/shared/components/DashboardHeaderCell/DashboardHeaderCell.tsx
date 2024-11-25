@@ -1,10 +1,18 @@
-import { HeaderSection } from "sections/shared/interfaces/interfaces";
+import {
+  HeaderSection,
+  SectionTypes,
+} from "sections/shared/interfaces/interfaces";
 import { StyledTableCell } from "../DashboardTable/DashboardTable";
 import { useState } from "react";
-import { FaArrowUp, FaArrowDown, FaArrowsAltV } from "react-icons/fa";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
 import { OrderItem } from "sections/user/UserContext/UserContext";
 import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
+import { BsFilterLeft } from "react-icons/bs";
+import theme from "assets/styles/theme";
+import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
+import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
+import { usePlansContext } from "sections/plans/PlansContext/usePlansContext";
+import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
 
 interface Props {
   section: HeaderSection;
@@ -14,7 +22,9 @@ const DashBoardHeaderCell = ({ section }: Props) => {
   const { setOrder, order } = useUserContext();
   const { order: orderCollabs, setOrder: setOrderCollabs } =
     useCollabsContext();
-
+  const { setOrderPlans, orderPlans } = usePlansContext();
+  const { orderCompanies, setOrderCompanies } = useCompanyContext();
+  const { order: orderOffers, setOrder: setOrderOffers } = useOffersContext();
   const getOrder = (section: HeaderSection) => {
     if (section.pageName === "collabs") {
       if (orderCollabs.sortTag === section.sortTag) {
@@ -23,12 +33,30 @@ const DashBoardHeaderCell = ({ section }: Props) => {
         return null;
       }
     }
+    if (section.pageName === "offers") {
+      if (orderOffers.sortTag === section.sortTag) {
+        return orderOffers.direction;
+      } else {
+        return null;
+      }
+    }
+    if (section.pageName === SectionTypes.plans) {
+      if (orderPlans.sortTag === section.sortTag) {
+        return orderPlans.direction;
+      } else {
+        return null;
+      }
+    }
 
-    if (
-      section.pageName === "user" ||
-      section.pageName === "influencer" ||
-      section.pageName === "company"
-    ) {
+    if (section.pageName === SectionTypes.customers) {
+      if (orderCompanies.sortTag === section.sortTag) {
+        return orderCompanies.direction;
+      } else {
+        return null;
+      }
+    }
+
+    if (section.pageName === "user" || section.pageName === "influencer") {
       if (order?.sortTag === section?.sortTag) {
         return order.direction;
       } else {
@@ -42,32 +70,35 @@ const DashBoardHeaderCell = ({ section }: Props) => {
   );
 
   const handlePressSort = () => {
-    if (section.pageName === "collabs") {
-      if (isSort === null) {
-        setIsSort("ASC");
-        setOrderCollabs({ sortTag: section.sortTag!, direction: "ASC" });
-      } else if (isSort === "ASC") {
-        setIsSort("DESC");
-        setOrderCollabs({ sortTag: section.sortTag!, direction: "DESC" });
-      } else {
-        setIsSort(null);
-        setOrderCollabs({} as OrderItem);
-      }
-    } else if (
-      section.pageName === "user" ||
-      section.pageName === "influencer" ||
-      section.pageName === "company"
-    ) {
-      if (isSort === null) {
-        setIsSort("ASC");
-        setOrder({ sortTag: section.sortTag!, direction: "ASC" });
-      } else if (isSort === "ASC") {
-        setIsSort("DESC");
-        setOrder({ sortTag: section.sortTag!, direction: "DESC" });
-      } else {
-        setIsSort(null);
-        setOrder({} as OrderItem);
-      }
+    const sortActions: Record<
+      string,
+      (sortTag: string, direction: "ASC" | "DESC" | null) => void
+    > = {
+      [SectionTypes.plans]: (sortTag, direction) =>
+        setOrderPlans(direction ? { sortTag, direction } : ({} as OrderItem)),
+
+      offers: (sortTag, direction) =>
+        setOrderOffers(direction ? { sortTag, direction } : ({} as OrderItem)),
+
+      collabs: (sortTag, direction) =>
+        setOrderCollabs(direction ? { sortTag, direction } : ({} as OrderItem)),
+      [SectionTypes.customers]: (sortTag, direction) =>
+        setOrderCompanies(
+          direction ? { sortTag, direction } : ({} as OrderItem),
+        ),
+
+      user: (sortTag, direction) =>
+        setOrder(direction ? { sortTag, direction } : ({} as OrderItem)),
+      influencer: (sortTag, direction) =>
+        setOrder(direction ? { sortTag, direction } : ({} as OrderItem)),
+    };
+
+    const nextSort = isSort === null ? "ASC" : isSort === "ASC" ? "DESC" : null;
+    setIsSort(nextSort);
+
+    const action = sortActions[section.pageName];
+    if (action && section.sortTag) {
+      action(section.sortTag, nextSort);
     }
   };
 
@@ -90,11 +121,11 @@ const DashBoardHeaderCell = ({ section }: Props) => {
       >
         {section.name}
         {isSort === null && section.sortTag !== "" ? (
-          <FaArrowsAltV color={"grey"} size={10} />
+          <BsFilterLeft color={theme.colors.mainColor} size={15} />
         ) : isSort === "ASC" ? (
-          <FaArrowUp color={"black"} size={10} />
+          <BiSolidUpArrow color={theme.colors.mainColor} size={10} />
         ) : isSort === "DESC" ? (
-          <FaArrowDown color={"black"} size={10} />
+          <BiSolidDownArrow color={theme.colors.mainColor} size={10} />
         ) : null}
       </button>
     </StyledTableCell>

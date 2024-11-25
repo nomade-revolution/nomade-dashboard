@@ -17,7 +17,7 @@ const useDialog = () => {
   const { deleteCompanyById } = useCompanyContext();
   const { deleteOfferById } = useOffersContext();
   const { deleteCollabById } = useCollabsContext();
-  const { acceptCollab, rejectCollab } = useActions();
+  const { acceptCollab, rejectCollab, cancelCollab } = useActions();
 
   const handleDeleteUsers = async (sectionId: number) => {
     const response = await deleteUserById(sectionId!);
@@ -52,6 +52,7 @@ const useDialog = () => {
   const getFunctionForDialog = (
     sectionId: number,
     pageName: string,
+    accept_state_id: number,
     type?: string,
     rejected_colab_reason_id?: number,
   ) => {
@@ -60,10 +61,12 @@ const useDialog = () => {
         return handleDeleteOffer(sectionId);
       case SectionTypes.collabs:
         return type === CollabActionTypes.accept
-          ? acceptCollab(sectionId)
+          ? acceptCollab(sectionId, accept_state_id)
           : type === CollabActionTypes.refuse
             ? rejectCollab(sectionId, rejected_colab_reason_id!)
-            : handleDeleteCollab(sectionId);
+            : type === CollabActionTypes.cancel
+              ? cancelCollab(sectionId)
+              : handleDeleteCollab(sectionId);
       case SectionTypes.customers:
         return handleDeleteCompany(sectionId);
       case SectionTypes.influencers:

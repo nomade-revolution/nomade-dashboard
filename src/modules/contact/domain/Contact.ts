@@ -4,6 +4,7 @@ export interface Contact {
   email: string;
   phone: string;
   type_id: number;
+  type: string;
 }
 
 export interface ContactType {

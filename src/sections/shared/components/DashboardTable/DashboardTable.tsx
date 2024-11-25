@@ -15,6 +15,7 @@ import { Influencer } from "@influencer";
 import DashBoardHeaderCell from "../DashboardHeaderCell/DashboardHeaderCell";
 import NoDataHandler from "../NoDataHandler/NoDataHandler";
 import { useState } from "react";
+import { Plan } from "modules/plans/domain/Plan";
 
 export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -96,6 +97,7 @@ const DashboardTable = <Type,>({
                             | Influencer
                             | Company
                             | Collab
+                            | Plan
                         }
                         pageName={pageName}
                         type={type}

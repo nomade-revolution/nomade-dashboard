@@ -1,4 +1,4 @@
-const theme = {
+export const theme = {
   colors: {
     mainColor: "#8C9B6E",
     secondaryColor: "#ECEDE6",
@@ -16,6 +16,7 @@ const theme = {
     tagsBlue: "#2196F3",
     darkRed: "#AD6975",
     purple: "#7D26CD",
+    softMainColor: "#d1d6c5",
   },
   fonts: {
     primaryFont: "Roboto",
@@ -35,6 +36,7 @@ const theme = {
     grey: "#ABABB4",
   },
   fontsSize: {
+    __XS: "0.5rem",
     __S: "0.6rem",
     __SSM: "0.7rem",
     __SM: "0.8rem",

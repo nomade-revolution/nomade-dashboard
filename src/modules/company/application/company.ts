@@ -1,6 +1,6 @@
 import { CompanyRepository } from "@company/domain/CompanyRepository";
 import { HttpResponseInterface } from "@core/domain/HttpResponseInterface";
-import { Company } from "modules/user/domain/User";
+import { CompaniesApiResponse, Company } from "modules/user/domain/User";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
 
 export const deleteCompany = (
@@ -24,6 +24,19 @@ export const registerCompany = (
   return companyRepo.registerCompany(company);
 };
 
+export const exportCompanies = (
+  companyRepo: CompanyRepository<Company>,
+  token: string,
+) => {
+  return companyRepo.exportCompanies(token);
+};
+
+export const exportCompanyBilling = (
+  companyRepo: CompanyRepository<Company>,
+  token: string,
+) => {
+  return companyRepo.exportCompanyBilling(token);
+};
 export const getCompaniesBadge = (companyRepo: CompanyRepository<number>) => {
   return companyRepo.getCompaniesBadge();
 };
@@ -33,4 +46,28 @@ export const getCompanies = (
   params: FilterParams,
 ) => {
   return companyRepo.getCompanies(params);
+};
+
+export const getCompaniesWithPagination = (
+  companyRepo: CompanyRepository<CompaniesApiResponse>,
+  page: number,
+  per_page: number,
+  filters: FilterParams,
+) => {
+  return companyRepo.getCompaniesWithPagination(page, per_page, filters);
+};
+
+export const postNewCompany = (
+  companyRepo: CompanyRepository<Company>,
+  company: FormData,
+) => {
+  return companyRepo.postNewCompany(company);
+};
+
+export const editCompany = (
+  companyRepo: CompanyRepository<Company>,
+  company: FormData,
+  id: number,
+) => {
+  return companyRepo.editCompany(company, id);
 };

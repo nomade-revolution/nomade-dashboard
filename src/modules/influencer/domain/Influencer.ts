@@ -13,8 +13,8 @@ export interface Influencer {
   from_country?: CountryInterface;
   from_city?: CityInterface;
   living_country?: CountryInterface;
-  living_city?: string;
-  categories?: Category[];
+  living_city?: CityInterface;
+  categories: Category[];
   LGPD: string;
   avatar: string;
   socialMedia: SocialMedia[];

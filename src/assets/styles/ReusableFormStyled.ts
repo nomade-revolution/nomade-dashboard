@@ -1,6 +1,10 @@
 import styled from "styled-components";
 
-const ReusableFormStyled = styled.form`
+interface Props {
+  $isMultiple?: boolean;
+}
+
+const ReusableFormStyled = styled.form<Props>`
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -16,7 +20,13 @@ const ReusableFormStyled = styled.form`
       display: flex;
       flex-direction: column;
       gap: 10px;
+      width: 100%;
     }
+
+    &__title {
+      color: ${(props) => props.theme.colors.mainColor};
+    }
+
     &__section {
       display: flex;
       flex-direction: column;
@@ -67,7 +77,8 @@ const ReusableFormStyled = styled.form`
     }
 
     &__add-address,
-    &__add-contact {
+    &__add-contact,
+    &__save-contact {
       display: flex;
       align-items: center;
       gap: 8px;
@@ -81,6 +92,10 @@ const ReusableFormStyled = styled.form`
       &--icon {
         font-size: large;
       }
+    }
+
+    &__save-contact {
+      background: ${(props) => props.theme.colors.mainColor};
     }
 
     &__address-mssg,
@@ -146,6 +161,26 @@ const ReusableFormStyled = styled.form`
         cursor: not-allowed;
       }
     }
+
+    &__contact {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-bottom: ${(props) =>
+        props.$isMultiple ? "2px solid black" : "none"};
+      padding-bottom: 20px;
+      width: 100%;
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+
+    &__btns {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
   }
 
   .form-subsection {
@@ -164,7 +199,10 @@ const ReusableFormStyled = styled.form`
     &__field-large,
     &__field-textarea,
     &__field-large--offer,
-    &__field-textarea--offer {
+    &__field-textarea--offer,
+    &__field-date,
+    &__field-large--company,
+    &__field-textarea--company {
       display: flex;
       align-items: center;
       height: 40px;
@@ -192,7 +230,8 @@ const ReusableFormStyled = styled.form`
       }
     }
 
-    &__field-textarea--offer {
+    &__field-textarea--offer,
+    &__field-textarea--company {
       height: 200px;
 
       width: 100%;
@@ -204,6 +243,11 @@ const ReusableFormStyled = styled.form`
       }
     }
 
+    &__field-large--company,
+    &__field-textarea--company {
+      width: 100%;
+    }
+
     &__field-large--offer {
       font-weight: 700;
       font-family: inherit;
@@ -212,6 +256,10 @@ const ReusableFormStyled = styled.form`
       @media (min-width: 1000px) {
         width: 400px;
       }
+    }
+
+    &__field-date {
+      height: 55px;
     }
 
     &__taxes-item {
@@ -250,6 +298,16 @@ const ReusableFormStyled = styled.form`
       padding: 0 8px;
       width: 70%;
       gap: 40px;
+    }
+
+    &__password {
+      position: relative;
+    }
+
+    &__password-btn {
+      position: absolute;
+      top: 12px;
+      right: 5px;
     }
 
     &__error-message {
@@ -302,6 +360,12 @@ const ReusableFormStyled = styled.form`
       width: 100%;
     }
 
+    &__section-link {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
     &__title {
       color: ${(props) => props.theme.colors.mainColor};
     }
@@ -314,14 +378,10 @@ const ReusableFormStyled = styled.form`
 
     &__link {
       color: ${(props) => props.theme.colors.mainColor};
-      font-weight: 700;
       display: flex;
       align-items: center;
       gap: 5px;
-
-      &:hover {
-        text-decoration: underline;
-      }
+      text-decoration: underline;
     }
 
     &__checkbox-container {
@@ -388,6 +448,7 @@ const ReusableFormStyled = styled.form`
     &__select-data {
       display: flex;
       flex-direction: column;
+
       gap: 20px;
     }
 
@@ -406,6 +467,52 @@ const ReusableFormStyled = styled.form`
       display: flex;
       flex-direction: column;
       gap: 10px;
+    }
+  }
+
+  .stats {
+    &__section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+
+    &__sub-section {
+      display: flex;
+      align-items: flex-end;
+      gap: 20px;
+    }
+
+    &__field {
+      display: flex;
+      align-items: center;
+      height: 57px;
+      border-radius: ${(props) => props.theme.borderRadius.inputs};
+      border: 1px solid ${(props) => props.theme.borders.lightGrey};
+      padding: 0 8px;
+      width: 100%;
+    }
+
+    &__title {
+      color: ${(props) => props.theme.colors.mainColor};
+    }
+
+    &__list {
+      width: 100%;
+    }
+
+    &__list-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    &__list-text {
+      width: 20%;
+      font-weight: 700;
+      color: ${(props) => props.theme.colors.darkBlue};
     }
   }
 `;

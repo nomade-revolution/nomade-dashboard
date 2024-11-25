@@ -169,6 +169,17 @@ const CollabsDetailStyled = styled.div`
       flex-direction: column;
       align-items: center;
     }
+
+    &__dates {
+      font-weight: 700;
+      font-size: ${(props) => props.theme.fontsSize.__SM};
+    }
+
+    &__text-icon {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
   }
 `;
 

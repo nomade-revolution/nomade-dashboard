@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
-import { UserTypes } from "modules/user/domain/User";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import DashboardCardListMobile from "sections/shared/components/DashboardCardListMobile/DashboardCardListMobile";
@@ -11,41 +11,61 @@ import {
   FilterParams,
   SectionTypes,
 } from "sections/shared/interfaces/interfaces";
-
-import { useUserContext } from "sections/user/UserContext/useUserContext";
 import { companyTableHeaderSections } from "../../utils/companySections";
+import { IoAddCircle } from "react-icons/io5";
+import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
+import CompanyForm from "sections/company/components/CompanyForm/CompanyForm";
+import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
+import ExportFilesButton from "sections/shared/components/ExportButton/ExportButton";
+import ActionButton from "sections/shared/components/ActionButton/ActionButton";
+import theme from "assets/styles/theme";
 
 const CompaniesPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const { getUsers, users_company, pagination, loading, order } =
-    useUserContext();
   const { page } = useParams();
+  const {
+    postCompanyCms,
+    getCompaniesPaginated,
+    companies,
+    pagination,
+    loading,
+    orderCompanies,
+    exportCompaniesExcel,
+  } = useCompanyContext();
 
   const handleSearch = (searchText: string) => {
-    getUsersData(searchText);
+    gteCompaniesData(searchText);
   };
-  const getUsersData = useCallback(
+  const gteCompaniesData = useCallback(
     (text?: string) => {
-      const filters: FilterParams = {
-        filters: {
-          types: ["Company"],
-        },
-      };
-      if (order?.sortTag) {
-        filters.order = [{ by: order.sortTag, dir: order.direction }];
+      const filters: FilterParams = {};
+
+      if (orderCompanies?.sortTag) {
+        filters.order = [
+          { by: orderCompanies.sortTag, dir: orderCompanies.direction },
+        ];
       }
+
       if (text) {
-        filters.search = text;
+        (filters as any).filters = {};
+        (filters as any).filters.search = text;
       }
-      getUsers(+page!, 12, filters, UserTypes.company);
+
+      getCompaniesPaginated(+page!, 12, filters);
     },
-    [getUsers, order.direction, order.sortTag, page],
+    [
+      getCompaniesPaginated,
+      orderCompanies.direction,
+      orderCompanies.sortTag,
+      page,
+    ],
   );
 
   useEffect(() => {
-    getUsersData();
-  }, [page, order, getUsersData]);
+    gteCompaniesData();
+  }, [page, gteCompaniesData]);
 
   return (
     <>
@@ -53,19 +73,31 @@ const CompaniesPage = (): React.ReactElement => {
         <Loader width="20px" height="20px" />
       ) : (
         <ReusablePageStyled className="dashboard">
-          <div className="dashboard__search">
+          <div className="dashboard__searchContainer">
+            <section className="dashboard__btns-section">
+              <ActionButton
+                color={theme.colors.darkBlue}
+                icon={<IoAddCircle className="dashboard__create--icon" />}
+                onClick={() => setIsModalOpen(true)}
+                text="Crear cliente"
+              />
+              <ExportFilesButton
+                action={() => exportCompaniesExcel()}
+                text="Exportar clientes"
+              />
+            </section>
             <SearchBar
               pageName={SectionTypes.customers}
               pageTypes={SectionTypes.customers}
               searchText={searchText!}
               setSearchText={setSearchText}
               onSearchSubmit={() => handleSearch(searchText)}
-              onReset={() => getUsersData()}
+              onReset={() => gteCompaniesData()}
             />
           </div>
           <div className="dashboard__table">
             <DashboardTable
-              bodySections={users_company}
+              bodySections={companies}
               headerSections={companyTableHeaderSections}
               pageName={SectionTypes.customers}
             />
@@ -73,7 +105,7 @@ const CompaniesPage = (): React.ReactElement => {
           <div className="dashboard__mobile">
             <h3>Clientes</h3>
             <DashboardCardListMobile
-              bodySections={users_company}
+              bodySections={companies}
               headerSections={companyTableHeaderSections}
               pageName={SectionTypes.customers}
             />
@@ -84,6 +116,12 @@ const CompaniesPage = (): React.ReactElement => {
             per_page={pagination.per_page}
             pageName={SectionTypes.customers}
             filterParams={""}
+          />
+          <ReusableModal
+            children={<CompanyForm onSubmit={postCompanyCms} />}
+            openModal={isModalOpen}
+            setIsModalOpen={setIsModalOpen}
+            type="client"
           />
         </ReusablePageStyled>
       )}

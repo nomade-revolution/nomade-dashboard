@@ -7,7 +7,6 @@ const LoginFormStyled = styled.form`
   gap: 20px;
   font-size: ${(props) => props.theme.fontsSize.__SM};
   width: 85%;
-
   @media (min-width: 1000px) {
     width: 60%;
   }

@@ -7,15 +7,28 @@ import InfluencerDetailPageStyled from "./InfluencerDetailPageStyled";
 import InfluencerCollabs from "sections/influencer/components/InfluencerCollabs/InfluencerCollabs";
 import Loader from "sections/shared/components/Loader/Loader";
 import GoBackButton from "sections/shared/components/GoBackButton/GoBackButton";
-import DeleteButton from "sections/shared/components/DeleteButton/DeleteButton";
+import ActionButton from "sections/shared/components/ActionButton/ActionButton";
 import useActions from "sections/shared/hooks/useActions/useActions";
 import DialogDeleteConfirm from "sections/shared/components/DialogDeleteConfirm/DialogDeleteConfirm";
 import { SectionTypes } from "sections/shared/interfaces/interfaces";
+import { FaRegTrashCan } from "react-icons/fa6";
+import theme from "assets/styles/theme";
+import { SocialMedia } from "@influencer/domain/InfluencerSocialMedia";
+import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
+import SocialMediaCard from "sections/shared/components/SocialMediaCard/SocialMediaCard";
+import SocialMediaForm from "sections/shared/components/SocialMediaForm/SocialMediaForm";
 
 const InfluencerDetailPage = (): React.ReactElement => {
   const { getInfluencer, influencer, loading } = useInfluencerContext();
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const { handleIsDialogOpen } = useActions();
+
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+  const [isOpenModalEdit, setIsOpenModalEdit] = useState<boolean>(false);
+  const [socialMediaSelected, setSocialMediaSelected] = useState<SocialMedia>(
+    {} as SocialMedia,
+  );
+
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
   const { id } = useParams();
 
@@ -26,7 +39,6 @@ const InfluencerDetailPage = (): React.ReactElement => {
   useEffect(() => {
     getInfluencer(+id!);
   }, [getInfluencer, id]);
-
   return (
     <>
       {loading ? (
@@ -38,7 +50,12 @@ const InfluencerDetailPage = (): React.ReactElement => {
             <div className="influencer-detail__title">
               <h2>Influencer</h2>
             </div>
-            <DeleteButton onClick={handleDeleteButton} />
+            <ActionButton
+              onClick={handleDeleteButton}
+              text="Borrar"
+              icon={<FaRegTrashCan />}
+              color={theme.colors.red}
+            />
           </section>
           <section className="influencer-detail__info">
             <ImageCustom
@@ -48,7 +65,11 @@ const InfluencerDetailPage = (): React.ReactElement => {
               height={150}
               width={150}
             />
-            <InfluencerDetailData influencer={influencer} />
+            <InfluencerDetailData
+              influencer={influencer}
+              setSocialMediaSelected={setSocialMediaSelected}
+              setIsModalOpen={setIsOpenModal}
+            />
           </section>
           <InfluencerCollabs influencer_id={+id!} />
           <DialogDeleteConfirm
@@ -56,6 +77,31 @@ const InfluencerDetailPage = (): React.ReactElement => {
             open={isDialogOpen}
             sectionId={influencer.id!}
             pageName={SectionTypes.influencers}
+          />
+          <ReusableModal
+            children={
+              <SocialMediaCard
+                socialMedia={socialMediaSelected}
+                setIsModalOpenEdit={setIsOpenModalEdit}
+                setIsModalOpen={setIsOpenModal}
+              />
+            }
+            openModal={isOpenModal}
+            setIsModalOpen={setIsOpenModal}
+            type="social"
+          />
+          <ReusableModal
+            children={
+              <SocialMediaForm
+                setIsModalOpen={setIsOpenModal}
+                setIsModalOpenEdit={setIsOpenModalEdit}
+                social={socialMediaSelected}
+                influencer_id={+id!}
+              />
+            }
+            openModal={isOpenModalEdit}
+            setIsModalOpen={setIsOpenModalEdit}
+            type="social"
           />
         </InfluencerDetailPageStyled>
       )}

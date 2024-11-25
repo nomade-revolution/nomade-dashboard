@@ -110,6 +110,24 @@ const OffersPageStyled = styled.main`
     &__state-inactive {
       color: ${(props) => props.theme.fontsColors.lightGrey};
     }
+
+    &__name {
+      font-size: ${(props) => props.theme.fontsSize.__SM};
+      font-weight: 700;
+    }
+
+    &__link-icon {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    &__icon {
+      width: 30px;
+      height: 20px;
+      color: ${(props) => props.theme.colors.mainColor};
+    }
   }
 
   .dashboard {

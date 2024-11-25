@@ -122,8 +122,10 @@ export const UserContextProvider = ({
   }, [repository]);
 
   const registerUser = async (data: AuthRegisterNomadeInterface) => {
+    setLoading(true);
     const response = await repository.registerUser(data);
 
+    setLoading(false);
     return response;
   };
   return (

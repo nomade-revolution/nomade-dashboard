@@ -4,10 +4,12 @@ import { FullOffer } from "modules/offers/domain/Offer";
 import { CollabsRepository } from "modules/collabs/domain/CollabsRepository";
 import {
   collabsGetAll,
+  createCollab,
   deleteCollab,
   getCollab,
   getRejectedCollabReasons,
   updateCollabHistoryState,
+  exportCollabs,
 } from "modules/collabs/application/collabs";
 import { FullCollab, RejectedCollab } from "modules/collabs/domain/Collabs";
 import {
@@ -15,6 +17,7 @@ import {
   PaginationStucture,
 } from "sections/shared/interfaces/interfaces";
 import { OrderItem } from "sections/user/UserContext/UserContext";
+import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 
 interface ContextState {
   collabs: FullCollab[];
@@ -24,6 +27,7 @@ interface ContextState {
   error: string | null;
   isSuccess: boolean;
   pagination: PaginationStucture;
+  createLoading: boolean;
   getAllCollabs: (page: number, per_page: number, params: FilterParams) => void;
   deleteCollabById: (influencer_id: number) => void;
   updateCollabState: (
@@ -35,6 +39,8 @@ interface ContextState {
   setOrder: (order: OrderItem) => void;
   order: OrderItem;
   getCollabById: (collab_id: number) => void;
+  addNewCollab: (collab: FormData) => void;
+  exportCollabsExcel: () => void;
 }
 
 export const CollabsContext = createContext<ContextState>({} as ContextState);
@@ -53,8 +59,10 @@ export const CollabsContextProvider = ({
   const [pagination, setPagination] = useState<PaginationStucture>(
     {} as PaginationStucture,
   );
+  const { token } = useAuthContext();
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [order, setOrder] = useState<OrderItem>({} as OrderItem);
+  const [createLoading, setCreateLoading] = useState<boolean>(false);
 
   const getAllCollabs = useCallback(
     async (page: number, per_page: number, params: FilterParams) => {
@@ -120,6 +128,44 @@ export const CollabsContextProvider = ({
     [repository],
   );
 
+  const addNewCollab = async (collab: FormData) => {
+    setCreateLoading(true);
+    const response = await createCollab(repository, collab);
+
+    if (isHttpSuccessResponse(response)) {
+      setCollab(response.data);
+      setCreateLoading(false);
+      setIsSuccess(true);
+
+      setTimeout(() => setLoading(true), 3000);
+    } else {
+      setError(response.error as unknown as string);
+    }
+
+    setCreateLoading(false);
+    setIsSuccess(response.success);
+
+    return response;
+  };
+  const exportCollabsExcel = async () => {
+    const response = await exportCollabs(repository, token);
+
+    if (response && response instanceof Blob) {
+      const href = await URL.createObjectURL(response);
+      const link = document.createElement("a");
+      link.href = href;
+      link.download = `collabs`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      URL.revokeObjectURL(href);
+    }
+    return response;
+  };
+
+  setTimeout(() => setIsSuccess(false), 3000);
+
   return (
     <CollabsContext.Provider
       value={{
@@ -127,6 +173,7 @@ export const CollabsContextProvider = ({
         collab,
         collabRejectedReasons,
         loading,
+        createLoading,
         error,
         isSuccess,
         pagination,
@@ -137,6 +184,8 @@ export const CollabsContextProvider = ({
         order,
         setOrder,
         getCollabById,
+        addNewCollab,
+        exportCollabsExcel,
       }}
     >
       {children}

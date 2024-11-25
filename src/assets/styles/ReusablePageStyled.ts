@@ -1,25 +1,28 @@
 import styled from "styled-components";
 
 const ReusablePageStyled = styled.main`
-  background: ${(props) => props.theme.colors.backgroundPages};
   justify-content: center;
   display: flex;
   flex-direction: column;
   gap: 20px;
   padding: 40px 20px;
-  max-width: 100%;
   color: ${(props) => props.theme.fontsColors.dashBoard};
+  width: 100%;
 
   @media (min-width: 1000px) and (max-width: 1600px) {
     padding: 40px 40px;
+    max-width: fit-content;
   }
 
   @media (min-width: 1600px) {
     padding: 40px 50px;
     height: 100%;
+    max-width: fit-content;
   }
 
   .dashboard {
+    width: 100%;
+
     &__table {
       display: none;
 
@@ -51,22 +54,56 @@ const ReusablePageStyled = styled.main`
 
       @media (min-width: 880px) {
         width: 100%;
-        display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
       }
     }
-    &__filterContainer {
+
+    &__filtersContainer {
       display: flex;
-      align-items: center;
-      justify-content: flex-end;
+      flex-direction: column-reverse;
+      align-items: flex-end;
+      gap: 10px;
       width: 100%;
 
       @media (min-width: 880px) {
         width: 100%;
-        display: flex;
-        align-items: flex-end;
-        justify-content: flex-end;
+        flex-direction: row;
+
+        justify-content: space-between;
       }
+    }
+
+    &__selectsContainer {
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: flex-end;
+      gap: 10px;
+      width: 100%;
+
+      @media (min-width: 880px) {
+        width: 90%;
+        flex-direction: row;
+      }
+    }
+
+    &__btns-section {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    &__name {
+      font-size: ${(props) => props.theme.fontsSize.__SM};
+      font-weight: 700;
+    }
+
+    &__select {
+      padding-left: 40px;
+    }
+
+    &__filter {
+      display: flex;
+      align-items: flex-start;
     }
 
     &__title {
@@ -114,10 +151,12 @@ const ReusablePageStyled = styled.main`
     }
 
     &__category {
-      background: ${(props) => props.theme.colors.grey};
+      color: ${(props) => props.theme.colors.purple};
       padding: 3px 8px;
       border-radius: ${(props) => props.theme.borderRadius.inputs};
       font-size: small;
+      font-weight: 700;
+      text-align: center;
     }
 
     &__type-section {
@@ -165,14 +204,17 @@ const ReusablePageStyled = styled.main`
       }
 
       &--rejected {
+        font-weight: bold;
         color: ${(props) => props.theme.colors.darkRed};
       }
 
       &--cancelled {
+        font-weight: bold;
         color: ${(props) => props.theme.colors.red};
       }
 
       &--sent {
+        font-weight: bold;
         color: ${(props) => props.theme.colors.darkBlue};
       }
 
@@ -187,15 +229,23 @@ const ReusablePageStyled = styled.main`
       }
 
       &--done {
+        font-weight: bold;
         color: green;
       }
 
       &--finished {
+        font-weight: bold;
         color: ${(props) => props.theme.colors.purple};
       }
 
       &--incident {
+        font-weight: bold;
         color: brown;
+      }
+
+      &--published {
+        font-weight: bold;
+        color: ${(props) => props.theme.colors.softGreen};
       }
     }
 
@@ -262,7 +312,7 @@ const ReusablePageStyled = styled.main`
         flex-direction: row;
         align-items: flex-end;
         justify-content: space-between;
-        width: 84%;
+        width: 100%;
       }
     }
 
@@ -315,13 +365,97 @@ const ReusablePageStyled = styled.main`
       font-weight: 700;
       opacity: 0.6;
     }
+
+    &__link-sent {
+      color: ${(props) => props.theme.colors.softGreen};
+      font-weight: 700;
+    }
+
+    &__link-pending {
+      font-weight: 700;
+      color: ${(props) => props.theme.colors.red};
+    }
+
+    &__date {
+      font-weight: 700;
+    }
+
+    &__social-media {
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    &__status {
+      &--active {
+        color: green;
+        font-weight: 700;
+      }
+
+      &--inactive {
+        color: red;
+        font-weight: 700;
+      }
+
+      &--pending {
+        color: orange;
+        font-weight: 700;
+      }
+
+      &--standby {
+        color: blueviolet;
+        font-weight: 700;
+      }
+    }
+
+    &__plan {
+      &--mensual {
+        font-weight: 700;
+        color: chocolate;
+      }
+
+      &--trimestral {
+        font-weight: 700;
+        color: yellowgreen;
+      }
+    }
+
+    &__role {
+      &--admin {
+        font-weight: 700;
+        color: ${(props) => props.theme.colors.mainColor};
+      }
+
+      &--manager {
+        font-weight: 700;
+        color: ${(props) => props.theme.colors.darkRed};
+      }
+    }
+
+    &__link-icon {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 2px;
+    }
+
+    &__icon {
+      width: 30px;
+      height: 20px;
+      color: ${(props) => props.theme.colors.mainColor};
+    }
+
+    &__email {
+      font-size: ${(props) => props.theme.fontsSize.__SM};
+    }
   }
 
   .filterBox {
     display: flex;
-    min-width: 300px;
-    width: 300px;
-    margin-top: 5px;
+    align-items: center;
+    width: 250px;
   }
 
   .plans-page {
@@ -329,6 +463,89 @@ const ReusablePageStyled = styled.main`
       display: flex;
       flex-direction: column;
       gap: 10px;
+    }
+
+    &__show-calendar {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      width: 100%;
+      align-items: flex-end;
+    }
+
+    &__calendar {
+      position: absolute;
+      right: 30px;
+      top: 215px;
+      background: white;
+      width: 90%;
+      z-index: 10;
+      box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.3);
+
+      @media (min-width: 1000px) {
+        width: 20%;
+        right: 20px;
+        top: 110px;
+      }
+    }
+
+    &__filter-btnSection {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    &__filter-btn {
+      background: ${(props) => props.theme.colors.darkBlue};
+      padding: 10px;
+      border-radius: 5px;
+      color: ${(props) => props.theme.colors.light};
+      font-weight: 700;
+    }
+
+    &__filter-active {
+      background: ${(props) => props.theme.colors.mainColor};
+      padding: 2px 5px;
+      width: fit-content;
+      font-size: ${(props) => props.theme.fontsSize.__SM};
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      border-radius: 3px;
+      color: ${(props) => props.theme.colors.light};
+    }
+
+    &__date-picker {
+      border-radius: 10px;
+      height: 40px;
+      padding: 10px;
+      border: 1px solid ${(props) => props.theme.colors.mainColor};
+    }
+
+    &__filter-close {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .filters {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    width: 100%;
+
+    &__filter {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: ${(props) => props.theme.colors.mainColor};
+      padding: 5px 10px;
+      color: ${(props) => props.theme.colors.light};
+      font-size: ${(props) => props.theme.fontsSize.__SM};
+      width: fit-content;
+      border-radius: 5px;
     }
   }
 `;

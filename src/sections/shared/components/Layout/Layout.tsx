@@ -4,20 +4,22 @@ import LayoutStyled from "./LayoutStyled";
 
 import { appPaths } from "../../utils/appPaths/appPaths";
 import Header from "../Header/Header";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
 import { Company } from "modules/user/domain/User";
-import { useUserContext } from "sections/user/UserContext/useUserContext";
 import { useInfluencerContext } from "sections/influencer/InfluencerContext/useInfluencerContext";
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
+import { useMediaQuery } from "@mui/material";
 
 const Layout = (): React.ReactElement => {
   const location = useLocation();
+  const matches = useMediaQuery("(max-width: 1200px)");
+  const [isMinimized, setIsMinimized] = useState<boolean>(matches);
 
   const { setSessionToken, token, getLoggedUser, user, logoutUser } =
     useAuthContext();
-  const { getUsersStatusBadge, badgeCount: badgeCountUsers } = useUserContext();
+
   const { getAllOffers, offers } = useOffersContext();
   const { getInfluencersStatusBadge, badgeCount: badgeCountInfluencers } =
     useInfluencerContext();
@@ -48,10 +50,6 @@ const Layout = (): React.ReactElement => {
   }, [getAllOffers, user]);
 
   useEffect(() => {
-    getUsersStatusBadge();
-  }, [getUsersStatusBadge]);
-
-  useEffect(() => {
     getInfluencersStatusBadge();
   }, [getInfluencersStatusBadge]);
 
@@ -65,8 +63,12 @@ const Layout = (): React.ReactElement => {
     }
   }, [logoutUser, navigate, user]);
 
+  useEffect(() => {
+    setIsMinimized(matches);
+  }, [matches]);
+
   return (
-    <LayoutStyled>
+    <LayoutStyled $isMinimized={isMinimized}>
       <div
         className={
           location.pathname !== appPaths.login &&
@@ -95,17 +97,19 @@ const Layout = (): React.ReactElement => {
             location.pathname !== appPaths.reset_password &&
             location.pathname !== appPaths.leadsSubmit && (
               <SideBar
-                badgeUsers={badgeCountUsers}
+                badgeUsers={0}
                 badgeInfluencers={badgeCountInfluencers}
                 badgeCompanies={badgeCountCompanies}
                 user={user}
                 offer={offers[0]}
+                isMinimized={isMinimized}
+                setIsMinimized={setIsMinimized}
               />
             )}
         </section>
         <div className="layout__header">
           <Header
-            badgeCountUsers={badgeCountUsers}
+            badgeCountUsers={0}
             badgeCountInfluencers={badgeCountInfluencers}
             badgeCountCompanies={badgeCountCompanies}
             offer={offers[0]}

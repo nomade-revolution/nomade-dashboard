@@ -1,0 +1,571 @@
+import ReusableFormStyled from "assets/styles/ReusableFormStyled";
+import { Formik, Field, ErrorMessage, FormikHelpers } from "formik";
+import { useEffect, useState } from "react";
+import CustomFileInput from "sections/shared/components/CustomFileInput/CustomFileInput";
+import ReusableSelect from "sections/shared/components/ReusableSelect/ReusableSelect";
+import { clientSchema, initialData } from "./utils/validations/validations";
+import { PartialCompany } from "@company";
+import { FullAddress } from "modules/address/domain/Address";
+import {
+  FaEdit,
+  FaCheckCircle,
+  FaEyeSlash,
+  FaEye,
+  FaLink,
+} from "react-icons/fa";
+import { IoAddCircle } from "react-icons/io5";
+import AddressForm from "sections/shared/components/AddressForm/AddressForm";
+import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
+import { billingOptions } from "./utils/options/options";
+import { Contact, ContactType } from "modules/contact/domain/Contact";
+import ContactForm from "sections/shared/components/ContactForm/ContactForm";
+import { useContactContext } from "sections/contact/ContactContext/useContactContext";
+import { Link, useNavigate } from "react-router-dom";
+import CustomCheckbox from "sections/shared/components/CustomCheckbox/CustomCheckbox";
+import Loader from "sections/shared/components/Loader/Loader";
+import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
+import { formatDateWithDash } from "sections/shared/utils/formatDate/formatDate";
+import { Company } from "modules/user/domain/User";
+
+interface Props {
+  onSubmit: (values: FormData, id?: number) => void;
+  type?: string;
+  client?: Company;
+}
+
+const CompanyForm = ({ onSubmit, client, type }: Props): React.ReactElement => {
+  const [formState, setFormState] = useState<{ company_plan_id: string }>({
+    company_plan_id: "",
+  });
+  const [file, setFile] = useState<File[] | null>(() => {
+    if (client?.image) {
+      const blob = new Blob([client.image], { type: "image/png" });
+      const generatedFile = new File([blob], "uploaded-image.png", {
+        type: "image/png",
+      });
+      return [generatedFile];
+    }
+    return null;
+  });
+  const [registerAddress, setRegisterAddress] = useState<FullAddress | null>(
+    client ? client.address : null,
+  );
+  const [registerContacts, setRegisterContacts] = useState<Contact[]>(
+    client ? (client.contacts as never) : [],
+  );
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState<boolean>(false);
+  const [isPasswordShown, setIsPasswordShown] = useState<boolean>(false);
+  const [isPasswordConfirmationShown, setIsPasswordConfirmationShown] =
+    useState<boolean>(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState<boolean>(false);
+  const [isCheked, setIsChecked] = useState<boolean>(
+    client ? Boolean(client.goCardless) : false,
+  );
+
+  const { contact_types, getAllContactTypes } = useContactContext();
+  const { isSuccess, isError, loading } = useCompanyContext();
+  const navigate = useNavigate();
+
+  const handleFormStateChange = (field: string, value: string) => {
+    setFormState((prevState) => ({ ...prevState, [field]: value }));
+  };
+
+  const handleIsAddressModalOpen = () => {
+    setIsAddressModalOpen(true);
+  };
+
+  const handleIsContactModalOpen = () => {
+    setIsContactModalOpen(true);
+  };
+
+  const handleIsChecked = () => {
+    setIsChecked(!isCheked);
+  };
+
+  const handleSubmitForm = async (
+    values: PartialCompany,
+    { setSubmitting }: FormikHelpers<PartialCompany>,
+  ) => {
+    setSubmitting(true);
+
+    const formData = new FormData();
+
+    const formattedDate = formatDateWithDash(values.start_date);
+
+    Object.keys(values).forEach((key) => {
+      if (key !== "id") {
+        const value =
+          key === "start_date"
+            ? formattedDate
+            : values[key as keyof PartialCompany];
+        formData.append(key, value || "");
+      }
+    });
+
+    registerAddress &&
+      formData.append("address", JSON.stringify(registerAddress));
+
+    if (registerContacts.length > 0) {
+      formData.append("contacts", JSON.stringify(registerContacts));
+    }
+
+    formData.append("name", values.company_name);
+    formData.append("gocardless", JSON.stringify(isCheked));
+    formData.append("image", file![0]);
+    formData.append("plan_id", formState.company_plan_id);
+
+    await onSubmit(formData, client && client?.id);
+
+    if (isSuccess) {
+      setTimeout(() => navigate(0), 2000);
+    }
+
+    setSubmitting(false);
+  };
+
+  useEffect(() => {
+    getAllContactTypes();
+  }, [getAllContactTypes]);
+
+  const initialValues = {
+    ...initialData,
+    ...client,
+  };
+
+  return (
+    <Formik
+      initialValues={initialValues}
+      validationSchema={clientSchema}
+      onSubmit={handleSubmitForm}
+    >
+      {({ errors, touched, handleSubmit, getFieldProps, isSubmitting }) => (
+        <ReusableFormStyled onSubmit={handleSubmit} className="datasheet-form">
+          <h3>Cliente</h3>
+          <div className="datasheet-form__content">
+            <h4 className="datasheet-form__title">Información del cliente</h4>
+            <div className="form-subsection">
+              <label htmlFor="company" className="form-subsection__label">
+                Nombre del cliente
+              </label>
+              <Field
+                type="text"
+                id="company"
+                className="form-subsection__field-large--company"
+                aria-label="Cliente"
+                {...getFieldProps("company")}
+              />
+
+              {errors.company && touched.company && (
+                <ErrorMessage
+                  className="form-subsection__error-message"
+                  component="span"
+                  name="company"
+                />
+              )}
+            </div>
+            <div className="form-subsection">
+              <label htmlFor="company_name" className="form-subsection__label">
+                Razón social
+              </label>
+              <Field
+                type="text"
+                id="company_name"
+                className="form-subsection__field-large--company"
+                aria-label="Razón social"
+                {...getFieldProps("company_name")}
+              />
+
+              {errors.company && touched.company && (
+                <ErrorMessage
+                  className="form-subsection__error-message"
+                  component="span"
+                  name="company_name"
+                />
+              )}
+            </div>
+
+            <div className="form-subsection">
+              <label htmlFor="nif" className="form-subsection__label">
+                NIF
+              </label>
+              <Field
+                type="text"
+                id="nif"
+                className="form-subsection__field-large--company"
+                aria-label="Alias"
+                {...getFieldProps("nif")}
+              />
+              {errors.nif && touched.nif && (
+                <ErrorMessage
+                  className="form-subsection__error-message"
+                  component="span"
+                  name="nif"
+                />
+              )}
+            </div>
+            <div className="form-subsection">
+              <label htmlFor="web" className="form-subsection__label">
+                Web
+              </label>
+              <Field
+                type="web"
+                id="web"
+                className="form-subsection__field-large--company"
+                aria-label="Correo electrónico"
+                {...getFieldProps("web")}
+              />
+              {errors.web && touched.web && (
+                <ErrorMessage
+                  className="form-subsection__error-message"
+                  component="span"
+                  name="web"
+                />
+              )}
+            </div>
+            <div className="form-subsection">
+              <label htmlFor="phone" className="form-subsection__label">
+                Teléfono
+              </label>
+              <Field
+                type="phone"
+                id="phone"
+                className="form-subsection__field-large--company"
+                aria-label="Correo electrónico"
+                {...getFieldProps("phone")}
+              />
+              {errors.phone && touched.phone && (
+                <ErrorMessage
+                  className="form-subsection__error-message"
+                  component="span"
+                  name="phone"
+                />
+              )}
+            </div>
+            <div className="form-subsection">
+              <label htmlFor="email" className="form-subsection__label">
+                Email
+              </label>
+              <Field
+                type="email"
+                id="email"
+                className="form-subsection__field-large--company"
+                aria-label="Correo electrónico"
+                {...getFieldProps("email")}
+              />
+              {errors.email && touched.email && (
+                <ErrorMessage
+                  className="form-subsection__error-message"
+                  component="span"
+                  name="email"
+                />
+              )}
+            </div>
+            <div className="form-subsection">
+              <label htmlFor="description" className="form-subsection__label">
+                Descripción
+              </label>
+              <Field
+                type="text"
+                id="description"
+                className="form-subsection__field-textarea--company"
+                aria-label="Nombre del laboratorio"
+                as={"textarea"}
+                {...getFieldProps("description")}
+              />
+              {errors.description && touched.description && (
+                <ErrorMessage
+                  className="form-subsection__error-message"
+                  component="span"
+                  name="description"
+                />
+              )}
+            </div>
+            <div className="form-subsection">
+              <label htmlFor="plan_comments" className="form-subsection__label">
+                Comentarios acerca del cliente
+              </label>
+              <Field
+                type="text"
+                id="plan_comments"
+                className="form-subsection__field-textarea--company"
+                aria-label="Nombre del laboratorio"
+                as={"textarea"}
+                {...getFieldProps("plan_comments")}
+              />
+              {errors.plan_comments && touched.plan_comments && (
+                <ErrorMessage
+                  className="form-subsection__error-message"
+                  component="span"
+                  name="plan_comments"
+                />
+              )}
+            </div>
+            <section className="lead-form__section">
+              <h4 className="lead-form__title">Información de facturación</h4>
+              <div className="lead-form__section-link">
+                <span className="lead-form__thirdparty-link">
+                  Completar los datos de facturación el siguiente enlace:
+                </span>
+                <Link
+                  to="https://pay.gocardless.com/AL0005R1W7RZ3V"
+                  target="_blank"
+                  className="lead-form__link"
+                >
+                  <FaLink size={12} />
+                  GoCardless - Nomade
+                </Link>
+              </div>
+              <div className="lead-form__checkbox-container">
+                <CustomCheckbox onChange={handleIsChecked} checked={isCheked} />
+                <span>Se ha rellenado la información en Gocardless.com</span>
+              </div>
+            </section>
+
+            <h4 className="datasheet-form__title">Información del plan</h4>
+            <section className="datasheet-form__section">
+              <div className="form-subsection">
+                <label htmlFor="type_id" className="form-subsection__label">
+                  Plan
+                </label>
+                <ReusableSelect
+                  label="Plan"
+                  options={billingOptions}
+                  setValue={(value) =>
+                    handleFormStateChange("company_plan_id", value)
+                  }
+                  value={formState.company_plan_id}
+                />
+              </div>
+              <div className="form-subsection">
+                <label htmlFor="start_date" className="form-subsection__label">
+                  Inicio plan
+                </label>
+                <Field
+                  type="date"
+                  id="start_date"
+                  className="form-subsection__field-date"
+                  aria-label="Correo electrónico"
+                  {...getFieldProps("start_date")}
+                />
+                {errors.start_date && touched.start_date && (
+                  <ErrorMessage
+                    className="form-subsection__error-message"
+                    component="span"
+                    name="start_date"
+                  />
+                )}
+              </div>
+            </section>
+            <div className="form-subsection">
+              <label htmlFor="description" className="form-subsection__label">
+                Comentarios acerca del plan
+              </label>
+              <Field
+                type="text"
+                id="description"
+                className="form-subsection__field-textarea--company"
+                aria-label="Nombre del laboratorio"
+                as={"textarea"}
+                {...getFieldProps("description")}
+              />
+              {errors.description && touched.description && (
+                <ErrorMessage
+                  className="form-subsection__error-message"
+                  component="span"
+                  name="description"
+                />
+              )}
+            </div>
+
+            <h4 className="datasheet-form__title">Datos adicionales</h4>
+            <CustomFileInput
+              setFile={setFile}
+              file={file!}
+              text="Imágen del cliente"
+            />
+            {registerAddress && (
+              <section className="lead-form__address">
+                <span>{registerAddress.address}</span>
+                <span>{registerAddress.province}</span>
+                <span>{registerAddress.zip_code}</span>
+              </section>
+            )}
+            <div className="datasheet-form__address-section">
+              <button
+                type="button"
+                className="datasheet-form__add-address"
+                onClick={handleIsAddressModalOpen}
+              >
+                {registerAddress ? (
+                  <FaEdit className="datasheet-form__create--icon" />
+                ) : (
+                  <IoAddCircle className="datasheet-form__create--icon" />
+                )}
+                {registerAddress ? "Modificar dirección" : "Añadir dirección"}
+              </button>
+              {registerAddress && (
+                <span className="datasheet-form__address-mssg">
+                  <FaCheckCircle />
+                  Dirección añadida
+                </span>
+              )}
+            </div>
+            {registerContacts &&
+              registerContacts.map((contact) => (
+                <section className="lead-form__address">
+                  <div>
+                    <span>{contact.name}</span>
+                    <span>{contact.surname}</span>
+                  </div>
+                  <span>{contact.email}</span>
+                  <span>{contact.phone}</span>
+                  <span>
+                    {
+                      contact_types.find(
+                        (type: ContactType) => type.id === contact.type_id,
+                      )?.name
+                    }
+                  </span>
+                </section>
+              ))}
+
+            <div className="datasheet-form__contact-section">
+              <button
+                type="button"
+                className="datasheet-form__add-contact"
+                onClick={handleIsContactModalOpen}
+              >
+                {registerContacts.length > 0 ? (
+                  <FaEdit className="datasheet-form__create--icon" />
+                ) : (
+                  <IoAddCircle className="datasheet-form__create--icon" />
+                )}
+                {registerContacts.length > 0
+                  ? "Modificar contacto"
+                  : "Añadir contacto"}
+              </button>
+              {registerContacts.length > 0 && (
+                <span className="datasheet-form__contact-mssg">
+                  <FaCheckCircle />
+                  Contacto añadido
+                </span>
+              )}
+            </div>
+            <div className="form-subsection">
+              <label htmlFor="password" className="form-subsection__label">
+                Contraseña
+              </label>
+              <div className="form-subsection__password">
+                <Field
+                  type={isPasswordShown ? "text" : "password"}
+                  id="password"
+                  className="form-subsection__field-large--company"
+                  aria-label="Comentarios"
+                  {...getFieldProps("password")}
+                />
+                <button
+                  onClick={() => setIsPasswordShown(!isPasswordShown)}
+                  className="form-subsection__password-btn"
+                >
+                  {isPasswordShown ? <FaEye /> : <FaEyeSlash />}
+                </button>
+              </div>
+              {errors.password && touched.password && (
+                <ErrorMessage
+                  className="form-subsection__error-message"
+                  component="span"
+                  name="password"
+                />
+              )}
+            </div>
+            <div className="form-subsection">
+              <label
+                htmlFor="password_confirmation"
+                className="form-subsection__label"
+              >
+                Repite contraseña
+              </label>
+              <div className="form-subsection__password">
+                <Field
+                  type={isPasswordConfirmationShown ? "text" : "password"}
+                  id="password_confirmation"
+                  className="form-subsection__field-large--company"
+                  aria-label="Comentarios"
+                  {...getFieldProps("password_confirmation")}
+                />
+                <button
+                  onClick={() =>
+                    setIsPasswordConfirmationShown(!isPasswordConfirmationShown)
+                  }
+                  className="form-subsection__password-btn"
+                >
+                  {isPasswordConfirmationShown ? <FaEye /> : <FaEyeSlash />}
+                </button>
+              </div>
+              {errors.password_confirmation &&
+                touched.password_confirmation && (
+                  <ErrorMessage
+                    className="form-subsection__error-message"
+                    component="span"
+                    name="password_confirmation"
+                  />
+                )}
+            </div>
+          </div>
+          <ReusableModal
+            children={
+              <AddressForm
+                address={registerAddress!}
+                setAddress={setRegisterAddress as never}
+                setIsModalOpen={setIsAddressModalOpen}
+              />
+            }
+            openModal={isAddressModalOpen}
+            setIsModalOpen={setIsAddressModalOpen}
+          />
+          <ReusableModal
+            openModal={isContactModalOpen}
+            setIsModalOpen={setIsContactModalOpen}
+            children={
+              <ContactForm
+                contacts={registerContacts}
+                setContacts={setRegisterContacts}
+                setIsModalOpen={setIsContactModalOpen}
+                contact_types={contact_types}
+              />
+            }
+          />
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className={
+              isSuccess
+                ? "datasheet-form__success"
+                : isError
+                  ? "datasheet-form__error"
+                  : "datasheet-form__submit"
+            }
+          >
+            {isSubmitting || loading ? (
+              <Loader width="20px" height="20px" />
+            ) : isSuccess ? (
+              type === "edit" ? (
+                "Cliente editado"
+              ) : (
+                "Cliente creado"
+              )
+            ) : isError ? (
+              "Revisa los datos e intentalo de nuevo"
+            ) : type === "edit" ? (
+              "Editar cliente"
+            ) : (
+              "Crear cliente"
+            )}
+          </button>
+        </ReusableFormStyled>
+      )}
+    </Formik>
+  );
+};
+
+export default CompanyForm;

@@ -1,6 +1,7 @@
 import { HttpResponseInterface } from "@core/domain/HttpResponseInterface";
 import { Influencer } from "@influencer/domain";
 import { InfluencerRepository } from "@influencer/domain/InfluencerRepository";
+import { EditInfluencerStatsStructure } from "@influencer/domain/InfluencerSocialMedia";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
 
 export const deleteInfluencer = (
@@ -22,9 +23,18 @@ export const getInfluencersBadge = (
 ) => {
   return influencerRepo.getInfluencersBadge();
 };
+
 export const getInfluencers = (
   influencerRepo: InfluencerRepository<Influencer[]>,
   params: FilterParams,
 ) => {
   return influencerRepo.getInfluencers(params);
+};
+
+export const editInfluencerStats = (
+  influencerRepo: InfluencerRepository<Influencer>,
+  data: EditInfluencerStatsStructure,
+  influencer_id: number,
+) => {
+  return influencerRepo.editInfluencerStats(data, influencer_id);
 };

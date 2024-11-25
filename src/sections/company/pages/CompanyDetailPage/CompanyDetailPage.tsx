@@ -7,14 +7,23 @@ import CompanyDetailPageStyled from "./CompanyDetailPageStyled";
 import CompanyDetailData from "sections/company/components/CompanyDetailData/CompanyDetailData";
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
 import CompanyCollabs from "sections/company/components/CompanyCollabs/CompanyCollabs";
-import DeleteButton from "sections/shared/components/DeleteButton/DeleteButton";
+import ActionButton from "sections/shared/components/ActionButton/ActionButton";
 import useActions from "sections/shared/hooks/useActions/useActions";
 import { SectionTypes } from "sections/shared/interfaces/interfaces";
 import DialogDeleteConfirm from "sections/shared/components/DialogDeleteConfirm/DialogDeleteConfirm";
+import theme from "assets/styles/theme";
+import { FaRegTrashCan } from "react-icons/fa6";
+import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
+import CompanyForm from "sections/company/components/CompanyForm/CompanyForm";
+import { FaEdit } from "react-icons/fa";
+import PlanForm from "sections/plans/components/PlanForm/PlanForm";
 
 const InfluencerDetailPage = (): React.ReactElement => {
-  const { getCompany, company, loading } = useCompanyContext();
+  const { getCompany, company, loading, editCompanyCms } = useCompanyContext();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isPlanModalOpen, setIsPlanModalOpen] = useState<boolean>(false);
+
   const { handleIsDialogOpen } = useActions();
 
   const { id } = useParams();
@@ -26,7 +35,6 @@ const InfluencerDetailPage = (): React.ReactElement => {
   useEffect(() => {
     getCompany(+id!);
   }, [getCompany, id]);
-
   return (
     <>
       {loading ? (
@@ -38,7 +46,30 @@ const InfluencerDetailPage = (): React.ReactElement => {
             <div className="company-detail__title">
               <h2>Cliente</h2>
             </div>
-            <DeleteButton onClick={handleDeleteButton} />
+            <div className="company-detail__actions">
+              {company.plan?.plan_name !== "Pendiente" && (
+                <button
+                  className="company-detail__plan-modify"
+                  onClick={() => setIsPlanModalOpen(true)}
+                >
+                  <FaEdit className="dashboard__create--icon" />
+                  Modificar plan
+                </button>
+              )}
+              <button
+                className="company-detail__create"
+                onClick={() => setIsModalOpen(true)}
+              >
+                <FaEdit className="dashboard__create--icon" />
+                Editar cliente
+              </button>
+              <ActionButton
+                onClick={handleDeleteButton}
+                text="Borrar"
+                icon={<FaRegTrashCan />}
+                color={theme.colors.red}
+              />
+            </div>
           </section>
 
           <section className="company-detail__info">
@@ -58,6 +89,24 @@ const InfluencerDetailPage = (): React.ReactElement => {
             open={isDialogOpen}
             sectionId={company.id!}
             pageName={SectionTypes.customers}
+          />
+          <ReusableModal
+            children={
+              <CompanyForm
+                onSubmit={editCompanyCms}
+                client={company}
+                type="edit"
+              />
+            }
+            openModal={isModalOpen}
+            setIsModalOpen={setIsModalOpen}
+            type="client"
+          />
+          <ReusableModal
+            children={<PlanForm company_id={company.id} />}
+            openModal={isPlanModalOpen}
+            setIsModalOpen={setIsPlanModalOpen}
+            type="plan"
           />
         </CompanyDetailPageStyled>
       )}

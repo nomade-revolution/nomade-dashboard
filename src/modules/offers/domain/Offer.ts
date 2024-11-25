@@ -1,5 +1,5 @@
 import { PaginationStucture } from "sections/shared/interfaces/interfaces";
-import { Calendar, CalendarWithWeeks } from "./OfferCalendar";
+import { Calendar } from "./OfferCalendar";
 import { ImageStructure } from "./OfferImage";
 import { Address } from "modules/address/domain/Address";
 
@@ -23,28 +23,29 @@ export interface Offer {
   favorite: boolean;
   reserves?: number;
   active: boolean;
+  calendar: Calendar[] | Calendar;
+  user_id: number;
 }
 
-export interface ActivityOffer extends Offer {
-  calendar: Calendar[];
-}
-export interface BrandOffer extends Offer {}
-export interface DeliveryOffer extends Offer {
-  calendar: CalendarWithWeeks;
-}
-export interface LodgingOffer extends Offer {
-  addresses: Address[];
-}
-export interface RestaurantOffer extends Offer {
-  calendar: Calendar[];
-}
+// export interface ActivityOffer extends Offer {
+//   calendar: Calendar[];
+// }
+// export interface BrandOffer extends Offer {}
+// export interface DeliveryOffer extends Offer {
+//   calendar: CalendarWithWeeks;
+// }
+// export interface LodgingOffer extends Offer {
+//   addresses: Address[];
+// }
+// export interface RestaurantOffer extends Offer {
+//   calendar: Calendar[];
+// }
 
 export interface FullOffer extends Offer {
   description: string;
   conditions: string;
   in_exchange: string;
   offer_category_id: number;
-  calendar: Calendar[];
   addresses: Address[];
   images: ImageStructure[];
   limitDate: string;

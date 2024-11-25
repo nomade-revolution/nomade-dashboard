@@ -9,6 +9,13 @@ const OffersButtonStyled = styled.button`
   padding: 10px;
   border-radius: 5px;
   font-weight: 700;
+  height: 40px;
+
+  &:hover {
+    color: ${(props) => props.theme.colors.darkBlue};
+    background: transparent;
+    border: 2px solid ${(props) => props.theme.colors.darkBlue};
+  }
 `;
 
 export default OffersButtonStyled;

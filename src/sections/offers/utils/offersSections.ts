@@ -12,7 +12,7 @@ export const offersHeaderSections: HeaderSection[] = [
     id: 2,
     name: "Cliente",
     property: "company",
-    sortTag: "",
+    sortTag: "company",
     pageName: "offers",
   },
   {
@@ -47,7 +47,7 @@ export const offersHeaderSections: HeaderSection[] = [
     id: 7,
     name: "Estado",
     property: "state",
-    sortTag: "",
+    sortTag: "state",
     pageName: "offers",
   },
   {

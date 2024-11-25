@@ -115,6 +115,13 @@ export default function ReusableStepper({
         pageName={SectionTypes.collabs}
         sectionId={collab?.id}
         type={collabStateActionType}
+        accept_state_id={
+          collab?.history &&
+          collab?.history[collab.history?.length - 1].id ===
+            collabStates.COLAB_PENDING_NOMADE_STATE
+            ? collabStates.COLAB_PENDING_COMPANY_STATE
+            : collabStates.COLAB_ACCEPTED_STATE
+        }
       />
     </ReusableStepperStyled>
   );

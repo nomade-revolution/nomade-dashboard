@@ -5,6 +5,7 @@ import FileInputWrapper from "./CustomFileInputStyled";
 interface Props {
   setFile: (value: File[]) => void;
   file: File[];
+  text?: string;
   image?: string;
   multiple?: boolean;
 }
@@ -14,6 +15,7 @@ const CustomFileInput = ({
   file,
   image,
   multiple = false,
+  text,
 }: Props): React.ReactElement => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [fileNames, setFileNames] = useState<string[]>([]);
@@ -76,7 +78,7 @@ const CustomFileInput = ({
         </div>
 
         <span className="file-text">
-          Sube al menos una foto para que destaque la oferta
+          {text ? text : "Sube al menos una foto para que destaque la oferta"}
         </span>
         <label className="file-input-label" onClick={handleClick}>
           {file?.length > 0 || image ? "Modificar" : "Subir"}

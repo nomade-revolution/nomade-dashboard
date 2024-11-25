@@ -22,6 +22,7 @@ import * as collabStates from "../../../collabs/utils/collabsStates";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { MdOutlineHistory } from "react-icons/md";
 import CustomDropdown from "../CustomDropdown/CustomDropdown";
+import theme from "assets/styles/theme";
 
 interface ActionsProps {
   pageName: string;
@@ -70,9 +71,12 @@ const Actions = ({
             </Link>
           </Tooltip>
 
-          {(section as FullCollab).history[
+          {((section as FullCollab).history[
             (section as FullCollab).history.length - 1
-          ].id === collabStates.COLAB_PENDING_NOMADE_STATE && (
+          ].id === collabStates.COLAB_PENDING_NOMADE_STATE ||
+            (section as FullCollab).history[
+              (section as FullCollab).history.length - 1
+            ].id === collabStates.COLAB_PENDING_COMPANY_STATE) && (
             <>
               <Tooltip title="Aceptar">
                 <button
@@ -176,19 +180,19 @@ const Actions = ({
       );
       break;
     case SectionTypes.customers:
-      buttons = (
-        <>
-          <Tooltip title="Ver detalles">
-            <Link
-              to={`/cliente/${(section as Company)?.id}`}
-              aria-label="Ver detalles"
-              className="link"
-            >
-              <FaEye className={"icon"} />
-            </Link>
-          </Tooltip>
-        </>
-      );
+      // buttons = (
+      //   <>
+      //     <Tooltip title="Ver detalles">
+      //       <Link
+      //         to={`/cliente/${(section as Company)?.id}`}
+      //         aria-label="Ver detalles"
+      //         className="link"
+      //       >
+      //         <FaEye className={"icon"} />
+      //       </Link>
+      //     </Tooltip>
+      //   </>
+      // );
       break;
     case SectionTypes.users:
       buttons = (
@@ -210,7 +214,9 @@ const Actions = ({
             aria-label="Verificar usuario"
             onClick={() => handleSendLeadLink((section as Lead).id)}
             style={{
-              background: "#8C9B6E",
+              background: (section as Lead).link_sent
+                ? theme.colors.darkBlue
+                : theme.colors.mainColor,
               display: "flex",
               alignItems: "center",
               gap: "8px",
@@ -221,7 +227,9 @@ const Actions = ({
             }}
           >
             <BsSendCheckFill />
-            <span>Enviar link</span>
+            <span>
+              {(section as Lead).link_sent ? "Volver a enviar" : "Enviar link"}
+            </span>
           </button>
         </Tooltip>
       );
