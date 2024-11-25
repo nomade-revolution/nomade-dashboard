@@ -39,7 +39,7 @@ const SocialMediaCard = ({
       <section className="social-card__data">
         <span>@{socialMedia.account_name}</span>
         <span className="social-card__text-icon">
-          <FaUserFriends size={30} /> {socialMedia.followers} followers
+          <FaUserFriends size={20} /> {socialMedia.followers} followers
         </span>
         <Link
           to={socialMedia.url}

@@ -1,6 +1,6 @@
 import { HttpResponseInterface } from "@core";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
-import { SocialMedia } from "./InfluencerSocialMedia";
+import { EditInfluencerStatsStructure } from "./InfluencerSocialMedia";
 
 export interface InfluencerRepository<I> {
   deleteInfluencer(influencer_id: number): Promise<HttpResponseInterface<I>>;
@@ -8,7 +8,7 @@ export interface InfluencerRepository<I> {
   getInfluencersBadge(): Promise<HttpResponseInterface<I>>;
   getInfluencers(params: FilterParams): Promise<HttpResponseInterface<I>>;
   editInfluencerStats(
-    data: SocialMedia,
+    data: EditInfluencerStatsStructure,
     influencer_id: number,
   ): Promise<HttpResponseInterface<I>>;
 }
