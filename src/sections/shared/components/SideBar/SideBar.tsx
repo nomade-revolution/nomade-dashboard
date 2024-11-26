@@ -1,6 +1,6 @@
 import { getSideBarUpperSections } from "./utils/sideBarSections";
 import { Link, useLocation } from "react-router-dom";
-import { IoIosSettings } from "react-icons/io";
+import { IoIosSettings, IoIosStats } from "react-icons/io";
 import { CiLogout } from "react-icons/ci";
 import SideBarStyled from "./SideBarStyled";
 import { appPaths } from "../../utils/appPaths/appPaths";
@@ -35,15 +35,25 @@ const SideBar = ({
   const { logoutUser } = useAuthContext();
   const sideBarUpperSections =
     user.type === "Company"
-      ? getSideBarUpperSections(
-          badgeUsers,
-          badgeInfluencers,
-          // badgeCompanies,
-          offer?.id,
-        ).filter(
-          (section) =>
-            section.pathname === "collabs" || section.pathname === "oferta",
-        )
+      ? [
+          ...getSideBarUpperSections(
+            badgeUsers,
+            badgeInfluencers,
+            // badgeCompanies,
+            offer?.id,
+          ).filter(
+            (section) =>
+              section.pathname === "collabs" || section.pathname === "oferta",
+          ),
+          {
+            id: 9,
+            icon: <IoIosStats />,
+            name: "Uso plan",
+            pathname: "plan",
+            quantity: 0,
+            path: `/plan`,
+          },
+        ]
       : getSideBarUpperSections(
           badgeUsers,
           badgeInfluencers,

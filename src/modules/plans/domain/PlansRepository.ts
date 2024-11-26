@@ -12,4 +12,5 @@ export interface PlansRepository<I> {
     company_id: number,
     data: PlanUpdateStructure,
   ): Promise<HttpResponseInterface<I>>;
+  getPlanByUserId(id: number): Promise<HttpResponseInterface<I>>;
 }
