@@ -27,20 +27,6 @@ export interface Offer {
   user_id: number;
 }
 
-// export interface ActivityOffer extends Offer {
-//   calendar: Calendar[];
-// }
-// export interface BrandOffer extends Offer {}
-// export interface DeliveryOffer extends Offer {
-//   calendar: CalendarWithWeeks;
-// }
-// export interface LodgingOffer extends Offer {
-//   addresses: Address[];
-// }
-// export interface RestaurantOffer extends Offer {
-//   calendar: Calendar[];
-// }
-
 export interface FullOffer extends Offer {
   description: string;
   conditions: string;
@@ -155,3 +141,17 @@ export const enum OfferTypes {
   delivery = "delivery",
   brand = "brand",
 }
+
+// export interface ActivityOffer extends Offer {
+//   calendar: Calendar[];
+// }
+// export interface BrandOffer extends Offer {}
+// export interface DeliveryOffer extends Offer {
+//   calendar: CalendarWithWeeks;
+// }
+// export interface LodgingOffer extends Offer {
+//   addresses: Address[];
+// }
+// export interface RestaurantOffer extends Offer {
+//   calendar: Calendar[];
+// }

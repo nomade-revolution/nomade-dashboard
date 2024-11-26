@@ -258,10 +258,12 @@ const CollabsPage = (): React.ReactElement => {
                   </button>
                 </div>
               ))}
-            <ExportFilesButton
-              action={() => exportCollabsExcel()}
-              text="Exportar collabs"
-            />
+            {user.type === "Nomade" && (
+              <ExportFilesButton
+                action={() => exportCollabsExcel()}
+                text="Exportar collabs"
+              />
+            )}
           </div>
 
           <div className="dashboard__table">

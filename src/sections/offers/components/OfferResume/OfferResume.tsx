@@ -25,6 +25,7 @@ interface Props {
     | OfferableActivity[]
     | OfferableDelivery[]
     | OfferableLodging[];
+
   company: Company;
   category: string;
   offer?: FullOffer;
@@ -36,11 +37,15 @@ const OfferResume = ({
   category,
   offer,
 }: Props): React.ReactElement => {
-  const resume = offer
-    ? offer.calendar
-    : offerResume && Array.isArray(offerResume)
-      ? offerResume
-      : offerResume && Array(offerResume);
+  const resume = Array.isArray(offerResume)
+    ? offerResume
+    : offerResume
+      ? [offerResume]
+      : Array.isArray(offer?.calendar)
+        ? offer.calendar
+        : offer?.calendar
+          ? [offer.calendar]
+          : [];
 
   return (
     <OfferResumeStyled className="offer-resume">

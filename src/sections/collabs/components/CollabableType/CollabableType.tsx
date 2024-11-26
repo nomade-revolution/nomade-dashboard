@@ -8,7 +8,7 @@ import {
   FormikValues,
 } from "formik";
 
-import { Calendar, TimeSlot } from "modules/offers/domain/OfferCalendar";
+import { Calendar, TimeSlotOffer } from "modules/offers/domain/OfferCalendar";
 import { Value } from "react-calendar/src/shared/types.js";
 import {
   ACTIVITY_OFFER_ID,
@@ -129,7 +129,7 @@ const CollabableType = ({
             {offer.calendar &&
               calendar?.week.map((week) => {
                 const groupedDays: Record<string, string[]> = week.reduce(
-                  (acc: Record<string, string[]>, day: TimeSlot) => {
+                  (acc: Record<string, string[]>, day: TimeSlotOffer) => {
                     if (!acc[day.day_name]) {
                       acc[day.day_name] = [];
                     }

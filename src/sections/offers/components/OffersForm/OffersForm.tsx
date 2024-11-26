@@ -42,6 +42,8 @@ import useOffers from "sections/offers/hooks/useOffers";
 import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
 import { useNavigate } from "react-router-dom";
 import Loader from "sections/shared/components/Loader/Loader";
+import { Calendar } from "modules/offers/domain/OfferCalendar";
+import formatOfferResume from "sections/offers/utils/formatOfferResume";
 
 interface Props {
   offer?: FullOffer;
@@ -55,6 +57,7 @@ const OffersForm = ({ offer }: Props): React.ReactElement => {
   const { handleOfferFormData } = useOffers();
 
   const navigate = useNavigate();
+  const offerResumeFormat = formatOfferResume(offer!);
 
   const [companySearch, setCompanySearch] = useState<string>(
     offer?.company ?? "",
@@ -72,7 +75,7 @@ const OffersForm = ({ offer }: Props): React.ReactElement => {
     | OfferableActivity[]
     | OfferableDelivery
     | object
-  >([]);
+  >(offer ? offerResumeFormat : []);
 
   const [formState, setFormState] = useState<{
     country: string;
@@ -85,9 +88,13 @@ const OffersForm = ({ offer }: Props): React.ReactElement => {
     country: "",
     city: "",
     location: "",
-    category: String(offer?.offer_category_id) ?? "",
+    category: offer ? String(offer?.offer_category_id) : "",
     offerable_type: "",
-    address: String(offer?.calendar[0].address_id) ?? "",
+    address: offer?.calendar
+      ? String((offer?.calendar as Calendar[])[0]?.address_id)
+      : offer?.addresses
+        ? String(offer?.addresses[0]?.address_id)
+        : "",
   });
 
   const [schedulingState, setSchedulingState] = useState<{
