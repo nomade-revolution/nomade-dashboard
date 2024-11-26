@@ -34,7 +34,7 @@ const DropdownMenu = ({
       ? getSideBarUpperSections(
           badgeCountUsers,
           badgeCountInfluencers,
-          badgeCountCompanies,
+          // badgeCountCompanies,
           offer?.id,
         ).filter(
           (section) =>
