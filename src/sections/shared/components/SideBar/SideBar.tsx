@@ -38,7 +38,7 @@ const SideBar = ({
       ? getSideBarUpperSections(
           badgeUsers,
           badgeInfluencers,
-          badgeCompanies,
+          // badgeCompanies,
           offer?.id,
         ).filter(
           (section) =>

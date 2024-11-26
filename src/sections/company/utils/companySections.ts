@@ -6,7 +6,7 @@ import {
 export const companyTableHeaderSections: HeaderSection[] = [
   {
     id: 1,
-    name: "Imágen",
+    name: "Logo",
     property: "image",
     sortTag: "",
     pageName: SectionTypes.customers,

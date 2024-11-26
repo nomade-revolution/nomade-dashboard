@@ -9,7 +9,7 @@ import { AiFillFileAdd } from "react-icons/ai";
 export const getSideBarUpperSections = (
   usersQuantity: number,
   influencersQuantity: number,
-  companiesQuantity: number,
+  // companiesQuantity: number,
   offer_id?: number,
 ) => {
   const sideBarUpperSections = [
@@ -36,7 +36,7 @@ export const getSideBarUpperSections = (
       icon: <FaUserTie />,
       name: "Clientes",
       pathname: "clientes",
-      quantity: companiesQuantity,
+      quantity: 0,
       path: `/clientes/page/1`,
       subSection: "cliente",
     },
