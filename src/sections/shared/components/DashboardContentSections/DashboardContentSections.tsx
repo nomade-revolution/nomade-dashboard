@@ -27,13 +27,14 @@ import { Lead } from "modules/leads/domain/Leads";
 import { Plan } from "modules/plans/domain/Plan";
 import LinearBuffer from "../LinearBuffer/LinearBuffer";
 import { COLAB_PUBLISHED_STATE } from "sections/collabs/utils/collabsStates";
-import getDateIntoHourFormat from "sections/shared/utils/getDateIntoHourFormat/getDateIntoHourFormat";
 import { SocialMediaTypes } from "@influencer/domain/InfluencerSocialMedia";
 import theme from "assets/styles/theme";
 import { formatDateWithSlash } from "sections/shared/utils/formatDate/formatDate";
-import { ImProfile } from "react-icons/im";
-import { RiMailSendFill } from "react-icons/ri";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
+import {
+  formatSentAt,
+  getDateIntoHourFormat,
+} from "sections/shared/utils/getDateIntoHourFormat/getDateIntoHourFormat";
 
 interface Props {
   headerSection: HeaderSection;
@@ -87,7 +88,6 @@ const DashboardContentSections = ({
                 to={`/influencer/${(section as Influencer).id}`}
                 className="dashboard__link-icon"
               >
-                <ImProfile className="dashboard__icon" />
                 <span className="dashboard__name">{`${
                   (section as Influencer).name
                 } ${
@@ -110,7 +110,6 @@ const DashboardContentSections = ({
             to={`mailto:${(section as Influencer).email}`}
             className="dashboard__link-icon"
           >
-            <RiMailSendFill className="dashboard__icon" />
             <span className="dashboard__email">
               {(section as Influencer).email}
             </span>
@@ -187,7 +186,6 @@ const DashboardContentSections = ({
                 }`}
                 className="dashboard__link-icon"
               >
-                <ImProfile className="dashboard__icon" />
                 <span className="dashboard__name">
                   {(section as Company | FullCollab | Offer).company}
                 </span>
@@ -210,7 +208,6 @@ const DashboardContentSections = ({
                 to={`/cliente/${(section as Company).id}`}
                 className="dashboard__link-icon"
               >
-                <ImProfile className="dashboard__icon" />
                 <span className="dashboard__name">
                   {(section as Company).company_name}
                 </span>
@@ -410,7 +407,6 @@ const DashboardContentSections = ({
             }`}
             className="dashboard__link-icon"
           >
-            <ImProfile className="dashboard__icon" />
             <span className="dashboard__name">
               {(section as FullCollab).influencer_name}
             </span>
@@ -468,11 +464,9 @@ const DashboardContentSections = ({
       return (
         <span className="dashboard__date">
           {getDateIntoHourFormat(
-            new Date(
-              (section as FullCollab).history[
-                (section as FullCollab).history.length - 1
-              ].created_at,
-            ),
+            (section as FullCollab).history[
+              (section as FullCollab).history.length - 1
+            ].created_at,
           )}
           {}
         </span>
@@ -564,7 +558,7 @@ const DashboardContentSections = ({
           {headerSection.property === "created_at"
             ? (section as Lead).created_at.split(" ")[0]
             : (section as Lead).sent_at
-              ? getDateIntoHourFormat(new Date((section as Lead).sent_at))
+              ? formatSentAt((section as Lead).sent_at)
               : "No enviado"}
         </span>
       );
