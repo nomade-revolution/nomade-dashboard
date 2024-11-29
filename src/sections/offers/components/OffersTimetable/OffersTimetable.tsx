@@ -79,27 +79,43 @@ const OffersTimetable = ({
   };
 
   useEffect(() => {
-    const updatedWeek = selectedDays?.reduce((acc: WeekDay[], day, index) => {
+    const updatedWeek = selectedDays?.reduce((acc: WeekDay[], day) => {
       const timeSlot = [
         {
           from_time:
             `${getFieldProps(`from_time_day_${day.day_number}_1`).value}${
-              day?.day_number !== acc[index]?.day_of_week && ":00"
+              String(
+                getFieldProps(`from_time_day_${day.day_number}_1`).value,
+              ).split(":").length < 3
+                ? ":00"
+                : ""
             }` || "",
           to_time:
-            String(
-              getFieldProps(`to_time_day_${day.day_number}_1`).value + ":00",
-            ) || "",
+            `${getFieldProps(`to_time_day_${day.day_number}_1`).value}${
+              String(
+                getFieldProps(`to_time_day_${day.day_number}_1`).value,
+              ).split(":").length < 3
+                ? ":00"
+                : ""
+            }` || "",
         },
         {
           from_time:
-            String(
-              getFieldProps(`from_time_day_${day.day_number}_2`).value + ":00",
-            ) || "",
+            `${getFieldProps(`from_time_day_${day.day_number}_2`).value}${
+              String(
+                getFieldProps(`from_time_day_${day.day_number}_2`).value,
+              ).split(":").length < 3
+                ? ":00"
+                : ""
+            }` || "",
           to_time:
-            String(
-              getFieldProps(`to_time_day_${day.day_number}_2`).value + ":00",
-            ) || "",
+            `${getFieldProps(`to_time_day_${day.day_number}_2`).value}${
+              String(
+                getFieldProps(`to_time_day_${day.day_number}_2`).value,
+              ).split(":").length < 3
+                ? ":00"
+                : ""
+            }` || "",
         },
       ];
 

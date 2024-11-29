@@ -148,12 +148,6 @@ const OffersScheduling = ({
   }, [schedulingStateSelected, setFieldValue]);
 
   const handleOfferTimetables = () => {
-    week.forEach((day) => {
-      setFieldValue(`from_time_day_${day.day_of_week}_1`, ""),
-        setFieldValue(`to_time_day_${day.day_of_week}_1`, ""),
-        setFieldValue(`from_time_day_${day.day_of_week}_2`, ""),
-        setFieldValue(`to_time_day_${day.day_of_week}_2`, "");
-    });
     const updatedSchedulingState = { ...schedulingState };
 
     switch (category) {
@@ -168,11 +162,7 @@ const OffersScheduling = ({
           week: week || [],
         };
 
-        if (
-          (selectedIndex as number) >= 0 &&
-          schedulingState.restaurant.length > 0 &&
-          selectedIndex !== null
-        ) {
+        if (selectedIndex !== null && schedulingState.restaurant.length > 0) {
           updatedSchedulingState[key] = schedulingState.restaurant.map(
             (item, idx) =>
               idx === selectedIndex ? newOfferableRestaurant : item,
@@ -203,10 +193,20 @@ const OffersScheduling = ({
           max_guests: +getFieldProps("max_guests").value || 0,
         };
 
-        handleScheduling("lodging", [
-          ...schedulingState.lodging,
-          newOfferableLodging,
-        ]);
+        if (selectedIndex !== null && schedulingState.lodging.length > 0) {
+          updatedSchedulingState.lodging = schedulingState.lodging.map(
+            (item, idx) => (idx === selectedIndex ? newOfferableLodging : item),
+          );
+
+          handleScheduling("lodging", updatedSchedulingState.lodging);
+        } else {
+          updatedSchedulingState.lodging = [
+            ...schedulingState.lodging,
+            newOfferableLodging,
+          ];
+
+          handleScheduling("lodging", updatedSchedulingState.lodging);
+        }
         break;
       }
 
@@ -218,10 +218,21 @@ const OffersScheduling = ({
           week: week,
         };
 
-        handleScheduling("activity", [
-          ...schedulingState.activity,
-          newOfferableActivity,
-        ]);
+        if (selectedIndex !== null && schedulingState.activity.length > 0) {
+          updatedSchedulingState.activity = schedulingState.activity.map(
+            (item, idx) =>
+              idx === selectedIndex ? newOfferableActivity : item,
+          );
+
+          handleScheduling("activity", updatedSchedulingState.activity);
+        } else {
+          updatedSchedulingState.activity = [
+            ...schedulingState.activity,
+            newOfferableActivity,
+          ];
+
+          handleScheduling("activity", updatedSchedulingState.activity);
+        }
         break;
       }
 
@@ -231,16 +242,25 @@ const OffersScheduling = ({
           week: week,
         };
 
-        handleScheduling("delivery", newOfferableDelivery);
+        if (selectedIndex !== null) {
+          updatedSchedulingState.delivery = newOfferableDelivery;
+        } else {
+          updatedSchedulingState.delivery = newOfferableDelivery;
+        }
+
+        handleScheduling("delivery", updatedSchedulingState.delivery);
         break;
       }
+
+      default:
+        break;
     }
 
     week.forEach((day) => {
-      setFieldValue(`from_time_day_${day.day_of_week}_1`, ""),
-        setFieldValue(`to_time_day_${day.day_of_week}_1`, ""),
-        setFieldValue(`from_time_day_${day.day_of_week}_2`, ""),
-        setFieldValue(`to_time_day_${day.day_of_week}_2`, "");
+      setFieldValue(`from_time_day_${day.day_of_week}_1`, "");
+      setFieldValue(`to_time_day_${day.day_of_week}_1`, "");
+      setFieldValue(`from_time_day_${day.day_of_week}_2`, "");
+      setFieldValue(`to_time_day_${day.day_of_week}_2`, "");
     });
     setWeek([]);
     setSelectedDays([]);

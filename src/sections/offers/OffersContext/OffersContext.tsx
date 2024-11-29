@@ -104,7 +104,7 @@ export const OffersContextProvider = ({
     const response = await editOffer(repository, offer, offer_id!);
 
     if (isHttpSuccessResponse(response)) {
-      setOffer(response.data.data);
+      // setOffer(response.data.data);
       setIsSuccess(true);
     } else {
       setError(response.error as never);
