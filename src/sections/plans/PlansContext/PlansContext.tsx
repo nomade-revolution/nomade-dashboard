@@ -5,6 +5,7 @@ import { PlansRepository } from "modules/plans/domain/PlansRepository";
 import {
   getCompaniesPlans,
   updateCompanyPlan,
+  getPlanByUserId,
 } from "modules/plans/application/plans";
 import {
   FilterParams,
@@ -29,6 +30,8 @@ interface ContextState {
   ) => void;
   orderPlans: OrderItem;
   setOrderPlans: (order: OrderItem) => void;
+  getPlan: (id: number) => void;
+  plan: Plan;
 }
 
 export const PlansContext = createContext<ContextState>({} as ContextState);
@@ -44,6 +47,7 @@ export const PlansContextProvider = ({
   const [pagination, setPagination] = useState<PaginationStucture>(
     {} as PaginationStucture,
   );
+  const [plan, setPlan] = useState<Plan>({} as Plan);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [orderPlans, setOrderPlans] = useState<OrderItem>({} as OrderItem);
@@ -87,6 +91,24 @@ export const PlansContextProvider = ({
 
     return response;
   };
+  const getPlan = useCallback(async (company_id: number) => {
+    setLoading(true);
+
+    const response = await getPlanByUserId(repository, company_id);
+
+    if (isHttpSuccessResponse(response)) {
+      setPlan(response.data as unknown as Plan);
+      setIsSuccess(response.success);
+      setLoading(false);
+    } else {
+      setLoading(false);
+      setError(response.error as never);
+    }
+
+    setLoading(false);
+
+    return response;
+  }, []);
 
   setTimeout(() => setIsSuccess(false), 2000);
 
@@ -102,6 +124,8 @@ export const PlansContextProvider = ({
         updateCompanyPlanPeriod,
         orderPlans,
         setOrderPlans,
+        plan,
+        getPlan,
       }}
     >
       {children}

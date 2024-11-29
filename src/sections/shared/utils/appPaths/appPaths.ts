@@ -22,4 +22,5 @@ export const appPaths = {
   plans: "/planes/page/:page",
   logout: "/logout",
   createUser: "/create-user",
+  plan: "/plan",
 };

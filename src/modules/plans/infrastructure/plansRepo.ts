@@ -1,7 +1,11 @@
 import { Http } from "@core/application";
 import { HttpResponseInterface } from "@core/domain";
 import { Plan, PlansApiResponse, PlanUpdateStructure } from "../domain/Plan";
-import { COMPANIES_PLAN_UPDATE, COMPANIES_PLANS } from "../application/routes";
+import {
+  COMPANIES_PLAN_UPDATE,
+  COMPANIES_PLANS,
+  GETPLAN,
+} from "../application/routes";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
 
 export class PlansRepository {
@@ -33,6 +37,17 @@ export class PlansRepository {
         `${COMPANIES_PLAN_UPDATE(company_id)}`,
         data,
       );
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  public async getPlanByUserId(
+    id: number,
+  ): Promise<HttpResponseInterface<PlansApiResponse>> {
+    try {
+      const resp = await this.http.get<Plan>(GETPLAN(id));
       return resp;
     } catch (error) {
       return Promise.reject(error);
