@@ -564,7 +564,12 @@ const OffersForm = ({ offer, onSubmit }: Props): React.ReactElement => {
 
           <button
             type="submit"
-            disabled={isSubmitting || !offerResume}
+            disabled={
+              isSubmitting ||
+              (!offerResume && offer?.offer_category_id !== LODGING_OFFER_ID)
+              // (!formState.address &&
+              //   offer?.offer_category_id !== DELIVERY_OFFER_ID)
+            }
             className={
               isSuccess
                 ? "datasheet-form__success"
@@ -575,7 +580,9 @@ const OffersForm = ({ offer, onSubmit }: Props): React.ReactElement => {
           >
             {isSubmitting ? (
               <Loader width="20px" height="20px" />
-            ) : isSuccess ? (
+            ) : isSuccess && offer ? (
+              "Oferta editada"
+            ) : isSuccess && !offer ? (
               "Oferta creada"
             ) : error ? (
               "Revisa los datos e intentalo de nuevo"
