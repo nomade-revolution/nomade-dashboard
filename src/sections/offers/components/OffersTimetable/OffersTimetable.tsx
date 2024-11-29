@@ -7,7 +7,12 @@ import {
   Field,
   ErrorMessage,
 } from "formik";
-import { SelectedDay, TimeSlot, WeekDay } from "modules/offers/domain/Offer";
+import {
+  FullOffer,
+  SelectedDay,
+  TimeSlot,
+  WeekDay,
+} from "modules/offers/domain/Offer";
 import { useEffect } from "react";
 
 import {
@@ -28,6 +33,12 @@ interface Props {
   setWeek: (value: WeekDay[]) => void;
   selectedDays: SelectedDay[];
   setSelectedDays: React.Dispatch<React.SetStateAction<SelectedDay[]>>;
+  setFieldValue: (
+    field: string,
+    value: unknown,
+    shouldValidate?: boolean,
+  ) => Promise<void | FormikErrors<unknown>>;
+  offer: FullOffer;
 }
 
 const OffersTimetable = ({
@@ -38,6 +49,8 @@ const OffersTimetable = ({
   setWeek,
   selectedDays,
   setSelectedDays,
+  setFieldValue,
+  offer,
 }: Props): React.ReactElement => {
   const handleCheckboxChange = (selectedDay: (typeof offersTimetable)[0]) => {
     setSelectedDays((prevDays: SelectedDay[]) => {
@@ -51,7 +64,6 @@ const OffersTimetable = ({
         );
       } else {
         return [
-          ...prevDays,
           {
             day_number: selectedDay.day_number,
             day_name: selectedDay.name,
@@ -66,32 +78,49 @@ const OffersTimetable = ({
   };
 
   useEffect(() => {
-    const updatedWeek = selectedDays.reduce((acc: WeekDay[], day) => {
+    const updatedWeek = selectedDays?.reduce((acc: WeekDay[], day) => {
       const timeSlot = [
         {
           from_time:
-            String(
-              getFieldProps(`from_time_day_${day.day_number}_1`).value + ":00",
-            ) || "",
+            `${getFieldProps(`from_time_day_${day.day_number}_1`).value}${
+              String(
+                getFieldProps(`from_time_day_${day.day_number}_1`).value,
+              ).split(":").length < 3
+                ? ":00"
+                : ""
+            }` || "",
           to_time:
-            String(
-              getFieldProps(`to_time_day_${day.day_number}_1`).value + ":00",
-            ) || "",
+            `${getFieldProps(`to_time_day_${day.day_number}_1`).value}${
+              String(
+                getFieldProps(`to_time_day_${day.day_number}_1`).value,
+              ).split(":").length < 3
+                ? ":00"
+                : ""
+            }` || "",
         },
         {
           from_time:
-            String(
-              getFieldProps(`from_time_day_${day.day_number}_2`).value + ":00",
-            ) || "",
+            `${getFieldProps(`from_time_day_${day.day_number}_2`).value}${
+              String(
+                getFieldProps(`from_time_day_${day.day_number}_2`).value,
+              ).split(":").length < 3
+                ? ":00"
+                : ""
+            }` || "",
           to_time:
-            String(
-              getFieldProps(`to_time_day_${day.day_number}_2`).value + ":00",
-            ) || "",
+            `${getFieldProps(`to_time_day_${day.day_number}_2`).value}${
+              String(
+                getFieldProps(`to_time_day_${day.day_number}_2`).value,
+              ).split(":").length < 3
+                ? ":00"
+                : ""
+            }` || "",
         },
       ];
 
       if (!acc.some((entry: WeekDay) => entry.day_of_week === day.day_number)) {
         acc.push({
+          day_name: day.day_name,
           day_of_week: day.day_number,
           time_slot: timeSlot,
         });
@@ -103,6 +132,43 @@ const OffersTimetable = ({
     setWeek(updatedWeek);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getFieldProps, selectedDays, setWeek]);
+
+  useEffect(() => {
+    if (
+      offer?.offer_category_id === RESTAURANT_OFFER_ID ||
+      offer?.offer_category_id === ACTIVITY_OFFER_ID
+    ) {
+      selectedDays.forEach((day) => {
+        if (day.shifts?.firstShift.from_time !== undefined) {
+          setFieldValue(
+            `from_time_day_${day.day_number}_1`,
+            day.shifts.firstShift.from_time || 0,
+          );
+        }
+
+        if (day.shifts?.firstShift.to_time !== undefined) {
+          setFieldValue(
+            `to_time_day_${day.day_number}_1`,
+            day.shifts.firstShift.to_time || 0,
+          );
+        }
+
+        if (day.shifts?.secondShift.from_time !== undefined) {
+          setFieldValue(
+            `from_time_day_${day.day_number}_2`,
+            day.shifts.secondShift.from_time || 0,
+          );
+        }
+
+        if (day.shifts?.secondShift.to_time !== undefined) {
+          setFieldValue(
+            `to_time_day_${day.day_number}_2`,
+            day.shifts.secondShift.to_time || 0,
+          );
+        }
+      });
+    }
+  }, [offer?.offer_category_id, selectedDays, setFieldValue]);
 
   return (
     <section>
@@ -116,7 +182,7 @@ const OffersTimetable = ({
                 <section className="scheduling__timetable-check">
                   <CustomCheckbox
                     onChange={() => handleCheckboxChange(time)}
-                    checked={selectedDays.some(
+                    checked={selectedDays?.some(
                       (d) => d.day_number === time.day_number,
                     )}
                   />
@@ -140,6 +206,7 @@ const OffersTimetable = ({
                           id={`from_time_day_${index + 1}_1`}
                           className="form-subsection__field--small-time"
                           aria-label="Entrada primer turno"
+                          step="1800"
                           {...getFieldProps(
                             `from_time_day_${time.day_number}_1`,
                           )}
@@ -220,7 +287,7 @@ const OffersTimetable = ({
                           id={`to_time_day_${time.day_number}_2`}
                           className="form-subsection__field--small-time"
                           aria-label="Salida segundo turno"
-                          {...getFieldProps(`to_time_day_${index + 1}_2`)}
+                          {...getFieldProps(`to_time_day_${time.day_number}_2`)}
                         />
                         {errors.to_time && touched.to_time && (
                           <ErrorMessage

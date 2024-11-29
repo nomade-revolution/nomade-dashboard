@@ -16,6 +16,21 @@ const OfferResumeStyled = styled.section`
       border-radius: 10px;
     }
 
+    &__top-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    &__delete-btn {
+      color: red;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 700;
+    }
+
     &__text-icon {
       display: flex;
       align-items: center;
@@ -53,6 +68,18 @@ const OfferResumeStyled = styled.section`
   h4 {
     padding: 0;
     margin: 0;
+  }
+
+  .selected {
+    background-color: #f0f8ff;
+    border: 2px solid #007bff;
+    border-radius: 10px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .offer-resume__content.highlighted {
+    background-color: #e8f5e9;
   }
 `;
 

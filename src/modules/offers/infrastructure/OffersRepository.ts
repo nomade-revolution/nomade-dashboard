@@ -65,4 +65,22 @@ export class OffersRepository {
       return Promise.reject(error);
     }
   }
+
+  public async editOffer(
+    offer: FormData,
+    offer_id: number,
+  ): Promise<
+    HttpResponseInterface<{ data: FullOffer; success: boolean; error: string }>
+  > {
+    try {
+      const resp = await this.http.put<{
+        data: FullOffer;
+        success: boolean;
+        error: string;
+      }>(`${OFFERS_BASE}/${offer_id}`, offer);
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 }

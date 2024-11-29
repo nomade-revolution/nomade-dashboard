@@ -14,7 +14,7 @@ import {
 } from "react-icons/fa6";
 import { FullOffer, Offer } from "../../../../modules/offers/domain/Offer";
 import { Switch, Tooltip } from "@mui/material";
-import { TimeSlot } from "modules/offers/domain/OfferCalendar";
+import { TimeSlotOffer } from "modules/offers/domain/OfferCalendar";
 import { Company, User } from "modules/user/domain/User";
 import { CollabActionTypes, FullCollab } from "modules/collabs/domain/Collabs";
 import {
@@ -312,7 +312,7 @@ const DashboardContentSections = ({
               <li key={time.address_id}>
                 {time.week?.map(
                   (day) =>
-                    day?.map((slot: TimeSlot) => {
+                    day?.map((slot: TimeSlotOffer) => {
                       const dayInitial = slot.day_name.charAt(0);
                       if (!daysSet.has(dayInitial)) {
                         daysSet.add(dayInitial);

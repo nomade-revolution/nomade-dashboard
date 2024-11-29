@@ -17,7 +17,7 @@ import OffersForm from "sections/offers/components/OffersForm/OffersForm";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
 
 const OffersPage = (): React.ReactElement => {
-  const { getAllOffers, offers, pagination, loading, order } =
+  const { getAllOffers, offers, pagination, loading, order, createNewOffer } =
     useOffersContext();
   const { page } = useParams();
   const [searchText, setSearchText] = useState<string>("");
@@ -113,7 +113,7 @@ const OffersPage = (): React.ReactElement => {
             />
           </div>
           <ReusableModal
-            children={<OffersForm />}
+            children={<OffersForm onSubmit={createNewOffer} />}
             openModal={isModalOpen}
             setIsModalOpen={setIsModalOpen}
             type="offer"

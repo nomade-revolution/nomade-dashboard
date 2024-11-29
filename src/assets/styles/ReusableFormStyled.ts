@@ -238,7 +238,7 @@ const ReusableFormStyled = styled.form<Props>`
       font-family: inherit;
       padding: 10px;
 
-      @media (min-width: 1000px) {
+      @media (min-width: 1600px) {
         width: 400px;
       }
     }
@@ -253,7 +253,7 @@ const ReusableFormStyled = styled.form<Props>`
       font-family: inherit;
       width: 100%;
 
-      @media (min-width: 1000px) {
+      @media (min-width: 1600px) {
         width: 400px;
       }
     }
@@ -435,7 +435,7 @@ const ReusableFormStyled = styled.form<Props>`
     width: 100%;
     justify-content: space-between;
 
-    @media (min-width: 1000px) {
+    @media (min-width: 1600px) {
       flex-direction: row;
     }
 

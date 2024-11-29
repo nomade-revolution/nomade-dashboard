@@ -65,7 +65,7 @@ export const offerSchema = yup.object().shape({
   in_exchange: yup.string().required("In exchange is required"),
 });
 
-export const initialValues: OfferFormStructure = {
+export const initialData: OfferFormStructure = {
   company_id: 0,
   description: "",
   offer_category_id: 0,
