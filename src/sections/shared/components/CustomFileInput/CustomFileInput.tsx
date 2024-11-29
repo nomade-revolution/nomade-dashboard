@@ -6,14 +6,14 @@ interface Props {
   setFile: (value: File[]) => void;
   file: File[];
   text?: string;
-  image?: string;
+  images?: string[];
   multiple?: boolean;
 }
 
 const CustomFileInput = ({
   setFile,
   file,
-  image,
+  images,
   multiple = false,
   text,
 }: Props): React.ReactElement => {
@@ -58,14 +58,16 @@ const CustomFileInput = ({
                 image={url}
               />
             ))
-          ) : image ? (
-            <ImageCustom
-              alt="Image preview"
-              className="create-fourth__image-preview"
-              height={80}
-              width={180}
-              image={image}
-            />
+          ) : images ? (
+            images.map((image) => (
+              <ImageCustom
+                alt="Image preview"
+                className="create-fourth__image-preview"
+                height={80}
+                width={120}
+                image={image}
+              />
+            ))
           ) : (
             <ImageCustom
               alt="Placeholder"
@@ -81,7 +83,9 @@ const CustomFileInput = ({
           {text ? text : "Sube al menos una foto para que destaque la oferta"}
         </span>
         <label className="file-input-label" onClick={handleClick}>
-          {file?.length > 0 || image ? "Modificar" : "Subir"}
+          {file?.length > 0 || (images && images!.length > 0)
+            ? "Modificar"
+            : "Subir"}
         </label>
         <input
           type="file"

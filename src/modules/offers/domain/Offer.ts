@@ -36,6 +36,8 @@ export interface FullOffer extends Offer {
   images: ImageStructure[];
   limitDate: string;
   offerable_type: string;
+  location_type: string;
+  location_id: number;
 }
 
 export interface OffersApiResponse {
@@ -66,11 +68,13 @@ export interface TimeSlot {
 }
 
 export interface WeekDay {
+  day_name: string;
   day_of_week: number;
   time_slot: TimeSlot[];
 }
 
 export interface OfferableRestaurant {
+  type?: string;
   address_id: number;
   min_guests: number;
   max_guests: number;
@@ -78,12 +82,14 @@ export interface OfferableRestaurant {
 }
 
 export interface OfferableLodging {
+  type?: string;
   address_id: number;
   min_guests: number;
   max_guests: number;
 }
 
 export interface OfferableActivity {
+  type?: string;
   address_id: number;
   min_guests: number;
   max_guests: number;
@@ -91,11 +97,13 @@ export interface OfferableActivity {
 }
 
 export interface OfferableDelivery {
+  type?: string;
   advance_notice_time: number;
   week: WeekDay[];
 }
 
 export interface OfferableBrand {
+  type?: string;
   advance_notice_time: number;
 }
 
@@ -137,7 +145,7 @@ export interface SelectedDay {
 export const enum OfferTypes {
   restaurant = "restaurant",
   activity = "activity",
-  lodging = "lodginh",
+  lodging = "lodging",
   delivery = "delivery",
   brand = "brand",
 }

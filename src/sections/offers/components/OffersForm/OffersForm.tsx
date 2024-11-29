@@ -15,6 +15,8 @@ import {
   OfferableLodging,
   OfferableRestaurant,
   OfferFormStructure,
+  SelectedDay,
+  WeekDay,
 } from "modules/offers/domain/Offer";
 import { initialData, offerSchema } from "./utils/validations";
 import ReusableSelect from "sections/shared/components/ReusableSelect/ReusableSelect";
@@ -40,23 +42,25 @@ import { Company } from "modules/user/domain/User";
 import OfferResume from "../OfferResume/OfferResume";
 import useOffers from "sections/offers/hooks/useOffers";
 import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import Loader from "sections/shared/components/Loader/Loader";
 import { Calendar } from "modules/offers/domain/OfferCalendar";
 import formatOfferResume from "sections/offers/utils/formatOfferResume";
+import formatOfferScheduling from "sections/offers/utils/formatOfferScheduling";
 
 interface Props {
   offer?: FullOffer;
+  onSubmit: (offer: FormData, id?: number) => void;
 }
 
-const OffersForm = ({ offer }: Props): React.ReactElement => {
+const OffersForm = ({ offer, onSubmit }: Props): React.ReactElement => {
   const { getAllCountries, countries } = useCountryContext();
   const { cities, getAllCities } = useCitiesContext();
   const { companies, getCompaniesWithParams } = useCompanyContext();
-  const { createNewOffer, isSuccess, error } = useOffersContext();
+  const { isSuccess, error } = useOffersContext();
   const { handleOfferFormData } = useOffers();
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const offerResumeFormat = formatOfferResume(offer!);
 
   const [companySearch, setCompanySearch] = useState<string>(
@@ -66,9 +70,10 @@ const OffersForm = ({ offer }: Props): React.ReactElement => {
   const [countriesFormat, setCountriesFormat] = useState<OptionsStructure[]>(
     [],
   );
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(0);
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
   const [citiesFormat, setCitiesFormat] = useState<OptionsStructure[]>([]);
-  const [file, setFile] = useState<File[] | null>(null);
+  const [file, setFile] = useState<File[] | []>([]);
   const [offerResume, setOfferResume] = useState<
     | OfferableRestaurant[]
     | OfferableLodging[]
@@ -85,9 +90,12 @@ const OffersForm = ({ offer }: Props): React.ReactElement => {
     offerable_type: string;
     address: string;
   }>({
-    country: "",
+    country:
+      offer && offer.location_type === "App\\Models\\Country"
+        ? String(offer.location_id)
+        : "",
     city: "",
-    location: "",
+    location: offer ? offer.location_type : "",
     category: offer ? String(offer?.offer_category_id) : "",
     offerable_type: "",
     address: offer?.calendar
@@ -104,15 +112,47 @@ const OffersForm = ({ offer }: Props): React.ReactElement => {
     brand: object;
     lodging: OfferableLodging[];
   }>({
-    restaurant: [],
-    delivery: {} as OfferableDelivery,
-    activity: [],
+    restaurant:
+      offer?.offer_category_id === RESTAURANT_OFFER_ID
+        ? ((
+            offerResumeFormat as OfferableRestaurant[][]
+          )[0] as OfferableRestaurant[])
+        : [],
+    delivery:
+      offer?.offer_category_id === DELIVERY_OFFER_ID
+        ? (offerResumeFormat! as OfferableDelivery[])[0]
+        : ({} as OfferableDelivery),
+    activity:
+      offer?.offer_category_id === ACTIVITY_OFFER_ID
+        ? ((
+            offerResumeFormat as OfferableActivity[][]
+          )[0] as OfferableActivity[])
+        : [],
     brand: {},
-    lodging: [],
+    lodging:
+      offer?.offer_category_id === LODGING_OFFER_ID
+        ? ((offerResumeFormat as OfferableLodging[][])[0] as OfferableLodging[])
+        : [],
   });
+
+  const [week, setWeek] = useState<WeekDay[]>([]);
+  const [selectedDays, setSelectedDays] = useState<SelectedDay[]>(
+    offer ? (formatOfferScheduling(schedulingState)[0] as SelectedDay[]) : [],
+  );
 
   const handleFormStateChange = (field: string, value: string) => {
     setFormState((prevState) => ({ ...prevState, [field]: value }));
+  };
+
+  const handleOfferResumeChange = (
+    updatedResume:
+      | OfferableRestaurant[]
+      | OfferableLodging[]
+      | OfferableActivity[]
+      | OfferableDelivery
+      | object,
+  ) => {
+    setOfferResume(updatedResume);
   };
 
   const handleSchedulingStateChange = (
@@ -135,6 +175,7 @@ const OffersForm = ({ offer }: Props): React.ReactElement => {
       formState.location === "App\\Models\\Country"
         ? +formState.country
         : +formState.city;
+
     const formData = handleOfferFormData(
       values,
       offerResume as never,
@@ -147,7 +188,7 @@ const OffersForm = ({ offer }: Props): React.ReactElement => {
       +formState.category,
     );
 
-    await createNewOffer(formData);
+    await onSubmit(formData, offer && offer?.id);
 
     setSubmitting(false);
   };
@@ -155,6 +196,16 @@ const OffersForm = ({ offer }: Props): React.ReactElement => {
   const handleCompanySelect = (companyName: string) => {
     setCompanySearch(companyName);
     setShowSuggestions(false);
+  };
+
+  const handleSchedulingStateDelete = () => {
+    setSchedulingState({
+      activity: [],
+      brand: {},
+      delivery: {} as OfferableDelivery,
+      lodging: [],
+      restaurant: [],
+    });
   };
 
   useEffect(() => {
@@ -235,11 +286,11 @@ const OffersForm = ({ offer }: Props): React.ReactElement => {
     }
   }, [formState.category, schedulingState]);
 
-  useEffect(() => {
-    if (isSuccess) {
-      setTimeout(() => navigate(0), 2000);
-    }
-  }, [isSuccess, navigate]);
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     setTimeout(() => navigate(0), 2000);
+  //   }
+  // }, [isSuccess, navigate]);
 
   const initialValues = {
     ...initialData,
@@ -376,6 +427,14 @@ const OffersForm = ({ offer }: Props): React.ReactElement => {
                   offerResume={offerResume as never}
                   category={formState.category}
                   offer={offer}
+                  onOfferResumeChange={handleOfferResumeChange}
+                  setSelectedDays={setSelectedDays}
+                  setWeek={setWeek}
+                  onSchedulingStateDelete={handleSchedulingStateDelete}
+                  schedulingState={schedulingState}
+                  setSchedulingState={setSchedulingState}
+                  selectedIndex={selectedIndex}
+                  setSelectedIndex={setSelectedIndex}
                 />
               </section>
               <section className="datasheet-form__section">
@@ -457,7 +516,12 @@ const OffersForm = ({ offer }: Props): React.ReactElement => {
                       </section>
                     </section>
                   </div>
-                  <CustomFileInput setFile={setFile} file={file!} multiple />
+                  <CustomFileInput
+                    setFile={setFile}
+                    file={file!}
+                    images={offer?.images.map((image) => image.url)}
+                    multiple
+                  />
                   <OffersScheduling
                     category={+formState.category}
                     errors={
@@ -486,6 +550,12 @@ const OffersForm = ({ offer }: Props): React.ReactElement => {
                     }
                     handleScheduling={handleSchedulingStateChange}
                     schedulingState={schedulingState}
+                    selectedDays={selectedDays}
+                    setSelectedDays={setSelectedDays}
+                    setWeek={setWeek}
+                    week={week}
+                    offer={offer!}
+                    selectedIndex={selectedIndex}
                   />
                 </section>
               </section>
@@ -509,6 +579,8 @@ const OffersForm = ({ offer }: Props): React.ReactElement => {
               "Oferta creada"
             ) : error ? (
               "Revisa los datos e intentalo de nuevo"
+            ) : offer ? (
+              "Editar oferta"
             ) : (
               "Crear oferta"
             )}

@@ -20,6 +20,7 @@ import ReusableSelect from "sections/shared/components/ReusableSelect/ReusableSe
 import OfferSchedulingStyled from "./OffersSchedulingStyled";
 import OffersTimetable from "../OffersTimetable/OffersTimetable";
 import {
+  FullOffer,
   OfferableActivity,
   OfferableBrand,
   OfferableDelivery,
@@ -29,7 +30,7 @@ import {
   TimeSlot,
   WeekDay,
 } from "modules/offers/domain/Offer";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 
 interface Props {
   category: number;
@@ -68,6 +69,12 @@ interface Props {
     brand: object;
     lodging: OfferableLodging[];
   };
+  selectedDays: SelectedDay[];
+  week: WeekDay[];
+  setSelectedDays: Dispatch<SetStateAction<SelectedDay[]>>;
+  setWeek: (value: WeekDay[]) => void;
+  offer: FullOffer;
+  selectedIndex: number | null;
 }
 
 const OffersScheduling = ({
@@ -80,26 +87,112 @@ const OffersScheduling = ({
   setAddress,
   handleScheduling,
   schedulingState,
+  selectedDays,
+  week,
+  setSelectedDays,
+  setWeek,
+  offer,
+  selectedIndex,
 }: Props): React.ReactElement => {
-  const [week, setWeek] = useState<WeekDay[]>([]);
-  const [selectedDays, setSelectedDays] = useState<SelectedDay[]>([]);
+  const { setFieldValue, values } = useFormikContext();
 
-  const { setFieldValue } = useFormikContext();
+  const schedulingStateSelected =
+    category === RESTAURANT_OFFER_ID
+      ? schedulingState.restaurant
+      : category === LODGING_OFFER_ID
+        ? schedulingState.lodging
+        : category === DELIVERY_OFFER_ID
+          ? schedulingState.delivery
+          : category === ACTIVITY_OFFER_ID
+            ? schedulingState.activity
+            : schedulingState.brand;
+
+  useEffect(() => {
+    if (
+      (
+        schedulingStateSelected as
+          | OfferableRestaurant[]
+          | OfferableActivity[]
+          | OfferableLodging[]
+      )[0]?.min_guests !== undefined
+    ) {
+      setFieldValue(
+        "min_guests",
+        (
+          schedulingStateSelected as
+            | OfferableRestaurant[]
+            | OfferableActivity[]
+            | OfferableLodging[]
+        )[0].min_guests || 0,
+      );
+    }
+
+    if (
+      (
+        schedulingStateSelected as
+          | OfferableRestaurant[]
+          | OfferableActivity[]
+          | OfferableLodging[]
+      )[0]?.max_guests !== undefined
+    ) {
+      setFieldValue(
+        "max_guests",
+        (
+          schedulingStateSelected as
+            | OfferableRestaurant[]
+            | OfferableActivity[]
+            | OfferableLodging[]
+        )[0].max_guests || 0,
+      );
+    }
+  }, [schedulingStateSelected, setFieldValue]);
 
   const handleOfferTimetables = () => {
+    week.forEach((day) => {
+      setFieldValue(`from_time_day_${day.day_of_week}_1`, ""),
+        setFieldValue(`to_time_day_${day.day_of_week}_1`, ""),
+        setFieldValue(`from_time_day_${day.day_of_week}_2`, ""),
+        setFieldValue(`to_time_day_${day.day_of_week}_2`, "");
+    });
+    const updatedSchedulingState = { ...schedulingState };
+
     switch (category) {
       case RESTAURANT_OFFER_ID: {
+        const key =
+          offer?.type.toLocaleLowerCase() as keyof typeof schedulingState;
+
         const newOfferableRestaurant: OfferableRestaurant = {
           address_id: +address,
-          min_guests: +getFieldProps("min_guests").value || 0,
+          min_guests: +getFieldProps("min_guests").value,
           max_guests: +getFieldProps("max_guests").value || 0,
-          week: week,
+          week: week || [],
         };
 
-        handleScheduling("restaurant", [
-          ...schedulingState.restaurant,
-          newOfferableRestaurant,
-        ]);
+        if (
+          (selectedIndex as number) >= 0 &&
+          schedulingState.restaurant.length > 0 &&
+          selectedIndex !== null
+        ) {
+          updatedSchedulingState[key] = schedulingState.restaurant.map(
+            (item, idx) =>
+              idx === selectedIndex ? newOfferableRestaurant : item,
+          ) as never;
+
+          handleScheduling(
+            "restaurant",
+            updatedSchedulingState[key] as OfferableRestaurant[],
+          );
+        } else {
+          updatedSchedulingState[key] = [
+            ...schedulingState.restaurant,
+            newOfferableRestaurant,
+          ] as never;
+
+          handleScheduling(
+            "restaurant",
+            updatedSchedulingState[key] as OfferableRestaurant[],
+          );
+        }
         break;
       }
 
@@ -174,6 +267,21 @@ const OffersScheduling = ({
                 className="form-subsection__field--small"
                 aria-label="Mínimo de personas"
                 {...getFieldProps("min_guests")}
+                value={
+                  (
+                    values as
+                      | OfferableRestaurant
+                      | OfferableActivity
+                      | OfferableLodging
+                  ).min_guests ??
+                  (
+                    schedulingStateSelected as
+                      | OfferableRestaurant[]
+                      | OfferableActivity[]
+                      | OfferableLodging[]
+                  )[0]?.min_guests ??
+                  0
+                }
               />
               {(
                 errors as
@@ -204,6 +312,21 @@ const OffersScheduling = ({
                 className="form-subsection__field--small"
                 aria-label="Máximo de personas"
                 {...getFieldProps("max_guests")}
+                value={
+                  (
+                    values as
+                      | OfferableRestaurant
+                      | OfferableActivity
+                      | OfferableLodging
+                  ).max_guests ??
+                  (
+                    schedulingStateSelected as
+                      | OfferableRestaurant[]
+                      | OfferableActivity[]
+                      | OfferableLodging[]
+                  )[0]?.max_guests ??
+                  0
+                }
               />
               {(
                 errors as
@@ -272,6 +395,8 @@ const OffersScheduling = ({
         setWeek={setWeek}
         selectedDays={selectedDays}
         setSelectedDays={setSelectedDays}
+        setFieldValue={setFieldValue}
+        offer={offer}
       />
       <div className="scheduling__btn-container">
         {category && category !== BRAND_OFFER_ID ? (

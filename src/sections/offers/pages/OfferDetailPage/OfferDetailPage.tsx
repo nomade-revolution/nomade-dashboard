@@ -16,7 +16,7 @@ const OfferDetailsPage = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const { id } = useParams();
-  const { offer, loading, getOffer } = useOffersContext();
+  const { offer, loading, getOffer, modifyOffer } = useOffersContext();
 
   const handleIsModalOpen = () => {
     setIsModalOpen(true);
@@ -36,6 +36,7 @@ const OfferDetailsPage = () => {
           <button
             onClick={handleIsModalOpen}
             className="offer-detail__edit-btn"
+            type="button"
           >
             <MdOutlineLibraryAdd />
             Crear oferta
@@ -118,7 +119,7 @@ const OfferDetailsPage = () => {
             </div>
           </section>
           <ReusableModal
-            children={<OffersForm offer={offer} />}
+            children={<OffersForm offer={offer} onSubmit={modifyOffer} />}
             openModal={isModalOpen}
             setIsModalOpen={setIsModalOpen}
             type="offer"
