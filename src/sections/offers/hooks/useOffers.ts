@@ -6,6 +6,12 @@ import {
   OfferableRestaurant,
   OfferFormStructure,
 } from "modules/offers/domain/Offer";
+import {
+  RESTAURANT_OFFER_ID,
+  DELIVERY_OFFER_ID,
+  ACTIVITY_OFFER_ID,
+  LODGING_OFFER_ID,
+} from "../utils/offersCategories";
 
 const useOffers = () => {
   const handleOfferFormData = (
@@ -55,7 +61,32 @@ const useOffers = () => {
 
     return formData;
   };
-  return { handleOfferFormData };
+
+  const getSchedulingStateField = (
+    schedulingState: {
+      restaurant: OfferableRestaurant[];
+      delivery: OfferableDelivery;
+      activity: OfferableActivity[];
+      brand: object;
+      lodging: OfferableLodging[];
+    },
+    category: string,
+  ) => {
+    switch (+category) {
+      case RESTAURANT_OFFER_ID:
+        return schedulingState.restaurant;
+      case DELIVERY_OFFER_ID:
+        return schedulingState.delivery;
+      case ACTIVITY_OFFER_ID:
+        return schedulingState.activity;
+      case LODGING_OFFER_ID:
+        return schedulingState.lodging;
+      default:
+        return schedulingState.brand;
+    }
+  };
+
+  return { handleOfferFormData, getSchedulingStateField };
 };
 
 export default useOffers;

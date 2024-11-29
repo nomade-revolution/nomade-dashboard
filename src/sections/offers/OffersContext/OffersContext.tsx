@@ -3,6 +3,7 @@ import { isHttpSuccessResponse } from "../../shared/utils/typeGuards/typeGuardsF
 import {
   createOffer,
   deleteOffer,
+  editOffer,
   getOfferById,
   offersGetAll,
 } from "modules/offers/application/offers";
@@ -25,6 +26,7 @@ interface ContextState {
   deleteOfferById: (offer_id: number) => void;
   getOffer: (offer_id: number) => void;
   createNewOffer: (offer: FormData) => void;
+  modifyOffer: (offer: FormData, offer_id?: number) => void;
   order: OrderItem;
   setOrder: (order: OrderItem) => void;
 }
@@ -98,6 +100,24 @@ export const OffersContextProvider = ({
     return response;
   };
 
+  const modifyOffer = async (offer: FormData, offer_id?: number) => {
+    const response = await editOffer(repository, offer, offer_id!);
+
+    if (isHttpSuccessResponse(response)) {
+      // setOffer(response.data.data);
+      setIsSuccess(true);
+    } else {
+      setError(response.error as never);
+    }
+
+    setTimeout(() => {
+      setIsSuccess(false);
+      setError("");
+    }, 3000);
+
+    return response;
+  };
+
   return (
     <OffersContext.Provider
       value={{
@@ -111,6 +131,7 @@ export const OffersContextProvider = ({
         deleteOfferById,
         getOffer,
         createNewOffer,
+        modifyOffer,
         order,
         setOrder,
       }}

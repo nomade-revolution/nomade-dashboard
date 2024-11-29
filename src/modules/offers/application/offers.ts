@@ -38,3 +38,17 @@ export const createOffer = (
 > => {
   return offersRepo.createOffer(offer);
 };
+
+export const editOffer = (
+  offersRepo: OffersRepository<{
+    data: FullOffer;
+    success: boolean;
+    error: string;
+  }>,
+  offer: FormData,
+  offer_id: number,
+): Promise<
+  HttpResponseInterface<{ data: FullOffer; success: boolean; error: string }>
+> => {
+  return offersRepo.editOffer(offer, offer_id);
+};
