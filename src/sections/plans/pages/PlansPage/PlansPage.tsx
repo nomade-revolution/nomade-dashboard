@@ -98,10 +98,6 @@ const PlansPage = (): React.ReactElement => {
                     onReset={() => getPlansData()}
                   />
                   <div className="plans-page__filter-btnSection">
-                    <ExportFilesButton
-                      action={() => exportCompanyBillingExcel()}
-                      text="Exportar Planes"
-                    />
                     <button
                       onClick={() => setIsCalendarShown(!isCalendarShown)}
                       className="plans-page__filter-btn"
@@ -162,6 +158,10 @@ const PlansPage = (): React.ReactElement => {
                     onReset={() => getPlansData()}
                   />
                   <div className="plans-page__filter-btnSection">
+                    <ExportFilesButton
+                      action={() => exportCompanyBillingExcel()}
+                      text="Exportar Planes"
+                    />
                     <button
                       onClick={() => setIsCalendarShown(!isCalendarShown)}
                       className="plans-page__filter-btn"

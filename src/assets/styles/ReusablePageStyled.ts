@@ -5,17 +5,17 @@ const ReusablePageStyled = styled.main`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 40px 20px;
+  padding: 20px;
   color: ${(props) => props.theme.fontsColors.dashBoard};
   width: 100%;
 
   @media (min-width: 1000px) and (max-width: 1600px) {
-    padding: 40px 40px;
+    padding: 20px 40px;
     max-width: fit-content;
   }
 
   @media (min-width: 1600px) {
-    padding: 40px 50px;
+    padding: 10px 50px;
     height: 100%;
     max-width: fit-content;
   }
@@ -439,6 +439,7 @@ const ReusablePageStyled = styled.main`
       align-items: flex-start;
       justify-content: center;
       gap: 2px;
+      text-decoration: underline;
     }
 
     &__icon {

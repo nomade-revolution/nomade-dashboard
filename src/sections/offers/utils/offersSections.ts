@@ -1,13 +1,13 @@
 import { HeaderSection } from "../../shared/interfaces/interfaces";
 
 export const offersHeaderSections: HeaderSection[] = [
-  {
-    id: 1,
-    name: "Imagen",
-    property: "images",
-    sortTag: "",
-    pageName: "offers",
-  },
+  // {
+  //   id: 1,
+  //   name: "Imagen",
+  //   property: "images",
+  //   sortTag: "",
+  //   pageName: "offers",
+  // },
   {
     id: 2,
     name: "Cliente",
@@ -15,20 +15,20 @@ export const offersHeaderSections: HeaderSection[] = [
     sortTag: "company",
     pageName: "offers",
   },
-  {
-    id: 3,
-    name: "Condiciones",
-    property: "conditions",
-    sortTag: "",
-    pageName: "offers",
-  },
-  {
-    id: 4,
-    name: "Horario",
-    property: "calendar",
-    sortTag: "",
-    pageName: "offers",
-  },
+  // {
+  //   id: 3,
+  //   name: "Condiciones",
+  //   property: "conditions",
+  //   sortTag: "",
+  //   pageName: "offers",
+  // },
+  // {
+  //   id: 4,
+  //   name: "Horario",
+  //   property: "calendar",
+  //   sortTag: "",
+  //   pageName: "offers",
+  // },
   {
     id: 5,
     name: "Categoría",

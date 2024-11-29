@@ -141,7 +141,7 @@ const CollabsPage = (): React.ReactElement => {
       setCompanySelect(null);
     }
 
-    getAllCollabs(+page!, 12, totalFilters);
+    getAllCollabs(+page!, 20, totalFilters);
   };
 
   useEffect(() => {

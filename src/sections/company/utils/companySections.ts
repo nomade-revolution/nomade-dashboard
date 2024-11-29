@@ -4,13 +4,13 @@ import {
 } from "../../shared/interfaces/interfaces";
 
 export const companyTableHeaderSections: HeaderSection[] = [
-  {
-    id: 1,
-    name: "Logo",
-    property: "image",
-    sortTag: "",
-    pageName: SectionTypes.customers,
-  },
+  // {
+  //   id: 1,
+  //   name: "Logo",
+  //   property: "image",
+  //   sortTag: "",
+  //   pageName: SectionTypes.customers,
+  // },
   {
     id: 2,
     name: "Cliente",
@@ -18,20 +18,20 @@ export const companyTableHeaderSections: HeaderSection[] = [
     sortTag: "company_name",
     pageName: SectionTypes.customers,
   },
-  {
-    id: 3,
-    name: "Web",
-    property: "web",
-    sortTag: "",
-    pageName: SectionTypes.customers,
-  },
-  {
-    id: 4,
-    name: "Teléfono",
-    property: "phone",
-    sortTag: "",
-    pageName: SectionTypes.customers,
-  },
+  // {
+  //   id: 3,
+  //   name: "Web",
+  //   property: "web",
+  //   sortTag: "",
+  //   pageName: SectionTypes.customers,
+  // },
+  // {
+  //   id: 4,
+  //   name: "Teléfono",
+  //   property: "phone",
+  //   sortTag: "",
+  //   pageName: SectionTypes.customers,
+  // },
   {
     id: 5,
     name: "Porcentaje",
@@ -39,13 +39,13 @@ export const companyTableHeaderSections: HeaderSection[] = [
     sortTag: "",
     pageName: SectionTypes.customers,
   },
-  {
-    id: 6,
-    name: "NIF",
-    property: "nif",
-    sortTag: "nif",
-    pageName: SectionTypes.customers,
-  },
+  // {
+  //   id: 6,
+  //   name: "NIF",
+  //   property: "nif",
+  //   sortTag: "nif",
+  //   pageName: SectionTypes.customers,
+  // },
   {
     id: 7,
     name: "Plan",
@@ -67,13 +67,13 @@ export const companyTableHeaderSections: HeaderSection[] = [
     sortTag: "company_status",
     pageName: SectionTypes.customers,
   },
-  // {
-  //   id: 10,
-  //   name: "Comentarios",
-  //   property: "company_comments",
-  //   sortTag: "",
-  //   pageName: SectionTypes.customers,
-  // },
+  {
+    id: 10,
+    name: "Comentarios",
+    property: "company_comments",
+    sortTag: "",
+    pageName: SectionTypes.customers,
+  },
   // {
   //   id: 10,
   //   name: "Acciones",
