@@ -11,7 +11,7 @@ const DashboardStyled = styled.table`
       font-size: ${(props) => props.theme.fontsSize.__SMM};
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       gap: 10px;
       width: 100%;
     }

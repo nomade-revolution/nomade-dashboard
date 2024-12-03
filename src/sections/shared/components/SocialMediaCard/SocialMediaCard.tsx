@@ -24,6 +24,18 @@ const SocialMediaCard = ({
   setIsModalOpen,
 }: Props): React.ReactElement => {
   const { user } = useAuthContext();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const sortByFollowers = (array: any[]) => {
+    const a = array.sort(
+      (a, b) => b.followers_percentage - a.followers_percentage,
+    );
+    return a;
+  };
+  const sortedCities = sortByFollowers(socialMedia.cities);
+  const sortedCountries = sortByFollowers(socialMedia.countries);
+  const ageRanges = sortByFollowers(socialMedia.ageRanges);
+  const genders = sortByFollowers(socialMedia.genders);
   return (
     <SocialMediaCardStyled className="social-card">
       {user.type === "Nomade" && (
@@ -79,19 +91,19 @@ const SocialMediaCard = ({
             Estadísticas por ciudad{" "}
           </h4>
           <StadisticsDisplay
-            barCategories={socialMedia.cities.map(
+            barCategories={sortedCities.map(
               (city) => (city as CitySocialRequest).name,
             )}
-            data={socialMedia.cities.map((city) => city.followers_percentage)}
+            data={sortedCities.map((city) => city.followers_percentage)}
           />
         </section>
         <section className="statsSection">
           <h4 className="social-card__section-title">Estadísticas por país </h4>
           <StadisticsDisplay
-            barCategories={socialMedia.countries.map(
+            barCategories={sortedCountries.map(
               (country) => (country as CountrySocialRequest).name,
             )}
-            data={socialMedia.countries.map(
+            data={sortedCountries.map(
               (country) => country.followers_percentage,
             )}
           />
@@ -103,10 +115,10 @@ const SocialMediaCard = ({
             Estadísticas por edades{" "}
           </h4>
           <StadisticsDisplay
-            barCategories={socialMedia.ageRanges.map(
+            barCategories={ageRanges.map(
               (age) => (age as SocialMediaStatistic).name,
             )}
-            data={socialMedia.ageRanges.map((age) => age.followers_percentage)}
+            data={ageRanges.map((age) => age.followers_percentage)}
           />
         </section>
         <section className="statsSection">
@@ -114,12 +126,10 @@ const SocialMediaCard = ({
             Estadísticas por genero{" "}
           </h4>
           <StadisticsDisplay
-            barCategories={socialMedia.genders.map(
+            barCategories={genders.map(
               (gender) => (gender as SocialMediaStatistic).name,
             )}
-            data={socialMedia.genders.map(
-              (gender) => gender.followers_percentage,
-            )}
+            data={genders.map((gender) => gender.followers_percentage)}
           />
         </section>
       </div>

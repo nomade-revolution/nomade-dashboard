@@ -48,14 +48,14 @@ export const monthPlansTableSections: HeaderSection[] = [
   },
 
   {
-    id: 7,
+    id: 8,
     name: "Progreso",
     property: "percentage",
     sortTag: "",
     pageName: SectionTypes.plans,
   },
   {
-    id: 8,
+    id: 9,
     name: "Status",
     property: "status",
     sortTag: "company_status",

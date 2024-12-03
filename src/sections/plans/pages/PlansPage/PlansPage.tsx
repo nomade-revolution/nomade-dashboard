@@ -25,8 +25,6 @@ import formatCalendarDate from "sections/shared/utils/formatCalendarDate/formatC
 const PlansPage = (): React.ReactElement => {
   const tabs = ["Mensual", "Trimestral"];
   const [textToSearch, setTextToSearch] = useState<string>("");
-  const [textToSearchTrimestral, setTextToSearchTrimestral] =
-    useState<string>("");
 
   const [billing_id, setBillingId] = useState<number>(1);
   const [isCalendarShown, setIsCalendarShown] = useState<boolean>(false);
@@ -55,8 +53,6 @@ const PlansPage = (): React.ReactElement => {
   };
   const getPlansData = useCallback(
     (text?: string) => {
-      setTextToSearch("");
-      setTextToSearchTrimestral("");
       const filters: FilterParams = {
         filters: { billing_id },
       };
@@ -77,7 +73,6 @@ const PlansPage = (): React.ReactElement => {
   }, [page, getPlansData]);
 
   const maxMonth = formatCalendarDate(new Date().toString());
-
   return (
     <ReusablePageStyled className="plans-page">
       <ReusableTabSelector
@@ -150,11 +145,9 @@ const PlansPage = (): React.ReactElement => {
                   <SearchBar
                     pageName={SectionTypes.customers}
                     pageTypes={SectionTypes.customers}
-                    searchText={textToSearchTrimestral!}
-                    setSearchText={setTextToSearchTrimestral}
-                    onSearchSubmit={() =>
-                      handleSearchByText(textToSearchTrimestral)
-                    }
+                    searchText={textToSearch}
+                    setSearchText={setTextToSearch}
+                    onSearchSubmit={() => handleSearchByText(textToSearch)}
                     onReset={() => getPlansData()}
                   />
                   <div className="plans-page__filter-btnSection">

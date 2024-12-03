@@ -11,7 +11,6 @@ const StadisticsDisplay = ({
   data,
 }: Props): React.ReactElement => {
   const matches = useMediaQuery("(max-width: 1000px)");
-
   return (
     <BarChart
       xAxis={[

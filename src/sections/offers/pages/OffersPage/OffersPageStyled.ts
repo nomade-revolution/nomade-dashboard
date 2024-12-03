@@ -118,9 +118,10 @@ const OffersPageStyled = styled.main`
 
     &__link-icon {
       display: flex;
-      align-items: flex-start;
-      justify-content: center;
+      align-items: center;
+      justify-content: flex-start;
       gap: 5px;
+      width: 100%;
     }
 
     &__icon {

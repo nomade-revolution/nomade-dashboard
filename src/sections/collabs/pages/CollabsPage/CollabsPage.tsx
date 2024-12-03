@@ -91,7 +91,7 @@ const CollabsPage = (): React.ReactElement => {
 
       setTotalFilters(filters);
 
-      getAllCollabs(+page!, 12, filters);
+      getAllCollabs(+page!, 25, filters);
     },
     [
       getAllCollabs,
@@ -257,12 +257,6 @@ const CollabsPage = (): React.ReactElement => {
                   </button>
                 </div>
               ))}
-            {user.type === "Nomade" && (
-              <ExportFilesButton
-                action={() => exportCollabsExcel()}
-                text="Exportar collabs"
-              />
-            )}
           </div>
 
           <div className="dashboard__table">
@@ -297,6 +291,21 @@ const CollabsPage = (): React.ReactElement => {
             openModal={isModalOpen}
             setIsModalOpen={setIsModalOpen}
           />
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+            }}
+          >
+            {user.type !== "Nomade" && (
+              <ExportFilesButton
+                action={() => exportCollabsExcel()}
+                text="Exportar collabs"
+              />
+            )}
+          </div>
         </ReusablePageStyled>
       )}
     </>

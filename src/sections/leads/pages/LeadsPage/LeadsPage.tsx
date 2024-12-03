@@ -36,7 +36,6 @@ const LeadsPage = (): React.ReactElement => {
   useEffect(() => {
     getLeadsData();
   }, [getLeadsPaginated, page]);
-
   return (
     <>
       {loading ? (

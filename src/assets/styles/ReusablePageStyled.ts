@@ -95,6 +95,8 @@ const ReusablePageStyled = styled.main`
     &__name {
       font-size: ${(props) => props.theme.fontsSize.__SM};
       font-weight: 700;
+      width: 100%;
+      text-align: left;
     }
 
     &__select {
@@ -382,7 +384,7 @@ const ReusablePageStyled = styled.main`
     &__social-media {
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       gap: 5px;
     }
 
@@ -434,8 +436,10 @@ const ReusablePageStyled = styled.main`
 
     &__link-icon {
       display: flex;
-      align-items: flex-start;
-      justify-content: center;
+      align-items: center;
+      justify-content: flex-start;
+      width: 100%;
+      text-align: left;
       gap: 2px;
       text-decoration: underline;
     }
@@ -448,6 +452,8 @@ const ReusablePageStyled = styled.main`
 
     &__email {
       font-size: ${(props) => props.theme.fontsSize.__SM};
+      width: 100%;
+      text-align: left;
     }
   }
 

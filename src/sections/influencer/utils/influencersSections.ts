@@ -90,7 +90,7 @@ export const influencerCollabsHeaderSections: HeaderSection[] = [
     pageName: "influencer",
   },
   {
-    id: 5,
+    id: 6,
     name: "Estado",
     property: "history",
     sortTag: "",

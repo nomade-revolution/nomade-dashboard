@@ -57,64 +57,60 @@ const DashboardTable = <Type,>({
   setCollabStateActionType,
 }: DashboardTableProps<Type>): React.ReactElement => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
   return (
     <>
-      {bodySections.length > 0 ? (
-        <TableContainer
-          component={Paper}
-          sx={{
-            boxShadow: "0px 0px 20px 0.2em rgba(0, 0, 0, 0.1)",
-            width: "fit-content",
-          }}
+      <TableContainer
+        component={Paper}
+        sx={{
+          boxShadow: "0px 0px 20px 0.2em rgba(0, 0, 0, 0.1)",
+          width: "fit-content",
+        }}
+      >
+        <DashboardStyled
+          className="table"
+          aria-label="dashboard table"
+          style={{ borderCollapse: "collapse" }}
         >
-          <DashboardStyled
-            className="table"
-            aria-label="dashboard table"
-            style={{ borderCollapse: "collapse" }}
-          >
-            <TableHead>
-              <TableRow
-                className="table__header"
-                sx={{ textTransform: "uppercase" }}
-              >
-                {headerSections.map((section) => (
-                  <DashBoardHeaderCell section={section} key={section.id} />
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody sx={{ borderCollapse: "collapse" }}>
-              {bodySections?.map((section: Type, index) => (
-                <StyledTableRow key={index}>
-                  {headerSections?.map((headerSection) => (
-                    <StyledTableCell align="center" key={headerSection.id}>
-                      <DashboardTableCellContent
-                        headerSection={headerSection}
-                        section={
-                          section as
-                            | Offer
-                            | User
-                            | Influencer
-                            | Company
-                            | Collab
-                            | Plan
-                        }
-                        pageName={pageName}
-                        type={type}
-                        setCollabStateActionType={setCollabStateActionType}
-                        anchorEl={anchorEl}
-                        setAnchorEl={setAnchorEl}
-                      />
-                    </StyledTableCell>
-                  ))}
-                </StyledTableRow>
+          <TableHead>
+            <TableRow
+              className="table__header"
+              sx={{ textTransform: "uppercase" }}
+            >
+              {headerSections.map((section) => (
+                <DashBoardHeaderCell section={section} key={section.id} />
               ))}
-            </TableBody>
-          </DashboardStyled>
-        </TableContainer>
-      ) : (
-        <NoDataHandler pageName="" search={""} />
-      )}
+            </TableRow>
+          </TableHead>
+          <TableBody sx={{ borderCollapse: "collapse" }}>
+            {bodySections?.map((section: Type, index) => (
+              <StyledTableRow key={index}>
+                {headerSections?.map((headerSection) => (
+                  <StyledTableCell align="left" key={headerSection.id}>
+                    <DashboardTableCellContent
+                      headerSection={headerSection}
+                      section={
+                        section as
+                          | Offer
+                          | User
+                          | Influencer
+                          | Company
+                          | Collab
+                          | Plan
+                      }
+                      pageName={pageName}
+                      type={type}
+                      setCollabStateActionType={setCollabStateActionType}
+                      anchorEl={anchorEl}
+                      setAnchorEl={setAnchorEl}
+                    />
+                  </StyledTableCell>
+                ))}
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </DashboardStyled>
+      </TableContainer>
+      {bodySections.length === 0 && <NoDataHandler pageName="" search={""} />}
     </>
   );
 };
