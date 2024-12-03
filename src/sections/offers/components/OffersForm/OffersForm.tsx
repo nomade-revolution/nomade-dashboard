@@ -602,11 +602,7 @@ const OffersForm = ({
               <button
                 onClick={() => onCancel && onCancel(false)}
                 type="button"
-                disabled={
-                  isSubmitting ||
-                  (!offerResume &&
-                    offer?.offer_category_id !== LODGING_OFFER_ID)
-                }
+                disabled={isSubmitting}
                 className={"datasheet-form__error"}
               >
                 Cancelar cambios
