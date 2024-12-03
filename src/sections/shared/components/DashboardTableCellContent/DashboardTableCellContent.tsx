@@ -39,7 +39,6 @@ const DashboardTableCellContent = ({
   setAnchorEl,
 }: ReusableTableBodyCellProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-
   return (
     <>
       {
