@@ -154,11 +154,12 @@ const ReusablePageStyled = styled.main`
 
     &__category {
       color: ${(props) => props.theme.colors.purple};
-      padding: 3px 8px;
       border-radius: ${(props) => props.theme.borderRadius.inputs};
       font-size: small;
       font-weight: 700;
-      text-align: center;
+      text-align: left;
+      display: flex;
+      justify-content: flex-start;
     }
 
     &__type-section {
