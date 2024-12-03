@@ -10,6 +10,17 @@ const SocialMediaCardStyled = styled.article`
   padding: 20px;
   position: relative;
 
+  .stats-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .statsSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
   .social-card {
     &__edit-btn {
       position: absolute;
@@ -40,7 +51,11 @@ const SocialMediaCardStyled = styled.article`
     &__data {
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: flex-start;
+      width: 100%;
+      padding-left: 40px;
+      padding-top: 30px;
+      padding-bottom: 40px;
       gap: 10px;
       font-size: ${(props) => props.theme.fontsSize.__SM};
     }

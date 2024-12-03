@@ -1,5 +1,6 @@
 import { HttpResponseInterface } from "@core";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
+import { FullCollab } from "./Collabs";
 
 export interface CollabsRepository<I> {
   getAllCollabs(
@@ -17,4 +18,5 @@ export interface CollabsRepository<I> {
   getCollab(collab_id: number): Promise<HttpResponseInterface<I>>;
   createCollab(collab: FormData): Promise<HttpResponseInterface<I>>;
   exportCollabs(token: string): Promise<Blob>;
+  editCollabById(id: number, collab: Partial<FullCollab>): Promise<boolean>;
 }

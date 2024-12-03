@@ -10,6 +10,7 @@ import {
   getRejectedCollabReasons,
   updateCollabHistoryState,
   exportCollabs,
+  editCollabById,
 } from "modules/collabs/application/collabs";
 import { FullCollab, RejectedCollab } from "modules/collabs/domain/Collabs";
 import {
@@ -41,6 +42,7 @@ interface ContextState {
   getCollabById: (collab_id: number) => void;
   addNewCollab: (collab: FormData) => void;
   exportCollabsExcel: () => void;
+  editCollab: (id: number, collab: Partial<FullCollab>) => Promise<boolean>;
 }
 
 export const CollabsContext = createContext<ContextState>({} as ContextState);
@@ -164,6 +166,21 @@ export const CollabsContextProvider = ({
     return response;
   };
 
+  const editCollab = useCallback(
+    async (id: number, colab: Partial<FullCollab>): Promise<boolean> => {
+      setLoading(true);
+      setError(null);
+      const response = await editCollabById(repository, id, colab);
+      if (response) {
+        setLoading(false);
+        return true;
+      }
+      return false;
+      setLoading(false);
+    },
+    [repository],
+  );
+
   setTimeout(() => setIsSuccess(false), 3000);
 
   return (
@@ -186,6 +203,7 @@ export const CollabsContextProvider = ({
         getCollabById,
         addNewCollab,
         exportCollabsExcel,
+        editCollab,
       }}
     >
       {children}

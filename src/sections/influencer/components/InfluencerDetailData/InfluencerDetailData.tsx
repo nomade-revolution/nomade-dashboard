@@ -3,6 +3,7 @@ import InfluencerCategories from "../InfluencerCategories/InfluencerCategories";
 import InfluencerSocialMedia from "../InfluencerSocialMedia/InfluencerSocialMedia";
 import { Influencer } from "@influencer";
 import { SocialMedia } from "@influencer/domain/InfluencerSocialMedia";
+import { Link } from "react-router-dom";
 
 interface Props {
   influencer: Influencer;
@@ -23,7 +24,19 @@ const InfluencerDetailData = ({
             <span className="influencer-data__name">{influencer?.name}</span>
             <span>{influencer?.surnames}</span>
           </div>
-          <span>@ {influencer.user_name}</span>
+          {/* <span> */}
+          {influencer.socialMedia?.length > 0 && (
+            <Link
+              to={influencer.socialMedia[0]?.url}
+              className="social-card__text-link"
+              target="_blank"
+              style={{ textDecoration: "underline" }}
+            >
+              @{influencer.socialMedia[0]?.account_name}
+            </Link>
+          )}
+          {/* @{influencer.user_name} */}
+          {/* </span> */}
           <span>{influencer.phone}</span>
           {influencer.email && <span>{influencer.email}</span>}
           {influencer.from_country && (

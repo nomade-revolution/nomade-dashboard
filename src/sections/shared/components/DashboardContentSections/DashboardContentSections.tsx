@@ -173,7 +173,7 @@ const DashboardContentSections = ({
     case "company":
       return (
         <>
-          {user.type !== "Company" ? (
+          {user.type !== "Company" && pageName !== SectionTypes.collabs ? (
             <Tooltip title="Ver cliente">
               <Link
                 to={`/cliente/${
@@ -581,20 +581,49 @@ const DashboardContentSections = ({
         (social) => social.main,
       );
       return (
-        <div className={`dashboard__social-media`}>
+        <Link
+          className={`dashboard__social-media`}
+          to={main_social?.url as unknown as string}
+          target="_blank"
+        >
           {main_social?.name === SocialMediaTypes.instagram ? (
-            <FaInstagram color="fuchsia" />
+            <span
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "5px",
+                textDecoration: "underline",
+                fontWeight: 400,
+              }}
+            >
+              <FaInstagram
+                color="fuchsia"
+                size={17}
+                style={{ marginBottom: "-2px" }}
+              />
+
+              {"@" + main_social.account_name}
+            </span>
           ) : main_social?.name === SocialMediaTypes.tiktok ? (
-            <FaTiktok />
+            <span>
+              <FaTiktok />
+              {"@" + main_social.account_name}
+            </span>
           ) : main_social?.name === SocialMediaTypes.twitch ? (
-            <FaTwitch color="purple" />
+            <span>
+              <FaTwitch color="purple" />
+              {"@" + main_social.account_name}
+            </span>
           ) : main_social?.name === SocialMediaTypes.youtube ? (
-            <FaYoutube color={theme.colors.red} />
+            <span>
+              <FaYoutube color={theme.colors.red} />
+              {"@" + main_social.account_name}
+            </span>
           ) : (
             ""
           )}
-          <span>{main_social ? main_social?.name : "-"}</span>
-        </div>
+        </Link>
       );
     }
 

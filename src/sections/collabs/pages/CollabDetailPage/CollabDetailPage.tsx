@@ -17,7 +17,7 @@ import { SectionTypes } from "sections/shared/interfaces/interfaces";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { MdDoNotDisturbOn } from "react-icons/md";
 import theme from "assets/styles/theme";
-import { FaCheckCircle } from "react-icons/fa";
+import { FaCheckCircle, FaEdit } from "react-icons/fa";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import {
@@ -25,6 +25,8 @@ import {
   COLAB_PENDING_NOMADE_STATE,
 } from "sections/collabs/utils/collabsStates";
 import * as collabStates from "../../utils/collabsStates";
+import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
+import EditCollabForm from "sections/collabs/components/CollabsForm/EditCollabsForm/EditCollabsForm";
 
 const CollabDetailPage = (): React.ReactElement => {
   const { getCollabById, collab, loading } = useCollabsContext();
@@ -38,7 +40,7 @@ const CollabDetailPage = (): React.ReactElement => {
   const { user } = useAuthContext();
   const { handleIsDialogOpen } = useActions();
   const { id } = useParams();
-
+  const [isOpenEdit, setIsOpenEdit] = useState<boolean>(false);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [isAcceptOrRefuse, setIsAcceptOrRefuse] = useState<string>("");
 
@@ -123,6 +125,12 @@ const CollabDetailPage = (): React.ReactElement => {
                 )}
 
               <ActionButton
+                onClick={() => setIsOpenEdit(true)}
+                text="Editar"
+                icon={<FaEdit />}
+                color={theme.colors.darkBlue}
+              />
+              <ActionButton
                 onClick={handleOpenDialogDelete}
                 text="Borrar"
                 icon={<FaRegTrashCan />}
@@ -146,20 +154,28 @@ const CollabDetailPage = (): React.ReactElement => {
               />
             </section>
           </div>
-          <DialogDeleteConfirm
-            handleClose={() => setIsDialogOpen(false)}
-            open={isDialogOpen}
-            sectionId={collab.id!}
-            pageName={SectionTypes.collabs}
-            type={isAcceptOrRefuse}
-            accept_state_id={
-              collab?.history &&
-              collab?.history[collab.history?.length - 1].id ===
-                collabStates.COLAB_PENDING_NOMADE_STATE
-                ? collabStates.COLAB_PENDING_COMPANY_STATE
-                : collabStates.COLAB_ACCEPTED_STATE
-            }
-          />
+          <>
+            <ReusableModal
+              openModal={isOpenEdit}
+              setIsModalOpen={setIsOpenEdit}
+            >
+              <EditCollabForm collab={collab} setIsOpen={setIsOpenEdit} />
+            </ReusableModal>
+            <DialogDeleteConfirm
+              handleClose={() => setIsDialogOpen(false)}
+              open={isDialogOpen}
+              sectionId={collab.id!}
+              pageName={SectionTypes.collabs}
+              type={isAcceptOrRefuse}
+              accept_state_id={
+                collab?.history &&
+                collab?.history[collab.history?.length - 1].id ===
+                  collabStates.COLAB_PENDING_NOMADE_STATE
+                  ? collabStates.COLAB_PENDING_COMPANY_STATE
+                  : collabStates.COLAB_ACCEPTED_STATE
+              }
+            />
+          </>
         </CollabsDetailPageStyled>
       )}
     </>

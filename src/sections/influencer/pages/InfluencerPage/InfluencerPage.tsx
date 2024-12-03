@@ -46,7 +46,6 @@ const InfluencersPage = (): React.ReactElement => {
   useEffect(() => {
     getUsersData();
   }, [page, order, getUsersData]);
-
   return (
     <>
       {loading ? (

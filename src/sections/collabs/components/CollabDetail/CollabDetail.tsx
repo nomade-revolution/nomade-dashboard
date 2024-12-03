@@ -29,7 +29,6 @@ const CollabDetail = ({
   offer,
 }: Props): React.ReactElement => {
   const { address } = useAddressContext();
-
   return (
     <CollabsDetailStyled className="collab-detail">
       <section className="collab-detail__participants">
@@ -132,6 +131,13 @@ const CollabDetail = ({
             </Link>
           </div>
         </div>
+      </section>
+
+      <section className="collab-detail__data">
+        <div className="collab-detail__offer-section">
+          <h3>Comentario</h3>
+        </div>
+        <span className={""}>{collab.comment}</span>
       </section>
     </CollabsDetailStyled>
   );

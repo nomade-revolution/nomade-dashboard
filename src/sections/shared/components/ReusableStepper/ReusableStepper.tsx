@@ -21,7 +21,7 @@ import * as collabStates from "../../../collabs/utils/collabsStates";
 import useActions from "sections/shared/hooks/useActions/useActions";
 import DialogDeleteConfirm from "../DialogDeleteConfirm/DialogDeleteConfirm";
 import { SectionTypes } from "sections/shared/interfaces/interfaces";
-import { formatDateWithSlash } from "sections/shared/utils/formatDate/formatDate";
+import { formatDateWithTime } from "sections/shared/utils/formatDate/formatDate";
 
 interface Props {
   steps: State[];
@@ -74,7 +74,7 @@ export default function ReusableStepper({
               </StepLabel>
               <StepContent>
                 <Typography sx={{ fontWeight: 700, fontSize: "small" }}>
-                  {step.type} - {formatDateWithSlash(step.created_at)}
+                  {step.type} - {formatDateWithTime(step.created_at)}
                 </Typography>
               </StepContent>
             </Step>

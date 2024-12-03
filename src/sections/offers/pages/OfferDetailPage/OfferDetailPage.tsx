@@ -119,7 +119,13 @@ const OfferDetailsPage = () => {
             </div>
           </section>
           <ReusableModal
-            children={<OffersForm offer={offer} onSubmit={modifyOffer} />}
+            children={
+              <OffersForm
+                offer={offer}
+                onSubmit={modifyOffer}
+                onCancel={setIsModalOpen}
+              />
+            }
             openModal={isModalOpen}
             setIsModalOpen={setIsModalOpen}
             type="offer"

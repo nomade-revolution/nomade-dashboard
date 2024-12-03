@@ -16,7 +16,7 @@ const InfluencerSocialMedia = ({
   return (
     <InfluencerSocialMediaStyles className="social-media">
       {socialMedia?.map((media) => (
-        <li className="social-media__data">
+        <li className="social-media__data" key={media.id}>
           <button
             className="social-media__data"
             onClick={() => {

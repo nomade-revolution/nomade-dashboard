@@ -319,7 +319,6 @@ const ReusablePageStyled = styled.main`
     &__web,
     &__country,
     &__influencer {
-      font-weight: bold;
     }
 
     &__progress {
@@ -381,7 +380,6 @@ const ReusablePageStyled = styled.main`
     }
 
     &__social-media {
-      font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;

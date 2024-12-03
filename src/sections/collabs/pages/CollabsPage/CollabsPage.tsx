@@ -147,7 +147,6 @@ const CollabsPage = (): React.ReactElement => {
   useEffect(() => {
     getCollabs();
   }, [page, order, getCollabs, filterId]);
-
   return (
     <>
       {loading ? (

@@ -62,3 +62,11 @@ export const exportCollabs = (
 ): Promise<Blob> => {
   return collabsRepo.exportCollabs(token);
 };
+
+export const editCollabById = (
+  collabsRepo: CollabsRepository<FullCollab>,
+  id: number,
+  colab: Partial<FullCollab>,
+): Promise<boolean> => {
+  return collabsRepo.editCollabById(id, colab);
+};

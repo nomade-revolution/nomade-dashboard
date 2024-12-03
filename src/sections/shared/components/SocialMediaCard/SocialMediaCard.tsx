@@ -38,10 +38,20 @@ const SocialMediaCard = ({
           <IoStatsChart />
         </button>
       )}
-      {getSocialMediaIcons(socialMedia.name, 100)}
-      <h3 className="social-card__title">{socialMedia.name}</h3>
       <section className="social-card__data">
-        <span>@{socialMedia.account_name}</span>
+        <span
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 10,
+            fontSize: 16,
+            fontWeight: "bold",
+          }}
+        >
+          {getSocialMediaIcons(socialMedia.name, 30)} @
+          {socialMedia.account_name}
+        </span>
         <span className="social-card__text-icon">
           <FaUserFriends size={20} /> {socialMedia.followers} followers
         </span>
@@ -63,46 +73,56 @@ const SocialMediaCard = ({
           </video>
         </section>
       )}
-      <section>
-        <h4 className="social-card__section-title">Estadísticas por ciudad </h4>
-        <StadisticsDisplay
-          barCategories={socialMedia.cities.map(
-            (city) => (city as CitySocialRequest).name,
-          )}
-          data={socialMedia.cities.map((city) => city.followers_percentage)}
-        />
-      </section>
-      <section>
-        <h4 className="social-card__section-title">Estadísticas por país </h4>
-        <StadisticsDisplay
-          barCategories={socialMedia.countries.map(
-            (country) => (country as CountrySocialRequest).name,
-          )}
-          data={socialMedia.countries.map(
-            (country) => country.followers_percentage,
-          )}
-        />
-      </section>
-      <section>
-        <h4 className="social-card__section-title">Estadísticas por edades </h4>
-        <StadisticsDisplay
-          barCategories={socialMedia.ageRanges.map(
-            (age) => (age as SocialMediaStatistic).name,
-          )}
-          data={socialMedia.ageRanges.map((age) => age.followers_percentage)}
-        />
-      </section>
-      <section>
-        <h4 className="social-card__section-title">Estadísticas por genero </h4>
-        <StadisticsDisplay
-          barCategories={socialMedia.genders.map(
-            (gender) => (gender as SocialMediaStatistic).name,
-          )}
-          data={socialMedia.genders.map(
-            (gender) => gender.followers_percentage,
-          )}
-        />
-      </section>
+      <div className="stats-container">
+        <section className="statsSection">
+          <h4 className="social-card__section-title">
+            Estadísticas por ciudad{" "}
+          </h4>
+          <StadisticsDisplay
+            barCategories={socialMedia.cities.map(
+              (city) => (city as CitySocialRequest).name,
+            )}
+            data={socialMedia.cities.map((city) => city.followers_percentage)}
+          />
+        </section>
+        <section className="statsSection">
+          <h4 className="social-card__section-title">Estadísticas por país </h4>
+          <StadisticsDisplay
+            barCategories={socialMedia.countries.map(
+              (country) => (country as CountrySocialRequest).name,
+            )}
+            data={socialMedia.countries.map(
+              (country) => country.followers_percentage,
+            )}
+          />
+        </section>
+      </div>
+      <div className="stats-container">
+        <section className="statsSection">
+          <h4 className="social-card__section-title">
+            Estadísticas por edades{" "}
+          </h4>
+          <StadisticsDisplay
+            barCategories={socialMedia.ageRanges.map(
+              (age) => (age as SocialMediaStatistic).name,
+            )}
+            data={socialMedia.ageRanges.map((age) => age.followers_percentage)}
+          />
+        </section>
+        <section className="statsSection">
+          <h4 className="social-card__section-title">
+            Estadísticas por genero{" "}
+          </h4>
+          <StadisticsDisplay
+            barCategories={socialMedia.genders.map(
+              (gender) => (gender as SocialMediaStatistic).name,
+            )}
+            data={socialMedia.genders.map(
+              (gender) => gender.followers_percentage,
+            )}
+          />
+        </section>
+      </div>
     </SocialMediaCardStyled>
   );
 };

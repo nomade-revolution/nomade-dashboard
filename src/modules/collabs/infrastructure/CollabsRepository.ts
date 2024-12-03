@@ -111,4 +111,16 @@ export class CollabsRepository {
       return Promise.reject(error);
     }
   }
+
+  public async editCollabById(
+    id: number,
+    collab: Partial<FullCollab>,
+  ): Promise<boolean> {
+    try {
+      await this.http.put<FullCollab>(`${COLLABS_BASE}/${id}`, collab);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
 }

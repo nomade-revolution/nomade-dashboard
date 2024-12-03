@@ -11,7 +11,7 @@ const InfluencerCategories = ({ categories }: Props): React.ReactElement => {
       <h3 className="categories__title">Categorías</h3>
       <ul className="categories__list">
         {categories.map((category) => (
-          <li>{category?.name}</li>
+          <li key={category?.name}>{category?.name}</li>
         ))}
       </ul>
     </InfluencerCategoriesStyled>

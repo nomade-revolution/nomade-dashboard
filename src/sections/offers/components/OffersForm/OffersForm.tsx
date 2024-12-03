@@ -51,9 +51,14 @@ import formatOfferScheduling from "sections/offers/utils/formatOfferScheduling";
 interface Props {
   offer?: FullOffer;
   onSubmit: (offer: FormData, id?: number) => void;
+  onCancel?: (state: boolean) => void;
 }
 
-const OffersForm = ({ offer, onSubmit }: Props): React.ReactElement => {
+const OffersForm = ({
+  offer,
+  onSubmit,
+  onCancel,
+}: Props): React.ReactElement => {
   const { getAllCountries, countries } = useCountryContext();
   const { cities, getAllCities } = useCitiesContext();
   const { companies, getCompaniesWithParams } = useCompanyContext();
@@ -562,36 +567,52 @@ const OffersForm = ({ offer, onSubmit }: Props): React.ReactElement => {
             </div>
           </div>
 
-          <button
-            type="submit"
-            disabled={
-              isSubmitting ||
-              (!offerResume && offer?.offer_category_id !== LODGING_OFFER_ID)
-              // (!formState.address &&
-              //   offer?.offer_category_id !== DELIVERY_OFFER_ID)
-            }
-            className={
-              isSuccess
-                ? "datasheet-form__success"
-                : error
-                  ? "datasheet-form__error"
-                  : "datasheet-form__submit"
-            }
-          >
-            {isSubmitting ? (
-              <Loader width="20px" height="20px" />
-            ) : isSuccess && offer ? (
-              "Oferta editada"
-            ) : isSuccess && !offer ? (
-              "Oferta creada"
-            ) : error ? (
-              "Revisa los datos e intentalo de nuevo"
-            ) : offer ? (
-              "Editar oferta"
-            ) : (
-              "Crear oferta"
+          <div style={{ display: "flex", gap: "20px" }}>
+            <button
+              type="submit"
+              disabled={
+                isSubmitting ||
+                (!offerResume && offer?.offer_category_id !== LODGING_OFFER_ID)
+                // (!formState.address &&
+                //   offer?.offer_category_id !== DELIVERY_OFFER_ID)
+              }
+              className={
+                isSuccess
+                  ? "datasheet-form__success"
+                  : error
+                    ? "datasheet-form__error"
+                    : "datasheet-form__submit"
+              }
+            >
+              {isSubmitting ? (
+                <Loader width="20px" height="20px" />
+              ) : isSuccess && offer ? (
+                "Oferta editada"
+              ) : isSuccess && !offer ? (
+                "Oferta creada"
+              ) : error ? (
+                "Revisa los datos e intentalo de nuevo"
+              ) : offer ? (
+                "Guardar cambios"
+              ) : (
+                "Crear oferta"
+              )}
+            </button>
+            {offer && (
+              <button
+                onClick={() => onCancel && onCancel(false)}
+                type="button"
+                disabled={
+                  isSubmitting ||
+                  (!offerResume &&
+                    offer?.offer_category_id !== LODGING_OFFER_ID)
+                }
+                className={"datasheet-form__error"}
+              >
+                Cancelar cambios
+              </button>
             )}
-          </button>
+          </div>
         </ReusableFormStyled>
       )}
     </Formik>
