@@ -26,6 +26,7 @@ import Loader from "sections/shared/components/Loader/Loader";
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
 import { formatDateWithDash } from "sections/shared/utils/formatDate/formatDate";
 import { Company } from "modules/user/domain/User";
+import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 
 interface Props {
   onSubmit: (values: FormData, id?: number) => void;
@@ -35,16 +36,17 @@ interface Props {
 
 const CompanyForm = ({ onSubmit, client, type }: Props): React.ReactElement => {
   const [formState, setFormState] = useState<{ company_plan_id: string }>({
-    company_plan_id: "",
+    company_plan_id: client?.plan.plan_id.toString() || "",
   });
+  const { user } = useAuthContext();
   const [file, setFile] = useState<File[] | null>(() => {
-    if (client?.image) {
-      const blob = new Blob([client.image], { type: "image/png" });
-      const generatedFile = new File([blob], "uploaded-image.png", {
-        type: "image/png",
-      });
-      return [generatedFile];
-    }
+    // if (client?.image) {
+    //   const blob = new Blob([client.image], { type: "image/png" });
+    //   const generatedFile = new File([blob], "uploaded-image.png", {
+    //     type: "image/png",
+    //   });
+    //   return [generatedFile];
+    // }
     return null;
   });
   const [registerAddress, setRegisterAddress] = useState<FullAddress | null>(
@@ -81,7 +83,6 @@ const CompanyForm = ({ onSubmit, client, type }: Props): React.ReactElement => {
   const handleIsChecked = () => {
     setIsChecked(!isCheked);
   };
-
   const handleSubmitForm = async (
     values: PartialCompany,
     { setSubmitting }: FormikHelpers<PartialCompany>,
@@ -95,7 +96,7 @@ const CompanyForm = ({ onSubmit, client, type }: Props): React.ReactElement => {
     Object.keys(values).forEach((key) => {
       if (key !== "id") {
         const value =
-          key === "start_date"
+          key === "plan[start_date]"
             ? formattedDate
             : values[key as keyof PartialCompany];
         formData.append(key, value || "");
@@ -111,9 +112,14 @@ const CompanyForm = ({ onSubmit, client, type }: Props): React.ReactElement => {
 
     formData.append("name", values.company_name);
     formData.append("gocardless", JSON.stringify(isCheked));
-    formData.append("image", file![0]);
-    formData.append("plan_id", formState.company_plan_id);
 
+    if (file) {
+      formData.append("image", file![0]);
+    } else {
+      formData.delete("image");
+    }
+
+    formData.append("plan_id", formState.company_plan_id);
     await onSubmit(formData, client && client?.id);
 
     if (isSuccess) {
@@ -241,25 +247,7 @@ const CompanyForm = ({ onSubmit, client, type }: Props): React.ReactElement => {
                 />
               )}
             </div>
-            <div className="form-subsection">
-              <label htmlFor="email" className="form-subsection__label">
-                Email
-              </label>
-              <Field
-                type="email"
-                id="email"
-                className="form-subsection__field-large--company"
-                aria-label="Correo electrónico"
-                {...getFieldProps("email")}
-              />
-              {errors.email && touched.email && (
-                <ErrorMessage
-                  className="form-subsection__error-message"
-                  component="span"
-                  name="email"
-                />
-              )}
-            </div>
+
             <div className="form-subsection">
               <label htmlFor="description" className="form-subsection__label">
                 Descripción
@@ -330,10 +318,12 @@ const CompanyForm = ({ onSubmit, client, type }: Props): React.ReactElement => {
                 <ReusableSelect
                   label="Plan"
                   options={billingOptions}
-                  setValue={(value) =>
-                    handleFormStateChange("company_plan_id", value)
+                  setValue={(value) => {
+                    handleFormStateChange("company_plan_id", value);
+                  }}
+                  value={
+                    client?.plan.plan_id.toString() || formState.company_plan_id
                   }
-                  value={formState.company_plan_id}
                 />
               </div>
               <div className="form-subsection">
@@ -345,7 +335,7 @@ const CompanyForm = ({ onSubmit, client, type }: Props): React.ReactElement => {
                   id="start_date"
                   className="form-subsection__field-date"
                   aria-label="Correo electrónico"
-                  {...getFieldProps("start_date")}
+                  {...getFieldProps("plan[start_date]")}
                 />
                 {errors.start_date && touched.start_date && (
                   <ErrorMessage
@@ -451,66 +441,72 @@ const CompanyForm = ({ onSubmit, client, type }: Props): React.ReactElement => {
                 </span>
               )}
             </div>
-            <div className="form-subsection">
-              <label htmlFor="password" className="form-subsection__label">
-                Contraseña
-              </label>
-              <div className="form-subsection__password">
-                <Field
-                  type={isPasswordShown ? "text" : "password"}
-                  id="password"
-                  className="form-subsection__field-large--company"
-                  aria-label="Comentarios"
-                  {...getFieldProps("password")}
-                />
-                <button
-                  onClick={() => setIsPasswordShown(!isPasswordShown)}
-                  className="form-subsection__password-btn"
-                >
-                  {isPasswordShown ? <FaEye /> : <FaEyeSlash />}
-                </button>
-              </div>
-              {errors.password && touched.password && (
-                <ErrorMessage
-                  className="form-subsection__error-message"
-                  component="span"
-                  name="password"
-                />
-              )}
-            </div>
-            <div className="form-subsection">
-              <label
-                htmlFor="password_confirmation"
-                className="form-subsection__label"
-              >
-                Repite contraseña
-              </label>
-              <div className="form-subsection__password">
-                <Field
-                  type={isPasswordConfirmationShown ? "text" : "password"}
-                  id="password_confirmation"
-                  className="form-subsection__field-large--company"
-                  aria-label="Comentarios"
-                  {...getFieldProps("password_confirmation")}
-                />
-                <button
-                  onClick={() =>
-                    setIsPasswordConfirmationShown(!isPasswordConfirmationShown)
-                  }
-                  className="form-subsection__password-btn"
-                >
-                  {isPasswordConfirmationShown ? <FaEye /> : <FaEyeSlash />}
-                </button>
-              </div>
-              {errors.password_confirmation &&
-                touched.password_confirmation && (
-                  <ErrorMessage
-                    className="form-subsection__error-message"
-                    component="span"
-                    name="password_confirmation"
-                  />
-                )}
-            </div>
+            {type === "edit" && user.id === client!.id && (
+              <>
+                <div className="form-subsection">
+                  <label htmlFor="password" className="form-subsection__label">
+                    Contraseña
+                  </label>
+                  <div className="form-subsection__password">
+                    <Field
+                      type={isPasswordShown ? "text" : "password"}
+                      id="password"
+                      className="form-subsection__field-large--company"
+                      aria-label="Comentarios"
+                      {...getFieldProps("password")}
+                    />
+                    <button
+                      onClick={() => setIsPasswordShown(!isPasswordShown)}
+                      className="form-subsection__password-btn"
+                    >
+                      {isPasswordShown ? <FaEye /> : <FaEyeSlash />}
+                    </button>
+                  </div>
+                  {errors.password && touched.password && (
+                    <ErrorMessage
+                      className="form-subsection__error-message"
+                      component="span"
+                      name="password"
+                    />
+                  )}
+                </div>
+                <div className="form-subsection">
+                  <label
+                    htmlFor="password_confirmation"
+                    className="form-subsection__label"
+                  >
+                    Repite contraseña
+                  </label>
+                  <div className="form-subsection__password">
+                    <Field
+                      type={isPasswordConfirmationShown ? "text" : "password"}
+                      id="password_confirmation"
+                      className="form-subsection__field-large--company"
+                      aria-label="Comentarios"
+                      {...getFieldProps("password_confirmation")}
+                    />
+                    <button
+                      onClick={() =>
+                        setIsPasswordConfirmationShown(
+                          !isPasswordConfirmationShown,
+                        )
+                      }
+                      className="form-subsection__password-btn"
+                    >
+                      {isPasswordConfirmationShown ? <FaEye /> : <FaEyeSlash />}
+                    </button>
+                  </div>
+                  {errors.password_confirmation &&
+                    touched.password_confirmation && (
+                      <ErrorMessage
+                        className="form-subsection__error-message"
+                        component="span"
+                        name="password_confirmation"
+                      />
+                    )}
+                </div>
+              </>
+            )}
           </div>
           <ReusableModal
             children={

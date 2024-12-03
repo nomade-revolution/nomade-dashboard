@@ -346,7 +346,7 @@ const DashboardContentSections = ({
       );
 
     case "state":
-      return <Switch checked />;
+      return <Switch checked={(section as Offer).active ? true : false} />;
 
     case "from_country":
       return (

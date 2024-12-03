@@ -19,13 +19,9 @@ export const clientSchema = yup.object().shape({
     .string()
     .typeError("La fecha debe tener un formato válido")
     .nullable(),
-  email: yup
-    .string()
-    .email("El email debe ser una dirección válida")
-    .required("El email es un campo requerido"),
+
   password: yup
     .string()
-    .required("La contraseña es un campo requerido")
     .min(8, "Debe contener almenos 8 caracteres")
     .matches(/[A-Z]/, "Debe contener al menos una mayúscula")
     .matches(/[a-z]/, "Debe contener almenos una minuscula")
@@ -36,7 +32,6 @@ export const clientSchema = yup.object().shape({
     ),
   password_confirmation: yup
     .string()
-    .required("La confirmación de contraseña es un campo requerido")
     .oneOf([yup.ref("password")], "Las contraseñas deben coincidir"),
 });
 

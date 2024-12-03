@@ -124,6 +124,12 @@ const CompanyDetailData = ({ company }: Props): React.ReactElement => {
             <span className="plan__date">
               {formatDateWithSlash(company.plan && company.plan.start_date!)}
             </span>
+
+            {/* TO DO FALTA FECHA FIN DE PLAN */}
+            {/* <h5>Fecha de fin</h5>
+            <span className="plan__date">
+              {formatDateWithSlash(company.plan && company.plan.end_date!)}
+            </span> */}
           </div>
           <div className="plan__section">
             <CircularWithValueLabel progress={company.percentage} />
