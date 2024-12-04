@@ -83,16 +83,8 @@ const PlansPage = (): React.ReactElement => {
               <Loader width="20px" height="20px" />
             ) : (
               <section className="plans-page__mensual">
-                <div className="plans-page__show-calendar">
-                  <SearchBar
-                    pageName={SectionTypes.customers}
-                    pageTypes={SectionTypes.customers}
-                    searchText={textToSearch!}
-                    setSearchText={setTextToSearch}
-                    onSearchSubmit={() => handleSearchByText(textToSearch)}
-                    onReset={() => getPlansData()}
-                  />
-                  <div className="plans-page__filter-btnSection">
+                <div className="plans-page__filter-btnSection">
+                  <div className="plans-page__show-calendar">
                     <ExportFilesButton
                       action={() => exportCompanyBillingExcel()}
                       text="Exportar Planes"
@@ -103,27 +95,34 @@ const PlansPage = (): React.ReactElement => {
                     >
                       Selector de fechas
                     </button>
+                    {isCalendarShown && (
+                      <input
+                        type="month"
+                        className="plans-page__date-picker"
+                        max={maxMonth}
+                        onChange={handleCalendarChange}
+                      />
+                    )}
+                    {date && (
+                      <div className="plans-page__filter-active">
+                        <span> {date}</span>
+                        <button
+                          onClick={() => setDate("")}
+                          className="plans-page__filter-close"
+                        >
+                          <IoClose color="#fff" />
+                        </button>
+                      </div>
+                    )}
                   </div>
-
-                  {date && (
-                    <div className="plans-page__filter-active">
-                      <span> {date}</span>
-                      <button
-                        onClick={() => setDate("")}
-                        className="plans-page__filter-close"
-                      >
-                        <IoClose color="#fff" />
-                      </button>
-                    </div>
-                  )}
-                  {isCalendarShown && (
-                    <input
-                      type="month"
-                      className="plans-page__date-picker"
-                      max={maxMonth}
-                      onChange={handleCalendarChange}
-                    />
-                  )}
+                  <SearchBar
+                    pageName={SectionTypes.customers}
+                    pageTypes={SectionTypes.customers}
+                    searchText={textToSearch!}
+                    setSearchText={setTextToSearch}
+                    onSearchSubmit={() => handleSearchByText(textToSearch)}
+                    onReset={() => getPlansData()}
+                  />
                 </div>
                 <DashboardTable
                   bodySections={plans}
@@ -146,14 +145,6 @@ const PlansPage = (): React.ReactElement => {
             ) : (
               <section className="plans-page__mensual">
                 <div className="plans-page__show-calendar">
-                  <SearchBar
-                    pageName={SectionTypes.customers}
-                    pageTypes={SectionTypes.customers}
-                    searchText={textToSearch}
-                    setSearchText={setTextToSearch}
-                    onSearchSubmit={() => handleSearchByText(textToSearch)}
-                    onReset={() => getPlansData()}
-                  />
                   <div className="plans-page__filter-btnSection">
                     <ExportFilesButton
                       action={() => exportCompanyBillingExcel()}
@@ -165,27 +156,34 @@ const PlansPage = (): React.ReactElement => {
                     >
                       Selector de fechas
                     </button>
+                    {date && (
+                      <div className="plans-page__filter-active">
+                        <span> {date}</span>
+                        <button
+                          onClick={() => setDate("")}
+                          className="plans-page__filter-close"
+                        >
+                          <IoClose color="#fff" />
+                        </button>
+                      </div>
+                    )}
+                    {isCalendarShown && (
+                      <input
+                        type="month"
+                        className="plans-page__date-picker"
+                        max={maxMonth}
+                        onChange={handleCalendarChange}
+                      />
+                    )}
                   </div>
-
-                  {date && (
-                    <div className="plans-page__filter-active">
-                      <span> {date}</span>
-                      <button
-                        onClick={() => setDate("")}
-                        className="plans-page__filter-close"
-                      >
-                        <IoClose color="#fff" />
-                      </button>
-                    </div>
-                  )}
-                  {isCalendarShown && (
-                    <input
-                      type="month"
-                      className="plans-page__date-picker"
-                      max={maxMonth}
-                      onChange={handleCalendarChange}
-                    />
-                  )}
+                  <SearchBar
+                    pageName={SectionTypes.customers}
+                    pageTypes={SectionTypes.customers}
+                    searchText={textToSearch}
+                    setSearchText={setTextToSearch}
+                    onSearchSubmit={() => handleSearchByText(textToSearch)}
+                    onReset={() => getPlansData()}
+                  />
                 </div>
                 <DashboardTable
                   bodySections={plans}

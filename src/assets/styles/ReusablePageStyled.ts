@@ -473,10 +473,10 @@ const ReusablePageStyled = styled.main`
 
     &__show-calendar {
       display: flex;
-      flex-direction: column;
       gap: 5px;
       width: 100%;
-      align-items: flex-end;
+      align-items: center;
+      justify-content: flex-start;
     }
 
     &__calendar {
@@ -498,8 +498,9 @@ const ReusablePageStyled = styled.main`
     &__filter-btnSection {
       width: 100%;
       display: flex;
-      justify-content: flex-end;
+      justify-content: flex-start;
       gap: 8px;
+      align-items: center;
     }
 
     &__filter-btn {
@@ -526,6 +527,7 @@ const ReusablePageStyled = styled.main`
       border-radius: 10px;
       height: 40px;
       padding: 10px;
+      align-self: left;
       border: 1px solid ${(props) => props.theme.colors.mainColor};
     }
 
