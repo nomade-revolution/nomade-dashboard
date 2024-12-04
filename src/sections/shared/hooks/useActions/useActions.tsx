@@ -7,7 +7,6 @@ import { Collab, CollabActionTypes } from "modules/collabs/domain/Collabs";
 
 const useActions = () => {
   const { sendLinkForLead } = useLeadsContext();
-
   const { updateCollabState } = useCollabsContext();
   const navigate = useNavigate();
 
@@ -21,6 +20,7 @@ const useActions = () => {
 
   const handleSendLeadLink = async (section_id: number) => {
     await sendLinkForLead(section_id);
+    navigate(0);
   };
 
   const acceptCollab = async (collabId: number, state_id: number) => {
