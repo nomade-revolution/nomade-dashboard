@@ -87,6 +87,7 @@ const InfluencerDetailPage = (): React.ReactElement => {
             <CompanyDetailData company={company} />
           </section>
 
+          <h2 style={{ marginBottom: "-35px" }}>Plan</h2>
           <DashboardTable
             bodySections={[plan]}
             headerSections={companyPlanTableSections}

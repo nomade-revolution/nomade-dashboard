@@ -10,7 +10,6 @@ import {
 } from "sections/shared/interfaces/interfaces";
 import CompanyCollabsStyled from "./CompanyCollabsStyled";
 import { companyCollabsHeaderSections } from "sections/company/utils/companySections";
-import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 
 interface Props {
   company_id: number;
@@ -36,8 +35,8 @@ const CompanyCollabs = ({ company_id }: Props): React.ReactElement => {
   }, [getAllCollabs, order]);
 
   return (
-    <ReusablePageStyled>
-      <h2>Collabs</h2>
+    <div style={{ width: "100%" }}>
+      <h2 style={{ marginBottom: "10px" }}>Collabs</h2>
       {loading ? (
         <Loader height="40px" width="40px" />
       ) : (
@@ -59,7 +58,7 @@ const CompanyCollabs = ({ company_id }: Props): React.ReactElement => {
           )}
         </CompanyCollabsStyled>
       )}
-    </ReusablePageStyled>
+    </div>
   );
 };
 
