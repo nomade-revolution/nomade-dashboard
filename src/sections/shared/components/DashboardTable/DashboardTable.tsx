@@ -13,7 +13,6 @@ import DashboardTableCellContent from "../DashboardTableCellContent/DashboardTab
 import { Collab, CollabActionTypes } from "modules/collabs/domain/Collabs";
 import { Influencer } from "@influencer";
 import DashBoardHeaderCell from "../DashboardHeaderCell/DashboardHeaderCell";
-import NoDataHandler from "../NoDataHandler/NoDataHandler";
 import { useState } from "react";
 import { Plan } from "modules/plans/domain/Plan";
 
@@ -110,7 +109,6 @@ const DashboardTable = <Type,>({
           </TableBody>
         </DashboardStyled>
       </TableContainer>
-      {bodySections.length === 0 && <NoDataHandler pageName="" search={""} />}
     </>
   );
 };

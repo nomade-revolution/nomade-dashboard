@@ -28,7 +28,7 @@ const CompanyCollabs = ({ company_id }: Props): React.ReactElement => {
       <h2>Collabs</h2>
       {loading ? (
         <Loader height="40px" width="40px" />
-      ) : !loading && collabs.length !== 0 ? (
+      ) : (
         <CompanyCollabsStyled>
           <DashboardTable
             bodySections={collabs}
@@ -42,11 +42,10 @@ const CompanyCollabs = ({ company_id }: Props): React.ReactElement => {
             filterParams=""
             pageName=""
           />
+          {collabs.length === 0 && (
+            <NoDataHandler pageName={SectionTypes.collabs} search={""} />
+          )}
         </CompanyCollabsStyled>
-      ) : collabs.length === 0 ? (
-        <NoDataHandler pageName={SectionTypes.collabs} search={""} />
-      ) : (
-        <></>
       )}
     </ReusablePageStyled>
   );

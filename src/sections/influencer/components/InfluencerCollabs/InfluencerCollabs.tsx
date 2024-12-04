@@ -1,52 +1,63 @@
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
 import { influencerCollabsHeaderSections } from "sections/influencer/utils/influencersSections";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
 import Loader from "sections/shared/components/Loader/Loader";
 import NoDataHandler from "sections/shared/components/NoDataHandler/NoDataHandler";
-import PaginationComponent from "sections/shared/components/Pagination/PaginationComponent";
-import { SectionTypes } from "sections/shared/interfaces/interfaces";
+// import PaginationComponent from "sections/shared/components/Pagination/PaginationComponent";
+import {
+  FilterParams,
+  SectionTypes,
+} from "sections/shared/interfaces/interfaces";
 
 interface Props {
   influencer_id: number;
 }
 
 const InfluencerCollabs = ({ influencer_id }: Props): React.ReactElement => {
-  const [page, setPage] = useState<number>(1);
+  const [page] = useState<number>(1);
 
-  const { getAllCollabs, collabs, pagination, loading } = useCollabsContext();
+  const { getAllCollabs, collabs, loading, order } = useCollabsContext();
+
+  const getAllCollabsWithFilters = useCallback(() => {
+    const filters: FilterParams = { filters: { influencer_id } };
+
+    if (order?.sortTag) {
+      filters.order = [{ by: order.sortTag, dir: order.direction }];
+    }
+
+    getAllCollabs(page, 25, filters);
+  }, [getAllCollabs, influencer_id, order.direction, order.sortTag, page]);
 
   useEffect(() => {
-    setPage(pagination.current_page + 1);
-    getAllCollabs(page, 12, { filters: { influencer_id } });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getAllCollabs, influencer_id]);
+    getAllCollabsWithFilters();
+  }, [getAllCollabsWithFilters, order]);
 
   return (
-    <ReusablePageStyled>
+    <ReusablePageStyled style={{ width: "100%" }}>
       <h3>Collabs</h3>
       {loading ? (
         <Loader height="40px" width="40px" />
-      ) : !loading && collabs.length !== 0 ? (
-        <section style={{ gap: 20, display: "flex", flexDirection: "column" }}>
+      ) : (
+        <section
+          style={{
+            gap: 20,
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+          }}
+        >
           <DashboardTable
             bodySections={collabs}
             headerSections={influencerCollabsHeaderSections}
             pageName={SectionTypes.collabs}
           />
-          <PaginationComponent
-            current_page={pagination.current_page}
-            last_page={pagination.last_page}
-            per_page={pagination.per_page}
-            filterParams=""
-            pageName=""
-          />
+
+          {collabs.length === 0 && (
+            <NoDataHandler pageName={SectionTypes.collabs} search={""} />
+          )}
         </section>
-      ) : collabs.length === 0 ? (
-        <NoDataHandler pageName={SectionTypes.collabs} search={""} />
-      ) : (
-        <></>
       )}
     </ReusablePageStyled>
   );

@@ -33,42 +33,39 @@ const CollabsReservationsPage = (): React.ReactElement => {
         <Loader width="20px" height="20px" />
       ) : (
         <>
-          {collabs.length > 0 ? (
-            <CollabsReservationsPageStyled>
-              <div className="header">
-                <GoBackButton />
-              </div>
-              <div className="title">
-                <span className="title--text">Company </span>
-                <span>-</span>
-                <h3>{collabs[0]?.company}</h3>
-              </div>
-              <DashboardTable
+          <CollabsReservationsPageStyled>
+            <div className="header">
+              <GoBackButton />
+            </div>
+            <div className="title">
+              <span className="title--text">Company </span>
+              <span>-</span>
+              <h3>{collabs[0]?.company}</h3>
+            </div>
+            <DashboardTable
+              bodySections={collabs}
+              headerSections={collabsHeaderSections}
+              pageName={SectionTypes.collabs}
+              type={collabStateActionType}
+              setCollabStateActionType={setCollabStateActionType}
+            />
+            <div className="list-mobile">
+              <DashboardCardListMobile
                 bodySections={collabs}
                 headerSections={collabsHeaderSections}
                 pageName={SectionTypes.collabs}
-                type={collabStateActionType}
-                setCollabStateActionType={setCollabStateActionType}
               />
-              <div className="list-mobile">
-                <DashboardCardListMobile
-                  bodySections={collabs}
-                  headerSections={collabsHeaderSections}
-                  pageName={SectionTypes.collabs}
-                />
-              </div>
-              <PaginationComponent
-                current_page={pagination.current_page}
-                filterParams={""}
-                id={+id!}
-                per_page={pagination.per_page}
-                last_page={pagination.last_page}
-                pageName={SectionTypes.collabsReservations}
-              />
-            </CollabsReservationsPageStyled>
-          ) : (
-            <NoDataHandler pageName="" search="" />
-          )}
+            </div>
+            <PaginationComponent
+              current_page={pagination.current_page}
+              filterParams={""}
+              id={+id!}
+              per_page={pagination.per_page}
+              last_page={pagination.last_page}
+              pageName={SectionTypes.collabsReservations}
+            />
+          </CollabsReservationsPageStyled>
+          {collabs.length > 0 && <NoDataHandler pageName="" search="" />}
         </>
       )}
     </>

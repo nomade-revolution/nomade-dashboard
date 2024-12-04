@@ -15,7 +15,13 @@ export const collabsHeaderSections: HeaderSection[] = [
     sortTag: "influencer",
     pageName: "collabs",
   },
-  { id: 3, name: "Día", property: "day", sortTag: "day", pageName: "collabs" },
+  {
+    id: 3,
+    name: "Día",
+    property: "day",
+    sortTag: "day",
+    pageName: "collabs",
+  },
   {
     id: 4,
     name: "Hora",

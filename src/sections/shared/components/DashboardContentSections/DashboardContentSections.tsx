@@ -417,7 +417,9 @@ const DashboardContentSections = ({
     case "day":
       return (
         <span>
-          {(section as FullCollab).day ? (section as FullCollab).day : "-"}
+          {(section as FullCollab).day
+            ? (section as FullCollab).day
+            : (section as FullCollab).from_day ?? "-"}
         </span>
       );
 
