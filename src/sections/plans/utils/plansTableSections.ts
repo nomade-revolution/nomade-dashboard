@@ -138,13 +138,6 @@ export const trimestralPlansTableSections: HeaderSection[] = [
 
 export const planTableSections: HeaderSection[] = [
   {
-    id: 2,
-    name: "Cliente",
-    property: "company",
-    sortTag: "",
-    pageName: "offers",
-  },
-  {
     id: 3,
     name: "Plan",
     property: "plan",
