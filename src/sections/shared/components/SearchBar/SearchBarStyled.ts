@@ -22,11 +22,11 @@ const SearchBarStyled = styled.form`
       height: 55px;
 
       @media (min-width: 1000px) and (max-width: 1600px) {
-        width: 400px;
+        width: 100px;
       }
 
       @media (min-width: 1600px) {
-        width: 500px;
+        width: 200px;
       }
     }
 

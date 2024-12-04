@@ -298,7 +298,7 @@ const ReusablePageStyled = styled.main`
       @media (min-width: 1000px) {
         flex-direction: row;
         align-items: flex-end;
-        justify-content: flex-end;
+        justify-content: space-between;
         width: 100%;
         gap: 100px;
       }
