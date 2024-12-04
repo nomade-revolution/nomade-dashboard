@@ -8,9 +8,8 @@ const InfluencerDetailPageStyled = styled.main`
   padding: 20px 20px;
   color: ${(props) => props.theme.fontsColors.dashBoard};
   height: auto;
-
   @media (min-width: 1000px) and (max-width: 1600px) {
-    padding: 50px 100px;
+    padding: 50px 80px;
   }
 
   @media (min-width: 1600px) {
@@ -36,7 +35,7 @@ const InfluencerDetailPageStyled = styled.main`
       gap: 20px;
       box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
       background-color: ${(props) => props.theme.colors.lightGrey};
-      padding: 20px;
+      padding: 0px;
       border-radius: 10px;
 
       @media (min-width: 1000px) {
@@ -44,7 +43,7 @@ const InfluencerDetailPageStyled = styled.main`
         position: relative;
         box-shadow: none;
         background-color: none;
-        padding: 30px;
+        padding: 0px;
       }
     }
 
@@ -55,7 +54,7 @@ const InfluencerDetailPageStyled = styled.main`
       @media (min-width: 1000px) {
         position: absolute;
         left: -50px;
-        bottom: 150px;
+        bottom: 100px;
       }
     }
   }

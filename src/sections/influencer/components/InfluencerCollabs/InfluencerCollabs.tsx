@@ -1,4 +1,3 @@
-import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 import { useCallback, useEffect, useState } from "react";
 import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
 import { influencerCollabsHeaderSections } from "sections/influencer/utils/influencersSections";
@@ -35,8 +34,8 @@ const InfluencerCollabs = ({ influencer_id }: Props): React.ReactElement => {
   }, [getAllCollabsWithFilters, order]);
 
   return (
-    <ReusablePageStyled style={{ width: "100%" }}>
-      <h3>Collabs</h3>
+    <div style={{ width: "100%" }}>
+      <h2 style={{ marginBottom: "10px" }}>Collabs</h2>
       {loading ? (
         <Loader height="40px" width="40px" />
       ) : (
@@ -59,7 +58,7 @@ const InfluencerCollabs = ({ influencer_id }: Props): React.ReactElement => {
           )}
         </section>
       )}
-    </ReusablePageStyled>
+    </div>
   );
 };
 

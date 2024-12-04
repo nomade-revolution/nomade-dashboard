@@ -4,6 +4,7 @@ const InfluencerSocialMediaStyles = styled.ul`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  min-height: 80px;
 
   @media (min-width: 1000px) {
     flex-direction: row;

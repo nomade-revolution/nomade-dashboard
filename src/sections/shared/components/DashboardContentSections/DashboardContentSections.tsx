@@ -496,9 +496,25 @@ const DashboardContentSections = ({
 
     case "percentage":
       return (
-        <section className="dashboard__progress">
+        <section
+          className="dashboard__progress"
+          style={{
+            position: "relative",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <LinearBuffer progress={(section as Plan).percentage} />
-          <span className="dashboard__progress-percentage">
+          <span
+            className="dashboard__progress-percentage"
+            style={{
+              color: "white",
+              position: "absolute",
+              top: "0px",
+              textAlign: "center",
+            }}
+          >
             {(section as Plan).percentage}%
           </span>
         </section>
@@ -543,11 +559,22 @@ const DashboardContentSections = ({
 
     case "remaining":
       return (
-        <section className="dashboard__progress">
+        <section
+          className="dashboard__progress"
+          style={{
+            display: "flex",
+            position: "relative",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <LinearBuffer
             progress={+(section as Plan).remaining?.replace("%", "")}
           />
-          <span className="dashboard__progress-percentage">
+          <span
+            className="dashboard__progress-percentage"
+            style={{ position: "absolute", color: "white", top: 0 }}
+          >
             {(section as Plan).remaining}
           </span>
         </section>
