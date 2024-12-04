@@ -139,28 +139,42 @@ export const trimestralPlansTableSections: HeaderSection[] = [
 export const planTableSections: HeaderSection[] = [
   {
     id: 3,
-    name: "Plan",
+    name: "Plan Contratado",
     property: "plan",
     sortTag: "",
     pageName: "offers",
   },
   {
+    id: 2,
+    name: "Periodicidad",
+    property: "billing",
+    sortTag: "",
+    pageName: "offers",
+  },
+  {
     id: 4,
-    name: "Objetivo",
+    name: "Mínimo de collabs",
+    property: "minimum",
+    sortTag: "",
+    pageName: "offers",
+  },
+  {
+    id: 5,
+    name: "Máximo de collabs",
     property: "objective",
     sortTag: "",
     pageName: "offers",
   },
   {
     id: 6,
-    name: "Fecha inicio trimestre",
+    name: "Fecha inicio plan",
     property: "start_date",
     sortTag: "",
     pageName: "offers",
   },
   {
     id: 7,
-    name: "Fecha fin trimestre",
+    name: "Fecha fin plan",
     property: "end_date",
     sortTag: "",
     pageName: "offers",
@@ -174,24 +188,10 @@ export const planTableSections: HeaderSection[] = [
   },
   {
     id: 9,
-    name: "Collabs",
+    name: "Collabs realizadas",
     property: "colabs",
     sortTag: "",
     pageName: "offers",
-  },
-  {
-    id: 10,
-    name: "Progreso",
-    property: "percentage",
-    sortTag: "",
-    pageName: "offers",
-  },
-  {
-    id: 11,
-    name: "Status",
-    property: "status",
-    sortTag: "",
-    pageName: SectionTypes.plans,
   },
 ];
 

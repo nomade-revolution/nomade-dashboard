@@ -20,7 +20,6 @@ const PlanPage = (): React.ReactElement => {
   useEffect(() => {
     getPlansData();
   }, [getPlansData]);
-
   return (
     <ReusablePageStyled className="plans-page">
       <>
