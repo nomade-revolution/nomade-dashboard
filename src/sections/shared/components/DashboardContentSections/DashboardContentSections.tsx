@@ -545,7 +545,7 @@ const DashboardContentSections = ({
       return (
         <section className="dashboard__progress">
           <LinearBuffer
-            progress={+(section as Plan).remaining.replace("%", "")}
+            progress={+(section as Plan).remaining?.replace("%", "")}
           />
           <span className="dashboard__progress-percentage">
             {(section as Plan).remaining}

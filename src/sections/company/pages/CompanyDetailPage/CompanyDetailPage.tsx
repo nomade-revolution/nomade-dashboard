@@ -17,13 +17,16 @@ import ReusableModal from "sections/shared/components/ReusableModal/ReusableModa
 import CompanyForm from "sections/company/components/CompanyForm/CompanyForm";
 import { FaEdit } from "react-icons/fa";
 import PlanForm from "sections/plans/components/PlanForm/PlanForm";
+import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
+import { companyPlanTableSections } from "sections/plans/utils/plansTableSections";
+import { usePlansContext } from "sections/plans/PlansContext/usePlansContext";
 
 const InfluencerDetailPage = (): React.ReactElement => {
   const { getCompany, company, loading, editCompanyCms } = useCompanyContext();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isPlanModalOpen, setIsPlanModalOpen] = useState<boolean>(false);
-
+  const { getPlan, plan } = usePlansContext();
   const { handleIsDialogOpen } = useActions();
 
   const { id } = useParams();
@@ -34,7 +37,8 @@ const InfluencerDetailPage = (): React.ReactElement => {
 
   useEffect(() => {
     getCompany(+id!);
-  }, [getCompany, id]);
+    getPlan(+id!);
+  }, [getCompany, id, getPlan]);
   return (
     <>
       {loading ? (
@@ -83,6 +87,11 @@ const InfluencerDetailPage = (): React.ReactElement => {
             <CompanyDetailData company={company} />
           </section>
 
+          <DashboardTable
+            bodySections={[plan]}
+            headerSections={companyPlanTableSections}
+            pageName={""}
+          />
           <CompanyCollabs company_id={+id!} />
           <DialogDeleteConfirm
             handleClose={() => setIsDialogOpen(false)}

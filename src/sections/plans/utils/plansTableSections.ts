@@ -201,3 +201,62 @@ export const planTableSections: HeaderSection[] = [
     pageName: SectionTypes.plans,
   },
 ];
+
+export const companyPlanTableSections: HeaderSection[] = [
+  {
+    id: 3,
+    name: "Plan",
+    property: "plan",
+    sortTag: "",
+    pageName: SectionTypes.plans,
+  },
+  {
+    id: 4,
+    name: "Objetivo",
+    property: "objective",
+    sortTag: "",
+    pageName: SectionTypes.plans,
+  },
+  {
+    id: 6,
+    name: "Fecha inicio trimestre",
+    property: "start_date",
+    sortTag: "",
+    pageName: SectionTypes.plans,
+  },
+  {
+    id: 7,
+    name: "Fecha fin trimestre",
+    property: "end_date",
+    sortTag: "",
+    pageName: SectionTypes.plans,
+  },
+  {
+    id: 8,
+    name: "Tiempo restante",
+    property: "remaining",
+    sortTag: "",
+    pageName: SectionTypes.plans,
+  },
+  {
+    id: 9,
+    name: "Collabs",
+    property: "colabs",
+    sortTag: "",
+    pageName: SectionTypes.plans,
+  },
+  {
+    id: 10,
+    name: "Progreso",
+    property: "percentage",
+    sortTag: "",
+    pageName: SectionTypes.plans,
+  },
+  {
+    id: 11,
+    name: "Status",
+    property: "status",
+    sortTag: "",
+    pageName: SectionTypes.plans,
+  },
+];

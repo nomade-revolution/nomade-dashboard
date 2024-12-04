@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
 import Loader from "sections/shared/components/Loader/Loader";
 import NoDataHandler from "sections/shared/components/NoDataHandler/NoDataHandler";
 import PaginationComponent from "sections/shared/components/Pagination/PaginationComponent";
-import { SectionTypes } from "sections/shared/interfaces/interfaces";
+import {
+  FilterParams,
+  SectionTypes,
+} from "sections/shared/interfaces/interfaces";
 import CompanyCollabsStyled from "./CompanyCollabsStyled";
 import { companyCollabsHeaderSections } from "sections/company/utils/companySections";
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
@@ -14,14 +17,23 @@ interface Props {
 }
 
 const CompanyCollabs = ({ company_id }: Props): React.ReactElement => {
-  const [page, setPage] = useState<number>(1);
-  const { getAllCollabs, collabs, pagination, loading } = useCollabsContext();
+  const [page] = useState<number>(1);
+  const { getAllCollabs, collabs, pagination, loading, order } =
+    useCollabsContext();
+
+  const getAllCollabsWithFilters = useCallback(() => {
+    const filters: FilterParams = { filters: { company_id } };
+
+    if (order?.sortTag) {
+      filters.order = [{ by: order.sortTag, dir: order.direction }];
+    }
+
+    getAllCollabs(page, 25, filters);
+  }, [getAllCollabs, company_id, order.direction, order.sortTag, page]);
 
   useEffect(() => {
-    setPage(pagination.current_page + 1);
-    getAllCollabs(page, 12, { filters: { company_id } });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getAllCollabs, company_id]);
+    getAllCollabsWithFilters();
+  }, [getAllCollabs, order]);
 
   return (
     <ReusablePageStyled>

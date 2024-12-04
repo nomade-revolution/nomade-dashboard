@@ -330,7 +330,6 @@ const ReusablePageStyled = styled.main`
 
     &__progress-percentage {
       position: absolute;
-      top: 0;
       font-weight: 700;
     }
 

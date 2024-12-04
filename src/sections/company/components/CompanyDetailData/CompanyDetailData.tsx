@@ -5,8 +5,6 @@ import CompanySocialMedia from "../CompanySocialMedia/CompanySocialMedia";
 import { FaPhoneAlt } from "react-icons/fa";
 import { FaLocationDot, FaRegCommentDots } from "react-icons/fa6";
 import { TbWorld } from "react-icons/tb";
-import CircularWithValueLabel from "sections/shared/components/CircularProgressWithLabel/CircularProgressWithLabel";
-import { formatDateWithSlash } from "sections/shared/utils/formatDate/formatDate";
 import ActionButton from "sections/shared/components/ActionButton/ActionButton";
 import theme from "assets/styles/theme";
 import { useState } from "react";
@@ -90,7 +88,7 @@ const CompanyDetailData = ({ company }: Props): React.ReactElement => {
         </div>
       </div>
       <section className="company-detal__plan plan">
-        <h4 className="company-data__title">Plan</h4>
+        {/* <h4 className="company-data__title">Plan</h4>
         <div className="plan__data">
           <div className="plan__section">
             <h5>Tipo</h5>
@@ -125,16 +123,16 @@ const CompanyDetailData = ({ company }: Props): React.ReactElement => {
               {formatDateWithSlash(company.plan && company.plan.start_date!)}
             </span>
 
-            {/* TO DO FALTA FECHA FIN DE PLAN */}
-            {/* <h5>Fecha de fin</h5>
+            <h5>Fecha de fin</h5>
             <span className="plan__date">
               {formatDateWithSlash(company.plan && company.plan.end_date!)}
-            </span> */}
+            </span>
           </div>
           <div className="plan__section">
             <CircularWithValueLabel progress={company.percentage} />
           </div>
-        </div>
+        </div> 
+        */}
       </section>
       {company.socialMedia?.length > 0 && (
         <CompanySocialMedia socialMedia={company?.socialMedia} />
