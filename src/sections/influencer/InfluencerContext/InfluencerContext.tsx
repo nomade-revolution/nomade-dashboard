@@ -12,6 +12,7 @@ import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuar
 import { Influencer } from "@influencer";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
 import { EditInfluencerStatsStructure } from "@influencer/domain/InfluencerSocialMedia";
+import { RegisterInfluencerInterface } from "@auth";
 
 interface ContextState {
   loading: boolean;
@@ -28,7 +29,7 @@ interface ContextState {
     influencer_id: number,
     stats: EditInfluencerStatsStructure,
   ) => void;
-  registerInfluencer: (data: Partial<Influencer>) => void;
+  registerInfluencer: (data: Partial<RegisterInfluencerInterface>) => void;
 }
 
 export const InfluencerContext = createContext<ContextState>(
@@ -117,7 +118,7 @@ export const InfluencerContextProvider = ({
   );
 
   const registerInfluencer = useCallback(
-    async (data: Partial<Influencer>) => {
+    async (data: Partial<RegisterInfluencerInterface>) => {
       const response = await registerNewInfluencer(repository, data);
 
       if (isHttpSuccessResponse(response)) {

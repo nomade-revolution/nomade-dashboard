@@ -33,7 +33,7 @@ export const registerInfluencerScheme = yup.object({
     .string()
     .min(8, "La contraseña debe tener mínimo 8 carácteres")
     .required(errorMessages.required),
-  repeatPassword: yup
+  password_confirmation: yup
     .string()
     .required(errorMessages.required)
     .oneOf([yup.ref("password")], "Las contraseñas no coinciden"),

@@ -6,7 +6,7 @@ import { ErrorMessage, Field, Formik } from "formik";
 import { registerInfluencerScheme } from "sections/auth/components/validations/validations";
 import Loader from "sections/shared/components/Loader/Loader";
 import GoBackButton from "sections/shared/components/GoBackButton/GoBackButton";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ReusableSelect from "sections/shared/components/ReusableSelect/ReusableSelect";
 import CreateInfluencerFormStyled from "./CreateInfluencerFormStyled";
 import { useCitiesContext } from "sections/city/CityContext/useCitiesContext";
@@ -22,9 +22,9 @@ const initialState: RegisterInfluencerInterface = {
   prefix: "",
   LGPD: true,
   password: "",
-  repeatPassword: "",
+  password_confirmation: "",
   avatar: null,
-  categories: [1],
+  categories: [3],
   phone: "",
   from_city_id: 0,
   from_country_id: 0,
@@ -49,7 +49,7 @@ const CreateInfluencerPage = () => {
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const { registerInfluencer } = useInfluencerContext();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [loading, setIsLoading] = useState<boolean>(false);
   const { getAllCities } = useCitiesContext();
   const { countries, getAllCountries } = useCountryContext();
@@ -77,17 +77,22 @@ const CreateInfluencerPage = () => {
   const handleSubmitForm = async (values: RegisterInfluencerInterface) => {
     setIsLoading(true);
     setIsFormSubmitted(true);
-
-    const resp: any = await registerInfluencer({
-      ...values,
-      avatar: file[0],
+    const formData = new FormData();
+    Object.keys(values).forEach((key) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      formData.append(key, values[key]);
     });
+
+    formData.append("avatar", file[0]);
+
+    const resp: any = await registerInfluencer(formData as any);
 
     setIsSuccess(Boolean(resp.success));
     setIsLoading(false);
 
     if (isSuccess) {
-      // navigate("/users");
+      navigate("/users");
       return;
     }
 
@@ -650,24 +655,28 @@ const CreateInfluencerPage = () => {
                 )}
               </div>
               <div className="form-section">
-                <label htmlFor="repeatPassword" className="login-form__label">
+                <label
+                  htmlFor="password_confirmation"
+                  className="login-form__label"
+                >
                   Repetir contraseña
                 </label>
 
                 <Field
                   type="password"
-                  id="repeatPassword"
+                  id="password_confirmation"
                   className="form-section__field"
-                  aria-label="repeatPassword"
-                  {...getFieldProps("repeatPassword")}
+                  aria-label="password_confirmation"
+                  {...getFieldProps("password_confirmation")}
                 />
-                {errors.repeatPassword && touched.repeatPassword && (
-                  <ErrorMessage
-                    className="login-form__error-message"
-                    component="span"
-                    name="repeatPassword"
-                  />
-                )}
+                {errors.password_confirmation &&
+                  touched.password_confirmation && (
+                    <ErrorMessage
+                      className="login-form__error-message"
+                      component="span"
+                      name="password_confirmation"
+                    />
+                  )}
               </div>
             </div>
             <button

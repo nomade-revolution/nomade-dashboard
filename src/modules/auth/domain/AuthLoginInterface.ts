@@ -27,9 +27,8 @@ export interface RegisterInfluencerInterface {
   avatar: File | null;
   living_country_id: number;
   email: string;
-
   password: string;
-  repeatPassword: string;
+  password_confirmation: string;
   socialMedia: [
     {
       social_media_id: number;

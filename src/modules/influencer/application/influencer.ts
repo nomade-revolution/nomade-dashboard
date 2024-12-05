@@ -1,3 +1,4 @@
+import { RegisterInfluencerInterface } from "@auth";
 import { HttpResponseInterface } from "@core/domain/HttpResponseInterface";
 import { Influencer } from "@influencer/domain";
 import { InfluencerRepository } from "@influencer/domain/InfluencerRepository";
@@ -41,7 +42,7 @@ export const editInfluencerStats = (
 
 export const registerNewInfluencer = (
   influencerRepo: InfluencerRepository<Influencer>,
-  data: Partial<Influencer>,
+  data: Partial<RegisterInfluencerInterface>,
 ) => {
   return influencerRepo.registerInfluencer(data);
 };

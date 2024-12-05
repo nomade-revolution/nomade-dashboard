@@ -1,3 +1,4 @@
+import { RegisterInfluencerInterface } from "@auth";
 import { Http } from "@core/application";
 import { HttpResponseInterface } from "@core/domain";
 import {
@@ -76,7 +77,7 @@ export class InfluencerRepository {
 
   public async registerInfluencer(
     data: Partial<Influencer>,
-  ): Promise<HttpResponseInterface<Influencer>> {
+  ): Promise<HttpResponseInterface<RegisterInfluencerInterface>> {
     try {
       const resp = await this.http.post<Influencer>(INFLUENCER_BASE, data);
       return resp;
