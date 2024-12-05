@@ -76,7 +76,7 @@ export class InfluencerRepository {
   }
 
   public async registerInfluencer(
-    data: Partial<Influencer>,
+    data: Partial<RegisterInfluencerInterface>,
   ): Promise<HttpResponseInterface<RegisterInfluencerInterface>> {
     try {
       const resp = await this.http.post<Influencer>(INFLUENCER_BASE, data);
