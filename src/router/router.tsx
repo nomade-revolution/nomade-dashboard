@@ -23,6 +23,7 @@ import PlansPage from "sections/plans/pages/PlansPage/PlansPage";
 import LogoutPage from "sections/auth/pages/LogooutPage/LogoutPage";
 import CreateUserPage from "sections/user/pages/CreateUserPage/CreateUserPage";
 import PlanPage from "sections/plans/pages/Plan/PlanPage";
+import CreateInfluencerPage from "sections/user/pages/CreateInfluencerPage/CreateInfluencerPage";
 
 const routes: RouteObject[] = [
   {
@@ -105,6 +106,10 @@ const routes: RouteObject[] = [
       {
         path: appPaths.createUser,
         element: <CreateUserPage />,
+      },
+      {
+        path: appPaths.createInfluencer,
+        element: <CreateInfluencerPage />,
       },
       {
         path: appPaths.plan,

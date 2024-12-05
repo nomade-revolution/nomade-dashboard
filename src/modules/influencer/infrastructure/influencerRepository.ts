@@ -73,4 +73,15 @@ export class InfluencerRepository {
       return Promise.reject(error);
     }
   }
+
+  public async registerInfluencer(
+    data: Partial<Influencer>,
+  ): Promise<HttpResponseInterface<Influencer>> {
+    try {
+      const resp = await this.http.post<Influencer>(INFLUENCER_BASE, data);
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 }

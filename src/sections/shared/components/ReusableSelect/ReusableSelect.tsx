@@ -9,6 +9,7 @@ interface ReusableSelectProps {
   setValue: (value: string) => void;
   options: OptionsStructure[];
   label: string;
+  disabled?: boolean;
 }
 
 export default function ReusableSelect({
@@ -16,6 +17,7 @@ export default function ReusableSelect({
   value,
   options,
   label,
+  disabled = false,
 }: ReusableSelectProps) {
   // const breakpoint = useMediaQuery("min-width: 1000px");
   const handleChange = (event: SelectChangeEvent) => {
@@ -24,9 +26,11 @@ export default function ReusableSelect({
 
   return (
     <FormControl
+      disabled={disabled}
       sx={{
         minWidth: 200,
         width: "100%",
+        maxWidth: 400,
       }}
     >
       <InputLabel id="select-label">{label}</InputLabel>

@@ -1,8 +1,11 @@
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
+import theme from "assets/styles/theme";
 import { UserTypes } from "modules/user/domain/User";
 import { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { FaUser } from "react-icons/fa6";
+import { useNavigate, useParams } from "react-router-dom";
 import { influencersTableHeaderSections } from "sections/influencer/utils/influencersSections";
+import ActionButton from "sections/shared/components/ActionButton/ActionButton";
 import DashboardCardListMobile from "sections/shared/components/DashboardCardListMobile/DashboardCardListMobile";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
 import Loader from "sections/shared/components/Loader/Loader";
@@ -12,11 +15,12 @@ import {
   FilterParams,
   SectionTypes,
 } from "sections/shared/interfaces/interfaces";
+import { appPaths } from "sections/shared/utils/appPaths/appPaths";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
 
 const InfluencersPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
-
+  const navigate = useNavigate();
   const { getUsers, users_influencer, pagination, loading, order } =
     useUserContext();
   const { page } = useParams();
@@ -42,7 +46,9 @@ const InfluencersPage = (): React.ReactElement => {
     },
     [getUsers, order.direction, order.sortTag, page],
   );
-
+  const handleCreateUser = () => {
+    navigate(appPaths.createInfluencer);
+  };
   useEffect(() => {
     getUsersData();
   }, [page, order, getUsersData]);
@@ -53,6 +59,12 @@ const InfluencersPage = (): React.ReactElement => {
       ) : (
         <ReusablePageStyled className="dashboard">
           <div className="dashboard__search">
+            <ActionButton
+              color={theme.colors.darkBlue}
+              icon={<FaUser />}
+              onClick={() => handleCreateUser()}
+              text="Crear usuario"
+            />
             <SearchBar
               pageName={SectionTypes.influencers}
               pageTypes={SectionTypes.influencers}
@@ -62,6 +74,7 @@ const InfluencersPage = (): React.ReactElement => {
               onReset={() => getUsersData()}
             />
           </div>
+
           <div className="dashboard__table">
             <DashboardTable
               bodySections={users_influencer}

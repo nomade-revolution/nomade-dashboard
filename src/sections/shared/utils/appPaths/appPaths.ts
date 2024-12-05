@@ -23,4 +23,5 @@ export const appPaths = {
   logout: "/logout",
   createUser: "/create-user",
   plan: "/plan",
+  createInfluencer: "/create-influencer",
 };

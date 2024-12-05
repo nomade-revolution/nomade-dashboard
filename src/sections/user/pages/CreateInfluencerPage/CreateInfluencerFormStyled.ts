@@ -1,0 +1,64 @@
+import styled from "styled-components";
+
+const CreateInfluencerFormStyled = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  font-size: ${(props) => props.theme.fontsSize.__SM};
+  width: 85%;
+
+  @media (min-width: 1000px) {
+    width: 60%;
+  }
+  .dobleContainer {
+    display: flex;
+    width: 100%;
+    gap: 20px;
+  }
+  .form-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    justify-content: center;
+    align-items: flex-start;
+    &__field {
+      border-radius: ${(props) => props.theme.borderRadius.inputs};
+      border: 1px solid ${(props) => props.theme.colors.inputsBorderColors};
+      height: ${(props) => props.theme.heights.inputs};
+      padding: 0 10px;
+      width: 100%;
+      max-width: 400px;
+    }
+  }
+
+  .login-form {
+    &__submit {
+      background: ${(props) => props.theme.colors.mainColor};
+      color: ${(props) => props.theme.fontsColors.light};
+      font-weight: ${(props) => props.theme.fontWeights.mediumBold};
+      height: ${(props) => props.theme.heights.inputs};
+      border-radius: ${(props) => props.theme.borderRadius.submitButton};
+      width: 100%;
+      align-self: center;
+      max-width: 300px;
+      margin-top: 20px;
+      margin-bottom: 60px;
+    }
+
+    &__label {
+      color: ${(props) => props.theme.fontsColors.lightGrey};
+    }
+
+    &__forgot-password {
+      color: ${(props) => props.theme.fontsColors.corporativeColor};
+    }
+
+    &__error-message {
+      color: ${(props) => props.theme.fontsColors.error};
+    }
+  }
+`;
+
+export default CreateInfluencerFormStyled;

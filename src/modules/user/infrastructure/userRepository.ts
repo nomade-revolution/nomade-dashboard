@@ -57,7 +57,7 @@ export class UsersRepository {
         name: data.name,
         email: data.email,
         password: data.password,
-        roles: [1],
+        roles: data.roles,
       });
 
       return response;

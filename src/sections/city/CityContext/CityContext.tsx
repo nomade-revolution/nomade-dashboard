@@ -37,7 +37,6 @@ export const CityContextProvider = ({
         setLoading(false);
         setCities(response.data);
       }
-
       return response;
     },
     [repository],

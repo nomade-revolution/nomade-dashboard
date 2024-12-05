@@ -5,6 +5,7 @@ import {
   getInfluencersBadge,
   getInfluencers,
   editInfluencerStats,
+  registerNewInfluencer,
 } from "@influencer/application/influencer";
 import { InfluencerRepository } from "@influencer/domain/InfluencerRepository";
 import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
@@ -27,6 +28,7 @@ interface ContextState {
     influencer_id: number,
     stats: EditInfluencerStatsStructure,
   ) => void;
+  registerInfluencer: (data: Partial<Influencer>) => void;
 }
 
 export const InfluencerContext = createContext<ContextState>(
@@ -114,10 +116,27 @@ export const InfluencerContextProvider = ({
     [repository],
   );
 
+  const registerInfluencer = useCallback(
+    async (data: Partial<Influencer>) => {
+      const response = await registerNewInfluencer(repository, data);
+
+      if (isHttpSuccessResponse(response)) {
+        setInfluencer(response.data);
+        setIsSuccess(true);
+      } else {
+        setError(response.error as never);
+      }
+
+      return response;
+    },
+    [repository],
+  );
+
   setTimeout(() => setIsSuccess(false), 3000);
   return (
     <InfluencerContext.Provider
       value={{
+        registerInfluencer,
         loading,
         isSuccess,
         influencer,

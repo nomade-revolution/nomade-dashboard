@@ -38,3 +38,10 @@ export const editInfluencerStats = (
 ) => {
   return influencerRepo.editInfluencerStats(data, influencer_id);
 };
+
+export const registerNewInfluencer = (
+  influencerRepo: InfluencerRepository<Influencer>,
+  data: Partial<Influencer>,
+) => {
+  return influencerRepo.registerInfluencer(data);
+};
