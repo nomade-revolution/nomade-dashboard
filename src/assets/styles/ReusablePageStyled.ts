@@ -5,16 +5,16 @@ const ReusablePageStyled = styled.main`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 20px;
+  padding: 0px;
   color: ${(props) => props.theme.fontsColors.dashBoard};
   width: 100%;
 
   @media (min-width: 1000px) and (max-width: 1600px) {
-    padding: 20px 40px;
+    padding: 10px 40px;
   }
 
   @media (min-width: 1600px) {
-    padding: 10px 50px;
+    padding: 20px 50px;
     height: 100%;
   }
 
@@ -23,7 +23,7 @@ const ReusablePageStyled = styled.main`
     &__table {
       display: none;
 
-      @media (min-width: 1000px) {
+      @media (min-width: 880px) {
         width: 100%;
         display: flex;
         flex-direction: column;
@@ -66,8 +66,8 @@ const ReusablePageStyled = styled.main`
       @media (min-width: 880px) {
         width: 100%;
         flex-direction: row;
-
         justify-content: space-between;
+        min-width: 100%;
       }
     }
 
@@ -143,7 +143,9 @@ const ReusablePageStyled = styled.main`
       color: ${(props) => props.theme.fontsColors.light};
       font-weight: 700;
     }
-
+    &__comments {
+      font-size: ${(props) => props.theme.fontsSize.__SM};
+    }
     &__location {
       font-size: large;
       color: ${(props) => props.theme.colors.darkRed};

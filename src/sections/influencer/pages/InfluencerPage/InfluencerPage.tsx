@@ -2,7 +2,7 @@ import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 import theme from "assets/styles/theme";
 import { UserTypes } from "modules/user/domain/User";
 import { useCallback, useEffect, useState } from "react";
-import { FaUser } from "react-icons/fa6";
+import { IoAddCircle } from "react-icons/io5";
 import { useNavigate, useParams } from "react-router-dom";
 import { influencersTableHeaderSections } from "sections/influencer/utils/influencersSections";
 import ActionButton from "sections/shared/components/ActionButton/ActionButton";
@@ -61,9 +61,9 @@ const InfluencersPage = (): React.ReactElement => {
           <div className="dashboard__search">
             <ActionButton
               color={theme.colors.darkBlue}
-              icon={<FaUser />}
+              icon={<IoAddCircle className="dashboard__create--icon" />}
               onClick={() => handleCreateUser()}
-              text="Crear usuario"
+              text="Crear influencer"
             />
             <SearchBar
               pageName={SectionTypes.influencers}

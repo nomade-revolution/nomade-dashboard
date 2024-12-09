@@ -7,15 +7,15 @@ const OffersPageStyled = styled.main`
   justify-content: center;
   align-items: center;
   gap: 20px;
-  padding: 0px 0px;
+  padding: 0px;
   color: ${(props) => props.theme.fontsColors.dashBoard};
 
   @media (min-width: 1000px) and (max-width: 1600px) {
-    padding: 40px 30px;
+    padding: 10px 40px;
   }
 
   @media (min-width: 1600px) {
-    padding: 40px 50px;
+    padding: 20px 50px;
     height: 100%;
   }
 

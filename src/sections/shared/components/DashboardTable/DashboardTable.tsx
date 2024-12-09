@@ -62,7 +62,7 @@ const DashboardTable = <Type,>({
         component={Paper}
         sx={{
           boxShadow: "0px 0px 20px 0.2em rgba(0, 0, 0, 0.1)",
-          width: "fit-content",
+          width: "100%",
         }}
       >
         <DashboardStyled
@@ -88,7 +88,11 @@ const DashboardTable = <Type,>({
             {bodySections?.map((section: Type, index) => (
               <StyledTableRow key={index}>
                 {headerSections?.map((headerSection) => (
-                  <StyledTableCell align="left" key={headerSection.id}>
+                  <StyledTableCell
+                    align="left"
+                    key={headerSection.id}
+                    style={{ minWidth: "100%" }}
+                  >
                     <DashboardTableCellContent
                       headerSection={headerSection}
                       section={

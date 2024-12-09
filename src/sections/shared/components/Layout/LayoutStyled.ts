@@ -34,7 +34,7 @@ const LayoutStyled = styled.div<Props>`
       background: ${(props) => `${props.theme.colors.softMainColor}`};
       box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
       z-index: 100;
-      padding: 30px 20px;
+      padding: 10px 20px;
 
       @media (min-width: 1000px) {
         display: none;
@@ -44,7 +44,7 @@ const LayoutStyled = styled.div<Props>`
     &__pages {
       flex-grow: 1;
       overflow-y: auto;
-      padding: 30px;
+      padding: 1px 30px;
       margin-left: ${(props) => (props.$isMinimized ? "2rem" : "15rem")};
 
       @media (max-width: 999px) {
