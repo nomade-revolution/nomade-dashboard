@@ -28,6 +28,7 @@ import CollabsForm from "sections/collabs/components/CollabsForm/CollabsForm";
 import ExportFilesButton from "sections/shared/components/ExportButton/ExportButton";
 import ActionButton from "sections/shared/components/ActionButton/ActionButton";
 import theme from "assets/styles/theme";
+import { FaFilter } from "react-icons/fa6";
 
 const CollabsPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
@@ -142,7 +143,7 @@ const CollabsPage = (): React.ReactElement => {
 
     getAllCollabs(+page!, 20, totalFilters);
   };
-
+  const [isOpenFilters, setIsOpenFilters] = useState<boolean>(false);
   useEffect(() => {
     getCollabs();
   }, [page, order, getCollabs, filterId]);
@@ -154,16 +155,41 @@ const CollabsPage = (): React.ReactElement => {
       ) : (
         <ReusablePageStyled>
           <div className="dashboard__filtersContainer">
-            <section className="dashboard__selectsContainer">
-              {user.type === "Nomade" && (
+            {user.type === "Nomade" && (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: "20px",
+                }}
+              >
                 <ActionButton
                   onClick={() => setIsModalOpen(true)}
                   color={theme.colors.darkBlue}
                   text="Crear collab"
                   icon={<IoAddCircle className="dashboard__create--icon" />}
                 />
-              )}
 
+                <ActionButton
+                  icon={<FaFilter />}
+                  color={theme.colors.darkBlue}
+                  text="Filtros"
+                  onClick={() => setIsOpenFilters(!isOpenFilters)}
+                />
+              </div>
+            )}
+            <SearchBar
+              pageName={SectionTypes.collabs}
+              pageTypes={SectionTypes.collabs}
+              searchText={searchText!}
+              setSearchText={setSearchText}
+              onReset={() => getCollabs()}
+              onSearchSubmit={() => handleSearch(searchText)}
+            />
+          </div>
+          {isOpenFilters && (
+            <section className="dashboard__selectsContainer">
               {user.type === "Nomade" && (
                 <TypeAhead
                   options={companies?.map((company) => {
@@ -208,16 +234,7 @@ const CollabsPage = (): React.ReactElement => {
                 />
               </div>
             </section>
-
-            <SearchBar
-              pageName={SectionTypes.collabs}
-              pageTypes={SectionTypes.collabs}
-              searchText={searchText!}
-              setSearchText={setSearchText}
-              onReset={() => getCollabs()}
-              onSearchSubmit={() => handleSearch(searchText)}
-            />
-          </div>
+          )}
 
           <div className="dashboard__filters filters">
             {Object.entries(totalFilters.filters || {})

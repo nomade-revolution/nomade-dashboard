@@ -676,6 +676,52 @@ const DashboardContentSections = ({
       );
     }
 
+    case "minimum": {
+      return (
+        <section
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <span className="dashboard__type">
+            {section[headerSection.property as never]}
+          </span>
+        </section>
+      );
+    }
+    case "objective": {
+      return (
+        <section
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <span className="dashboard__type">
+            {section[headerSection.property as never]}
+          </span>
+        </section>
+      );
+    }
+    case "colabs": {
+      return (
+        <section
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <span className="dashboard__type">
+            {section[headerSection.property as never]}
+          </span>
+        </section>
+      );
+    }
+
     default:
       return (
         <section>

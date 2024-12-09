@@ -40,9 +40,6 @@ const TypeAhead = ({
 
   return (
     <TypeAheadStyled>
-      <div className="loaderContainer">
-        {isLoading && <Loader width="20px" height="20px" />}
-      </div>
       <Autocomplete
         className="input"
         onChange={(_event, value) => {
@@ -57,14 +54,27 @@ const TypeAhead = ({
         ) => {
           return option.id === value.id;
         }}
-        clearOnEscape
         getOptionKey={(option: OptionsStructure) => option.id}
         getOptionLabel={(option: OptionsStructure) => option.name}
         options={options}
         renderInput={(params) => {
-          return <TextField {...params} label={label} />;
+          return (
+            <TextField
+              {...params}
+              label={label}
+              style={{
+                minWidth: 200,
+                width: "100%",
+                maxWidth: 400,
+                height: "40px",
+              }}
+            />
+          );
         }}
       />
+      <div className="loaderContainer">
+        {isLoading && <Loader width="20px" height="20px" />}
+      </div>
     </TypeAheadStyled>
   );
 };

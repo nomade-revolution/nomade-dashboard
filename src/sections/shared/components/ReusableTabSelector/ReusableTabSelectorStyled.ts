@@ -27,7 +27,7 @@ const ReusableTabSelectorStyled = styled.section`
     }
 
     &__tab-panel {
-      padding: 16px 0;
+      padding: 0px 0;
       border-top: none;
     }
 

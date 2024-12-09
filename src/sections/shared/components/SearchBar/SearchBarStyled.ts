@@ -19,10 +19,10 @@ const SearchBarStyled = styled.form`
       border-radius: 5px 0 0 5px;
       padding: 0 6px;
       width: 100%;
-      height: 55px;
+      height: 40px;
 
       @media (min-width: 1000px) and (max-width: 1600px) {
-        width: 100px;
+        width: 120px;
       }
 
       @media (min-width: 1600px) {
@@ -41,7 +41,7 @@ const SearchBarStyled = styled.form`
       border: 1px solid darkgray;
       border-radius: 0 5px 5px 0;
       font-weight: 700;
-      height: 55px;
+      height: 40px;
     }
 
     &__button-text {
@@ -55,6 +55,7 @@ const SearchBarStyled = styled.form`
     &__fieldContainer {
       position: relative;
       width: 100%;
+      height: 40px;
 
       @media (min-width: 1000px) {
         padding-left: 15px;

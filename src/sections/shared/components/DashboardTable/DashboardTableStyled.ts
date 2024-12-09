@@ -17,10 +17,25 @@ const DashboardStyled = styled.table`
       padding: 0;
       width: 100%;
     }
+    &__sort-button-center {
+      color: ${(props) => props.theme.fontsColors.corporativeColor};
+      font-weight: 700;
+      font-size: ${(props) => props.theme.fontsSize.__SMM};
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 0;
+      width: 100%;
+      background-color: pink;
+    }
   }
 
   .header__section {
     width: 200px;
+  }
+  .header__section--small {
+    width: 100px;
   }
 
   .contact__section {

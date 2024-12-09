@@ -4,13 +4,15 @@ const CompanyDetailPageStyled = styled.main`
   background: ${(props) => props.theme.colors.backgroundPages};
   display: flex;
   flex-direction: column;
-  gap: 50px;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
   padding: 20px 20px;
   color: ${(props) => props.theme.fontsColors.dashBoard};
   height: 100%;
 
   @media (min-width: 1000px) and (max-width: 1600px) {
-    padding: 200px 150px;
+    padding: 20px 70px;
   }
 
   @media (min-width: 1600px) {

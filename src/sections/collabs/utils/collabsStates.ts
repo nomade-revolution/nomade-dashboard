@@ -107,7 +107,7 @@ export const collabsFiltersNomade = [
   },
   {
     id: COLAB_MODIFICATION_IN_PROGRESS_STATE,
-    name: "Modificación en progreso (influencer)",
+    name: "Modificación en curso (Influencer)",
     value: "4",
   },
   // {
@@ -138,17 +138,17 @@ export const collabsFiltersNomade = [
   },
   {
     id: COLAB_RECEIVED_STATE,
-    name: "Recibido(Influencer)",
+    name: "Recibido (Influencer)",
     value: "10",
   },
   {
     id: COLAB_INCIDENT_STATE,
-    name: "Incidencia (influencer)",
+    name: "Incidencia (Influencer)",
     value: "11",
   },
   {
     id: COLAB_PUBLISHED_STATE,
-    name: "Publicado (influencer)",
+    name: "Publicado (Influencer)",
     value: "12",
   },
 ];

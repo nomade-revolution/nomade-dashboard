@@ -10,7 +10,7 @@ const ReusablePageStyled = styled.main`
   width: 100%;
 
   @media (min-width: 1000px) and (max-width: 1600px) {
-    padding: 10px 40px;
+    padding: 20px 40px;
   }
 
   @media (min-width: 1600px) {
@@ -74,13 +74,16 @@ const ReusablePageStyled = styled.main`
     &__selectsContainer {
       display: flex;
       flex-direction: column-reverse;
-      align-items: flex-end;
+      align-items: center;
       gap: 10px;
       width: 100%;
 
       @media (min-width: 880px) {
-        width: 90%;
+        width: 100%;
         flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 100%;
       }
     }
 
@@ -201,35 +204,35 @@ const ReusablePageStyled = styled.main`
       font-size: ${(props) => props.theme.fontsSize.__SM};
 
       &--accepted {
-        color: ${(props) => props.theme.colors.softGreen};
+        color: #8c9b6e;
         font-size: ${(props) => props.theme.fontsSize.__SM};
       }
 
       &--rejected {
-        color: ${(props) => props.theme.colors.darkRed};
+        color: #c00000;
         font-size: ${(props) => props.theme.fontsSize.__SM};
       }
 
       &--cancelled {
         font-size: ${(props) => props.theme.fontsSize.__SM};
 
-        color: ${(props) => props.theme.colors.red};
+        color: #7b3c47;
       }
 
       &--sent {
         font-size: ${(props) => props.theme.fontsSize.__SM};
-        color: ${(props) => props.theme.colors.darkBlue};
+        color: #4682b4;
       }
 
       &--pending-nomade {
         font-size: ${(props) => props.theme.fontsSize.__SM};
 
-        color: blue;
+        color: #e94e1b;
       }
 
       &--pending-company {
         font-size: ${(props) => props.theme.fontsSize.__SM};
-        color: fuchsia;
+        color: #ad6975;
       }
 
       &--done {
@@ -244,21 +247,21 @@ const ReusablePageStyled = styled.main`
 
       &--incident {
         font-size: ${(props) => props.theme.fontsSize.__SM};
-        color: brown;
+        color: #e57c00;
       }
 
       &--published {
         font-size: ${(props) => props.theme.fontsSize.__SM};
-        color: ${(props) => props.theme.colors.softGreen};
+        color: #28a745;
       }
       &--modification {
-        color: teal;
+        color: #f8a842;
         font-size: ${(props) => props.theme.fontsSize.__SM};
       }
     }
 
     &--modification {
-      color: teal;
+      color: #f8a842;
       font-size: ${(props) => props.theme.fontsSize.__SM};
     }
 
@@ -476,10 +479,12 @@ const ReusablePageStyled = styled.main`
   }
 
   .plans-page {
+    padding-top: 20px;
     &__mensual {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 20px;
+      padding-top: 20px;
     }
 
     &__show-calendar {
@@ -518,6 +523,8 @@ const ReusablePageStyled = styled.main`
       background: ${(props) => props.theme.colors.darkBlue};
       padding: 10px;
       border-radius: 5px;
+      height: 40px;
+      width: 150px;
       color: ${(props) => props.theme.colors.light};
       font-weight: 700;
     }

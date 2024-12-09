@@ -111,13 +111,17 @@ const DashBoardHeaderCell = ({ section }: Props) => {
           ? "contact__section"
           : section.property === "client"
             ? "client__section"
-            : "header__section"
+            : section.property === "objective" ||
+                section.property === "minimum" ||
+                section.property === "colabs"
+              ? "header__section--small"
+              : "header__section"
       }
     >
       <button
         onClick={handlePressSort}
         disabled={!section.sortTag}
-        className="table__sort-button"
+        className={"table__sort-button"}
       >
         {section.name}
         {isSort === null && section.sortTag !== "" ? (

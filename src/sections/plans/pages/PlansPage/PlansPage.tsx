@@ -27,17 +27,18 @@ const PlansPage = (): React.ReactElement => {
   const [textToSearch, setTextToSearch] = useState<string>("");
 
   const [billing_id, setBillingId] = useState<number>(1);
-  const [isCalendarShown, setIsCalendarShown] = useState<boolean>(false);
   const [date, setDate] = useState<string>("");
   const { getPlans, plans, loading, pagination, orderPlans } =
     usePlansContext();
   const { exportCompanyBillingExcel } = useCompanyContext();
   const { page } = useParams();
+
   const handleSearch = (searchText: string) => {
     getPlans(+page!, 12, {
       filters: { date: searchText, billing_id: billing_id },
     });
   };
+
   const handleSearchByText = async (text: string) => {
     await getPlansData(text);
   };
@@ -46,8 +47,9 @@ const PlansPage = (): React.ReactElement => {
 
     if (selectedMonth) {
       const formattedDate = `${selectedMonth}-01`;
-      setIsCalendarShown(false);
+
       setDate(selectedMonth);
+
       handleSearch(formattedDate);
     }
   };
@@ -56,6 +58,7 @@ const PlansPage = (): React.ReactElement => {
       const filters: FilterParams = {
         filters: { billing_id },
       };
+
       if (orderPlans?.sortTag) {
         filters.order = [{ by: orderPlans.sortTag, dir: orderPlans.direction }];
       }
@@ -73,10 +76,12 @@ const PlansPage = (): React.ReactElement => {
   }, [page, getPlansData]);
 
   const maxMonth = formatCalendarDate(new Date().toString());
+
   return (
     <ReusablePageStyled className="plans-page">
       <ReusableTabSelector
         tabs={tabs}
+        onClick={setBillingId}
         content={[
           <>
             {loading ? (
@@ -89,20 +94,14 @@ const PlansPage = (): React.ReactElement => {
                       action={() => exportCompanyBillingExcel()}
                       text="Exportar Planes"
                     />
-                    <button
-                      onClick={() => setIsCalendarShown(!isCalendarShown)}
-                      className="plans-page__filter-btn"
-                    >
-                      Selector de fechas
-                    </button>
-                    {isCalendarShown && (
-                      <input
-                        type="month"
-                        className="plans-page__date-picker"
-                        max={maxMonth}
-                        onChange={handleCalendarChange}
-                      />
-                    )}
+                    <input
+                      type="month"
+                      value={date}
+                      className="plans-page__date-picker"
+                      max={maxMonth}
+                      onChange={handleCalendarChange}
+                    />
+
                     {date && (
                       <div className="plans-page__filter-active">
                         <span> {date}</span>
@@ -150,12 +149,15 @@ const PlansPage = (): React.ReactElement => {
                       action={() => exportCompanyBillingExcel()}
                       text="Exportar Planes"
                     />
-                    <button
-                      onClick={() => setIsCalendarShown(!isCalendarShown)}
-                      className="plans-page__filter-btn"
-                    >
-                      Selector de fechas
-                    </button>
+
+                    <input
+                      type="month"
+                      className="plans-page__date-picker"
+                      max={maxMonth}
+                      value={date}
+                      onChange={handleCalendarChange}
+                    />
+
                     {date && (
                       <div className="plans-page__filter-active">
                         <span> {date}</span>
@@ -166,14 +168,6 @@ const PlansPage = (): React.ReactElement => {
                           <IoClose color="#fff" />
                         </button>
                       </div>
-                    )}
-                    {isCalendarShown && (
-                      <input
-                        type="month"
-                        className="plans-page__date-picker"
-                        max={maxMonth}
-                        onChange={handleCalendarChange}
-                      />
                     )}
                   </div>
                   <SearchBar
@@ -201,7 +195,6 @@ const PlansPage = (): React.ReactElement => {
             )}
           </>,
         ]}
-        onClick={setBillingId}
       />
     </ReusablePageStyled>
   );

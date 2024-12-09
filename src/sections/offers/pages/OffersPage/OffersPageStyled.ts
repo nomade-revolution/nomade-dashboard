@@ -11,7 +11,7 @@ const OffersPageStyled = styled.main`
   color: ${(props) => props.theme.fontsColors.dashBoard};
 
   @media (min-width: 1000px) and (max-width: 1600px) {
-    padding: 10px 40px;
+    padding: 20px 40px;
   }
 
   @media (min-width: 1600px) {

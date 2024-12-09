@@ -45,7 +45,15 @@ const InfluencerDetailPage = (): React.ReactElement => {
         <Loader height="40px" width="40px" />
       ) : (
         <CompanyDetailPageStyled className="company-detail">
-          <GoBackButton />
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "flex-start",
+            }}
+          >
+            <GoBackButton />
+          </div>
           <section className="company-detail__header">
             <div className="company-detail__title">
               <h2>Cliente</h2>
@@ -87,7 +95,9 @@ const InfluencerDetailPage = (): React.ReactElement => {
             <CompanyDetailData company={company} />
           </section>
 
-          <h2 style={{ marginBottom: "-35px" }}>Plan</h2>
+          <h2 style={{ marginBottom: "10px", alignSelf: "flex-start" }}>
+            Plan
+          </h2>
           <DashboardTable
             bodySections={[plan]}
             headerSections={companyPlanTableSections}
