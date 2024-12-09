@@ -47,7 +47,7 @@ const OffersPage = (): React.ReactElement => {
         (filters as any).filters.search = search;
       }
 
-      getAllOffers(+page!, 20, filters);
+      getAllOffers(+page!, 10, filters);
     },
     [getAllOffers, page, order],
   );
@@ -99,7 +99,7 @@ const OffersPage = (): React.ReactElement => {
           <div
             style={{
               display: "flex",
-              justifyContent: "center",
+              justifyContent: "flex-start",
               alignItems: "center",
               width: "100%",
             }}

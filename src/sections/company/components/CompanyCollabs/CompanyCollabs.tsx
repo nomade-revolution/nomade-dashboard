@@ -26,7 +26,7 @@ const CompanyCollabs = ({ company_id }: Props): React.ReactElement => {
       filters.order = [{ by: order.sortTag, dir: order.direction }];
     }
 
-    getAllCollabs(page, 25, filters);
+    getAllCollabs(page, 10, filters);
   }, [getAllCollabs, company_id, order.direction, order.sortTag, page]);
 
   useEffect(() => {

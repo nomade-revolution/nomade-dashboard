@@ -28,10 +28,10 @@ const CompanyDetailData = ({ company }: Props): React.ReactElement => {
         <div className="company-data__data">
           <section className="company-data__data-core">
             <div className="company-data__names">
-              <span className="company-data__name">
+              <span className="company-data__name">{company.company}</span>
+              <span className="company-data__company">
                 {company?.company_name}
               </span>
-              <span className="company-data__company">{company.company}</span>
               <div>
                 <span>NIF - </span>
                 <span>{company?.nif}</span>
@@ -55,7 +55,7 @@ const CompanyDetailData = ({ company }: Props): React.ReactElement => {
             <span>{company.address?.address}</span>
           </section>
           <h4 className="company-data__title">Personas de contacto</h4>
-          <ul className="company-data__contacts">
+          {/* <ul className="company-data__contacts">
             {company?.contacts?.map((contact) => (
               <li className="company-data__contact contact" key={contact.name}>
                 <span className="contact__name">{contact.name}</span>
@@ -64,13 +64,14 @@ const CompanyDetailData = ({ company }: Props): React.ReactElement => {
                 <span className="contact__type">{contact.type}</span>
               </li>
             ))}
-          </ul>
+          </ul> */}
           <section>
             <h4 className="company-data__title">Descripción</h4>
             <span>{company?.description}</span>
           </section>
           {user.user.type === UserTypes.nomade && (
             <>
+              {/* TO DO TABLA DE COMENTARIO */}
               <section>
                 <h4 className="company-data__title">Comentarios</h4>
                 <span>{company?.company_comments ?? "Sin comentarios"}</span>
@@ -134,9 +135,8 @@ const CompanyDetailData = ({ company }: Props): React.ReactElement => {
         </div> 
         */}
       </section>
-      {company.socialMedia?.length > 0 && (
-        <CompanySocialMedia socialMedia={company?.socialMedia} />
-      )}
+
+      <CompanySocialMedia socialMedia={company?.socialMedia} />
     </CompanyDetailDataStyled>
   );
 };

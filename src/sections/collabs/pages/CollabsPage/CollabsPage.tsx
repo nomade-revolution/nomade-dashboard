@@ -91,7 +91,7 @@ const CollabsPage = (): React.ReactElement => {
 
       setTotalFilters(filters);
 
-      getAllCollabs(+page!, 25, filters);
+      getAllCollabs(+page!, 10, filters);
     },
     [
       getAllCollabs,

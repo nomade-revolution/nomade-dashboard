@@ -40,7 +40,7 @@ const UsersPage = (): React.ReactElement => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (filters as any).filters.search = text;
       }
-      getUsers(+page!, 12, filters, UserTypes.nomade);
+      getUsers(+page!, 10, filters, UserTypes.nomade);
     },
     [getUsers, order.direction, order.sortTag, page],
   );

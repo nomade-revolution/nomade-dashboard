@@ -34,7 +34,7 @@ const PlansPage = (): React.ReactElement => {
   const { page } = useParams();
 
   const handleSearch = (searchText: string) => {
-    getPlans(+page!, 12, {
+    getPlans(+page!, 10, {
       filters: { date: searchText, billing_id: billing_id },
     });
   };
@@ -66,7 +66,7 @@ const PlansPage = (): React.ReactElement => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (filters as any).filters.search = text;
       }
-      getPlans(+page!, 12, filters);
+      getPlans(+page!, 10, filters);
     },
     [billing_id, getPlans, orderPlans.direction, orderPlans.sortTag, page],
   );

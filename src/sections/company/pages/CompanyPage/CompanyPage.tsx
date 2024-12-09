@@ -53,7 +53,7 @@ const CompaniesPage = (): React.ReactElement => {
         (filters as any).filters.search = text;
       }
 
-      getCompaniesPaginated(+page!, 20, filters);
+      getCompaniesPaginated(+page!, 10, filters);
     },
     [
       getCompaniesPaginated,

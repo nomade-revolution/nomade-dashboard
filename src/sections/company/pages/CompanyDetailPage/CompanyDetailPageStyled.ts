@@ -12,11 +12,11 @@ const CompanyDetailPageStyled = styled.main`
   height: 100%;
 
   @media (min-width: 1000px) and (max-width: 1600px) {
-    padding: 20px 70px;
+    padding: 20px 80px;
   }
 
   @media (min-width: 1600px) {
-    padding: 70px 200px;
+    padding: 70px 120px;
     padding-bottom: 40px;
   }
 

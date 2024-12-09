@@ -24,7 +24,7 @@ const LeadsPage = (): React.ReactElement => {
     if (searchText) {
       filters.search = text;
     }
-    getLeadsPaginated(+page!, 12, filters);
+    getLeadsPaginated(+page!, 10, filters);
   };
 
   const handleSearch = (text: string) => {

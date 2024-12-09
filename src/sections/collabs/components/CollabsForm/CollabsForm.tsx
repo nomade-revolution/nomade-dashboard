@@ -169,7 +169,7 @@ const CompanyForm = (): React.ReactElement => {
     const filters: FilterParams = { filters: { company_id: company.id } };
 
     if (companySearch) {
-      getAllOffers(1, 12, filters);
+      getAllOffers(1, 10, filters);
     }
   }, [company.id, companySearch, getAllOffers]);
 

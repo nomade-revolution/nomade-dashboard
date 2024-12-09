@@ -24,7 +24,7 @@ const CollabsReservationsPage = (): React.ReactElement => {
         company_id: id,
       },
     };
-    getAllCollabs(+page!, 12, filters);
+    getAllCollabs(+page!, 10, filters);
   }, [id, getAllCollabs, page]);
 
   return (
