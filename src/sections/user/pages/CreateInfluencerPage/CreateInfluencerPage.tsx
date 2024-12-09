@@ -78,13 +78,21 @@ const CreateInfluencerPage = () => {
     setIsLoading(true);
     setIsFormSubmitted(true);
     const formData = new FormData();
+    values.socialMedia[0].main = true;
     Object.keys(values).forEach((key) => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      formData.append(key, values[key]);
+      if (key !== "categories" && key !== "avatar" && key !== "socialMedia") {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        formData.append(key, values[key]);
+      }
     });
+    if (file[0]) {
+      formData.append("avatar", file[0]);
+    }
+    formData.append("socialMedia[]", JSON.stringify(values.socialMedia));
+    formData.append("categories[]", JSON.stringify(3));
 
-    formData.append("avatar", file[0]);
+    formData.append("categories[]", JSON.stringify(1));
 
     const resp: any = await registerInfluencer(formData as any);
 
@@ -422,7 +430,7 @@ const CreateInfluencerPage = () => {
               setFile={(e) => setFile(e)}
               text="Avatar"
             />
-            {/* <div className="form-section">
+            <div className="form-section">
               <h5>% Por género</h5>
               <label htmlFor="men" className="login-form__label">
                 Hombres
@@ -612,7 +620,7 @@ const CreateInfluencerPage = () => {
                   name="agePercentage6"
                 />
               )}
-            </div> */}
+            </div>
             <h3 style={{ width: "100%", textAlign: "left" }}>Cuenta</h3>
             <div className="form-section">
               <label htmlFor="email" className="login-form__label">

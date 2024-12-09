@@ -68,7 +68,11 @@ const DashboardTable = <Type,>({
         <DashboardStyled
           className="table"
           aria-label="dashboard table"
-          style={{ borderCollapse: "collapse" }}
+          style={{
+            borderCollapse: "collapse",
+            width: "100%",
+            minWidth: "100%",
+          }}
         >
           <TableHead>
             <TableRow

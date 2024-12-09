@@ -146,6 +146,7 @@ const CollabsPage = (): React.ReactElement => {
   useEffect(() => {
     getCollabs();
   }, [page, order, getCollabs, filterId]);
+
   return (
     <>
       {loading ? (
@@ -168,11 +169,11 @@ const CollabsPage = (): React.ReactElement => {
                   options={companies?.map((company) => {
                     return {
                       id: company.id,
-                      name: company.company + " / " + company.company_name,
+                      name: company.company,
                       value: company.id,
                     };
                   })}
-                  label="Filtrar por empresa"
+                  label="Filtrar por cliente"
                   setValue={setCompanySelect}
                   value={companySelect}
                   searchText={""}
@@ -187,7 +188,7 @@ const CollabsPage = (): React.ReactElement => {
                 options={influencers?.map((influencer) => {
                   return {
                     id: influencer.id,
-                    name: influencer.name + " / " + influencer.user_name,
+                    name: influencer.name,
                     value: influencer.id,
                   };
                 })}

@@ -66,7 +66,6 @@ const CompaniesPage = (): React.ReactElement => {
   useEffect(() => {
     gteCompaniesData();
   }, [page, gteCompaniesData]);
-
   return (
     <>
       {loading ? (

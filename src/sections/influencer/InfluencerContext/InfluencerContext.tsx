@@ -14,6 +14,12 @@ import { FilterParams } from "sections/shared/interfaces/interfaces";
 import { EditInfluencerStatsStructure } from "@influencer/domain/InfluencerSocialMedia";
 import { RegisterInfluencerInterface } from "@auth";
 
+interface InfluencerCategory {
+  id: number;
+  name: string;
+  parent_id: number | null;
+}
+
 interface ContextState {
   loading: boolean;
   isSuccess: boolean;
@@ -30,6 +36,7 @@ interface ContextState {
     stats: EditInfluencerStatsStructure,
   ) => void;
   registerInfluencer: (data: Partial<RegisterInfluencerInterface>) => void;
+  influencerCategories: InfluencerCategory[];
 }
 
 export const InfluencerContext = createContext<ContextState>(
@@ -42,6 +49,7 @@ export const InfluencerContextProvider = ({
 }: React.PropsWithChildren<{
   repository: InfluencerRepository<{ success: boolean }>;
 }>) => {
+  const [influencerCategories] = useState<InfluencerCategory[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -72,6 +80,7 @@ export const InfluencerContextProvider = ({
     },
     [repository],
   );
+
   const getInfluencersWithParams = useCallback(
     async (params: FilterParams) => {
       setLoading(true);
@@ -137,6 +146,8 @@ export const InfluencerContextProvider = ({
   return (
     <InfluencerContext.Provider
       value={{
+        influencerCategories,
+
         registerInfluencer,
         loading,
         isSuccess,

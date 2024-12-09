@@ -5,8 +5,9 @@ const OffersPageStyled = styled.main`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   gap: 20px;
-  padding: 20px 20px;
+  padding: 0px 0px;
   color: ${(props) => props.theme.fontsColors.dashBoard};
 
   @media (min-width: 1000px) and (max-width: 1600px) {
@@ -113,7 +114,6 @@ const OffersPageStyled = styled.main`
 
     &__name {
       font-size: ${(props) => props.theme.fontsSize.__SM};
-      font-weight: 700;
     }
 
     &__link-icon {
@@ -132,9 +132,11 @@ const OffersPageStyled = styled.main`
   }
 
   .dashboard {
-    &__type-section {
-      font-weight: bold;
+    &__type {
+      font-size: ${(props) => props.theme.fontsSize.__SM};
+    }
 
+    &__type-section {
       &--influencer {
         color: ${(props) => props.theme.colors.orange};
       }

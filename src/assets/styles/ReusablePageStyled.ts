@@ -11,18 +11,15 @@ const ReusablePageStyled = styled.main`
 
   @media (min-width: 1000px) and (max-width: 1600px) {
     padding: 20px 40px;
-    max-width: fit-content;
   }
 
   @media (min-width: 1600px) {
     padding: 10px 50px;
     height: 100%;
-    max-width: fit-content;
   }
 
   .dashboard {
     width: 100%;
-
     &__table {
       display: none;
 
@@ -32,6 +29,7 @@ const ReusablePageStyled = styled.main`
         flex-direction: column;
         gap: 20px;
         justify-content: center;
+        min-width: 100%;
       }
     }
 
@@ -94,7 +92,6 @@ const ReusablePageStyled = styled.main`
 
     &__name {
       font-size: ${(props) => props.theme.fontsSize.__SM};
-      font-weight: 700;
       width: 100%;
       text-align: left;
     }
@@ -161,10 +158,10 @@ const ReusablePageStyled = styled.main`
       display: flex;
       justify-content: flex-start;
     }
-
+    &__type {
+      font-size: ${(props) => props.theme.fontsSize.__SM};
+    }
     &__type-section {
-      font-weight: bold;
-
       &--influencer {
         color: ${(props) => props.theme.colors.orange};
       }
@@ -199,68 +196,77 @@ const ReusablePageStyled = styled.main`
     }
 
     &__state-section {
-      font-weight: bold;
+      font-size: ${(props) => props.theme.fontsSize.__SM};
 
       &--accepted {
-        font-weight: bold;
         color: ${(props) => props.theme.colors.softGreen};
+        font-size: ${(props) => props.theme.fontsSize.__SM};
       }
 
       &--rejected {
-        font-weight: bold;
         color: ${(props) => props.theme.colors.darkRed};
+        font-size: ${(props) => props.theme.fontsSize.__SM};
       }
 
       &--cancelled {
-        font-weight: bold;
+        font-size: ${(props) => props.theme.fontsSize.__SM};
+
         color: ${(props) => props.theme.colors.red};
       }
 
       &--sent {
-        font-weight: bold;
+        font-size: ${(props) => props.theme.fontsSize.__SM};
         color: ${(props) => props.theme.colors.darkBlue};
       }
 
       &--pending-nomade {
-        font-weight: bold;
+        font-size: ${(props) => props.theme.fontsSize.__SM};
+
         color: blue;
       }
 
       &--pending-company {
-        font-weight: bold;
+        font-size: ${(props) => props.theme.fontsSize.__SM};
         color: fuchsia;
       }
 
       &--done {
-        font-weight: bold;
+        font-size: ${(props) => props.theme.fontsSize.__SM};
         color: green;
       }
 
       &--finished {
-        font-weight: bold;
+        font-size: ${(props) => props.theme.fontsSize.__SM};
         color: ${(props) => props.theme.colors.purple};
       }
 
       &--incident {
-        font-weight: bold;
+        font-size: ${(props) => props.theme.fontsSize.__SM};
         color: brown;
       }
 
       &--published {
-        font-weight: bold;
+        font-size: ${(props) => props.theme.fontsSize.__SM};
         color: ${(props) => props.theme.colors.softGreen};
+      }
+      &--modification {
+        color: teal;
+        font-size: ${(props) => props.theme.fontsSize.__SM};
       }
     }
 
     &--modification {
       color: teal;
+      font-size: ${(props) => props.theme.fontsSize.__SM};
     }
 
     &--received {
+      font-size: ${(props) => props.theme.fontsSize.__SM};
       color: lightBlue;
     }
 
     &--published {
+      font-size: ${(props) => props.theme.fontsSize.__SM};
       color: gold;
     }
 
@@ -330,57 +336,59 @@ const ReusablePageStyled = styled.main`
 
     &__progress-percentage {
       position: absolute;
-      font-weight: 700;
       color: white;
       top: 0;
     }
 
     &__plan {
       &--basic {
-        font-weight: 700;
         color: fuchsia;
+        font-size: ${(props) => props.theme.fontsSize.__SM};
       }
 
       &--standard {
-        font-weight: 700;
         color: blue;
+        font-size: ${(props) => props.theme.fontsSize.__SM};
       }
 
       &--premium {
-        font-weight: 700;
         color: orange;
+        font-size: ${(props) => props.theme.fontsSize.__SM};
       }
 
       &--pending {
-        font-weight: 700;
         color: red;
+        font-size: ${(props) => props.theme.fontsSize.__SM};
+      }
+      &--pause {
+        font-size: ${(props) => props.theme.fontsSize.__SM};
       }
     }
 
     &__start-date {
       color: green;
-      font-weight: 700;
       opacity: 0.6;
+      font-size: ${(props) => props.theme.fontsSize.__SM};
     }
 
     &__end-date {
       color: red;
-      font-weight: 700;
       opacity: 0.6;
+      font-size: ${(props) => props.theme.fontsSize.__SM};
     }
 
     &__link-sent {
+      font-size: ${(props) => props.theme.fontsSize.__SM};
       color: ${(props) => props.theme.colors.softGreen};
-      font-weight: 700;
     }
 
     &__link-pending {
-      font-weight: 700;
+      font-size: ${(props) => props.theme.fontsSize.__SM};
       color: ${(props) => props.theme.colors.red};
     }
 
     &__date {
-      font-weight: 700;
+      font-size: ${(props) => props.theme.fontsSize.__SM};
     }
 
     &__social-media {
@@ -391,47 +399,47 @@ const ReusablePageStyled = styled.main`
     }
 
     &__status {
+      font-size: ${(props) => props.theme.fontsSize.__SM};
+
       &--active {
         color: green;
-        font-weight: 700;
+        font-size: ${(props) => props.theme.fontsSize.__SM};
       }
 
       &--inactive {
         color: red;
-        font-weight: 700;
+        font-size: ${(props) => props.theme.fontsSize.__SM};
       }
 
       &--pending {
         color: orange;
-        font-weight: 700;
+        font-size: ${(props) => props.theme.fontsSize.__SM};
       }
 
       &--standby {
         color: blueviolet;
-        font-weight: 700;
+        font-size: ${(props) => props.theme.fontsSize.__SM};
       }
     }
 
     &__plan {
       &--mensual {
-        font-weight: 700;
         color: chocolate;
+        font-size: ${(props) => props.theme.fontsSize.__SM};
       }
 
       &--trimestral {
-        font-weight: 700;
         color: yellowgreen;
+        font-size: ${(props) => props.theme.fontsSize.__SM};
       }
     }
 
     &__role {
       &--admin {
-        font-weight: 700;
         color: ${(props) => props.theme.colors.mainColor};
       }
 
       &--manager {
-        font-weight: 700;
         color: ${(props) => props.theme.colors.darkRed};
       }
     }

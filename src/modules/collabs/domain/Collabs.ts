@@ -11,6 +11,7 @@ export interface Collab {
   comment?: string;
   from_day?: string;
   to_day?: string;
+  company_id: number;
 }
 
 export interface FullCollab extends Collab {

@@ -17,10 +17,7 @@ import { Switch, Tooltip } from "@mui/material";
 import { TimeSlotOffer } from "modules/offers/domain/OfferCalendar";
 import { Company, User } from "modules/user/domain/User";
 import { CollabActionTypes, FullCollab } from "modules/collabs/domain/Collabs";
-import {
-  getCollabStateClassname,
-  getTypesClassNames,
-} from "./utils/getClassNames/getClassNames";
+import { getCollabStateClassname } from "./utils/getClassNames/getClassNames";
 import Actions from "../Actions/Actions";
 import { Influencer } from "@influencer";
 import { Lead } from "modules/leads/domain/Leads";
@@ -29,12 +26,7 @@ import LinearBuffer from "../LinearBuffer/LinearBuffer";
 import { COLAB_PUBLISHED_STATE } from "sections/collabs/utils/collabsStates";
 import { SocialMediaTypes } from "@influencer/domain/InfluencerSocialMedia";
 import theme from "assets/styles/theme";
-import { formatDateWithSlash } from "sections/shared/utils/formatDate/formatDate";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
-import {
-  formatSentAt,
-  getDateIntoHourFormat,
-} from "sections/shared/utils/getDateIntoHourFormat/getDateIntoHourFormat";
 
 interface Props {
   headerSection: HeaderSection;
@@ -173,7 +165,7 @@ const DashboardContentSections = ({
     case "company":
       return (
         <>
-          {user.type !== "Company" && pageName !== SectionTypes.collabs ? (
+          {user.type !== "Company" ? (
             <Tooltip title="Ver cliente">
               <Link
                 to={`/cliente/${
@@ -182,9 +174,15 @@ const DashboardContentSections = ({
                     ? (section as Company).id
                     : pageName === SectionTypes.offers
                       ? (section as Offer).company_id
-                      : (section as Offer).user_id
+                      : pageName === SectionTypes.collabs
+                        ? (section as FullCollab).company_id
+                        : (section as Offer).user_id
                 }`}
-                className="dashboard__link-icon"
+                style={{
+                  textDecoration: "underline",
+                  color: theme.colors.mainColor,
+                  textDecorationColor: theme.colors.mainColor,
+                }}
               >
                 <span className="dashboard__name">
                   {(section as Company | FullCollab | Offer).company}
@@ -377,11 +375,7 @@ const DashboardContentSections = ({
       );
 
     case "type":
-      return (
-        <span className={getTypesClassNames(section, "dashboard")}>
-          {(section as User).type}
-        </span>
-      );
+      return <span className="dashboard__type">{(section as User).type}</span>;
 
     case "web":
       return (
@@ -416,7 +410,7 @@ const DashboardContentSections = ({
 
     case "day":
       return (
-        <span>
+        <span className="dashboard__type">
           {(section as FullCollab).day
             ? (section as FullCollab).day
             : (section as FullCollab).from_day ?? "-"}
@@ -425,7 +419,7 @@ const DashboardContentSections = ({
 
     case "time":
       return (
-        <span>
+        <span className="dashboard__type">
           {(section as FullCollab).time ? (section as FullCollab).time : "-"}
         </span>
       );
@@ -465,11 +459,11 @@ const DashboardContentSections = ({
     case "history_update":
       return (
         <span className="dashboard__date">
-          {getDateIntoHourFormat(
+          {
             (section as FullCollab).history[
               (section as FullCollab).history.length - 1
-            ].created_at,
-          )}
+            ].created_at
+          }
           {}
         </span>
       );
@@ -482,11 +476,11 @@ const DashboardContentSections = ({
           ].id === COLAB_PUBLISHED_STATE ? (
             <span className="dashboard__published">
               <FaCheckDouble />
-              {formatDateWithSlash(
+              {
                 (section as FullCollab).history[
                   (section as FullCollab).history.length - 1
-                ].created_at,
-              )}
+                ].created_at
+              }
             </span>
           ) : (
             <span className="dashboard__not-published">No publicada</span>
@@ -587,7 +581,7 @@ const DashboardContentSections = ({
           {headerSection.property === "created_at"
             ? (section as Lead).created_at.split(" ")[0]
             : (section as Lead).sent_at
-              ? formatSentAt((section as Lead).sent_at)
+              ? (section as Lead).sent_at
               : "No enviado"}
         </span>
       );
@@ -628,7 +622,7 @@ const DashboardContentSections = ({
             >
               <FaInstagram
                 color="fuchsia"
-                size={17}
+                size={13}
                 style={{ marginBottom: "-2px" }}
               />
 
@@ -636,17 +630,17 @@ const DashboardContentSections = ({
             </span>
           ) : main_social?.name === SocialMediaTypes.tiktok ? (
             <span>
-              <FaTiktok />
+              <FaTiktok size={13} />
               {"@" + main_social.account_name}
             </span>
           ) : main_social?.name === SocialMediaTypes.twitch ? (
             <span>
-              <FaTwitch color="purple" />
+              <FaTwitch color="purple" size={13} />
               {"@" + main_social.account_name}
             </span>
           ) : main_social?.name === SocialMediaTypes.youtube ? (
             <span>
-              <FaYoutube color={theme.colors.red} />
+              <FaYoutube color={theme.colors.red} size={13} />
               {"@" + main_social.account_name}
             </span>
           ) : (
@@ -663,17 +657,21 @@ const DashboardContentSections = ({
       return (
         <div className={`dashboard__social-media`}>
           {main_social?.name === SocialMediaTypes.instagram ? (
-            <FaInstagram color="fuchsia" />
+            <FaInstagram color="fuchsia" size={13} />
           ) : main_social?.name === SocialMediaTypes.tiktok ? (
-            <FaTiktok />
+            <FaTiktok size={13} />
           ) : main_social?.name === SocialMediaTypes.twitch ? (
-            <FaTwitch color="purple" />
+            <FaTwitch color="purple" size={13} />
           ) : main_social?.name === SocialMediaTypes.youtube ? (
-            <FaYoutube color={theme.colors.red} />
+            <FaYoutube color={theme.colors.red} size={13} />
           ) : (
             ""
           )}
-          <span>{main_social ? main_social?.followers : "-"}</span>
+          <span>
+            {main_social
+              ? (main_social?.followers / 1000).toFixed(1) + "k"
+              : "-"}
+          </span>
         </div>
       );
     }
@@ -681,7 +679,9 @@ const DashboardContentSections = ({
     default:
       return (
         <section>
-          <span>{section[headerSection.property as never]}</span>
+          <span className="dashboard__type">
+            {section[headerSection.property as never]}
+          </span>
         </section>
       );
   }

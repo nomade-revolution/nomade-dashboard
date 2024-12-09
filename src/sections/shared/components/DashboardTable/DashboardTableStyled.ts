@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 const DashboardStyled = styled.table`
+  min-width: 90%;
   @media (max-width: 768px) {
     display: none;
   }
@@ -13,6 +14,7 @@ const DashboardStyled = styled.table`
       align-items: center;
       justify-content: flex-start;
       gap: 10px;
+      padding: 0;
       width: 100%;
     }
   }

@@ -120,13 +120,13 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                 <div className="lead-form__section">
                   <div className="form-subsection">
                     <label htmlFor="company" className="form-subsection__label">
-                      Denominación fiscal
+                      Denominación social
                     </label>
                     <Field
                       type="text"
                       id="company"
                       className="lead-form__field"
-                      aria-label="Nombre del laboratorio"
+                      aria-label="Denominación social"
                       {...getFieldProps("company")}
                     />
                     {errors.company && touched.company && (
@@ -224,7 +224,7 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                       htmlFor="company_name"
                       className="form-subsection__label"
                     >
-                      Nombre de la empresa
+                      Nombre comercial
                     </label>
                     <Field
                       type="text"

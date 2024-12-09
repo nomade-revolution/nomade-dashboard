@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
 import Loader from "sections/shared/components/Loader/Loader";
-import NoDataHandler from "sections/shared/components/NoDataHandler/NoDataHandler";
 import PaginationComponent from "sections/shared/components/Pagination/PaginationComponent";
 import {
   FilterParams,
@@ -53,9 +52,6 @@ const CompanyCollabs = ({ company_id }: Props): React.ReactElement => {
             filterParams=""
             pageName=""
           />
-          {collabs.length === 0 && (
-            <NoDataHandler pageName={SectionTypes.collabs} search={""} />
-          )}
         </CompanyCollabsStyled>
       )}
     </div>

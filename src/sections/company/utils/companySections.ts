@@ -14,8 +14,8 @@ export const companyTableHeaderSections: HeaderSection[] = [
   {
     id: 2,
     name: "Cliente",
-    property: "company_name",
-    sortTag: "company_name",
+    property: "company",
+    sortTag: "company",
     pageName: SectionTypes.customers,
   },
   // {
@@ -34,7 +34,7 @@ export const companyTableHeaderSections: HeaderSection[] = [
   // },
   {
     id: 5,
-    name: "Porcentaje",
+    name: "Progreso",
     property: "percentage",
     sortTag: "",
     pageName: SectionTypes.customers,
@@ -61,12 +61,20 @@ export const companyTableHeaderSections: HeaderSection[] = [
     pageName: SectionTypes.customers,
   },
   {
+    id: 12,
+    name: "Fecha de alta",
+    property: "created_at",
+    sortTag: "",
+    pageName: SectionTypes.customers,
+  },
+  {
     id: 9,
     name: "Status",
     property: "status",
     sortTag: "company_status",
     pageName: SectionTypes.customers,
   },
+
   {
     id: 10,
     name: "Comentarios",
@@ -74,6 +82,7 @@ export const companyTableHeaderSections: HeaderSection[] = [
     sortTag: "",
     pageName: SectionTypes.customers,
   },
+
   // {
   //   id: 10,
   //   name: "Acciones",

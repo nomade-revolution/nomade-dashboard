@@ -64,6 +64,13 @@ export const influencersTableHeaderSections: HeaderSection[] = [
     sortTag: "",
     pageName: "influencer",
   },
+  {
+    id: 10,
+    name: "Estado",
+    property: "status",
+    sortTag: "",
+    pageName: "influencer",
+  },
 ];
 
 export const influencerCollabsHeaderSections: HeaderSection[] = [
