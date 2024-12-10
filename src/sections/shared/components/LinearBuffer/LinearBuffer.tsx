@@ -16,8 +16,18 @@ export default function LinearBuffer({
         variant="buffer"
         value={progress}
         valueBuffer={buffer}
-        sx={{ height: "20px", color: "red" }}
-        color="success"
+        sx={{ height: "20px" }}
+        color={
+          progress < 25
+            ? "error"
+            : progress < 50
+              ? "warning"
+              : progress < 75
+                ? "info"
+                : progress < 100
+                  ? "primary"
+                  : "success"
+        }
       />
     </Box>
   );

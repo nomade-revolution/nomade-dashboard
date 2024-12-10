@@ -12,16 +12,14 @@ import {
 } from "@company/application/company";
 import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
 import { Company } from "modules/user/domain/User";
-import {
-  FilterParams,
-  PaginationStucture,
-} from "sections/shared/interfaces/interfaces";
+import { PaginationStucture } from "sections/shared/interfaces/interfaces";
 import { OrderItem } from "sections/user/UserContext/UserContext";
 import {
   exportCompanies,
   exportCompanyBilling,
 } from "../../../modules/company/application/company";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
+import { FilterParams } from "../../shared/interfaces/interfaces";
 
 interface ContextState {
   loading: boolean;
@@ -46,7 +44,7 @@ interface ContextState {
   postCompanyCms: (company: FormData) => void;
   editCompanyCms: (company: FormData, id?: number) => void;
   exportCompaniesExcel: () => void;
-  exportCompanyBillingExcel: () => void;
+  exportCompanyBillingExcel: (params?: FilterParams) => void;
 }
 
 export const CompanyContext = createContext<ContextState>({} as ContextState);
@@ -111,8 +109,8 @@ export const CompanyContextProvider = ({
     }
     return response;
   };
-  const exportCompanyBillingExcel = async () => {
-    const response = await exportCompanyBilling(repository, token);
+  const exportCompanyBillingExcel = async (params?: FilterParams) => {
+    const response = await exportCompanyBilling(repository, token, params);
 
     if (response && response instanceof Blob) {
       const href = await URL.createObjectURL(response);

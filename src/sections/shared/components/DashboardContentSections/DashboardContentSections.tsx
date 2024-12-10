@@ -243,7 +243,9 @@ const DashboardContentSections = ({
           className={`dashboard__plan${
             (section as Company).plan.billing === "Mensual"
               ? "--mensual"
-              : "--trimestral"
+              : (section as Company).plan.billing === "Trimestral"
+                ? "--trimestral"
+                : "--pending"
           }`}
         >
           {(section as Company).plan.billing
@@ -262,7 +264,7 @@ const DashboardContentSections = ({
                 ? "--inactive"
                 : (section as Company).status === "Pendiente"
                   ? "--pending"
-                  : (section as Company).status === "En pausa"
+                  : (section as Company).status === "Pausa"
                     ? "--standby"
                     : ""
           }`}

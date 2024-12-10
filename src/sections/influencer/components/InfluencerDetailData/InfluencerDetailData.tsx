@@ -4,6 +4,7 @@ import InfluencerSocialMedia from "../InfluencerSocialMedia/InfluencerSocialMedi
 import { Influencer } from "@influencer";
 import { SocialMedia } from "@influencer/domain/InfluencerSocialMedia";
 import ImageCustom from "sections/shared/components/ImageCustom/ImageCustom";
+import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 
 interface Props {
   influencer: Influencer;
@@ -16,17 +17,24 @@ const InfluencerDetailData = ({
   setIsModalOpen,
   setSocialMediaSelected,
 }: Props): React.ReactElement => {
+  const { user } = useAuthContext();
   return (
     <InfluecerDetailDataStyled className="influencer-data">
       <div className="influencer-data__mainData">
+        <ImageCustom
+          image={influencer.avatar}
+          alt={influencer.name}
+          className="avatar"
+          height={80}
+          width={80}
+        />
         <div className="influencer-data__data">
           <div className="influencer-data__names">
             <span className="influencer-data__name">{influencer?.name}</span>
 
             <span>{influencer?.surnames}</span>
           </div>
-
-          <span>{influencer.phone}</span>
+          {user.type === "Nomade" && <span>{influencer.phone}</span>}
           {influencer.email && <span>{influencer.email}</span>}
           {influencer.from_country && (
             <div className="influencer-data__from-country">
@@ -47,13 +55,6 @@ const InfluencerDetailData = ({
             </div>
           )}
         </div>
-        <ImageCustom
-          image={influencer.avatar}
-          alt={influencer.name}
-          className="avatar"
-          height={80}
-          width={80}
-        />
       </div>
       {influencer.categories && (
         <InfluencerCategories categories={influencer.categories} />

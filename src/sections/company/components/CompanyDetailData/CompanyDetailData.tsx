@@ -36,7 +36,9 @@ const CompanyDetailData = ({ company }: Props): React.ReactElement => {
             width={80}
           />
           <div className="data">
-            <span className="company-data__name">{company.company}</span>
+            <span className="company-data__name" style={{ fontWeight: "bold" }}>
+              {company.company}
+            </span>
             <span className="company-data__company">
               {company?.company_name}
             </span>

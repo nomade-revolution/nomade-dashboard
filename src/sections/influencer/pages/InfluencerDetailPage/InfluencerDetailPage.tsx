@@ -16,11 +16,12 @@ import { SocialMedia } from "@influencer/domain/InfluencerSocialMedia";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
 import SocialMediaCard from "sections/shared/components/SocialMediaCard/SocialMediaCard";
 import SocialMediaForm from "sections/shared/components/SocialMediaForm/SocialMediaForm";
+import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 
 const InfluencerDetailPage = (): React.ReactElement => {
   const { getInfluencer, influencer, loading } = useInfluencerContext();
   const { handleIsDialogOpen } = useActions();
-
+  const { user } = useAuthContext();
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [isOpenModalEdit, setIsOpenModalEdit] = useState<boolean>(false);
   const [socialMediaSelected, setSocialMediaSelected] = useState<SocialMedia>(
@@ -49,12 +50,14 @@ const InfluencerDetailPage = (): React.ReactElement => {
             <div className="influencer-detail__title">
               <h2>Influencer</h2>
             </div>
-            <ActionButton
-              onClick={handleDeleteButton}
-              text="Borrar"
-              icon={<FaRegTrashCan />}
-              color={theme.colors.red}
-            />
+            {user.type === "Nomade" && (
+              <ActionButton
+                onClick={handleDeleteButton}
+                text="Borrar"
+                icon={<FaRegTrashCan />}
+                color={theme.colors.red}
+              />
+            )}
           </section>
           <section className="influencer-detail__info">
             <InfluencerDetailData
@@ -63,7 +66,7 @@ const InfluencerDetailPage = (): React.ReactElement => {
               setIsModalOpen={setIsOpenModal}
             />
           </section>
-          <InfluencerCollabs influencer_id={+id!} />
+          {user.type === "Nomade" && <InfluencerCollabs influencer_id={+id!} />}
           <DialogDeleteConfirm
             handleClose={() => setIsDialogOpen(false)}
             open={isDialogOpen}

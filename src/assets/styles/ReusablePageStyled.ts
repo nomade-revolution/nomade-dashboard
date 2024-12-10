@@ -155,10 +155,8 @@ const ReusablePageStyled = styled.main`
     }
 
     &__category {
-      color: ${(props) => props.theme.colors.purple};
       border-radius: ${(props) => props.theme.borderRadius.inputs};
-      font-size: small;
-      font-weight: 700;
+      font-size: ${(props) => props.theme.fontsSize.__SM};
       text-align: left;
       display: flex;
       justify-content: flex-start;
@@ -346,22 +344,22 @@ const ReusablePageStyled = styled.main`
 
     &__plan {
       &--basic {
-        color: fuchsia;
+        color: #ad6975;
         font-size: ${(props) => props.theme.fontsSize.__SM};
       }
 
       &--standard {
-        color: blue;
+        color: #5b8a72;
         font-size: ${(props) => props.theme.fontsSize.__SM};
       }
 
       &--premium {
-        color: orange;
+        color: #c29f6d;
         font-size: ${(props) => props.theme.fontsSize.__SM};
       }
 
       &--pending {
-        color: red;
+        color: #e57c00;
         font-size: ${(props) => props.theme.fontsSize.__SM};
       }
       &--pause {
@@ -405,34 +403,38 @@ const ReusablePageStyled = styled.main`
       font-size: ${(props) => props.theme.fontsSize.__SM};
 
       &--active {
-        color: green;
+        color: #28a745;
         font-size: ${(props) => props.theme.fontsSize.__SM};
       }
 
       &--inactive {
-        color: red;
+        color: #c00000;
         font-size: ${(props) => props.theme.fontsSize.__SM};
       }
 
       &--pending {
-        color: orange;
+        color: #e57c00;
         font-size: ${(props) => props.theme.fontsSize.__SM};
       }
 
       &--standby {
-        color: blueviolet;
+        color: #ba7e83;
         font-size: ${(props) => props.theme.fontsSize.__SM};
       }
     }
 
     &__plan {
       &--mensual {
-        color: chocolate;
+        color: #7b3c47;
         font-size: ${(props) => props.theme.fontsSize.__SM};
       }
 
       &--trimestral {
-        color: yellowgreen;
+        color: #4682b4;
+        font-size: ${(props) => props.theme.fontsSize.__SM};
+      }
+      &--pending {
+        color: #e57c00;
         font-size: ${(props) => props.theme.fontsSize.__SM};
       }
     }

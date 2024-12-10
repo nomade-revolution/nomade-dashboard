@@ -33,18 +33,8 @@ const InfluencerDetailPageStyled = styled.main`
       display: flex;
       flex-direction: column;
       gap: 20px;
-      box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
       background-color: ${(props) => props.theme.colors.lightGrey};
-      padding: 0px;
       border-radius: 10px;
-
-      @media (min-width: 1000px) {
-        display: block;
-        position: relative;
-        box-shadow: none;
-        background-color: none;
-        padding: 0px;
-      }
     }
   }
 

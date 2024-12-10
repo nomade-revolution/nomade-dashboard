@@ -277,7 +277,13 @@ const CollabsPage = (): React.ReactElement => {
           <div className="dashboard__table">
             <DashboardTable
               bodySections={collabs}
-              headerSections={collabsHeaderSections}
+              headerSections={
+                user.type !== "Nomade"
+                  ? collabsHeaderSections.filter(
+                      (item) => item.name !== "Cliente",
+                    )
+                  : collabsHeaderSections
+              }
               pageName={SectionTypes.collabs}
               type={collabStateActionType!}
               setCollabStateActionType={setCollabStateActionType}

@@ -3,8 +3,7 @@ import styled from "styled-components";
 const InfluencerCategoriesStyled = styled.section`
   .categories {
     &__title {
-      padding-bottom: 10px;
-      margin: 0;
+      color: ${(props) => props.theme.colors.mainColor};
     }
 
     &__list {
