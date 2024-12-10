@@ -4,16 +4,16 @@ const InfluencerDetailPageStyled = styled.main`
   background: ${(props) => props.theme.colors.backgroundPages};
   display: flex;
   flex-direction: column;
-  gap: 50px;
-  padding: 20px 20px;
+  gap: 20px;
+  padding: 20px;
   color: ${(props) => props.theme.fontsColors.dashBoard};
   height: auto;
   @media (min-width: 1000px) and (max-width: 1600px) {
-    padding: 50px 80px;
+    padding: 50px 40px;
   }
 
   @media (min-width: 1600px) {
-    padding: 70px 200px;
+    padding: 70px 70px;
   }
 
   .influencer-detail {
@@ -44,17 +44,6 @@ const InfluencerDetailPageStyled = styled.main`
         box-shadow: none;
         background-color: none;
         padding: 0px;
-      }
-    }
-
-    &__avatar {
-      border-radius: 50%;
-      box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
-
-      @media (min-width: 1000px) {
-        position: absolute;
-        left: -50px;
-        bottom: 100px;
       }
     }
   }

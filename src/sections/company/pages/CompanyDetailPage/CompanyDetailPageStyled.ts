@@ -84,63 +84,70 @@ const CompanyDetailPageStyled = styled.main`
 
   .dashboard {
     &__state-section {
-      font-weight: bold;
+      font-size: ${(props) => props.theme.fontsSize.__SM};
 
       &--accepted {
-        font-weight: bold;
-        color: ${(props) => props.theme.colors.softGreen};
+        color: #8c9b6e;
+        font-size: ${(props) => props.theme.fontsSize.__SM};
       }
 
       &--rejected {
-        color: ${(props) => props.theme.colors.darkRed};
+        color: #c00000;
+        font-size: ${(props) => props.theme.fontsSize.__SM};
       }
 
       &--cancelled {
-        color: ${(props) => props.theme.colors.red};
+        font-size: ${(props) => props.theme.fontsSize.__SM};
+        color: #7b3c47;
       }
 
       &--sent {
-        color: ${(props) => props.theme.colors.darkBlue};
+        font-size: ${(props) => props.theme.fontsSize.__SM};
+        color: #4682b4;
       }
 
       &--pending-nomade {
-        font-weight: bold;
-        color: blue;
+        font-size: ${(props) => props.theme.fontsSize.__SM};
+        color: #e94e1b;
       }
 
       &--pending-company {
-        font-weight: bold;
-        color: fuchsia;
+        font-size: ${(props) => props.theme.fontsSize.__SM};
+        color: #ad6975;
       }
 
       &--done {
+        font-size: ${(props) => props.theme.fontsSize.__SM};
         color: green;
       }
 
       &--finished {
+        font-size: ${(props) => props.theme.fontsSize.__SM};
         color: ${(props) => props.theme.colors.purple};
       }
 
       &--incident {
-        color: brown;
+        font-size: ${(props) => props.theme.fontsSize.__SM};
+        color: #e57c00;
       }
     }
 
     &--modification {
-      color: teal;
+      color: #f8a842;
+      font-size: ${(props) => props.theme.fontsSize.__SM};
     }
 
     &--received {
+      font-size: ${(props) => props.theme.fontsSize.__SM};
       color: lightBlue;
     }
 
     &--published {
-      color: gold;
+      font-size: ${(props) => props.theme.fontsSize.__SM};
+      color: #28a745;
     }
 
     &__type-section {
-      font-weight: bold;
-
       &--influencer {
         color: ${(props) => props.theme.colors.orange};
       }

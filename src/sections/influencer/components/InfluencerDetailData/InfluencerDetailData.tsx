@@ -3,7 +3,7 @@ import InfluencerCategories from "../InfluencerCategories/InfluencerCategories";
 import InfluencerSocialMedia from "../InfluencerSocialMedia/InfluencerSocialMedia";
 import { Influencer } from "@influencer";
 import { SocialMedia } from "@influencer/domain/InfluencerSocialMedia";
-import { Link } from "react-router-dom";
+import ImageCustom from "sections/shared/components/ImageCustom/ImageCustom";
 
 interface Props {
   influencer: Influencer;
@@ -22,21 +22,10 @@ const InfluencerDetailData = ({
         <div className="influencer-data__data">
           <div className="influencer-data__names">
             <span className="influencer-data__name">{influencer?.name}</span>
+
             <span>{influencer?.surnames}</span>
           </div>
-          {/* <span> */}
-          {influencer.socialMedia?.length > 0 && (
-            <Link
-              to={influencer.socialMedia[0]?.url}
-              className="social-card__text-link"
-              target="_blank"
-              style={{ textDecoration: "underline" }}
-            >
-              @{influencer.socialMedia[0]?.account_name}
-            </Link>
-          )}
-          {/* @{influencer.user_name} */}
-          {/* </span> */}
+
           <span>{influencer.phone}</span>
           {influencer.email && <span>{influencer.email}</span>}
           {influencer.from_country && (
@@ -58,10 +47,17 @@ const InfluencerDetailData = ({
             </div>
           )}
         </div>
-        {influencer.categories && (
-          <InfluencerCategories categories={influencer.categories} />
-        )}
+        <ImageCustom
+          image={influencer.avatar}
+          alt={influencer.name}
+          className="avatar"
+          height={80}
+          width={80}
+        />
       </div>
+      {influencer.categories && (
+        <InfluencerCategories categories={influencer.categories} />
+      )}
       <InfluencerSocialMedia
         socialMedia={influencer.socialMedia}
         setSocialMediaSelected={setSocialMediaSelected}

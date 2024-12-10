@@ -14,6 +14,7 @@ const InfluencerCategories = ({ categories }: Props): React.ReactElement => {
           <li key={category?.name}>{category?.name}</li>
         ))}
       </ul>
+      {categories.length === 0 && <p>Sin categorías asignadas</p>}
     </InfluencerCategoriesStyled>
   );
 };

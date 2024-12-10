@@ -39,7 +39,7 @@ export const theme = {
     __XS: "0.5rem",
     __S: "0.6rem",
     __SSM: "0.7rem",
-    __SM: "0.8rem",
+    __SM: "14px",
     __SMM: "0.9rem",
     __M: "1rem",
     __ML: "1.2rem",

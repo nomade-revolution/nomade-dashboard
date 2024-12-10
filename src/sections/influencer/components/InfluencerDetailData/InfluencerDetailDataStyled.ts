@@ -12,10 +12,16 @@ const InfluecerDetailDataStyled = styled.section`
   @media (min-width: 1000px) {
     box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
     background-color: ${(props) => props.theme.colors.lightGrey};
-    padding: 20px 120px;
+    padding: 20px;
     align-items: unset;
   }
 
+  .avatar {
+    border-radius: 50%;
+    height: 80px;
+    width: 80px;
+    margin-right: 20px;
+  }
   .influencer-data {
     &__mainData {
       display: flex;

@@ -16,8 +16,7 @@ const CompanyCollabsStyled = styled.section`
     }
 
     &__not-published {
-      color: red;
-      font-weight: 700;
+      color: #c00000;
     }
   }
 `;

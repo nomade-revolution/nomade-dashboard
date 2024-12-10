@@ -215,7 +215,6 @@ const ReusablePageStyled = styled.main`
 
       &--cancelled {
         font-size: ${(props) => props.theme.fontsSize.__SM};
-
         color: #7b3c47;
       }
 
@@ -377,7 +376,6 @@ const ReusablePageStyled = styled.main`
     }
 
     &__end-date {
-      color: red;
       opacity: 0.6;
       font-size: ${(props) => props.theme.fontsSize.__SM};
     }

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import InfluencerDetailData from "sections/influencer/components/InfluencerDetailData/InfluencerDetailData";
 import { useInfluencerContext } from "sections/influencer/InfluencerContext/useInfluencerContext";
-import ImageCustom from "sections/shared/components/ImageCustom/ImageCustom";
 import InfluencerDetailPageStyled from "./InfluencerDetailPageStyled";
 import InfluencerCollabs from "sections/influencer/components/InfluencerCollabs/InfluencerCollabs";
 import Loader from "sections/shared/components/Loader/Loader";
@@ -58,13 +57,6 @@ const InfluencerDetailPage = (): React.ReactElement => {
             />
           </section>
           <section className="influencer-detail__info">
-            <ImageCustom
-              image={influencer.avatar}
-              alt={influencer.name}
-              className="influencer-detail__avatar"
-              height={150}
-              width={150}
-            />
             <InfluencerDetailData
               influencer={influencer}
               setSocialMediaSelected={setSocialMediaSelected}
