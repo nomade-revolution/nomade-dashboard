@@ -49,13 +49,9 @@ const ReusableFormStyled = styled.form<Props>`
       color: ${(props) => props.theme.fontsColors.light};
       font-weight: 700;
       padding: 10px 20px;
-      width: 100%;
+      width: 200px;
       border-radius: ${(props) => props.theme.borderRadius.submitButton};
-
-      @media (min-width: 1000px) {
-        width: ${(props) => props.theme.widths.datasheetLargeInputs};
-      }
-
+      border-radius: 5px;
       &:disabled {
         opacity: 0.7;
         cursor: not-allowed;
@@ -131,13 +127,8 @@ const ReusableFormStyled = styled.form<Props>`
       color: ${(props) => props.theme.fontsColors.light};
       font-weight: 700;
       padding: 10px 20px;
-      width: 100%;
-      border-radius: ${(props) => props.theme.borderRadius.submitButton};
-
-      @media (min-width: 1000px) {
-        width: ${(props) => props.theme.widths.datasheetLargeInputs};
-      }
-
+      width: 200px;
+      border-radius: 5px;
       &:disabled {
         opacity: 0.7;
         cursor: not-allowed;
@@ -149,12 +140,8 @@ const ReusableFormStyled = styled.form<Props>`
       color: ${(props) => props.theme.fontsColors.light};
       font-weight: 700;
       padding: 10px 20px;
-      width: 100%;
-      border-radius: ${(props) => props.theme.borderRadius.submitButton};
-
-      @media (min-width: 1000px) {
-        width: ${(props) => props.theme.widths.datasheetLargeInputs};
-      }
+      width: 200px;
+      border-radius: 5px;
 
       &:disabled {
         opacity: 0.7;

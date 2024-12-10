@@ -19,7 +19,7 @@ const CompanySocialMedia = ({ socialMedia }: Props): React.ReactElement => {
             className="social-media__link"
           >
             {getSocialMediaIcons(media.name)}
-            <span>{media.account_name}</span>
+            <span>@{media.account_name}</span>
             <span>{media.followers}</span>
           </Link>
         </li>

@@ -60,21 +60,20 @@ const InfluencerDetailPage = (): React.ReactElement => {
             </div>
             <div className="company-detail__actions">
               {company.plan?.plan_name !== "Pendiente" && (
-                <button
-                  className="company-detail__plan-modify"
+                <ActionButton
                   onClick={() => setIsPlanModalOpen(true)}
-                >
-                  <FaEdit className="dashboard__create--icon" />
-                  Modificar plan
-                </button>
+                  text="Modificar Plan"
+                  icon={<FaEdit />}
+                  color={theme.colors.darkBlue}
+                />
               )}
-              <button
-                className="company-detail__create"
+              <ActionButton
                 onClick={() => setIsModalOpen(true)}
-              >
-                <FaEdit className="dashboard__create--icon" />
-                Editar cliente
-              </button>
+                text="Editar Cliente"
+                icon={<FaEdit />}
+                color={theme.colors.darkBlue}
+              />
+
               <ActionButton
                 onClick={handleDeleteButton}
                 text="Borrar"

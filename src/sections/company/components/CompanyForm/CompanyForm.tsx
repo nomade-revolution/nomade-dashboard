@@ -519,39 +519,49 @@ const CompanyForm = ({
               />
             }
           />
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className={
-              isSuccess
-                ? "datasheet-form__success"
-                : isError
-                  ? "datasheet-form__error"
-                  : "datasheet-form__submit"
-            }
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              width: "100%",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
           >
-            {isSubmitting || loading ? (
-              <Loader width="20px" height="20px" />
-            ) : isSuccess ? (
-              type === "edit" ? (
-                "Cliente editado"
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className={
+                isSuccess
+                  ? "datasheet-form__success"
+                  : isError
+                    ? "datasheet-form__error"
+                    : "datasheet-form__submit"
+              }
+            >
+              {isSubmitting || loading ? (
+                <Loader width="20px" height="20px" />
+              ) : isSuccess ? (
+                type === "edit" ? (
+                  "Cliente editado"
+                ) : (
+                  "Cliente creado"
+                )
+              ) : isError ? (
+                "Revisa los datos e intentalo de nuevo"
+              ) : type === "edit" ? (
+                "Guardar cambios"
               ) : (
-                "Cliente creado"
-              )
-            ) : isError ? (
-              "Revisa los datos e intentalo de nuevo"
-            ) : type === "edit" ? (
-              "Editar cliente"
-            ) : (
-              "Crear cliente"
-            )}
-          </button>
-          <button
-            onClick={() => setIsOpen(false)}
-            className={"datasheet-form__error"}
-          >
-            Cancelar
-          </button>
+                "Crear cliente"
+              )}
+            </button>
+            <button
+              onClick={() => setIsOpen(false)}
+              className={"datasheet-form__error"}
+            >
+              Cancelar
+            </button>
+          </div>
         </ReusableFormStyled>
       )}
     </Formik>

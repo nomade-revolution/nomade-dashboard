@@ -7,9 +7,10 @@ import { useCompanyContext } from "sections/company/CompanyContext/useCompanyCon
 
 interface AddCommentFormProps {
   company: Company;
+  setModalOpen: (value: boolean) => void;
 }
 
-const AddCommentForm = ({ company }: AddCommentFormProps) => {
+const AddCommentForm = ({ company, setModalOpen }: AddCommentFormProps) => {
   const { editCompanyCms } = useCompanyContext();
   const [initialState, setInitialState] = useState({
     comment: company.company_comments ?? "",
@@ -61,17 +62,27 @@ const AddCommentForm = ({ company }: AddCommentFormProps) => {
               />
             )}
           </div>
-          <button
-            type="submit"
-            disabled={
-              isSubmitting ||
-              getFieldProps("comment").value === company.company_comments ||
-              getFieldProps("comment").value === ""
-            }
-            className="login-form__submit"
-          >
-            Guardar comentario
-          </button>
+          <div className="buttonsContainer">
+            <button
+              type="submit"
+              disabled={
+                isSubmitting ||
+                getFieldProps("comment").value === company.company_comments ||
+                getFieldProps("comment").value === ""
+              }
+              className="login-form__submit"
+            >
+              Guardar cambios
+            </button>
+
+            <button
+              onClick={() => setModalOpen(false)}
+              className="cancelButton"
+              type="button"
+            >
+              Cancelar
+            </button>
+          </div>
 
           {isSubmitting ? (
             <Loader width="20px" height="20px" />

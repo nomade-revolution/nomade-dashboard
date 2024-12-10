@@ -23,11 +23,18 @@ const CompanyDetailData = ({ company }: Props): React.ReactElement => {
   return (
     <CompanyDetailDataStyled>
       <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
-        <AddCommentForm company={company} />
+        <AddCommentForm company={company} setModalOpen={setIsDialogOpen} />
       </Dialog>
 
       <div className="company-data__data">
         <div className="header">
+          <ImageCustom
+            image={company.image}
+            alt={company.name}
+            className="avatar"
+            height={80}
+            width={80}
+          />
           <div className="data">
             <span className="company-data__name">{company.company}</span>
             <span className="company-data__company">
@@ -37,17 +44,12 @@ const CompanyDetailData = ({ company }: Props): React.ReactElement => {
             <span>{company.type}</span>
           </div>
           <CompanySocialMedia socialMedia={company?.socialMedia} />
-
-          <ImageCustom
-            image={company.image}
-            alt={company.name}
-            className="avatar"
-            height={80}
-            width={80}
-          />
         </div>
 
-        <section className="company-data__section-icon">
+        <section
+          className="company-data__section-icon"
+          style={{ marginTop: "20px" }}
+        >
           <Link to={company.web} target="_blank" className="">
             <TbWorld color="#4287f5" /> {company.web}
           </Link>

@@ -4,12 +4,29 @@ const AddCommentFormStyled = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  justify-content: space-between;
+  padding-top: 40px;
+  gap: 40px;
   font-size: ${(props) => props.theme.fontsSize.__SM};
-  width: 85%;
   padding: 20px;
-  min-height: 200px;
-  min-width: 400px;
+  min-height: 250px;
+  min-width: 600px;
+
+  .buttonsContainer {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .cancelButton {
+    background: ${(props) => props.theme.colors.red};
+    color: ${(props) => props.theme.fontsColors.light};
+    font-weight: ${(props) => props.theme.fontWeights.mediumBold};
+    height: ${(props) => props.theme.heights.inputs};
+    border-radius: 5px;
+    width: 100%;
+  }
 
   @media (min-width: 1000px) {
     width: 60%;
@@ -26,7 +43,8 @@ const AddCommentFormStyled = styled.form`
       border: 1px solid ${(props) => props.theme.colors.inputsBorderColors};
       height: ${(props) => props.theme.heights.inputs};
       padding: 0 10px;
-      height: 50px;
+      height: 100px;
+      text-align: start;
     }
   }
 
@@ -36,7 +54,7 @@ const AddCommentFormStyled = styled.form`
       color: ${(props) => props.theme.fontsColors.light};
       font-weight: ${(props) => props.theme.fontWeights.mediumBold};
       height: ${(props) => props.theme.heights.inputs};
-      border-radius: ${(props) => props.theme.borderRadius.submitButton};
+      border-radius: 5px;
       width: 100%;
     }
 

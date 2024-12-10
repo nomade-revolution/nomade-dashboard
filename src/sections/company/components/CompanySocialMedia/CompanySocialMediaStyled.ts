@@ -8,7 +8,7 @@ const CompanySocialMediaStyled = styled.ul`
   padding-right: 20px;
   .social-media {
     &__data {
-      height: 60px;
+      height: 40px;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
