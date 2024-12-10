@@ -81,7 +81,11 @@ const PlansPage = (): React.ReactElement => {
     <ReusablePageStyled className="plans-page">
       <ReusableTabSelector
         tabs={tabs}
-        onClick={setBillingId}
+        onClick={(id) => {
+          setBillingId(id);
+          setDate("");
+          setTextToSearch("");
+        }}
         content={[
           <>
             {loading ? (

@@ -260,6 +260,13 @@ export const companyPlanTableSections: HeaderSection[] = [
     pageName: SectionTypes.plans,
   },
   {
+    id: 12,
+    name: "Comentario",
+    property: "comments",
+    sortTag: "",
+    pageName: SectionTypes.plans,
+  },
+  {
     id: 11,
     name: "Status",
     property: "status",
