@@ -302,6 +302,11 @@ const OffersForm = ({
     ...offer,
   };
 
+  useEffect(() => {
+    if (offer) {
+      setShowSuggestions(false);
+    }
+  }, [offer]);
   return (
     <Formik
       initialValues={initialValues as OfferFormStructure}
@@ -325,6 +330,7 @@ const OffersForm = ({
                 value={companySearch}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                   setCompanySearch(event.target.value);
+
                   setShowSuggestions(true);
                 }}
               />
