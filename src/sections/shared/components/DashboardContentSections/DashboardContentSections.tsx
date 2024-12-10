@@ -27,6 +27,7 @@ import { COLAB_PUBLISHED_STATE } from "sections/collabs/utils/collabsStates";
 import { SocialMediaTypes } from "@influencer/domain/InfluencerSocialMedia";
 import theme from "assets/styles/theme";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
+import { formatSliceString } from "sections/shared/utils/getDateIntoHourFormat/getDateIntoHourFormat";
 
 interface Props {
   headerSection: HeaderSection;
@@ -274,7 +275,7 @@ const DashboardContentSections = ({
       return (
         <span className="dashboard__comments">
           {(section as Company).company_comments
-            ? (section as Company).company_comments
+            ? formatSliceString((section as Company).company_comments)
             : "-"}
         </span>
       );

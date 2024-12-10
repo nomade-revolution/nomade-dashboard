@@ -25,3 +25,7 @@ export function formatSentAt(dateString: string): string {
 
   return `${formattedDate} - ${formattedTime}`;
 }
+
+export const formatSliceString = (string: string) => {
+  return string.slice(0, 15) + " (...)";
+};
