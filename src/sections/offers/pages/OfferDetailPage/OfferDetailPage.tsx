@@ -6,7 +6,6 @@ import OfferDetailPageStyled from "./OfferDetailPageStyled";
 import ImageCustom from "sections/shared/components/ImageCustom/ImageCustom";
 import { getTypesClassNames } from "sections/shared/components/DashboardContentSections/utils/getClassNames/getClassNames";
 import { MdOutlineLibraryAdd, MdOutlineLocationOn } from "react-icons/md";
-import NoDataHandler from "sections/shared/components/NoDataHandler/NoDataHandler";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
 import { FaEdit } from "react-icons/fa";
 import OffersForm from "sections/offers/components/OffersForm/OffersForm";
@@ -34,7 +33,6 @@ const OfferDetailsPage = () => {
         <Loader width="20px" height="20px" />
       ) : !offer ? (
         <>
-          <NoDataHandler pageName={"oferta"} search={""} />
           <button
             onClick={handleIsModalOpen}
             className="offer-detail__edit-btn"

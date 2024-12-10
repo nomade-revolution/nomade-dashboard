@@ -9,7 +9,6 @@ import { SectionTypes } from "sections/shared/interfaces/interfaces";
 import DashboardCardListMobile from "sections/shared/components/DashboardCardListMobile/DashboardCardListMobile";
 import PaginationComponent from "sections/shared/components/Pagination/PaginationComponent";
 import { collabsHeaderSections } from "sections/collabs/utils/collabsSections";
-import NoDataHandler from "sections/shared/components/NoDataHandler/NoDataHandler";
 
 const CollabsReservationsPage = (): React.ReactElement => {
   const [collabStateActionType, setCollabStateActionType] =
@@ -65,7 +64,6 @@ const CollabsReservationsPage = (): React.ReactElement => {
               pageName={SectionTypes.collabsReservations}
             />
           </CollabsReservationsPageStyled>
-          {collabs.length > 0 && <NoDataHandler pageName="" search="" />}
         </>
       )}
     </>

@@ -3,8 +3,6 @@ import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsCon
 import { influencerCollabsHeaderSections } from "sections/influencer/utils/influencersSections";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
 import Loader from "sections/shared/components/Loader/Loader";
-import NoDataHandler from "sections/shared/components/NoDataHandler/NoDataHandler";
-// import PaginationComponent from "sections/shared/components/Pagination/PaginationComponent";
 import {
   FilterParams,
   SectionTypes,
@@ -52,10 +50,6 @@ const InfluencerCollabs = ({ influencer_id }: Props): React.ReactElement => {
             headerSections={influencerCollabsHeaderSections}
             pageName={SectionTypes.collabs}
           />
-
-          {collabs.length === 0 && (
-            <NoDataHandler pageName={SectionTypes.collabs} search={""} />
-          )}
         </section>
       )}
     </div>
