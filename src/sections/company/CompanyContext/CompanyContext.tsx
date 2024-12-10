@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useState } from "react";
+import React, { createContext, useCallback, useEffect, useState } from "react";
 import { CompanyRepository } from "@company/domain/CompanyRepository";
 import {
   deleteCompany,
@@ -223,6 +223,11 @@ export const CompanyContextProvider = ({
     return response;
   };
 
+  useEffect(() => {
+    setTimeout(() => {
+      setIsSuccess(false);
+    }, 2000);
+  }, []);
   return (
     <CompanyContext.Provider
       value={{

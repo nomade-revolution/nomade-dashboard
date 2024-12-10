@@ -9,7 +9,7 @@ const CompanyDetailDataStyled = styled.section`
   letter-spacing: 0.6px;
   padding: 20px;
   border-radius: 10px;
-
+  width: 100%;
   @media (min-width: 1000px) {
     box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
     background-color: ${(props) => props.theme.colors.lightGrey};
@@ -48,6 +48,7 @@ const CompanyDetailDataStyled = styled.section`
     &__data {
       display: flex;
       flex-direction: column;
+      width: 100%;
       gap: 10px;
     }
 

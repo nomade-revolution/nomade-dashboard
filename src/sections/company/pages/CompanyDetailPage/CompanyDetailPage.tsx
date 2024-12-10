@@ -84,7 +84,7 @@ const InfluencerDetailPage = (): React.ReactElement => {
             </div>
           </section>
 
-          <section className="company-detail__info">
+          <section style={{ width: "100%" }}>
             <CompanyDetailData company={company} />
           </section>
           <h2
@@ -120,6 +120,7 @@ const InfluencerDetailPage = (): React.ReactElement => {
                 onSubmit={editCompanyCms}
                 client={company}
                 type="edit"
+                setIsOpen={setIsModalOpen}
               />
             }
             openModal={isModalOpen}

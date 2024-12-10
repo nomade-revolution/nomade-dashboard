@@ -6,13 +6,7 @@ import ReusableSelect from "sections/shared/components/ReusableSelect/ReusableSe
 import { clientSchema, initialData } from "./utils/validations/validations";
 import { PartialCompany } from "@company";
 import { FullAddress } from "modules/address/domain/Address";
-import {
-  FaEdit,
-  FaCheckCircle,
-  FaEyeSlash,
-  FaEye,
-  FaLink,
-} from "react-icons/fa";
+import { FaEdit, FaEyeSlash, FaEye, FaLink } from "react-icons/fa";
 import { IoAddCircle } from "react-icons/io5";
 import AddressForm from "sections/shared/components/AddressForm/AddressForm";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
@@ -32,9 +26,15 @@ interface Props {
   onSubmit: (values: FormData, id?: number) => void;
   type?: string;
   client?: Company;
+  setIsOpen: (value: boolean) => void;
 }
 
-const CompanyForm = ({ onSubmit, client, type }: Props): React.ReactElement => {
+const CompanyForm = ({
+  onSubmit,
+  client,
+  type,
+  setIsOpen,
+}: Props): React.ReactElement => {
   const [formState, setFormState] = useState<{ company_plan_id: string }>({
     company_plan_id: client?.plan.plan_id.toString() || "",
   });
@@ -393,12 +393,6 @@ const CompanyForm = ({ onSubmit, client, type }: Props): React.ReactElement => {
                 )}
                 {registerAddress ? "Modificar dirección" : "Añadir dirección"}
               </button>
-              {registerAddress && (
-                <span className="datasheet-form__address-mssg">
-                  <FaCheckCircle />
-                  Dirección añadida
-                </span>
-              )}
             </div>
             {registerContacts &&
               registerContacts.map((contact) => (
@@ -434,12 +428,6 @@ const CompanyForm = ({ onSubmit, client, type }: Props): React.ReactElement => {
                   ? "Modificar contacto"
                   : "Añadir contacto"}
               </button>
-              {registerContacts.length > 0 && (
-                <span className="datasheet-form__contact-mssg">
-                  <FaCheckCircle />
-                  Contacto añadido
-                </span>
-              )}
             </div>
             {type === "edit" && user.id === client!.id && (
               <>
@@ -557,6 +545,12 @@ const CompanyForm = ({ onSubmit, client, type }: Props): React.ReactElement => {
             ) : (
               "Crear cliente"
             )}
+          </button>
+          <button
+            onClick={() => setIsOpen(false)}
+            className={"datasheet-form__error"}
+          >
+            Cancelar
           </button>
         </ReusableFormStyled>
       )}

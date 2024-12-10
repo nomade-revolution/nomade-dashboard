@@ -1,5 +1,4 @@
 import ReusableFormStyled from "assets/styles/ReusableFormStyled";
-import GoBackButton from "../GoBackButton/GoBackButton";
 import { Formik, FormikHelpers } from "formik";
 
 import {
@@ -190,13 +189,6 @@ const SocialMediaForm = ({
 
   return (
     <SocialMediaFormStyled className="social-form">
-      <GoBackButton
-        onClick={() => {
-          setIsModalOpen(true);
-          setIsModalOpenEdit(false);
-        }}
-      />
-
       <Formik initialValues={social} onSubmit={handleSubmitForm}>
         {({ handleSubmit, getFieldProps, isSubmitting }) => (
           <ReusableFormStyled onSubmit={handleSubmit}>
@@ -266,27 +258,39 @@ const SocialMediaForm = ({
               <GendersForm social={social} getFieldProps={getFieldProps} />
             </section>
 
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className={
-                isSuccess
-                  ? "datasheet-form__success"
-                  : error
-                    ? "datasheet-form__error"
-                    : "datasheet-form__submit"
-              }
-            >
-              {isSubmitting ? (
-                <Loader width="20px" height="20px" />
-              ) : isSuccess ? (
-                "Stats modificadas"
-              ) : error ? (
-                "Revisa los datos e intentalo de nuevo"
-              ) : (
-                "Guardar cambios"
-              )}
-            </button>
+            <div style={{ display: "flex", gap: "20px" }}>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className={
+                  isSuccess
+                    ? "datasheet-form__success"
+                    : error
+                      ? "datasheet-form__error"
+                      : "datasheet-form__submit"
+                }
+              >
+                {isSubmitting ? (
+                  <Loader width="20px" height="20px" />
+                ) : isSuccess ? (
+                  "Stats modificadas"
+                ) : error ? (
+                  "Revisa los datos e intentalo de nuevo"
+                ) : (
+                  "Guardar cambios"
+                )}
+              </button>
+
+              <button
+                onClick={() => {
+                  setIsModalOpenEdit(false);
+                  setIsModalOpen(false);
+                }}
+                className={"datasheet-form__error"}
+              >
+                Cancelaraa
+              </button>
+            </div>
           </ReusableFormStyled>
         )}
       </Formik>
