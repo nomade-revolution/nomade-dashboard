@@ -11,13 +11,18 @@ const CompanySocialMedia = ({ socialMedia }: Props): React.ReactElement => {
   return (
     <CompanySocialMediaStyled className="social-media">
       {socialMedia?.map((media) => (
-        <Link to={media.url} target="_blank" key={media.id}>
-          <li className="social-media__data">
+        <li className="social-media__data">
+          <Link
+            to={media.url}
+            target="_blank"
+            key={media.id}
+            className="social-media__link"
+          >
             {getSocialMediaIcons(media.name)}
             <span>{media.account_name}</span>
             <span>{media.followers}</span>
-          </li>
-        </Link>
+          </Link>
+        </li>
       ))}
     </CompanySocialMediaStyled>
   );

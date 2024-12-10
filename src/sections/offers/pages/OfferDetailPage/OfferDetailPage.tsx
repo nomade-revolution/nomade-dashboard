@@ -11,10 +11,12 @@ import ReusableModal from "sections/shared/components/ReusableModal/ReusableModa
 import { FaEdit } from "react-icons/fa";
 import OffersForm from "sections/offers/components/OffersForm/OffersForm";
 import GoBackButton from "sections/shared/components/GoBackButton/GoBackButton";
+import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
+import { UserTypes } from "modules/user/domain/User";
 
 const OfferDetailsPage = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
+  const { user } = useAuthContext();
   const { id } = useParams();
   const { offer, loading, getOffer, modifyOffer } = useOffersContext();
 
@@ -49,13 +51,15 @@ const OfferDetailsPage = () => {
           <section className="offer-detail__data">
             <div className="offer-detail__heading">
               <h3 className="offer-detail__title">{offer.company}</h3>
-              <button
-                onClick={handleIsModalOpen}
-                className="offer-detail__edit-btn"
-              >
-                <FaEdit />
-                Editar oferta
-              </button>
+              {user.type === UserTypes.nomade && (
+                <button
+                  onClick={handleIsModalOpen}
+                  className="offer-detail__edit-btn"
+                >
+                  <FaEdit />
+                  Editar oferta
+                </button>
+              )}
             </div>
             <span className={getTypesClassNames(offer, "offer-detail")}>
               {offer.type}

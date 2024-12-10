@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import ImageCustom from "sections/shared/components/ImageCustom/ImageCustom";
 import Loader from "sections/shared/components/Loader/Loader";
 import GoBackButton from "sections/shared/components/GoBackButton/GoBackButton";
 import CompanyDetailPageStyled from "./CompanyDetailPageStyled";
@@ -20,6 +19,7 @@ import PlanForm from "sections/plans/components/PlanForm/PlanForm";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
 import { companyPlanTableSections } from "sections/plans/utils/plansTableSections";
 import { usePlansContext } from "sections/plans/PlansContext/usePlansContext";
+import contactsHeader from "./utils/contactsHeader";
 
 const InfluencerDetailPage = (): React.ReactElement => {
   const { getCompany, company, loading, editCompanyCms } = useCompanyContext();
@@ -85,19 +85,23 @@ const InfluencerDetailPage = (): React.ReactElement => {
           </section>
 
           <section className="company-detail__info">
-            <ImageCustom
-              image={company.image}
-              alt={company.name}
-              className="company-detail__avatar"
-              height={150}
-              width={150}
-            />
             <CompanyDetailData company={company} />
           </section>
-
-          <h2 style={{ marginBottom: "10px", alignSelf: "flex-start" }}>
-            Plan
+          <h2
+            style={{
+              marginBottom: "20px",
+              alignSelf: "flex-start",
+              marginTop: "20px",
+            }}
+          >
+            Contactos
           </h2>
+          <DashboardTable
+            bodySections={company.contacts}
+            headerSections={contactsHeader}
+            pageName={""}
+          />
+          <h2 style={{ marginBottom: "5px", alignSelf: "flex-start" }}>Plan</h2>
           <DashboardTable
             bodySections={[plan]}
             headerSections={companyPlanTableSections}

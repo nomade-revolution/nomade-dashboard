@@ -40,16 +40,7 @@ const CompanyDetailPageStyled = styled.main`
       gap: 20px;
       box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
       background-color: ${(props) => props.theme.colors.lightGrey};
-      /* padding-top: 20px; */
       border-radius: 10px;
-
-      @media (min-width: 1000px) {
-        display: block;
-        position: relative;
-        box-shadow: none;
-        background-color: none;
-        /* padding-top: 100px; */
-      }
     }
 
     &__avatar {
