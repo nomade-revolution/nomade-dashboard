@@ -117,7 +117,12 @@ const CompaniesPage = (): React.ReactElement => {
             filterParams={""}
           />
           <ReusableModal
-            children={<CompanyForm onSubmit={postCompanyCms} />}
+            children={
+              <CompanyForm
+                onSubmit={postCompanyCms}
+                setIsOpen={setIsModalOpen}
+              />
+            }
             openModal={isModalOpen}
             setIsModalOpen={setIsModalOpen}
             type="client"
