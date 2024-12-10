@@ -109,8 +109,8 @@ export const CompanyContextProvider = ({
     }
     return response;
   };
-  const exportCompanyBillingExcel = async (params?: FilterParams) => {
-    const response = await exportCompanyBilling(repository, token, params);
+  const exportCompanyBillingExcel = async () => {
+    const response = await exportCompanyBilling(repository, token);
 
     if (response && response instanceof Blob) {
       const href = await URL.createObjectURL(response);
