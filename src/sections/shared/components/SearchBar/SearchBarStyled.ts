@@ -65,7 +65,7 @@ const SearchBarStyled = styled.form`
 
     &__closeButton {
       position: absolute;
-      top: 30px;
+      top: 20px;
       right: 5px;
       transform: translateY(-50%);
       background: none;
