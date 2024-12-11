@@ -28,6 +28,7 @@ import { SocialMediaTypes } from "@influencer/domain/InfluencerSocialMedia";
 import theme from "assets/styles/theme";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { formatSliceString } from "sections/shared/utils/getDateIntoHourFormat/getDateIntoHourFormat";
+import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
 
 interface Props {
   headerSection: HeaderSection;
@@ -59,7 +60,7 @@ const DashboardContentSections = ({
   const calendar = (section as FullOffer).calendar;
   const daysSet = new Set<string>();
   const { user } = useAuthContext();
-
+  const { modifyOffer } = useOffersContext();
   switch (headerSection.property) {
     case "images":
       return (
@@ -347,7 +348,16 @@ const DashboardContentSections = ({
       );
 
     case "state":
-      return <Switch checked={(section as Offer).active ? true : false} />;
+      return (
+        <Switch
+          checked={(section as Offer).active ? true : false}
+          onClick={() => {
+            const formData = new FormData();
+            formData.append("active", (section as Offer).active ? "0" : "1");
+            modifyOffer(formData, (section as Offer).id);
+          }}
+        />
+      );
 
     case "from_country":
       return (

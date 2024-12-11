@@ -5,7 +5,7 @@ import GoBackButton from "sections/shared/components/GoBackButton/GoBackButton";
 import CompanyDetailPageStyled from "./CompanyDetailPageStyled";
 import CompanyDetailData from "sections/company/components/CompanyDetailData/CompanyDetailData";
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
-import CompanyCollabs from "sections/company/components/CompanyCollabs/CompanyCollabs";
+// import CompanyCollabs from "sections/company/components/CompanyCollabs/CompanyCollabs";
 import ActionButton from "sections/shared/components/ActionButton/ActionButton";
 import useActions from "sections/shared/hooks/useActions/useActions";
 import { SectionTypes } from "sections/shared/interfaces/interfaces";
@@ -106,7 +106,7 @@ const InfluencerDetailPage = (): React.ReactElement => {
             headerSections={companyPlanTableSections}
             pageName={""}
           />
-          <CompanyCollabs company_id={+id!} />
+          {/* <CompanyCollabs company_id={+id!} /> */}
           <DialogDeleteConfirm
             handleClose={() => setIsDialogOpen(false)}
             open={isDialogOpen}

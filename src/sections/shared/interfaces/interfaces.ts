@@ -22,7 +22,7 @@ export enum SectionTypes {
   collabs = "collabs",
   leads = "leads",
   categories = "categories",
-  collabsReservations = "collabsReservations",
+  collabsReservations = "collabs-reservations",
   plans = "planes",
 }
 

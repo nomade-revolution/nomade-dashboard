@@ -45,6 +45,7 @@ export const OffersContextProvider = ({
   const [pagination, setPagination] = useState<PaginationStucture>(
     {} as PaginationStucture,
   );
+
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
   const getAllOffers = useCallback(
@@ -101,11 +102,20 @@ export const OffersContextProvider = ({
   };
 
   const modifyOffer = async (offer: FormData, offer_id?: number) => {
+    setLoading(true);
     const response = await editOffer(repository, offer, offer_id!);
 
     if (isHttpSuccessResponse(response)) {
-      // setOffer(response.data.data);
       setIsSuccess(true);
+      const newOffers = offers.map((prevOffer) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        if (prevOffer.id === (response as any).data.id) {
+          return response.data;
+        }
+        return prevOffer;
+      });
+      setOffers(newOffers as unknown as FullOffer[]);
+      setOffer(response.data as unknown as FullOffer);
     } else {
       setError(response.error as never);
     }
@@ -114,7 +124,7 @@ export const OffersContextProvider = ({
       setIsSuccess(false);
       setError("");
     }, 3000);
-
+    setLoading(false);
     return response;
   };
 
