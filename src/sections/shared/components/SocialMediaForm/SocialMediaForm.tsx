@@ -176,10 +176,10 @@ const SocialMediaForm = ({
         {
           ...values,
           social_media_id: social.id,
-          cities: cities,
-          countries: countries,
-          genders: genders,
-          ageRanges: ageRanges,
+          cities,
+          countries,
+          genders,
+          ageRanges,
         },
       ],
     });
@@ -258,7 +258,15 @@ const SocialMediaForm = ({
               <GendersForm social={social} getFieldProps={getFieldProps} />
             </section>
 
-            <div style={{ display: "flex", gap: "20px" }}>
+            <div
+              style={{
+                display: "flex",
+                gap: "20px",
+                width: "100%",
+                justifyContent: "center",
+                paddingTop: "20px",
+              }}
+            >
               <button
                 type="submit"
                 disabled={isSubmitting}

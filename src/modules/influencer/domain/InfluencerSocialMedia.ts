@@ -61,6 +61,8 @@ export interface CountryRequest {
 export interface AgeRangeSocialRequest {
   age_range_id: number;
   followers_percentage: number;
+  name?: string;
+  id?: number;
 }
 
 export interface GenderSocialRequest {
