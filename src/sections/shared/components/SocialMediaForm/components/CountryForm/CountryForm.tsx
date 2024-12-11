@@ -29,7 +29,6 @@ const CountryForm = ({
   ) => {
     onCountryChange(index, { ...data, [field]: value });
   };
-
   return (
     <div className="stats__sub-section">
       <ReusableSelect

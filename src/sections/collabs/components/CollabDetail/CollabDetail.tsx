@@ -15,7 +15,6 @@ import {
   HiMiniArrowRightOnRectangle,
 } from "react-icons/hi2";
 import theme from "assets/styles/theme";
-import { formatDateWithSlash } from "sections/shared/utils/formatDate/formatDate";
 
 interface Props {
   collab: FullCollab;
@@ -118,11 +117,11 @@ const CollabDetail = ({
                 <h4>Fechas</h4>
                 <div className="collab-detail__data-section">
                   <HiMiniArrowRightOnRectangle color={theme.colors.softGreen} />
-                  <span>{formatDateWithSlash(collab.from_day!)}</span>
+                  <span>{collab.from_day}</span>
                 </div>
                 <div className="collab-detail__data-section">
                   <HiMiniArrowLeftOnRectangle color={theme.colors.red} />
-                  <span>{formatDateWithSlash(collab.to_day!)}</span>
+                  <span>{collab.to_day}</span>
                 </div>
               </section>
             )}
