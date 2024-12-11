@@ -288,7 +288,7 @@ const SocialMediaForm = ({
                 }}
                 className={"datasheet-form__error"}
               >
-                Cancelaraa
+                Cancelara
               </button>
             </div>
           </ReusableFormStyled>
