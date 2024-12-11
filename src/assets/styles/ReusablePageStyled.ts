@@ -255,6 +255,10 @@ const ReusablePageStyled = styled.main`
         color: #f8a842;
         font-size: ${(props) => props.theme.fontsSize.__SM};
       }
+      &--received {
+        font-size: ${(props) => props.theme.fontsSize.__SM};
+        color: #4682b4;
+      }
     }
 
     &--modification {
@@ -264,7 +268,7 @@ const ReusablePageStyled = styled.main`
 
     &--received {
       font-size: ${(props) => props.theme.fontsSize.__SM};
-      color: lightBlue;
+      color: #4682b4;
     }
 
     &--published {
@@ -368,13 +372,13 @@ const ReusablePageStyled = styled.main`
     }
 
     &__start-date {
-      color: green;
-      opacity: 0.6;
+      color: ${(props) => props.theme.colors.mainColor};
+      /* opacity: 0.6; */
       font-size: ${(props) => props.theme.fontsSize.__SM};
     }
 
     &__end-date {
-      opacity: 0.6;
+      /* opacity: 0.6; */
       font-size: ${(props) => props.theme.fontsSize.__SM};
     }
 

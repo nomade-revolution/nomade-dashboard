@@ -32,13 +32,13 @@ export const companyTableHeaderSections: HeaderSection[] = [
   //   sortTag: "",
   //   pageName: SectionTypes.customers,
   // },
-  {
-    id: 5,
-    name: "Progreso",
-    property: "percentage",
-    sortTag: "",
-    pageName: SectionTypes.customers,
-  },
+  // {
+  //   id: 5,
+  //   name: "Progreso",
+  //   property: "percentage",
+  //   sortTag: "",
+  //   pageName: SectionTypes.customers,
+  // },
   // {
   //   id: 6,
   //   name: "NIF",

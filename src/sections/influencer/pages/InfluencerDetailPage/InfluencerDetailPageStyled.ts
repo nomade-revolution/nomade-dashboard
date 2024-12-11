@@ -40,10 +40,7 @@ const InfluencerDetailPageStyled = styled.main`
 
   .dashboard {
     &__state-section {
-      font-weight: bold;
-
       &--accepted {
-        font-weight: bold;
         color: ${(props) => props.theme.colors.softGreen};
       }
 
@@ -56,7 +53,7 @@ const InfluencerDetailPageStyled = styled.main`
       }
 
       &--sent {
-        color: ${(props) => props.theme.colors.darkBlue};
+        color: #4682b4;
       }
 
       &--pending-nomade {
@@ -80,6 +77,9 @@ const InfluencerDetailPageStyled = styled.main`
       &--incident {
         color: brown;
       }
+      &--received {
+        color: #4682b4;
+      }
     }
 
     &--modification {
@@ -87,7 +87,7 @@ const InfluencerDetailPageStyled = styled.main`
     }
 
     &--received {
-      color: lightBlue;
+      color: #4682b4;
     }
 
     &--published {

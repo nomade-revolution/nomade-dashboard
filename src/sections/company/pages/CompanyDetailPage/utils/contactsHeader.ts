@@ -1,4 +1,7 @@
-import { HeaderSection } from "sections/shared/interfaces/interfaces";
+import {
+  HeaderSection,
+  SectionTypes,
+} from "sections/shared/interfaces/interfaces";
 
 const contactsHeader: HeaderSection[] = [
   {
@@ -6,7 +9,7 @@ const contactsHeader: HeaderSection[] = [
     name: "Nombre",
     property: "name",
     sortTag: "",
-    pageName: "",
+    pageName: SectionTypes.users,
   },
   {
     id: 2,

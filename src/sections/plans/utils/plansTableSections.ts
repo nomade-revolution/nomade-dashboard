@@ -55,13 +55,6 @@ export const monthPlansTableSections: HeaderSection[] = [
   },
 
   {
-    id: 13,
-    name: "Tiempo restante",
-    property: "remaining",
-    sortTag: "",
-    pageName: "offers",
-  },
-  {
     id: 10,
     name: "Progreso",
     property: "percentage",

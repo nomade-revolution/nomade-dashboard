@@ -130,6 +130,10 @@ const CompanyDetailPageStyled = styled.main`
         font-size: ${(props) => props.theme.fontsSize.__SM};
         color: #e57c00;
       }
+      &--received {
+        font-size: ${(props) => props.theme.fontsSize.__SM};
+        color: red;
+      }
     }
 
     &--modification {
@@ -139,7 +143,7 @@ const CompanyDetailPageStyled = styled.main`
 
     &--received {
       font-size: ${(props) => props.theme.fontsSize.__SM};
-      color: lightBlue;
+      color: #4682b4;
     }
 
     &--published {

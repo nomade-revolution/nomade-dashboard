@@ -90,7 +90,7 @@ const CollabsPage = (): React.ReactElement => {
       }
 
       setTotalFilters(filters);
-
+      setIsOpenFilters(false);
       getAllCollabs(+page!, 10, filters);
     },
     [

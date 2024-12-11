@@ -98,7 +98,7 @@ const InfluencerDetailPage = (): React.ReactElement => {
           <DashboardTable
             bodySections={company.contacts}
             headerSections={contactsHeader}
-            pageName={""}
+            pageName={SectionTypes.users}
           />
           <h2 style={{ marginBottom: "5px", alignSelf: "flex-start" }}>Plan</h2>
           <DashboardTable
