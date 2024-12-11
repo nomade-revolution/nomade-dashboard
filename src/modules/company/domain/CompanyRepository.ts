@@ -18,5 +18,5 @@ export interface CompanyRepository<I> {
     id: number,
   ) => Promise<HttpResponseInterface<I>>;
   exportCompanies: (token: string) => Promise<Blob>;
-  exportCompanyBilling: (token: string) => Promise<Blob>;
+  exportCompanyBilling: (token: string, params?: FilterParams) => Promise<Blob>;
 }

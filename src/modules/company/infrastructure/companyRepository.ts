@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   COMPANY_BASE,
   COMPANY_CMS_REGISTER,
@@ -86,20 +87,35 @@ export class CompanyRepository {
       return Promise.reject(error);
     }
   };
-  public exportCompanyBilling = async (token: string): Promise<Blob> => {
+  public exportCompanyBilling = async (
+    token: string,
+    params?: FilterParams,
+  ): Promise<Blob> => {
     try {
-      const date = new Date().toISOString().split("T")[0];
+      let url = `${COMPANY_BASE}/billing?`;
 
-      const response = await fetch(
-        `${COMPANY_BASE}/billing?filters%5Bdate%5D=${date}`,
-        {
-          headers: {
-            method: "GET",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
+      const date = (params as any)?.filters?.date
+        ? (params as any)?.filters?.date + "-01"
+        : new Date().toISOString().split("T")[0];
+
+      url = url + `filters%5Bdate%5D=${date}`;
+
+      if ((params as any)?.filters?.billing_id) {
+        url =
+          url +
+          `&filters%5Bbilling_id%5D=${(params as any).filters.billing_id}`;
+      }
+      if ((params as any)?.filters?.search) {
+        url = url + `&filters%5Bsearch%5D=${(params as any).filters.search}`;
+      }
+      const response = await fetch(url, {
+        headers: {
+          method: "GET",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          params: JSON.stringify({ ...params }),
         },
-      );
+      });
 
       const data = await response.blob();
 

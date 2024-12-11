@@ -33,9 +33,9 @@ const PlansPage = (): React.ReactElement => {
   const { exportCompanyBillingExcel } = useCompanyContext();
   const { page } = useParams();
 
-  const handleSearch = (searchText: string) => {
+  const handleSearch = (date?: string) => {
     getPlans(+page!, 10, {
-      filters: { date: searchText, billing_id: billing_id },
+      filters: { date: date, billing_id: billing_id, search: textToSearch },
     });
   };
 
@@ -95,7 +95,15 @@ const PlansPage = (): React.ReactElement => {
                 <div className="plans-page__filter-btnSection">
                   <div className="plans-page__show-calendar">
                     <ExportFilesButton
-                      action={() => exportCompanyBillingExcel()}
+                      action={() =>
+                        exportCompanyBillingExcel({
+                          filters: {
+                            date: date,
+                            billing_id,
+                            search: textToSearch,
+                          },
+                        })
+                      }
                       text="Exportar Planes"
                     />
                     <input
@@ -150,7 +158,15 @@ const PlansPage = (): React.ReactElement => {
                 <div className="plans-page__show-calendar">
                   <div className="plans-page__filter-btnSection">
                     <ExportFilesButton
-                      action={() => exportCompanyBillingExcel()}
+                      action={() =>
+                        exportCompanyBillingExcel({
+                          filters: {
+                            date: date,
+                            billing_id,
+                            search: textToSearch,
+                          },
+                        })
+                      }
                       text="Exportar Planes"
                     />
 

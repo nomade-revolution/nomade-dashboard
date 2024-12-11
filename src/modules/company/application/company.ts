@@ -34,8 +34,9 @@ export const exportCompanies = (
 export const exportCompanyBilling = (
   companyRepo: CompanyRepository<Company>,
   token: string,
+  params?: FilterParams,
 ) => {
-  return companyRepo.exportCompanyBilling(token);
+  return companyRepo.exportCompanyBilling(token, params);
 };
 export const getCompaniesBadge = (companyRepo: CompanyRepository<number>) => {
   return companyRepo.getCompaniesBadge();
