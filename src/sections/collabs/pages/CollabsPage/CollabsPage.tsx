@@ -177,6 +177,10 @@ const CollabsPage = (): React.ReactElement => {
                   text="Filtros"
                   onClick={() => setIsOpenFilters(!isOpenFilters)}
                 />
+                <ExportFilesButton
+                  action={() => exportCollabsExcel()}
+                  text="Exportar collabs"
+                />
               </div>
             )}
             <SearchBar
@@ -312,21 +316,6 @@ const CollabsPage = (): React.ReactElement => {
             openModal={isModalOpen}
             setIsModalOpen={setIsModalOpen}
           />
-          <div
-            style={{
-              width: "100%",
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "center",
-            }}
-          >
-            {user.type !== "Nomade" && (
-              <ExportFilesButton
-                action={() => exportCollabsExcel()}
-                text="Exportar collabs"
-              />
-            )}
-          </div>
         </ReusablePageStyled>
       )}
     </>
