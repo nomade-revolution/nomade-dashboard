@@ -3,8 +3,9 @@ import styled from "styled-components";
 const InfluencerSocialMediaStyles = styled.ul`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   min-height: 80px;
+  gap: 30px;
 
   @media (min-width: 1000px) {
     flex-direction: row;
