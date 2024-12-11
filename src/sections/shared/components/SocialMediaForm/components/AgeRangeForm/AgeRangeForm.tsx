@@ -22,7 +22,7 @@ const initialAgeRange: AgeRangeSocialRequest[] = [
 ];
 const AgeRangeForm = ({ social, getFieldProps }: Props): React.ReactElement => {
   return (
-    <ul className="stats__list">
+    <ul className="stats__list" style={{ width: "60%" }}>
       {social.ageRanges.length < 0 &&
         social.ageRanges.map((age, index) => (
           <li className="stats__list-item">
@@ -39,7 +39,7 @@ const AgeRangeForm = ({ social, getFieldProps }: Props): React.ReactElement => {
               <Field
                 type="number"
                 id={`percentage-${index}`}
-                className="stats__field"
+                className="select--small"
                 placeholder="0"
                 {...getFieldProps(`ageRanges[${index}].followers_percentage`)}
               />
@@ -62,7 +62,7 @@ const AgeRangeForm = ({ social, getFieldProps }: Props): React.ReactElement => {
               <Field
                 type="number"
                 id={`percentage-${index}`}
-                className="stats__field"
+                className="select--small"
                 placeholder="0"
                 {...getFieldProps(`ageRanges[${index}].followers_percentage`)}
               />

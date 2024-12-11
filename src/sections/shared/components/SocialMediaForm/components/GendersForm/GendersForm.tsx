@@ -25,7 +25,7 @@ const initialValue = [
 
 const GendersForm = ({ social, getFieldProps }: Props): React.ReactElement => {
   return (
-    <ul className="stats__list">
+    <ul className="stats__list" style={{ width: "60%" }}>
       {social.genders.length > 0 &&
         social.genders.map((age, index) => (
           <li className="stats__list-item">
@@ -42,7 +42,7 @@ const GendersForm = ({ social, getFieldProps }: Props): React.ReactElement => {
               <Field
                 type="number"
                 id={`percentage-${index}`}
-                className="stats__field"
+                className="select--small"
                 placeholder="0"
                 {...getFieldProps(`genders[${index}].followers_percentage`)}
               />
@@ -65,7 +65,7 @@ const GendersForm = ({ social, getFieldProps }: Props): React.ReactElement => {
               <Field
                 type="number"
                 id={`percentage-${index}`}
-                className="stats__field"
+                className="select--small"
                 placeholder="0"
                 {...getFieldProps(`genders[${index}].followers_percentage`)}
               />

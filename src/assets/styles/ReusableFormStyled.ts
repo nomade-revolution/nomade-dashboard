@@ -170,6 +170,18 @@ const ReusableFormStyled = styled.form<Props>`
     }
   }
 
+  .select--small {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 40px;
+    border-radius: ${(props) => props.theme.borderRadius.inputs};
+    border: 1px solid ${(props) => props.theme.borders.lightGrey};
+    padding: 0 8px;
+    width: 50px;
+    gap: 40px;
+  }
   .form-subsection {
     display: flex;
     flex-direction: column;
@@ -498,8 +510,12 @@ const ReusableFormStyled = styled.form<Props>`
     }
 
     &__list-text {
-      width: 20%;
-      font-weight: 700;
+      width: 100px;
+      display: flex;
+      align-items: center;
+      padding-top: 25px;
+      justify-content: center;
+      margin-right: 20px;
       color: ${(props) => props.theme.colors.darkBlue};
     }
   }
