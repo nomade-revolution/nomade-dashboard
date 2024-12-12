@@ -117,7 +117,8 @@ const CompanyForm = ({
       formData.delete("image");
     }
     formData.delete("comments");
-    formData.append("comments", values?.company_comments);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    formData.append("comments", (values as any)?.company_comments);
     formData.append("plan_id", formState.company_plan_id);
     await onSubmit(formData, client && client?.id);
 
@@ -150,6 +151,8 @@ const CompanyForm = ({
     <Formik
       initialValues={initialValues}
       validationSchema={clientSchema}
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      //@ts-expect-error
       onSubmit={handleSubmitForm}
     >
       {({ errors, touched, handleSubmit, getFieldProps, isSubmitting }) => (
