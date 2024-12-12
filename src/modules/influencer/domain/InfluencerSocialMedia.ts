@@ -68,6 +68,8 @@ export interface AgeRangeSocialRequest {
 export interface GenderSocialRequest {
   gender_id: number;
   followers_percentage: number;
+  id?: number;
+  name?: string;
 }
 
 export interface FullSocialMediaCityData extends CitySocialRequest {
@@ -77,5 +79,25 @@ export interface FullSocialMediaCityData extends CitySocialRequest {
 }
 
 export interface EditInfluencerStatsStructure {
-  socialMedia: (Omit<SocialMedia, "id"> & { social_media_id: number })[];
+  socialMedia: (Omit<SocialMedia, "id"> & { social_media_id: number } & Omit<
+      SocialMedia,
+      "age_ranges"
+    >)[];
+}
+
+export interface SocialMediaEdit {
+  social_media_id: number;
+  main: boolean;
+  name: string;
+  url: string;
+  account_name: string;
+  followers: number;
+  video: string | null;
+  cities: CitySocialRequest[] | CityRequest[];
+  countries: CountrySocialRequest[] | CountryRequest[];
+  age_ranges: SocialMediaStatistic[] | AgeRangeSocialRequest[];
+  genders: SocialMediaStatistic[] | GenderSocialRequest[];
+}
+export interface EditInfluencerSocials {
+  socialMedia: SocialMediaEdit[];
 }

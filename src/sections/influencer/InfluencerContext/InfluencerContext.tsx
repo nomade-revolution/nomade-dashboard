@@ -11,7 +11,7 @@ import { InfluencerRepository } from "@influencer/domain/InfluencerRepository";
 import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
 import { Influencer } from "@influencer";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
-import { EditInfluencerStatsStructure } from "@influencer/domain/InfluencerSocialMedia";
+import { EditInfluencerSocials } from "@influencer/domain/InfluencerSocialMedia";
 import { RegisterInfluencerInterface } from "@auth";
 
 interface InfluencerCategory {
@@ -33,7 +33,7 @@ interface ContextState {
   getInfluencersWithParams: (params: FilterParams) => void;
   modifyInfluencerStats: (
     influencer_id: number,
-    stats: EditInfluencerStatsStructure,
+    stats: EditInfluencerSocials,
   ) => void;
   registerInfluencer: (data: Partial<RegisterInfluencerInterface>) => void;
   influencerCategories: InfluencerCategory[];
@@ -107,13 +107,12 @@ export const InfluencerContextProvider = ({
   }, [repository]);
 
   const modifyInfluencerStats = useCallback(
-    async (influencer_id: number, stats: EditInfluencerStatsStructure) => {
+    async (influencer_id: number, stats: EditInfluencerSocials) => {
       const response = await editInfluencerStats(
         repository,
         stats,
         influencer_id,
       );
-
       if (isHttpSuccessResponse(response)) {
         setInfluencer(response.data);
         setIsSuccess(true);

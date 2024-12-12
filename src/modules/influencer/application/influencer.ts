@@ -2,7 +2,7 @@ import { RegisterInfluencerInterface } from "@auth";
 import { HttpResponseInterface } from "@core/domain/HttpResponseInterface";
 import { Influencer } from "@influencer/domain";
 import { InfluencerRepository } from "@influencer/domain/InfluencerRepository";
-import { EditInfluencerStatsStructure } from "@influencer/domain/InfluencerSocialMedia";
+import { EditInfluencerSocials } from "@influencer/domain/InfluencerSocialMedia";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
 
 export const deleteInfluencer = (
@@ -34,7 +34,7 @@ export const getInfluencers = (
 
 export const editInfluencerStats = (
   influencerRepo: InfluencerRepository<Influencer>,
-  data: EditInfluencerStatsStructure,
+  data: EditInfluencerSocials,
   influencer_id: number,
 ) => {
   return influencerRepo.editInfluencerStats(data, influencer_id);

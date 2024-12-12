@@ -32,10 +32,18 @@ const SocialMediaCard = ({
     );
     return a;
   };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const sortById = (array: any[]) => {
+    const a = array.sort((a, b) => a.id - b.id);
+
+    return a;
+  };
+
   const sortedCities = sortByFollowers(socialMedia.cities);
   const sortedCountries = sortByFollowers(socialMedia.countries);
-  const ageRanges = sortByFollowers(socialMedia.ageRanges);
-  const genders = sortByFollowers(socialMedia.genders);
+  const genders = sortById(socialMedia.genders);
+  const ageRanges = sortById(socialMedia.ageRanges);
   return (
     <SocialMediaCardStyled className="social-card">
       {user.type === "Nomade" && (

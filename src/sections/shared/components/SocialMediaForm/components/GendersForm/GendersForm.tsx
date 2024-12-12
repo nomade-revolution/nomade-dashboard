@@ -10,14 +10,14 @@ interface Props {
     props: string | FieldConfig<Value>,
   ) => FieldInputProps<Value>;
 }
-const initialValue = [
+const initialValue: SocialMediaStatistic[] = [
   {
-    id: 0,
+    id: 1,
     name: "Hombre",
     followers_percentage: 0,
   },
   {
-    id: 0,
+    id: 2,
     name: "Mujer",
     followers_percentage: 0,
   },
@@ -51,7 +51,7 @@ const GendersForm = ({ social, getFieldProps }: Props): React.ReactElement => {
         ))}
       {social.genders.length === 0 &&
         initialValue.map((age, index) => (
-          <li className="stats__list-item">
+          <li className="stats__list-item" key={age.id}>
             <span className="stats__list-text">
               {(age as SocialMediaStatistic).name}
             </span>

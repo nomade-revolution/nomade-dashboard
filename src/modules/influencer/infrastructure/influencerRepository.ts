@@ -6,7 +6,7 @@ import {
   INFLUENCER_STATS,
 } from "@influencer/application/routes";
 import { Influencer } from "@influencer/domain";
-import { EditInfluencerStatsStructure } from "@influencer/domain/InfluencerSocialMedia";
+import { EditInfluencerSocials } from "@influencer/domain/InfluencerSocialMedia";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
 
 export class InfluencerRepository {
@@ -61,7 +61,7 @@ export class InfluencerRepository {
   }
 
   public async editInfluencerStats(
-    data: EditInfluencerStatsStructure,
+    data: EditInfluencerSocials,
     influencer_id: number,
   ): Promise<HttpResponseInterface<Influencer>> {
     try {

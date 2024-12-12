@@ -1,9 +1,9 @@
 import {
-  AgeRangeSocialRequest,
   SocialMedia,
   SocialMediaStatistic,
 } from "@influencer/domain/InfluencerSocialMedia";
 import { Field, FieldConfig, FieldInputProps, FormikValues } from "formik";
+import ageRanges from "./ageRanges";
 
 interface Props {
   social: SocialMedia;
@@ -12,18 +12,11 @@ interface Props {
   ) => FieldInputProps<Value>;
 }
 
-const initialAgeRange: AgeRangeSocialRequest[] = [
-  { age_range_id: 0, followers_percentage: 0, id: 0, name: "13-17" },
-  { age_range_id: 0, followers_percentage: 0, id: 0, name: "17-24" },
-  { age_range_id: 0, followers_percentage: 0, id: 0, name: "24-35" },
-  { age_range_id: 0, followers_percentage: 0, id: 0, name: "36-45" },
-  { age_range_id: 0, followers_percentage: 0, id: 0, name: "46-54" },
-  { age_range_id: 0, followers_percentage: 0, id: 0, name: "55-67" },
-];
+const initialAgeRange: SocialMediaStatistic[] = ageRanges;
 const AgeRangeForm = ({ social, getFieldProps }: Props): React.ReactElement => {
   return (
     <ul className="stats__list" style={{ width: "60%" }}>
-      {social.ageRanges.length < 0 &&
+      {social.ageRanges.length > 0 &&
         social.ageRanges.map((age, index) => (
           <li className="stats__list-item">
             <span className="stats__list-text">

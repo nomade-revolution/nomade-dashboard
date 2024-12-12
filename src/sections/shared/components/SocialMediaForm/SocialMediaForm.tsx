@@ -2,8 +2,10 @@ import ReusableFormStyled from "assets/styles/ReusableFormStyled";
 import { Formik, FormikHelpers } from "formik";
 
 import {
+  AgeRangeSocialRequest,
   CitySocialRequest,
   CountrySocialRequest,
+  GenderSocialRequest,
   SocialMedia,
   SocialMediaStatistic,
 } from "@influencer/domain/InfluencerSocialMedia";
@@ -14,10 +16,7 @@ import {
 import { useState, useEffect, useCallback } from "react";
 import { useCitiesContext } from "sections/city/CityContext/useCitiesContext";
 import { useCountryContext } from "sections/country/CountryContext/useCountryContext";
-import {
-  OptionsStructure,
-  FilterParams,
-} from "sections/shared/interfaces/interfaces";
+import { FilterParams } from "sections/shared/interfaces/interfaces";
 import SocialMediaFormStyled from "./SocialMediaFormStyled";
 import CityForm from "./components/CityForm/CityForm";
 import CountryForm from "./components/CountryForm/CountryForm";
@@ -26,6 +25,7 @@ import GendersForm from "./components/GendersForm/GendersForm";
 import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
 import { useInfluencerContext } from "sections/influencer/InfluencerContext/useInfluencerContext";
 import Loader from "../Loader/Loader";
+import { OptionsStructure } from "../../interfaces/interfaces";
 
 interface Props {
   setIsModalOpen: (value: boolean) => void;
@@ -42,7 +42,8 @@ const SocialMediaForm = ({
 }: Props): React.ReactElement => {
   const { getAllCountries, countries } = useCountryContext();
   const { getAllCities } = useCitiesContext();
-  const { modifyInfluencerStats, isSuccess, error } = useInfluencerContext();
+  const { modifyInfluencerStats, isSuccess, error, influencer } =
+    useInfluencerContext();
 
   const [countriesFormat, setCountriesFormat] = useState<OptionsStructure[]>(
     [],
@@ -97,7 +98,7 @@ const SocialMediaForm = ({
 
   useEffect(() => {
     if (citiesForm.length > 0) {
-      citiesForm.forEach((country) => loadCitiesByCountry(country.id));
+      citiesForm.forEach((country) => loadCitiesByCountry(country.country_id));
     }
   }, [citiesForm, loadCitiesByCountry]);
 
@@ -115,6 +116,7 @@ const SocialMediaForm = ({
     updatedCountry: CountrySocialRequest,
   ) => {
     const updatedForms = [...citiesForm];
+
     updatedForms[index] = {
       ...updatedForms[index],
       country_id: updatedCountry.country_id,
@@ -149,47 +151,114 @@ const SocialMediaForm = ({
     const cities = citiesForm.map((city, index) => ({
       city_id: city.city_id
         ? city.city_id
-        : (values.cities as CitySocialRequest[])[index].id,
-      followers_percentage: values.cities[index].followers_percentage,
+        : (values.cities as CitySocialRequest[])[index]?.id,
+      followers_percentage: values.cities[index]?.followers_percentage,
     }));
 
     const countries = countriesForm.map((country, index) => ({
       country_id: country.country_id
         ? country.country_id
-        : (values.countries as CountrySocialRequest[])[index].id,
+        : (values.countries as CountrySocialRequest[])[index]?.id,
       followers_percentage: (values.countries as CountrySocialRequest[])[index]
-        .followers_percentage,
+        ?.followers_percentage,
     }));
 
-    const genders = values.genders.map((gender) => ({
-      gender_id: (gender as SocialMediaStatistic).id,
-      followers_percentage: gender.followers_percentage,
-    }));
-
+    const genders = values.genders.map((gender) => {
+      return {
+        gender_id: (gender as SocialMediaStatistic).id,
+        followers_percentage: gender.followers_percentage,
+      };
+    });
     const ageRanges = values.ageRanges.map((age) => ({
       age_range_id: (age as SocialMediaStatistic).id,
       followers_percentage: age.followers_percentage,
     }));
 
-    await modifyInfluencerStats(influencer_id, {
+    const socialsNotModified = influencer.socialMedia.filter(
+      (socials) => socials.id !== social.id,
+    );
+
+    const formatedSocials = socialsNotModified.map((socialsData) => {
+      return {
+        ...socialsData,
+        social_media_id: socialsData.id,
+        cities: socialsData.cities.map((city) => ({
+          city_id: (city as CitySocialRequest).id,
+          followers_percentage: city.followers_percentage,
+        })),
+        countries: socialsData.countries.map((country) => ({
+          country_id: (country as CountrySocialRequest).id,
+          followers_percentage: country.followers_percentage,
+        })),
+        genders: socialsData.genders.map((gender) => ({
+          gender_id: (gender as GenderSocialRequest).id!,
+          followers_percentage: gender.followers_percentage!,
+        })),
+        age_ranges: socialsData.ageRanges.map((age) => ({
+          age_range_id: (age as AgeRangeSocialRequest).id!,
+          followers_percentage: age.followers_percentage!,
+        })),
+      };
+    });
+
+    const response = await modifyInfluencerStats(influencer_id, {
       socialMedia: [
+        ...formatedSocials,
         {
           ...values,
           social_media_id: social.id,
           cities,
           countries,
           genders,
-          ageRanges,
+          age_ranges: ageRanges,
         },
       ],
     });
-
     setSubmitting(false);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if ((response as any).success) {
+      setTimeout(() => {
+        setIsModalOpenEdit(false);
+        setIsModalOpen(false);
+      }, 1500);
+    }
+  };
+  const getInitialValues = (social: SocialMedia): SocialMedia => {
+    const newSocials = { ...social };
+    if (social.genders.length === 0) {
+      newSocials.genders = [
+        {
+          id: 1,
+          name: "Hombre",
+          followers_percentage: 0,
+        },
+        {
+          id: 2,
+          name: "Mujer",
+          followers_percentage: 0,
+        },
+      ];
+    }
+
+    if (social.ageRanges.length === 0) {
+      newSocials.ageRanges = [
+        { id: 1, followers_percentage: 0, name: "13-17" },
+        { id: 2, followers_percentage: 0, name: "18-24" },
+        { id: 3, followers_percentage: 0, name: "25-34" },
+        { id: 4, followers_percentage: 0, name: "35-44" },
+        { id: 5, followers_percentage: 0, name: "45-54" },
+        { id: 6, followers_percentage: 0, name: "+65" },
+      ];
+    }
+    return newSocials;
   };
 
   return (
     <SocialMediaFormStyled className="social-form">
-      <Formik initialValues={social} onSubmit={handleSubmitForm}>
+      <Formik
+        initialValues={getInitialValues(social)}
+        onSubmit={handleSubmitForm}
+      >
         {({ handleSubmit, getFieldProps, isSubmitting }) => (
           <ReusableFormStyled onSubmit={handleSubmit}>
             <h3>Estadísticas {social?.account_name}</h3>
@@ -281,7 +350,7 @@ const SocialMediaForm = ({
                 {isSubmitting ? (
                   <Loader width="20px" height="20px" />
                 ) : isSuccess ? (
-                  "Stats modificadas"
+                  "Cambios guardados"
                 ) : error ? (
                   "Revisa los datos e intentalo de nuevo"
                 ) : (
@@ -296,7 +365,7 @@ const SocialMediaForm = ({
                 }}
                 className={"datasheet-form__error"}
               >
-                Cancelara
+                Cancelar
               </button>
             </div>
           </ReusableFormStyled>
