@@ -48,10 +48,8 @@ const Actions = ({
 
   let state_id: number | undefined;
 
-  if (section && (section as FullCollab)?.history?.length) {
-    state_id = (section as FullCollab).history[
-      (section as FullCollab).history.length - 1
-    ]?.id;
+  if (section && (section as FullCollab).state) {
+    state_id = (section as FullCollab).state.id;
   }
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -71,12 +69,10 @@ const Actions = ({
             </Link>
           </Tooltip>
 
-          {((section as FullCollab).history[
-            (section as FullCollab).history.length - 1
-          ].id === collabStates.COLAB_PENDING_NOMADE_STATE ||
-            (section as FullCollab).history[
-              (section as FullCollab).history.length - 1
-            ].id === collabStates.COLAB_PENDING_COMPANY_STATE) && (
+          {((section as FullCollab).state.id ===
+            collabStates.COLAB_PENDING_NOMADE_STATE ||
+            (section as FullCollab).state.id ===
+              collabStates.COLAB_PENDING_COMPANY_STATE) && (
             <>
               <Tooltip title="Aceptar">
                 <button

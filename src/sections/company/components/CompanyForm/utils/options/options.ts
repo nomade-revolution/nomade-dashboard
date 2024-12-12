@@ -11,7 +11,20 @@ export const billingOptions: OptionsStructure[] = [
     name: "Trimestral",
     value: 2,
   },
-  { id: 6, name: "Premium", value: 6 },
+  {
+    id: 4,
+    name: "Estandar",
+    value: 4,
+  },
+  {
+    id: 6,
+    name: "Premium",
+    value: 6,
+  },
 
-  { id: 7, name: "Pendiente", value: 7 },
+  {
+    id: 7,
+    name: "Pendiente",
+    value: 7,
+  },
 ];

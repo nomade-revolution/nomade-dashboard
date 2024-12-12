@@ -12,6 +12,12 @@ export interface Collab {
   from_day?: string;
   to_day?: string;
   company_id: number;
+  state: {
+    created_at: string;
+    id: number;
+    name: string;
+    type: string;
+  };
 }
 
 export interface FullCollab extends Collab {

@@ -57,7 +57,6 @@ export default function ReusableStepper({
     event.stopPropagation();
     setAnchorEl(event.currentTarget);
   };
-
   const lastStep = steps && steps.length > 0 ? steps[steps.length - 1] : null;
   const state_id = lastStep ? lastStep.id : null;
   const state_type = lastStep ? lastStep.type : null;

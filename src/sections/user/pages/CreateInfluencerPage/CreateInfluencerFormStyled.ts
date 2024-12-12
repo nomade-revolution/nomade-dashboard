@@ -7,7 +7,7 @@ const CreateInfluencerFormStyled = styled.form`
   gap: 20px;
   font-size: ${(props) => props.theme.fontsSize.__SM};
   width: 85%;
-
+  padding: 20px;
   @media (min-width: 1000px) {
     width: 60%;
   }

@@ -17,7 +17,12 @@ const ReusablePageStyled = styled.main`
     padding: 20px 50px;
     height: 100%;
   }
-
+  .header {
+    display: flex;
+    padding-left: 20px;
+    justify-content: flex-start;
+    align-items: center;
+  }
   .dashboard {
     width: 100%;
     &__table {

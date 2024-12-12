@@ -14,7 +14,7 @@ import { billingOptions } from "./utils/options/options";
 import { Contact, ContactType } from "modules/contact/domain/Contact";
 import ContactForm from "sections/shared/components/ContactForm/ContactForm";
 import { useContactContext } from "sections/contact/ContactContext/useContactContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import CustomCheckbox from "sections/shared/components/CustomCheckbox/CustomCheckbox";
 import Loader from "sections/shared/components/Loader/Loader";
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
@@ -66,7 +66,7 @@ const CompanyForm = ({
 
   const { contact_types, getAllContactTypes } = useContactContext();
   const { isSuccess, isError, loading } = useCompanyContext();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleFormStateChange = (field: string, value: string) => {
     setFormState((prevState) => ({ ...prevState, [field]: value }));
@@ -88,9 +88,7 @@ const CompanyForm = ({
     { setSubmitting }: FormikHelpers<PartialCompany>,
   ) => {
     setSubmitting(true);
-
     const formData = new FormData();
-
     const formattedDate = formatDateWithDash(values.start_date);
 
     Object.keys(values).forEach((key) => {
@@ -118,12 +116,15 @@ const CompanyForm = ({
     } else {
       formData.delete("image");
     }
-
+    formData.delete("comments");
+    formData.append("comments", values?.company_comments);
     formData.append("plan_id", formState.company_plan_id);
     await onSubmit(formData, client && client?.id);
 
     if (isSuccess) {
-      setTimeout(() => navigate(0), 2000);
+      setTimeout(() => {
+        setIsOpen(false);
+      }, 1500);
     }
 
     setSubmitting(false);
@@ -132,12 +133,19 @@ const CompanyForm = ({
   useEffect(() => {
     getAllContactTypes();
   }, [getAllContactTypes]);
-
+  const convertDateToISO = (date?: string): string => {
+    if (!date) return "";
+    const [day, month, year] = date.split("-");
+    return `${year}-${month}-${day}`;
+  };
   const initialValues = {
     ...initialData,
     ...client,
+    plan: {
+      ...client?.plan,
+      start_date: convertDateToISO(client?.plan.start_date?.slice(0, 10)),
+    },
   };
-
   return (
     <Formik
       initialValues={initialValues}
@@ -269,22 +277,25 @@ const CompanyForm = ({
               )}
             </div>
             <div className="form-subsection">
-              <label htmlFor="plan_comments" className="form-subsection__label">
+              <label
+                htmlFor="company_comments"
+                className="form-subsection__label"
+              >
                 Comentarios acerca del cliente
               </label>
               <Field
                 type="text"
-                id="plan_comments"
+                id="company_comments"
                 className="form-subsection__field-textarea--company"
-                aria-label="Nombre del laboratorio"
+                aria-label="Comentario de cliente"
                 as={"textarea"}
-                {...getFieldProps("plan_comments")}
+                {...getFieldProps("company_comments")}
               />
-              {errors.plan_comments && touched.plan_comments && (
+              {errors.company_comments && touched.company_comments && (
                 <ErrorMessage
                   className="form-subsection__error-message"
                   component="span"
-                  name="plan_comments"
+                  name="company_comments"
                 />
               )}
             </div>
@@ -313,7 +324,7 @@ const CompanyForm = ({
             <section className="datasheet-form__section">
               <div className="form-subsection">
                 <label htmlFor="type_id" className="form-subsection__label">
-                  Plan
+                  Tipo de plan
                 </label>
                 <ReusableSelect
                   label="Plan"

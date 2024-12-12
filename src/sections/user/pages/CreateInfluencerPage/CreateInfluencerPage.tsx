@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import CreateInfluencerPageStyled from "./CreateInfluencerPageStyledd";
 import { useEffect, useState } from "react";
 import { RegisterInfluencerInterface } from "@auth";
 import { ErrorMessage, Field, Formik } from "formik";
@@ -14,6 +13,7 @@ import { useCountryContext } from "sections/country/CountryContext/useCountryCon
 import { City } from "modules/user/domain/User";
 import { useInfluencerContext } from "sections/influencer/InfluencerContext/useInfluencerContext";
 import CustomFileInput from "sections/shared/components/CustomFileInput/CustomFileInput";
+import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 
 const initialState: RegisterInfluencerInterface = {
   name: "",
@@ -114,10 +114,12 @@ const CreateInfluencerPage = () => {
   }, [getAllCountries]);
 
   return (
-    <CreateInfluencerPageStyled>
+    <ReusablePageStyled>
       <div className="header">
-        <GoBackButton />
-        <h2>Crear usuario</h2>
+        <div style={{ minWidth: "35%" }}>
+          <GoBackButton />
+        </div>
+        <h2 style={{ textAlign: "center" }}>Crear usuario</h2>
         <div />
       </div>
       <Formik
@@ -709,7 +711,7 @@ const CreateInfluencerPage = () => {
           </CreateInfluencerFormStyled>
         )}
       </Formik>
-    </CreateInfluencerPageStyled>
+    </ReusablePageStyled>
   );
 };
 

@@ -72,7 +72,6 @@ const AddressForm = ({
       country_id: country,
     };
     setCity("");
-
     getAllCities(filters);
   }, [country, getAllCities]);
 
@@ -91,6 +90,10 @@ const AddressForm = ({
     ...address,
   };
 
+  useEffect(() => {
+    setCountry(initialValues.country_id.toString());
+    setCity(initialValues.city_id);
+  }, []);
   return (
     <Formik
       initialValues={initialValues}

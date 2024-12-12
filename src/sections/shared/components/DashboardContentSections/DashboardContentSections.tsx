@@ -453,19 +453,11 @@ const DashboardContentSections = ({
       return (
         <span
           className={getCollabStateClassname(
-            (section as FullCollab).history[
-              (section as FullCollab).history.length - 1
-            ].id,
+            (section as FullCollab).state.id,
             "dashboard",
           )}
         >
-          {(section as FullCollab).history[
-            (section as FullCollab).history.length - 1
-          ].name === "Rechazada"
-            ? "No aceptada"
-            : (section as FullCollab).history[
-                (section as FullCollab).history.length - 1
-              ].name}
+          {(section as FullCollab).state.name}
         </span>
       );
 
