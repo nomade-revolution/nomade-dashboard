@@ -48,7 +48,6 @@ export default function ReusableStepper({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
-  const activeStep = steps?.length - 1;
   const { user } = useAuthContext();
   const { handleCollabStateUpdate } = useActions();
 
@@ -57,13 +56,12 @@ export default function ReusableStepper({
     event.stopPropagation();
     setAnchorEl(event.currentTarget);
   };
-  const lastStep = steps && steps.length > 0 ? steps[steps.length - 1] : null;
-  const state_id = lastStep ? lastStep.id : null;
-  const state_type = lastStep ? lastStep.type : null;
+  const state_id = collab.state.id;
+  const state_type = collab.state.type;
   return (
     <ReusableStepperStyled className="stepper">
       <Box sx={{ maxWidth: 400 }}>
-        <Stepper activeStep={activeStep} orientation="vertical">
+        <Stepper activeStep={collab.state.id} orientation="vertical">
           {steps?.map((step) => (
             <Step key={step.id} active>
               <StepLabel StepIconComponent={CustomStepIcon}>
@@ -71,7 +69,7 @@ export default function ReusableStepper({
               </StepLabel>
               <StepContent>
                 <Typography sx={{ fontWeight: 700, fontSize: "small" }}>
-                  {step.type} - {step.created_at}
+                  {step.type} {step.created_at && "-"} {step.created_at}
                 </Typography>
               </StepContent>
             </Step>
