@@ -573,7 +573,16 @@ const OffersForm = ({
             </div>
           </div>
 
-          <div style={{ display: "flex", gap: "20px" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: "20px",
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              paddingTop: "20px",
+            }}
+          >
             <button
               type="submit"
               disabled={

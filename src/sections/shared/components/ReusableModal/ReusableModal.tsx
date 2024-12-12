@@ -26,7 +26,7 @@ const ReusableModal = ({
       type === "social"
         ? "fit-content"
         : type === "offer" && !matches
-          ? "70%"
+          ? "75%"
           : matches
             ? "90%"
             : "40%",
