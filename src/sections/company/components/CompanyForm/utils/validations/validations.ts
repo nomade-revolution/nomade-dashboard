@@ -13,7 +13,6 @@ export const clientSchema = yup.object().shape({
   company_name: yup.string().required("La razón social es un campo requerido"),
   description: yup.string().required("La descripción es un campo requerido"),
   phone: yup.string(),
-
   web: yup.string(),
   start_date: yup
     .string()

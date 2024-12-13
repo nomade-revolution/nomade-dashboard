@@ -464,12 +464,7 @@ const DashboardContentSections = ({
     case "history_update":
       return (
         <span className="dashboard__date">
-          {
-            (section as FullCollab).history[
-              (section as FullCollab).history.length - 1
-            ].created_at
-          }
-          {}
+          {(section as FullCollab).state.created_at}
         </span>
       );
 

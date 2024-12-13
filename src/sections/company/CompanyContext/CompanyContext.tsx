@@ -217,14 +217,16 @@ export const CompanyContextProvider = ({
 
     setLoading(false);
     setIsSuccess(response.success);
-
+    setTimeout(() => {
+      setIsSuccess(false);
+    }, 1500);
     return response;
   };
 
   useEffect(() => {
     setTimeout(() => {
       setIsSuccess(false);
-    }, 2000);
+    }, 1500);
   }, []);
   return (
     <CompanyContext.Provider

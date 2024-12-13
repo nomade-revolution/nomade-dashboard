@@ -134,6 +134,7 @@ const CompanyForm = ({
   useEffect(() => {
     getAllContactTypes();
   }, [getAllContactTypes]);
+
   const convertDateToISO = (date?: string): string => {
     if (!date) return "";
     const [day, month, year] = date.split("-");

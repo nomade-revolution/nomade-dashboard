@@ -39,10 +39,14 @@ const AddressForm = ({
   const [countriesFormat, setCountriesFormat] = useState<OptionsStructure[]>(
     [],
   );
-  const [citiesFormat, setCitiesFormat] = useState<OptionsStructure[]>([]);
-  const [country, setCountry] = useState<string>("");
-  const [city, setCity] = useState<string>("");
 
+  const [citiesFormat, setCitiesFormat] = useState<OptionsStructure[]>([]);
+  const [country, setCountry] = useState<string>(
+    { ...initialState, ...address }.country_id.toString(),
+  );
+  const [city, setCity] = useState<string>(
+    { ...initialState, ...address }.city_id,
+  );
   const handleSubmitForm = async (
     values: FullAddress,
     { setSubmitting }: FormikHelpers<FullAddress>,
@@ -54,10 +58,6 @@ const AddressForm = ({
   };
 
   useEffect(() => {
-    getAllCountries();
-  }, [getAllCountries]);
-
-  useEffect(() => {
     const countriesArr: OptionsStructure[] = countries.map((country) => ({
       id: country.id,
       name: country.name,
@@ -65,15 +65,7 @@ const AddressForm = ({
     }));
 
     setCountriesFormat(countriesArr);
-  }, [countries, country]);
-
-  useEffect(() => {
-    const filters: FilterParams = {
-      country_id: country,
-    };
-    setCity("");
-    getAllCities(filters);
-  }, [country, getAllCities]);
+  }, [countries]);
 
   useEffect(() => {
     const citiesArr: OptionsStructure[] = cities.map((city) => ({
@@ -83,24 +75,38 @@ const AddressForm = ({
     }));
 
     setCitiesFormat(citiesArr);
-  }, [cities, countries, country]);
+  }, [cities]);
+
+  useEffect(() => {
+    const filters: FilterParams = {
+      country_id: country,
+    };
+    getAllCities(filters);
+  }, [country, getAllCities]);
+
+  useEffect(() => {
+    getAllCountries();
+  }, [getAllCountries]);
 
   const initialValues = {
     ...initialState,
     ...address,
   };
 
-  useEffect(() => {
-    setCountry(initialValues.country_id.toString());
-    setCity(initialValues.city_id);
-  }, []);
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={addressSchema}
       onSubmit={handleSubmitForm}
     >
-      {({ errors, touched, handleSubmit, getFieldProps, isSubmitting }) => (
+      {({
+        errors,
+        touched,
+        handleSubmit,
+        getFieldProps,
+        isSubmitting,
+        setFieldValue,
+      }) => (
         <ReusableFormStyled onSubmit={handleSubmit} className="datasheet-form">
           <h3>Dirección</h3>
           <section className="datasheet-form__section">
@@ -191,7 +197,10 @@ const AddressForm = ({
               <ReusableSelect
                 label="Seleccionar país"
                 options={countriesFormat}
-                setValue={setCountry}
+                setValue={(v) => {
+                  setCountry(v);
+                  setFieldValue("country_id", v);
+                }}
                 value={country}
               />
               {errors.country_id && touched.country_id && (
@@ -209,7 +218,10 @@ const AddressForm = ({
               <ReusableSelect
                 label="Seleccionar ciudad"
                 options={citiesFormat}
-                setValue={setCity}
+                setValue={(v) => {
+                  setCity(v);
+                  setFieldValue("city_id", v);
+                }}
                 value={city}
               />
               {errors.city_id && touched.city_id && (
