@@ -101,12 +101,9 @@ const CollabDetailPage = (): React.ReactElement => {
                   color={theme.colors.black}
                 />
               )}
-              {collab.history &&
-                collab.history.length > 0 &&
-                (collab.history[collab.history?.length - 1]?.id ===
-                  COLAB_PENDING_COMPANY_STATE ||
-                  collab.history[collab.history?.length - 1]?.id ===
-                    COLAB_PENDING_NOMADE_STATE) &&
+              {collab.state &&
+                (collab.state.id === COLAB_PENDING_COMPANY_STATE ||
+                  collab.state.id === COLAB_PENDING_NOMADE_STATE) &&
                 user.type === "Nomade" && (
                   <>
                     <ActionButton
@@ -168,9 +165,8 @@ const CollabDetailPage = (): React.ReactElement => {
               pageName={SectionTypes.collabs}
               type={isAcceptOrRefuse}
               accept_state_id={
-                collab?.history &&
-                collab?.history[collab.history?.length - 1].id ===
-                  collabStates.COLAB_PENDING_NOMADE_STATE
+                collab.state &&
+                collab.state.id === collabStates.COLAB_PENDING_NOMADE_STATE
                   ? collabStates.COLAB_PENDING_COMPANY_STATE
                   : collabStates.COLAB_ACCEPTED_STATE
               }

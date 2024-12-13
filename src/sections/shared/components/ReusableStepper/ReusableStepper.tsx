@@ -56,12 +56,10 @@ export default function ReusableStepper({
     event.stopPropagation();
     setAnchorEl(event.currentTarget);
   };
-  const state_id = collab.state.id;
-  const state_type = collab.state.type;
   return (
     <ReusableStepperStyled className="stepper">
       <Box sx={{ maxWidth: 400 }}>
-        <Stepper activeStep={collab.state.id} orientation="vertical">
+        <Stepper activeStep={collab.state?.id} orientation="vertical">
           {steps?.map((step) => (
             <Step key={step.id} active>
               <StepLabel StepIconComponent={CustomStepIcon}>
@@ -77,9 +75,9 @@ export default function ReusableStepper({
         </Stepper>
       </Box>
       {user.type === "Company" &&
-        state_id !== collabStates.COLAB_CANCELLED_STATE &&
-        state_id !== collabStates.COLAB_REJECTED_STATE &&
-        state_id !== collabStates.COLAB_SENT_STATE && (
+        collab.state?.id !== collabStates.COLAB_CANCELLED_STATE &&
+        collab.state?.id !== collabStates.COLAB_REJECTED_STATE &&
+        collab.state?.id !== collabStates.COLAB_SENT_STATE && (
           <div className="stepper__btn-container">
             <button
               className="stepper__state-btn"
@@ -102,7 +100,7 @@ export default function ReusableStepper({
           );
         }}
         options={collabStates
-          .getCollabStates(state_id!, state_type!)
+          .getCollabStates(collab.state?.id, collab.state?.type)
           .filter((state) => state.type === CollabType.company)}
       />
       <DialogDeleteConfirm
@@ -112,9 +110,7 @@ export default function ReusableStepper({
         sectionId={collab?.id}
         type={collabStateActionType}
         accept_state_id={
-          collab?.history &&
-          collab?.history[collab.history?.length - 1].id ===
-            collabStates.COLAB_PENDING_NOMADE_STATE
+          collab.state?.id === collabStates.COLAB_PENDING_NOMADE_STATE
             ? collabStates.COLAB_PENDING_COMPANY_STATE
             : collabStates.COLAB_ACCEPTED_STATE
         }
