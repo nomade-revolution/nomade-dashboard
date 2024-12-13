@@ -46,15 +46,9 @@ const Actions = ({
     useActions();
   const { user } = useAuthContext();
 
-  let state_id: number | undefined;
-
-  if (section && (section as FullCollab).state) {
-    state_id = (section as FullCollab).state.id;
-  }
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
-
   switch (pageName) {
     case SectionTypes.collabs:
       buttons = (
@@ -99,11 +93,16 @@ const Actions = ({
             </>
           )}
           {user.type === "Company" &&
-            state_id !== collabStates.COLAB_CANCELLED_STATE &&
-            state_id !== collabStates.COLAB_REJECTED_STATE &&
-            state_id !== collabStates.COLAB_SENT_STATE &&
-            state_id !== collabStates.COLAB_RECEIVED_STATE &&
-            state_id !== collabStates.COLAB_PUBLISHED_STATE && (
+            (section as FullCollab).state.id !==
+              collabStates.COLAB_CANCELLED_STATE &&
+            (section as FullCollab).state.id !==
+              collabStates.COLAB_REJECTED_STATE &&
+            (section as FullCollab).state.id !==
+              collabStates.COLAB_SENT_STATE &&
+            (section as FullCollab).state.id !==
+              collabStates.COLAB_RECEIVED_STATE &&
+            (section as FullCollab).state.id !==
+              collabStates.COLAB_PUBLISHED_STATE && (
               <>
                 <Tooltip title={"Estados collab"}>
                   <button aria-label="Estados" onClick={handleClick}>
@@ -128,7 +127,10 @@ const Actions = ({
                       );
                     }}
                     options={collabStates
-                      .getCollabStates(state_id!, (section as FullCollab).type)
+                      .getCollabStates(
+                        (section as FullCollab).state.id,
+                        (section as FullCollab).type,
+                      )
                       .filter((state) => state.type === CollabType.company)}
                   />
                 }

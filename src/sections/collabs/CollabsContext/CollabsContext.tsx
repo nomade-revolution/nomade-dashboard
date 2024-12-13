@@ -99,7 +99,6 @@ export const CollabsContextProvider = ({
       state_id,
       rejected_collab_reason_id,
     );
-
     if (isHttpSuccessResponse(response)) {
       setCollab(response.data);
     }
@@ -181,7 +180,7 @@ export const CollabsContextProvider = ({
     [repository],
   );
 
-  setTimeout(() => setIsSuccess(false), 3000);
+  setTimeout(() => setIsSuccess(false), 2000);
 
   return (
     <CollabsContext.Provider

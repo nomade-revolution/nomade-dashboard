@@ -46,7 +46,7 @@ const useActions = () => {
     setTimeout(() => navigate(0), 1500);
   };
 
-  const handleCollabStateUpdate = (
+  const handleCollabStateUpdate = async (
     state_id: number,
     setIsDialogOpen: (value: boolean) => void,
     setCollabStateActionType: (value: CollabActionTypes) => void,
@@ -58,7 +58,7 @@ const useActions = () => {
       setCollabStateActionType!(CollabActionTypes.refuse);
       return;
     }
-    updateCollabState(section.id, state_id);
+    await updateCollabState(section.id, state_id);
 
     type === "detail" && setTimeout(() => navigate(0), 1000);
   };
