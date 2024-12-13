@@ -443,72 +443,81 @@ const CompanyForm = ({
                   : "Añadir contacto"}
               </button>
             </div>
-            {type === "edit" && user.id === client!.id && (
-              <>
-                <div className="form-subsection">
-                  <label htmlFor="password" className="form-subsection__label">
-                    Contraseña
-                  </label>
-                  <div className="form-subsection__password">
-                    <Field
-                      type={isPasswordShown ? "text" : "password"}
-                      id="password"
-                      className="form-subsection__field-large--company"
-                      aria-label="Comentarios"
-                      {...getFieldProps("password")}
-                    />
-                    <button
-                      onClick={() => setIsPasswordShown(!isPasswordShown)}
-                      className="form-subsection__password-btn"
+            {type === "edit" &&
+              user.id === client?.id &&
+              user.type !== "Nomade" && (
+                <>
+                  <div className="form-subsection">
+                    <label
+                      htmlFor="password"
+                      className="form-subsection__label"
                     >
-                      {isPasswordShown ? <FaEye /> : <FaEyeSlash />}
-                    </button>
-                  </div>
-                  {errors.password && touched.password && (
-                    <ErrorMessage
-                      className="form-subsection__error-message"
-                      component="span"
-                      name="password"
-                    />
-                  )}
-                </div>
-                <div className="form-subsection">
-                  <label
-                    htmlFor="password_confirmation"
-                    className="form-subsection__label"
-                  >
-                    Repite contraseña
-                  </label>
-                  <div className="form-subsection__password">
-                    <Field
-                      type={isPasswordConfirmationShown ? "text" : "password"}
-                      id="password_confirmation"
-                      className="form-subsection__field-large--company"
-                      aria-label="Comentarios"
-                      {...getFieldProps("password_confirmation")}
-                    />
-                    <button
-                      onClick={() =>
-                        setIsPasswordConfirmationShown(
-                          !isPasswordConfirmationShown,
-                        )
-                      }
-                      className="form-subsection__password-btn"
-                    >
-                      {isPasswordConfirmationShown ? <FaEye /> : <FaEyeSlash />}
-                    </button>
-                  </div>
-                  {errors.password_confirmation &&
-                    touched.password_confirmation && (
+                      Contraseña
+                    </label>
+                    <div className="form-subsection__password">
+                      <Field
+                        type={isPasswordShown ? "text" : "password"}
+                        id="password"
+                        className="form-subsection__field-large--company"
+                        aria-label="Comentarios"
+                        {...getFieldProps("password")}
+                      />
+                      <button
+                        onClick={() => setIsPasswordShown(!isPasswordShown)}
+                        className="form-subsection__password-btn"
+                      >
+                        {isPasswordShown ? <FaEye /> : <FaEyeSlash />}
+                      </button>
+                    </div>
+                    {errors.password && touched.password && (
                       <ErrorMessage
                         className="form-subsection__error-message"
                         component="span"
-                        name="password_confirmation"
+                        name="password"
                       />
                     )}
-                </div>
-              </>
-            )}
+                  </div>
+                  <div className="form-subsection">
+                    <label
+                      htmlFor="password_confirmation"
+                      className="form-subsection__label"
+                    >
+                      Repite contraseña
+                    </label>
+                    <div className="form-subsection__password">
+                      <Field
+                        type={isPasswordConfirmationShown ? "text" : "password"}
+                        id="password_confirmation"
+                        className="form-subsection__field-large--company"
+                        aria-label="Comentarios"
+                        {...getFieldProps("password_confirmation")}
+                      />
+                      <button
+                        onClick={() =>
+                          setIsPasswordConfirmationShown(
+                            !isPasswordConfirmationShown,
+                          )
+                        }
+                        className="form-subsection__password-btn"
+                      >
+                        {isPasswordConfirmationShown ? (
+                          <FaEye />
+                        ) : (
+                          <FaEyeSlash />
+                        )}
+                      </button>
+                    </div>
+                    {errors.password_confirmation &&
+                      touched.password_confirmation && (
+                        <ErrorMessage
+                          className="form-subsection__error-message"
+                          component="span"
+                          name="password_confirmation"
+                        />
+                      )}
+                  </div>
+                </>
+              )}
           </div>
           <ReusableModal
             children={

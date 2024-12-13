@@ -12,6 +12,11 @@ export const billingOptions: OptionsStructure[] = [
     value: 2,
   },
   {
+    id: 3,
+    name: "Estandar",
+    value: 3,
+  },
+  {
     id: 4,
     name: "Estandar",
     value: 4,
