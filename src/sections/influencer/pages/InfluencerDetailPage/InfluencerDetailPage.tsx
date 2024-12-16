@@ -27,7 +27,6 @@ const InfluencerDetailPage = (): React.ReactElement => {
   const [socialMediaSelected, setSocialMediaSelected] = useState<SocialMedia>(
     {} as SocialMedia,
   );
-
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
   const { id } = useParams();

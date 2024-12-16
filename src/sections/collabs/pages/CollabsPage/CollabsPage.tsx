@@ -4,7 +4,7 @@ import DashboardTable from "sections/shared/components/DashboardTable/DashboardT
 import Loader from "sections/shared/components/Loader/Loader";
 import PaginationComponent from "sections/shared/components/Pagination/PaginationComponent";
 import { SectionTypes } from "sections/shared/interfaces/interfaces";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 import SearchBar from "sections/shared/components/SearchBar/SearchBar";
 import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
@@ -38,7 +38,7 @@ const CollabsPage = (): React.ReactElement => {
   const [collabStateActionType, setCollabStateActionType] =
     useState<CollabActionTypes | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
+  const { state } = useLocation();
   const {
     getAllCollabs,
     collabs,
@@ -47,6 +47,7 @@ const CollabsPage = (): React.ReactElement => {
     order,
     exportCollabsExcel,
   } = useCollabsContext();
+
   const { user } = useAuthContext();
   const { page } = useParams();
   const [filterId, setFilterId] = useState<string>("");
@@ -82,18 +83,18 @@ const CollabsPage = (): React.ReactElement => {
           influencer_id: influencerSelect,
         };
       }
-      if (companySelect) {
+      if (companySelect || state?.company_id) {
         filters.filters = {
           ...(filters.filters as object),
-          company_id: companySelect,
+          company_id: companySelect || state?.company_id,
         };
       }
-
       setTotalFilters(filters);
       setIsOpenFilters(false);
       getAllCollabs(+page!, 10, filters);
     },
     [
+      state,
       getAllCollabs,
       filterId,
       order.direction,
@@ -146,7 +147,8 @@ const CollabsPage = (): React.ReactElement => {
   const [isOpenFilters, setIsOpenFilters] = useState<boolean>(false);
   useEffect(() => {
     getCollabs();
-  }, [page, order, getCollabs, filterId]);
+  }, [page, order, getCollabs, filterId, state]);
+
   return (
     <>
       {loading ? (
