@@ -1,9 +1,9 @@
 import { Company, UserTypes } from "modules/user/domain/User";
 import CompanyDetailDataStyled from "./CompanyDetailDataStyled";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CompanySocialMedia from "../CompanySocialMedia/CompanySocialMedia";
 import { FaPhoneAlt } from "react-icons/fa";
-import { FaLocationDot, FaRegCommentDots } from "react-icons/fa6";
+import { FaEye, FaLocationDot, FaRegCommentDots } from "react-icons/fa6";
 import { TbWorld } from "react-icons/tb";
 import ActionButton from "sections/shared/components/ActionButton/ActionButton";
 import theme from "assets/styles/theme";
@@ -20,6 +20,23 @@ interface Props {
 const CompanyDetailData = ({ company }: Props): React.ReactElement => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const user = useAuthContext();
+
+  const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    navigate("/collabs/page/1", {
+      state: {
+        company_id: company.id,
+      },
+    });
+  };
+  const handleNavigateOffers = () => {
+    navigate("/ofertas/page/1", {
+      state: {
+        search: company.company,
+      },
+    });
+  };
   return (
     <CompanyDetailDataStyled>
       <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
@@ -76,12 +93,33 @@ const CompanyDetailData = ({ company }: Props): React.ReactElement => {
               <h4 className="company-data__title">Comentario</h4>
               <span>{company?.company_comments ?? "Sin comentarios"}</span>
             </section>
-            <div style={{ marginTop: "10px" }}>
+            <div
+              style={{
+                marginTop: "10px",
+                display: "flex",
+                width: "100%",
+                justifyContent: "flex-start",
+                gap: "40px",
+                alignItems: "center",
+              }}
+            >
               <ActionButton
                 text="Añadir Comentario"
                 color={theme.colors.softGreen}
                 icon={<FaRegCommentDots />}
                 onClick={() => setIsDialogOpen(true)}
+              />
+              <ActionButton
+                onClick={handleNavigateOffers}
+                text="Ver Oferta"
+                icon={<FaEye />}
+                color={theme.colors.darkBlue}
+              />
+              <ActionButton
+                onClick={handleNavigate}
+                text="Ver Collabs"
+                icon={<FaEye />}
+                color={theme.colors.darkBlue}
               />
             </div>
           </>

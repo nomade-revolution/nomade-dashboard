@@ -30,14 +30,13 @@ interface Props {
 }
 const CustomStepIconRoot = styled("div")<{
   ownerState: { active?: boolean; completed?: boolean };
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
 }>(({ theme, ownerState }) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
   color: ownerState.active || ownerState.completed ? "#8C9B6E" : "#ccc",
   "& .CustomStepIcon-completedIcon": {
-    backgroundColor: "#8C9B6E",
+    backgroundColor: theme ? "#8C9B6E" : "#8C9B6E",
     height: 20,
     width: 20,
     borderRadius: "50%",

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Loader from "sections/shared/components/Loader/Loader";
 import GoBackButton from "sections/shared/components/GoBackButton/GoBackButton";
 import CompanyDetailPageStyled from "./CompanyDetailPageStyled";
@@ -11,7 +11,7 @@ import useActions from "sections/shared/hooks/useActions/useActions";
 import { SectionTypes } from "sections/shared/interfaces/interfaces";
 import DialogDeleteConfirm from "sections/shared/components/DialogDeleteConfirm/DialogDeleteConfirm";
 import theme from "assets/styles/theme";
-import { FaEye, FaRegTrashCan } from "react-icons/fa6";
+import { FaRegTrashCan } from "react-icons/fa6";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
 import CompanyForm from "sections/company/components/CompanyForm/CompanyForm";
 import { FaEdit } from "react-icons/fa";
@@ -29,25 +29,10 @@ const InfluencerDetailPage = (): React.ReactElement => {
   const { getPlan, plan } = usePlansContext();
   const { handleIsDialogOpen } = useActions();
   const { id } = useParams();
-  const navigate = useNavigate();
   const handleDeleteButton = () => {
     handleIsDialogOpen(setIsDialogOpen);
   };
 
-  const handleNavigate = () => {
-    navigate("/collabs/page/1", {
-      state: {
-        company_id: company.id,
-      },
-    });
-  };
-  const handleNavigateOffers = () => {
-    navigate("/ofertas/page/1", {
-      state: {
-        search: company.company,
-      },
-    });
-  };
   useEffect(() => {
     getCompany(+id!);
     getPlan(+id!);
@@ -72,7 +57,7 @@ const InfluencerDetailPage = (): React.ReactElement => {
               <h2>Cliente</h2>
             </div>
             <div className="company-detail__actions">
-              <ActionButton
+              {/* <ActionButton
                 onClick={handleNavigateOffers}
                 text="Ver Ofertas"
                 icon={<FaEye />}
@@ -83,7 +68,7 @@ const InfluencerDetailPage = (): React.ReactElement => {
                 text="Ver Collabs"
                 icon={<FaEye />}
                 color={theme.colors.darkBlue}
-              />
+              /> */}
               {company.plan?.plan_name !== "Pendiente" && (
                 <ActionButton
                   onClick={() => setIsPlanModalOpen(true)}
