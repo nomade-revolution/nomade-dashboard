@@ -66,7 +66,6 @@ const CompanyForm = ({
 
   const { contact_types, getAllContactTypes } = useContactContext();
   const { isSuccess, isError, loading } = useCompanyContext();
-  // const navigate = useNavigate();
 
   const handleFormStateChange = (field: string, value: string) => {
     setFormState((prevState) => ({ ...prevState, [field]: value }));
@@ -100,9 +99,15 @@ const CompanyForm = ({
         formData.append(key, value || "");
       }
     });
+    if (registerAddress) {
+      formData.delete("address");
 
-    registerAddress &&
-      formData.append("address", JSON.stringify(registerAddress));
+      const newAddress = {
+        ...registerAddress,
+        address_2: registerAddress.address_2 ?? "",
+      };
+      formData.append("address", JSON.stringify(newAddress));
+    }
 
     if (registerContacts.length > 0) {
       formData.append("contacts", JSON.stringify(registerContacts));
