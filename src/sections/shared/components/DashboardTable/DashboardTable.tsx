@@ -15,6 +15,7 @@ import { Influencer } from "@influencer";
 import DashBoardHeaderCell from "../DashboardHeaderCell/DashboardHeaderCell";
 import { useState } from "react";
 import { Plan } from "modules/plans/domain/Plan";
+import { ExtendedCollab } from "sections/collabs/components/CollabDetail/CollabDetail";
 
 export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -103,6 +104,7 @@ const DashboardTable = <Type,>({
                           | Company
                           | Collab
                           | Plan
+                          | ExtendedCollab
                       }
                       pageName={pageName}
                       type={type}

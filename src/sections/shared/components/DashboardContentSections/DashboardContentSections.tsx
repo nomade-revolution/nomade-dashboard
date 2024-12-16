@@ -422,6 +422,16 @@ const DashboardContentSections = ({
       );
 
     case "day":
+      if (pageName === "collabDetail") {
+        return (
+          <span className="dashboard__type">
+            {(section as FullCollab).day ? (section as FullCollab).day : " - "}
+            {(section as FullCollab).time
+              ? " - " + (section as FullCollab).time
+              : "  "}
+          </span>
+        );
+      }
       return (
         <span className="dashboard__type">
           {(section as FullCollab).day
@@ -613,7 +623,7 @@ const DashboardContentSections = ({
             <span
               style={{
                 display: "flex",
-                justifyContent: "center",
+                justifyContent: "flex-start",
                 alignItems: "center",
                 gap: "5px",
                 textDecoration: "underline",

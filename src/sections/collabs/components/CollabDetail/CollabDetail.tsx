@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import ImageCustom from "sections/shared/components/ImageCustom/ImageCustom";
 import CollabsDetailStyled from "./CollabsDetailStyled";
 import { FaUsers } from "react-icons/fa";
-import { CgArrowsExchange } from "react-icons/cg";
 import { getTypesClassNames } from "sections/shared/components/DashboardContentSections/utils/getClassNames/getClassNames";
 import { FullOffer } from "modules/offers/domain/Offer";
 import { useAddressContext } from "sections/address/AddressContext/useAddressContext";
@@ -15,6 +14,9 @@ import {
   HiMiniArrowRightOnRectangle,
 } from "react-icons/hi2";
 import theme from "assets/styles/theme";
+import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
+import collabDetailTableData from "./collabTableData";
+import { SocialMedia } from "@influencer/domain/InfluencerSocialMedia";
 
 interface Props {
   collab: FullCollab;
@@ -22,16 +24,20 @@ interface Props {
   offer: FullOffer;
 }
 
+export interface ExtendedCollab extends FullCollab {
+  socialMedia: SocialMedia[];
+}
 const CollabDetail = ({
   collab,
   influencer,
   offer,
 }: Props): React.ReactElement => {
   const { address } = useAddressContext();
+
   return (
     <CollabsDetailStyled className="collab-detail">
-      <section className="collab-detail__participants">
-        <div className="collab-detail__participant">
+      {/* <section className="collab-detail__participants"> */}
+      {/* <div className="collab-detail__participant">
           <div className="collab-detail__company">
             <h3>Empresa</h3>
             <span>{collab?.company}</span>
@@ -62,11 +68,18 @@ const CollabDetail = ({
           >
             Ver perfil
           </Link>
-        </div>
-      </section>
+        </div> */}
+      {/* </section> */}
+      <DashboardTable
+        bodySections={[
+          { ...collab, socialMedia: influencer.socialMedia ?? [] },
+        ]}
+        headerSections={collabDetailTableData}
+        pageName="collabDetail"
+      />
       <section className="collab-detail__data">
         <div className="collab-detail__offer-section">
-          <h3>Oferta</h3>
+          <h3>Reserva</h3>
           <span className={getTypesClassNames(collab, "collab-detail")}>
             {collab.type}
           </span>
