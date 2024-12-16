@@ -156,7 +156,7 @@ const CollabsPage = (): React.ReactElement => {
       ) : (
         <ReusablePageStyled>
           <div className="dashboard__filtersContainer">
-            {user.type === "Nomade" && (
+            {user.type === "Nomade" ? (
               <div
                 style={{
                   display: "flex",
@@ -183,6 +183,15 @@ const CollabsPage = (): React.ReactElement => {
                   text="Exportar collabs"
                 />
               </div>
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: "20px",
+                }}
+              ></div>
             )}
             <SearchBar
               pageName={SectionTypes.collabs}
