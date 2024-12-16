@@ -35,6 +35,9 @@ const DashboardStyled = styled.table`
   .header__section {
     width: 200px;
   }
+  .header__section--large {
+    width: 250px;
+  }
   .header__section--small {
     width: 100px;
   }

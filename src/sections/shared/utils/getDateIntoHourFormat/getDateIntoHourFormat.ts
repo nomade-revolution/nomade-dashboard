@@ -27,5 +27,6 @@ export function formatSentAt(dateString: string): string {
 }
 
 export const formatSliceString = (string: string) => {
+  if (string.length <= 15) return string;
   return string.slice(0, 15) + " (...)";
 };

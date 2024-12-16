@@ -115,7 +115,9 @@ const DashBoardHeaderCell = ({ section }: Props) => {
                 section.property === "minimum" ||
                 section.property === "colabs"
               ? "header__section--small"
-              : "header__section"
+              : section.property === "company_comments"
+                ? "header__section--large"
+                : "header__section"
       }
     >
       <button
