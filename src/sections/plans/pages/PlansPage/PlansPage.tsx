@@ -34,8 +34,12 @@ const PlansPage = (): React.ReactElement => {
   const { page } = useParams();
 
   const handleSearch = (date?: string) => {
+    const filters: FilterParams = { date: date, billing_id: billing_id };
+    if (textToSearch) {
+      filters.search = textToSearch;
+    }
     getPlans(+page!, 10, {
-      filters: { date: date, billing_id: billing_id, search: textToSearch },
+      filters,
     });
   };
 
