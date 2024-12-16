@@ -34,7 +34,6 @@ const CompaniesPage = (): React.ReactElement => {
     orderCompanies,
     exportCompaniesExcel,
   } = useCompanyContext();
-
   const handleSearch = (searchText: string) => {
     gteCompaniesData(searchText);
   };

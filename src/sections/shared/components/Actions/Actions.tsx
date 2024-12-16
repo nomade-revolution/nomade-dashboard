@@ -23,6 +23,8 @@ import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { MdOutlineHistory } from "react-icons/md";
 import CustomDropdown from "../CustomDropdown/CustomDropdown";
 import theme from "assets/styles/theme";
+import LeadDialog from "../DialogDeleteConfirm/LeadDialog";
+import { useState } from "react";
 
 interface ActionsProps {
   pageName: string;
@@ -42,10 +44,9 @@ const Actions = ({
   setAnchorEl,
 }: ActionsProps): React.ReactElement => {
   let buttons: React.ReactNode;
-  const { handleIsDialogOpen, handleSendLeadLink, handleCollabStateUpdate } =
-    useActions();
+  const { handleIsDialogOpen, handleCollabStateUpdate } = useActions();
   const { user } = useAuthContext();
-
+  const [isLeadOpen, setIsLeadOpen] = useState(false);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -207,29 +208,38 @@ const Actions = ({
 
     case SectionTypes.leads:
       buttons = (
-        <Tooltip title="Enviar link">
-          <button
-            aria-label="Verificar usuario"
-            onClick={() => handleSendLeadLink((section as Lead).id)}
-            style={{
-              background: (section as Lead).link_sent
-                ? theme.colors.darkBlue
-                : theme.colors.mainColor,
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              color: "#fff",
-              padding: "10px",
-              borderRadius: "8px",
-              fontWeight: "bold",
-            }}
-          >
-            <BsSendCheckFill />
-            <span>
-              {(section as Lead).link_sent ? "Volver a enviar" : "Enviar link"}
-            </span>
-          </button>
-        </Tooltip>
+        <>
+          <Tooltip title="Enviar link">
+            <button
+              aria-label="Verificar usuario"
+              onClick={() => setIsLeadOpen(true)}
+              style={{
+                background: (section as Lead).link_sent
+                  ? theme.colors.darkBlue
+                  : theme.colors.mainColor,
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                color: "#fff",
+                padding: "10px",
+                borderRadius: "8px",
+                fontWeight: "bold",
+              }}
+            >
+              <BsSendCheckFill />
+              <span>
+                {(section as Lead).link_sent
+                  ? "Volver a enviar"
+                  : "Enviar link"}
+              </span>
+            </button>
+          </Tooltip>
+          <LeadDialog
+            handleClose={() => setIsLeadOpen(false)}
+            leadId={(section as Lead).id}
+            open={isLeadOpen}
+          />
+        </>
       );
       break;
 
