@@ -3,7 +3,7 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import StepContent from "@mui/material/StepContent";
-import StepIcon from "@mui/material/StepIcon";
+import { StepIconProps } from "@mui/material/StepIcon";
 import Typography from "@mui/material/Typography";
 import {
   CollabActionTypes,
@@ -21,24 +21,71 @@ import * as collabStates from "../../../collabs/utils/collabsStates";
 import useActions from "sections/shared/hooks/useActions/useActions";
 import DialogDeleteConfirm from "../DialogDeleteConfirm/DialogDeleteConfirm";
 import { SectionTypes } from "sections/shared/interfaces/interfaces";
-
+import { FaCheck } from "react-icons/fa6";
 interface Props {
   steps: State[];
   setCollabStateActionType: (value: CollabActionTypes) => void;
   collab: FullCollab;
   collabStateActionType: CollabActionTypes;
 }
-
-const CustomStepIcon = styled(StepIcon)(() => ({
-  color: "#7b7b7b",
-
-  "&.Mui-completed": {
-    color: "#8C9B6E",
+const CustomStepIconRoot = styled("div")<{
+  ownerState: { active?: boolean; completed?: boolean };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+}>(({ theme, ownerState }) => ({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  color: ownerState.active || ownerState.completed ? "#8C9B6E" : "#ccc",
+  "& .CustomStepIcon-completedIcon": {
+    backgroundColor: "#8C9B6E",
+    height: 20,
+    width: 20,
+    borderRadius: "50%",
+    marginLeft: 2,
   },
-  "&.Mui-active": {
-    color: "#8C9B6E",
+  "& .CustomStepIcon-circle": {
+    marginLeft: 7,
+    width: 10,
+    height: 10,
+    borderRadius: "50%",
+    backgroundColor: "currentColor",
   },
 }));
+
+function CustomStepIcon(props: StepIconProps) {
+  const { active, completed, className } = props;
+
+  return (
+    <CustomStepIconRoot
+      ownerState={{ completed, active }}
+      className={className}
+    >
+      {completed ? (
+        <div
+          className="CustomStepIcon-completedIcon"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <FaCheck color="white" size={10} />
+        </div>
+      ) : (
+        <div className="CustomStepIcon-circle" />
+      )}
+    </CustomStepIconRoot>
+  );
+}
+
+// const CustomStepIcon = styled(StepIcon)(() => ({
+//   "&.Mui-completed": {
+//     color: "#8C9B6E",
+//   },
+//   "&.Mui-active": {
+//     color: "#8C9B6E",
+//   },
+// }));
 
 export default function ReusableStepper({
   steps,
