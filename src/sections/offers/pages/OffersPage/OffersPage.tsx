@@ -10,7 +10,7 @@ import { offersHeaderSections } from "../../utils/offersSections";
 import OffersPageStyled from "./OffersPageStyled";
 import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
 import { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import SearchBar from "sections/shared/components/SearchBar/SearchBar";
 import OffersButton from "sections/offers/components/OffersButton/OffersButton";
 import OffersForm from "sections/offers/components/OffersForm/OffersForm";
@@ -21,7 +21,7 @@ const OffersPage = (): React.ReactElement => {
     useOffersContext();
   const { page } = useParams();
   const [searchText, setSearchText] = useState<string>("");
-
+  const { state } = useLocation();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const handleIsModalOpen = () => {
@@ -46,10 +46,14 @@ const OffersPage = (): React.ReactElement => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (filters as any).filters.search = search;
       }
-
+      if (state) {
+        setSearchText(state.search);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (filters as any).filters.search = state.search;
+      }
       getAllOffers(+page!, 10, filters);
     },
-    [getAllOffers, page, order],
+    [getAllOffers, page, order, state],
   );
 
   useEffect(() => {

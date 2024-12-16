@@ -30,7 +30,8 @@ interface Props {
 }
 
 const CustomStepIcon = styled(StepIcon)(() => ({
-  color: "#8C9B6E",
+  color: "#7b7b7b",
+
   "&.Mui-completed": {
     color: "#8C9B6E",
   },
@@ -61,7 +62,7 @@ export default function ReusableStepper({
       <Box sx={{ maxWidth: 400 }}>
         <Stepper activeStep={collab.state?.id} orientation="vertical">
           {steps?.map((step) => (
-            <Step key={step.id} active>
+            <Step key={step.id} active={collab.state.id === step.id}>
               <StepLabel StepIconComponent={CustomStepIcon}>
                 {step.name}
               </StepLabel>

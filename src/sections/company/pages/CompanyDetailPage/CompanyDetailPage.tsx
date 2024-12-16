@@ -41,6 +41,13 @@ const InfluencerDetailPage = (): React.ReactElement => {
       },
     });
   };
+  const handleNavigateOffers = () => {
+    navigate("/ofertas/page/1", {
+      state: {
+        search: company.company,
+      },
+    });
+  };
   useEffect(() => {
     getCompany(+id!);
     getPlan(+id!);
@@ -66,8 +73,14 @@ const InfluencerDetailPage = (): React.ReactElement => {
             </div>
             <div className="company-detail__actions">
               <ActionButton
+                onClick={handleNavigateOffers}
+                text="Ver Ofertas"
+                icon={<FaEye />}
+                color={theme.colors.darkBlue}
+              />
+              <ActionButton
                 onClick={handleNavigate}
-                text="Ver Oferta"
+                text="Ver Collabs"
                 icon={<FaEye />}
                 color={theme.colors.darkBlue}
               />
