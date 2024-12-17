@@ -89,6 +89,7 @@ export enum UserTypes {
   influencer = "Influencer",
   company = "Company",
   nomade = "Nomade",
+  infleuncerCompany = "InfluencerCompany",
 }
 
 export interface UserApiResponse {

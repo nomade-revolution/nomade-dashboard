@@ -17,7 +17,7 @@ import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 const UsersAppPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
   const { page } = useParams();
-  const { getUsers, users_nomade, pagination, loading, order } =
+  const { getUsers, users_infleuncerCompany, pagination, loading, order } =
     useUserContext();
   const handleSearch = (searchText: string) => {
     getUsersData(searchText);
@@ -37,7 +37,7 @@ const UsersAppPage = (): React.ReactElement => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (filters as any).filters.search = text;
       }
-      getUsers(+page!, 10, filters, UserTypes.nomade);
+      getUsers(+page!, 10, filters, UserTypes.infleuncerCompany);
     },
     [getUsers, order.direction, order.sortTag, page],
   );
@@ -64,8 +64,8 @@ const UsersAppPage = (): React.ReactElement => {
             <div></div>
             <SearchBar
               onReset={() => getUsersData()}
-              pageName={SectionTypes.users}
-              pageTypes={SectionTypes.users}
+              pageName={SectionTypes.usersApp}
+              pageTypes={SectionTypes.usersApp}
               searchText={searchText!}
               setSearchText={setSearchText}
               onSearchSubmit={() => {
@@ -75,24 +75,24 @@ const UsersAppPage = (): React.ReactElement => {
           </div>
           <div className="dashboard__table">
             <DashboardTable
-              bodySections={users_nomade}
+              bodySections={users_infleuncerCompany}
               headerSections={usersAppTableHeaderSections}
-              pageName={SectionTypes.users}
+              pageName={SectionTypes.usersApp}
             />
           </div>
           <div className="dashboard__mobile">
             <h3>Usuarios</h3>
             <DashboardCardListMobile
-              bodySections={users_nomade}
+              bodySections={users_infleuncerCompany}
               headerSections={usersAppTableHeaderSections}
-              pageName={SectionTypes.users}
+              pageName={SectionTypes.usersApp}
             />
           </div>
           <PaginationComponent
             current_page={pagination.current_page}
             last_page={pagination.last_page}
             per_page={pagination.per_page}
-            pageName={SectionTypes.users}
+            pageName={SectionTypes.usersApp}
             filterParams={""}
           />
         </ReusablePageStyled>

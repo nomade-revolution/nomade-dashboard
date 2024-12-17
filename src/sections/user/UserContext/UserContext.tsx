@@ -46,6 +46,7 @@ interface ContextState {
   registerUser: (
     data: AuthRegisterNomadeInterface,
   ) => Promise<HttpResponseInterface<User>>;
+  users_infleuncerCompany: User[];
 }
 
 export const UserContext = createContext<ContextState>({} as ContextState);
@@ -59,6 +60,9 @@ export const UserContextProvider = ({
   const [users_nomade, setUsersNomade] = useState<User[]>([]);
   const [users_influencer, setUsersInfluencer] = useState<Influencer[]>([]);
   const [users_company, setUsersCompany] = useState<Company[]>([]);
+  const [users_infleuncerCompany, setUsersInfleuncerCompany] = useState<User[]>(
+    [],
+  );
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
@@ -96,6 +100,9 @@ export const UserContextProvider = ({
             break;
           case UserTypes.company:
             setUsersCompany(response.data.users as Company[]);
+            break;
+          case UserTypes.infleuncerCompany:
+            setUsersInfleuncerCompany(response.data.users as User[]);
             break;
         }
       }
@@ -145,6 +152,7 @@ export const UserContextProvider = ({
         deleteUserById,
         setOrder,
         getUsersStatusBadge,
+        users_infleuncerCompany,
       }}
     >
       {children}

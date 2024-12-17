@@ -26,7 +26,7 @@ export const getSideBarUpperSections = (
       id: 10,
       icon: <PiUsersThreeFill />,
       name: "Usuarios (App)",
-      pathname: "usuarios-app",
+      pathname: "users-app",
       quantity: 0,
       path: `/users-app/page/1`,
       subSection: "user-app",
