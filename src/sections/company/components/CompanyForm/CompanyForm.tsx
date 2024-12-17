@@ -50,6 +50,7 @@ const CompanyForm = ({
     // }
     return null;
   });
+  const [checkedTerms, setIsCheckedTerms] = useState<boolean>(false);
   const [registerAddress, setRegisterAddress] = useState<FullAddress | null>(
     client ? client.address : null,
   );
@@ -85,8 +86,12 @@ const CompanyForm = ({
   };
   const handleSubmitForm = async (
     values: PartialCompany,
-    { setSubmitting }: FormikHelpers<PartialCompany>,
+    { setSubmitting, setErrors }: FormikHelpers<PartialCompany>,
   ) => {
+    if (!checkedTerms) {
+      setErrors({ company: "Debes aceptar los términos y condiciones" });
+    }
+
     setSubmitting(true);
     const formData = new FormData();
     const formattedDate = formatDateWithDash(values.start_date);
@@ -110,6 +115,10 @@ const CompanyForm = ({
       formData.append("address", JSON.stringify(newAddress));
     }
 
+    //BUSCAR COMO SE LLAMA LA PROP PARA EL BACK
+    if (checkedTerms) {
+      formData.append("terms", JSON.stringify(checkedTerms));
+    }
     if (registerContacts.length > 0) {
       formData.append("contacts", JSON.stringify(registerContacts));
     }
@@ -533,7 +542,11 @@ const CompanyForm = ({
               alignItems: "center",
             }}
           >
-            <Checkbox onChange={() => {}} value={true} />
+            <Checkbox
+              onChange={(e) => setIsCheckedTerms(e.target.checked)}
+              value={checkedTerms}
+              checked={checkedTerms}
+            />
             <span>He leído y acepto las condiciones y términos de uso</span>
           </div>
           <ReusableModal
