@@ -20,4 +20,5 @@ export interface Influencer {
   socialMedia: SocialMedia[];
   new: boolean;
   email: string;
+  state: { id: number; name: string };
 }

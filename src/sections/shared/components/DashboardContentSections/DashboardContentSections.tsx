@@ -348,6 +348,13 @@ const DashboardContentSections = ({
       );
 
     case "state":
+      if (pageName === "influencers") {
+        return (
+          <span className="dashboard__country">
+            {(section as Influencer).state.name}
+          </span>
+        );
+      }
       return (
         <Switch
           checked={(section as Offer).active ? true : false}

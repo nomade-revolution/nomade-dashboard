@@ -67,7 +67,7 @@ export const influencersTableHeaderSections: HeaderSection[] = [
   {
     id: 10,
     name: "Estado",
-    property: "status",
+    property: "state",
     sortTag: "",
     pageName: "influencer",
   },
