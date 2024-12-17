@@ -27,7 +27,7 @@ const UsersAppPage = (): React.ReactElement => {
     (text?: string) => {
       const filters: FilterParams = {
         filters: {
-          // types: ["Nomade"],
+          types: ["Influencer", "Company"],
         },
       };
       if (order?.sortTag) {
