@@ -1,4 +1,7 @@
-import { HeaderSection } from "sections/shared/interfaces/interfaces";
+import {
+  HeaderSection,
+  SectionTypes,
+} from "sections/shared/interfaces/interfaces";
 
 export const leadsHeaderSection: HeaderSection[] = [
   {
@@ -6,56 +9,62 @@ export const leadsHeaderSection: HeaderSection[] = [
     name: "Empresa",
     property: "company_name",
     sortTag: "",
-    pageName: "leads",
+    pageName: SectionTypes.leads,
   },
   {
     id: 3,
     name: "Contacto",
     property: "contact_name",
     sortTag: "",
-    pageName: "leads",
+    pageName: SectionTypes.leads,
   },
   {
     id: 4,
     name: "Teléfono",
     property: "phone",
     sortTag: "",
-    pageName: "leads",
+    pageName: SectionTypes.leads,
   },
-  { id: 5, name: "Email", property: "email", sortTag: "", pageName: "leads" },
+  {
+    id: 5,
+    name: "Email",
+    property: "email",
+    sortTag: "",
+    pageName: SectionTypes.leads,
+  },
   {
     id: 6,
     name: "Mensaje",
     property: "message",
     sortTag: "",
-    pageName: "leads",
+    pageName: SectionTypes.leads,
   },
   {
     id: 8,
     name: "Fecha de creacion",
     property: "created_at",
-    sortTag: "",
-    pageName: "leads",
+    sortTag: "created_at",
+    pageName: SectionTypes.leads,
   },
   {
     id: 17,
     name: "Fecha de envío",
     property: "sent_at",
-    sortTag: "",
-    pageName: "leads",
+    sortTag: "link_sent_at",
+    pageName: SectionTypes.leads,
   },
   {
     id: 18,
     name: "Estado",
     property: "link_sent",
-    sortTag: "",
-    pageName: "leads",
+    sortTag: "state",
+    pageName: SectionTypes.leads,
   },
   {
     id: 9,
     name: "Acciones",
     property: "actions",
     sortTag: "",
-    pageName: "leads",
+    pageName: SectionTypes.leads,
   },
 ];

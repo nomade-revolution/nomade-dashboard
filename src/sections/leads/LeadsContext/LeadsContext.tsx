@@ -12,6 +12,7 @@ import {
   sendLeadLink,
 } from "modules/leads/application/leads";
 import { CompanyRegisterStructure } from "modules/user/domain/User";
+import { OrderItem } from "sections/user/UserContext/UserContext";
 
 interface ContextState {
   leads: Lead[];
@@ -25,6 +26,8 @@ interface ContextState {
     per_page: number,
     params: FilterParams,
   ) => void;
+  setOrder: (order: OrderItem) => void;
+  order: OrderItem;
   sendLinkForLead: (lead_id: number) => void;
   getLeadFromHash: (hash: string) => void;
 }
@@ -37,6 +40,8 @@ export const LeadsContextProvider = ({
 }: React.PropsWithChildren<{
   repository: LeadsRepository<LeadsApiResponse>;
 }>) => {
+  const [order, setOrder] = useState<OrderItem>({} as OrderItem);
+
   const [leads, setLeads] = useState<Lead[]>([]);
   const [lead, setLead] = useState<CompanyRegisterStructure>(
     {} as CompanyRegisterStructure,
@@ -102,6 +107,8 @@ export const LeadsContextProvider = ({
         getLeadsPaginated,
         sendLinkForLead,
         getLeadFromHash,
+        order,
+        setOrder,
       }}
     >
       {children}

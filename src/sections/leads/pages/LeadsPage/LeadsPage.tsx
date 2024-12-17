@@ -1,5 +1,5 @@
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { useLeadsContext } from "sections/leads/LeadsContext/useLeadsContext";
 import { leadsHeaderSection } from "sections/leads/utils/leadsSections";
@@ -16,16 +16,23 @@ import {
 const LeadsPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
 
-  const { getLeadsPaginated, loading, leads, pagination } = useLeadsContext();
+  const { getLeadsPaginated, loading, leads, pagination, order } =
+    useLeadsContext();
   const { page } = useParams();
 
-  const getLeadsData = (text?: string) => {
-    const filters: FilterParams = {};
-    if (searchText) {
-      filters.search = text;
-    }
-    getLeadsPaginated(+page!, 10, filters);
-  };
+  const getLeadsData = useCallback(
+    (text?: string) => {
+      const filters: FilterParams = {};
+      if (searchText) {
+        filters.search = text;
+      }
+      if (order?.sortTag) {
+        filters.order = [{ by: order.sortTag, dir: order.direction }];
+      }
+      getLeadsPaginated(+page!, 10, filters);
+    },
+    [getLeadsPaginated, page, searchText, order.direction, order.sortTag],
+  );
 
   const handleSearch = (text: string) => {
     getLeadsData(text);
@@ -33,7 +40,8 @@ const LeadsPage = (): React.ReactElement => {
 
   useEffect(() => {
     getLeadsData();
-  }, [getLeadsPaginated, page]);
+  }, [page, order, getLeadsData]);
+
   return (
     <>
       {loading ? (

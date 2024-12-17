@@ -40,7 +40,7 @@ export const collabsHeaderSections: HeaderSection[] = [
     id: 6,
     name: "Estado",
     property: "history",
-    sortTag: "",
+    sortTag: "state",
     pageName: "collabs",
   },
 
@@ -48,7 +48,7 @@ export const collabsHeaderSections: HeaderSection[] = [
     id: 7,
     name: "Última modificación",
     property: "history_update",
-    sortTag: "",
+    sortTag: "updated_at",
     pageName: "collabs",
   },
   {

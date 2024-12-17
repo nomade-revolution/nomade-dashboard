@@ -13,6 +13,7 @@ import { BiSolidDownArrow, BiSolidUpArrow } from "react-icons/bi";
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
 import { usePlansContext } from "sections/plans/PlansContext/usePlansContext";
 import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
+import { useLeadsContext } from "sections/leads/LeadsContext/useLeadsContext";
 
 interface Props {
   section: HeaderSection;
@@ -23,9 +24,18 @@ const DashBoardHeaderCell = ({ section }: Props) => {
   const { order: orderCollabs, setOrder: setOrderCollabs } =
     useCollabsContext();
   const { setOrderPlans, orderPlans } = usePlansContext();
+  const { order: orderLeads, setOrder: setOrderLeads } = useLeadsContext();
   const { orderCompanies, setOrderCompanies } = useCompanyContext();
   const { order: orderOffers, setOrder: setOrderOffers } = useOffersContext();
+
   const getOrder = (section: HeaderSection) => {
+    if (section.pageName === SectionTypes.leads) {
+      if (orderLeads.sortTag === section.sortTag) {
+        return orderLeads.direction;
+      } else {
+        return null;
+      }
+    }
     if (section.pageName === "collabs") {
       if (orderCollabs.sortTag === section.sortTag) {
         return orderCollabs.direction;
@@ -74,6 +84,9 @@ const DashBoardHeaderCell = ({ section }: Props) => {
       string,
       (sortTag: string, direction: "ASC" | "DESC" | null) => void
     > = {
+      [SectionTypes.leads]: (sortTag, direction) =>
+        setOrderLeads(direction ? { sortTag, direction } : ({} as OrderItem)),
+
       [SectionTypes.plans]: (sortTag, direction) =>
         setOrderPlans(direction ? { sortTag, direction } : ({} as OrderItem)),
 

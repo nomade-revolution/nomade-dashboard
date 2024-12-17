@@ -144,7 +144,9 @@ const CollabsPage = (): React.ReactElement => {
 
     getAllCollabs(+page!, 20, totalFilters);
   };
+
   const [isOpenFilters, setIsOpenFilters] = useState<boolean>(false);
+
   useEffect(() => {
     getCollabs();
   }, [page, order, getCollabs, filterId, state]);
