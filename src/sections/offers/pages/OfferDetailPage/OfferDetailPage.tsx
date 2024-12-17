@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
@@ -16,6 +17,13 @@ import DashboardTable from "sections/shared/components/DashboardTable/DashboardT
 import { headerAddressOffers, headerOffers } from "./offersData";
 import { Calendar } from "modules/offers/domain/OfferCalendar";
 
+export interface AddresTableData {
+  address: string;
+  max_guests: number;
+  min_guests: number;
+  time: { day: string; start_time: string; end_time: string }[];
+}
+
 const OfferDetailsPage = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { user } = useAuthContext();
@@ -30,24 +38,25 @@ const OfferDetailsPage = () => {
     getOffer(+id!);
   }, [id, getOffer]);
 
-  // const getOfferWithDayTime = (calendars: Calendar[]) => {
-  //   const a = calendars.map((calendar) => {
-  //     return {
-  //       address: calendar.address,
-  //       max_guests: calendar.max_guests,
-  //       min_guests: calendar.min_guests,
-  //       time: calendar.week.map((week) => {
-  //         return {
-  //           day: week[0].day_of_week,
-  //           start_time: week[0].time_slot.from_time,
-  //           end_time: week[0].time_slot.to_time,
-  //         };
-  //       }),
-  //     };
-  //   });
-  //   return a;
-  // };
-  // getOfferWithDayTime(offer.calendar as Calendar[]);
+  const getOfferWithDayTime = (calendars: Calendar[]): AddresTableData[] => {
+    const a = calendars.map((calendar) => {
+      return {
+        address: calendar.address,
+        max_guests: calendar.max_guests,
+        min_guests: calendar.min_guests,
+        time: calendar.week.map((week) => {
+          return {
+            day: week[0].day_name,
+            //@ts-expect-error
+            start_time: week[0].time_slot.from_time,
+            //@ts-expect-error
+            end_time: week[0].time_slot.to_time,
+          };
+        }),
+      };
+    });
+    return a;
+  };
 
   return (
     <>
@@ -108,7 +117,7 @@ const OfferDetailsPage = () => {
               <h3>Direcciones</h3>
 
               <DashboardTable
-                bodySections={offer.calendar as Calendar[]}
+                bodySections={getOfferWithDayTime(offer.calendar as Calendar[])}
                 headerSections={headerAddressOffers}
                 pageName="offerDetail"
               />

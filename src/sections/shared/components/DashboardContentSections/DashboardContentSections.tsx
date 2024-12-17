@@ -29,6 +29,7 @@ import theme from "assets/styles/theme";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { formatSliceString } from "sections/shared/utils/getDateIntoHourFormat/getDateIntoHourFormat";
 import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
+import { AddresTableData } from "sections/offers/pages/OfferDetailPage/OfferDetailPage";
 
 interface Props {
   headerSection: HeaderSection;
@@ -730,32 +731,42 @@ const DashboardContentSections = ({
           }}
         >
           <span className="dashboard__type">
-            {(section as Calendar).address}
+            {(section as AddresTableData).address}
           </span>
         </section>
       );
     }
-    // case "week": {
-    //   return (
-    //     <>
-    //       {(section as Calendar).week[0].map((day) => (
-    //         <section
-    //           style={{
-    //             display: "flex",
-    //             alignItems: "center",
-    //             justifyContent: "center",
-    //           }}
-    //         >
-    //           <span className="dashboard__type">
-    //             {day.time_slot.from_time}
 
-    //             {/* {(section as Calendar).week[0][0].time_slot.to_time} */}
-    //           </span>
-    //         </section>
-    //       ))}
-    //     </>
-    //   );
-    // }
+    case "week": {
+      return (
+        <section
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-start",
+            width: "500px",
+          }}
+        >
+          {(section as AddresTableData).time.map((day) => {
+            return (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "flex-start",
+                  padding: "10px",
+                }}
+              >
+                <span>{day.day}</span>
+                <span>{day.start_time}</span>
+                <span>{day.end_time}</span>
+              </div>
+            );
+          })}
+        </section>
+      );
+    }
     case "objective": {
       return (
         <section
