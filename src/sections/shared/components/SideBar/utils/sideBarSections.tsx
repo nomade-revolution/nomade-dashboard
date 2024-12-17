@@ -23,6 +23,15 @@ export const getSideBarUpperSections = (
       subSection: "usuario",
     },
     {
+      id: 10,
+      icon: <PiUsersThreeFill />,
+      name: "Usuarios (App)",
+      pathname: "usuarios-app",
+      quantity: 0,
+      path: `/users-app/page/1`,
+      subSection: "user-app",
+    },
+    {
       id: 2,
       icon: <PiUsersThreeFill />,
       name: "Influencers",
@@ -31,15 +40,7 @@ export const getSideBarUpperSections = (
       path: `/influencers/page/1`,
       subSection: "influencer",
     },
-    {
-      id: 2,
-      icon: <PiUsersThreeFill />,
-      name: "Usuarios (App)",
-      pathname: "usuarios-app",
-      quantity: 0,
-      path: `/users-app/page/1`,
-      subSection: "user-app",
-    },
+
     {
       id: 3,
       icon: <FaUserTie />,
