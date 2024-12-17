@@ -9,7 +9,7 @@ import {
   FilterParams,
   SectionTypes,
 } from "../../../shared/interfaces/interfaces";
-import { usersTableHeaderSections } from "../../utils/userTableSections";
+import { usersAppTableHeaderSections } from "../../utils/userTableSections";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
 import { UserTypes } from "modules/user/domain/User";
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
@@ -76,7 +76,7 @@ const UsersAppPage = (): React.ReactElement => {
           <div className="dashboard__table">
             <DashboardTable
               bodySections={users_nomade}
-              headerSections={usersTableHeaderSections}
+              headerSections={usersAppTableHeaderSections}
               pageName={SectionTypes.users}
             />
           </div>
@@ -84,7 +84,7 @@ const UsersAppPage = (): React.ReactElement => {
             <h3>Usuarios</h3>
             <DashboardCardListMobile
               bodySections={users_nomade}
-              headerSections={usersTableHeaderSections}
+              headerSections={usersAppTableHeaderSections}
               pageName={SectionTypes.users}
             />
           </div>
