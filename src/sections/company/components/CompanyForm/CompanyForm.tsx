@@ -534,7 +534,7 @@ const CompanyForm = ({
             }}
           >
             <Checkbox onChange={() => {}} value={true} />
-            <span>He leído y acepto las condiciones y terminos de uso</span>
+            <span>He leído y acepto las condiciones y términos de uso</span>
           </div>
           <ReusableModal
             children={
