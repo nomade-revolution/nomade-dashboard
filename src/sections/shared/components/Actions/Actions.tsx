@@ -193,7 +193,7 @@ const Actions = ({
       //   </>
       // );
       break;
-    case SectionTypes.users:
+    case SectionTypes.users && SectionTypes.usersApp:
       buttons = (
         <Tooltip title="Borrar usuario">
           <button

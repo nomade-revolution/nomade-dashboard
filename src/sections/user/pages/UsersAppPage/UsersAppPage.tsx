@@ -22,12 +22,11 @@ const UsersAppPage = (): React.ReactElement => {
   const handleSearch = (searchText: string) => {
     getUsersData(searchText);
   };
-
   const getUsersData = useCallback(
     (text?: string) => {
       const filters: FilterParams = {
         filters: {
-          types: ["Influencer", "Company"],
+          types: ["Company"],
         },
       };
       if (order?.sortTag) {

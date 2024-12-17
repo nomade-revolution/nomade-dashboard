@@ -172,7 +172,8 @@ const DashboardContentSections = ({
               <Link
                 to={`/cliente/${
                   pageName === SectionTypes.customers ||
-                  pageName === SectionTypes.plans
+                  pageName === SectionTypes.plans ||
+                  pageName === SectionTypes.usersApp
                     ? (section as Company).id
                     : pageName === SectionTypes.offers
                       ? (section as Offer).company_id

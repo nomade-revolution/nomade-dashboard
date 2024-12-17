@@ -16,7 +16,7 @@ export const getSideBarUpperSections = (
     {
       id: 1,
       icon: <FaUserGroup />,
-      name: "Usuarios ",
+      name: "Usuarios (CMS)",
       pathname: "usuarios",
       quantity: usersQuantity,
       path: `/usuarios/page/1`,
@@ -25,7 +25,7 @@ export const getSideBarUpperSections = (
     {
       id: 10,
       icon: <PiUsersThreeFill />,
-      name: "Usuarios (App)",
+      name: "Usuarios (Empresa)",
       pathname: "users-app",
       quantity: 0,
       path: `/users-app/page/1`,
