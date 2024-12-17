@@ -18,9 +18,18 @@ import {
   COLAB_ACCEPTED_STATE,
 } from "sections/collabs/utils/collabsStates";
 import { Plan } from "modules/plans/domain/Plan";
+import { Calendar } from "modules/offers/domain/OfferCalendar";
 
 interface ReusableTableBodyCellProps {
-  section: Offer | Customer | Collab | User | Influencer | Lead | Plan;
+  section:
+    | Offer
+    | Customer
+    | Collab
+    | User
+    | Influencer
+    | Lead
+    | Plan
+    | Calendar;
   headerSection: HeaderSection;
   pageName: string;
   type?: string;
@@ -57,7 +66,7 @@ const DashboardTableCellContent = ({
         <DialogDeleteConfirm
           handleClose={() => setIsDialogOpen(false)}
           open={isDialogOpen}
-          sectionId={section.id!}
+          sectionId={"id" in section ? section.id! : 1}
           pageName={pageName}
           type={type}
           accept_state_id={

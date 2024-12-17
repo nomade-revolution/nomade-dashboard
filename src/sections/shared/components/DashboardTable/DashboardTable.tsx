@@ -16,6 +16,7 @@ import DashBoardHeaderCell from "../DashboardHeaderCell/DashboardHeaderCell";
 import { useState } from "react";
 import { Plan } from "modules/plans/domain/Plan";
 import { ExtendedCollab } from "sections/collabs/components/CollabDetail/CollabDetail";
+import { Calendar } from "modules/offers/domain/OfferCalendar";
 
 export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -105,6 +106,7 @@ const DashboardTable = <Type,>({
                           | Collab
                           | Plan
                           | ExtendedCollab
+                          | Calendar
                       }
                       pageName={pageName}
                       type={type}

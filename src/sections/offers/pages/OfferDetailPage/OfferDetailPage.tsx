@@ -5,13 +5,16 @@ import Loader from "sections/shared/components/Loader/Loader";
 import OfferDetailPageStyled from "./OfferDetailPageStyled";
 import ImageCustom from "sections/shared/components/ImageCustom/ImageCustom";
 import { getTypesClassNames } from "sections/shared/components/DashboardContentSections/utils/getClassNames/getClassNames";
-import { MdOutlineLibraryAdd, MdOutlineLocationOn } from "react-icons/md";
+import { MdOutlineLibraryAdd } from "react-icons/md";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
 import { FaEdit } from "react-icons/fa";
 import OffersForm from "sections/offers/components/OffersForm/OffersForm";
 import GoBackButton from "sections/shared/components/GoBackButton/GoBackButton";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { UserTypes } from "modules/user/domain/User";
+import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
+import { headerAddressOffers, headerOffers } from "./offersData";
+import { Calendar } from "modules/offers/domain/OfferCalendar";
 
 const OfferDetailsPage = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -26,6 +29,25 @@ const OfferDetailsPage = () => {
   useEffect(() => {
     getOffer(+id!);
   }, [id, getOffer]);
+
+  // const getOfferWithDayTime = (calendars: Calendar[]) => {
+  //   const a = calendars.map((calendar) => {
+  //     return {
+  //       address: calendar.address,
+  //       max_guests: calendar.max_guests,
+  //       min_guests: calendar.min_guests,
+  //       time: calendar.week.map((week) => {
+  //         return {
+  //           day: week[0].day_of_week,
+  //           start_time: week[0].time_slot.from_time,
+  //           end_time: week[0].time_slot.to_time,
+  //         };
+  //       }),
+  //     };
+  //   });
+  //   return a;
+  // };
+  // getOfferWithDayTime(offer.calendar as Calendar[]);
 
   return (
     <>
@@ -45,81 +67,53 @@ const OfferDetailsPage = () => {
       ) : (
         <OfferDetailPageStyled>
           <GoBackButton />
+          <div className="offer-detail__heading">
+            <h3 className="offer-detail__title">
+              {offer.company}{" "}
+              <span className={getTypesClassNames(offer, "offer-detail")}>
+                ( {offer.type} )
+              </span>
+            </h3>
+            {user.type === UserTypes.nomade && (
+              <button
+                onClick={handleIsModalOpen}
+                className="offer-detail__edit-btn"
+              >
+                <FaEdit />
+                Editar oferta
+              </button>
+            )}
+          </div>
+          <div className="images-container">
+            {offer.images?.length > 0 &&
+              offer.images.map((image) => (
+                <ImageCustom
+                  key={image.alt}
+                  alt="Imágen de la oferta"
+                  className="offer-detail__offer-img"
+                  height={200}
+                  width={250}
+                  image={image.url}
+                />
+              ))}
+          </div>
+          <DashboardTable
+            bodySections={[offer]}
+            headerSections={headerOffers}
+            pageName="offerDetail"
+          />
 
-          <section className="offer-detail__data">
-            <div className="offer-detail__heading">
-              <h3 className="offer-detail__title">{offer.company}</h3>
-              {user.type === UserTypes.nomade && (
-                <button
-                  onClick={handleIsModalOpen}
-                  className="offer-detail__edit-btn"
-                >
-                  <FaEdit />
-                  Editar oferta
-                </button>
-              )}
-            </div>
-            <span className={getTypesClassNames(offer, "offer-detail")}>
-              {offer.type}
-            </span>
-            <div className="offer-detail__offer-data">
-              <div className="images-container">
-                {offer.images?.length > 0 &&
-                  offer.images.map((image) => (
-                    <ImageCustom
-                      key={image.alt}
-                      alt="Imágen de la oferta"
-                      className="offer-detail__offer-img"
-                      height={200}
-                      width={250}
-                      image={image.url}
-                    />
-                  ))}
-              </div>
-              <section className="offer-detail__section">
-                <div className="offer-detail__data-section">
-                  <span className="offer-detail__data-title">Descripción</span>
-                  <span className="offer-detail__text">
-                    {offer.description}
-                  </span>
-                </div>
-                <div className="offer-detail__data-section">
-                  <span className="offer-detail__data-title">Condiciones</span>
-                  <span className="offer-detail__text">{offer.conditions}</span>
-                </div>
-              </section>
-              <section className="offer-detail__section">
-                {offer.addresses && (
-                  <div className="offer-detail__data-section">
-                    <span className="offer-detail__data-title">Locales</span>
+          {offer?.calendar && (
+            <>
+              <h3>Direcciones</h3>
 
-                    {/* <ul className="adress-list">
-                    {offer?.calendar?.map((adress) => (
-                      <li key={adress.address}>{adress.address}</li>
-                    ))}
-                  </ul> */}
-                    <ul className="adress-list">
-                      {offer?.addresses?.map((adress) => (
-                        <li
-                          key={adress.address}
-                          className="offer-detail__address"
-                        >
-                          <MdOutlineLocationOn color="#8C9B6E" size={15} />
-                          {adress.address}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                <div className="offer-detail__data-section">
-                  <span className="offer-detail__data-title">A cambio</span>
-                  <span className="offer-detail__text">
-                    {offer.in_exchange}
-                  </span>
-                </div>
-              </section>
-            </div>
-          </section>
+              <DashboardTable
+                bodySections={offer.calendar as Calendar[]}
+                headerSections={headerAddressOffers}
+                pageName="offerDetail"
+              />
+            </>
+          )}
           <ReusableModal
             children={
               <OffersForm

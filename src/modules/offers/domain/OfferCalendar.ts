@@ -1,10 +1,11 @@
-import { TimeSlot } from "./Offer";
-
 export interface TimeSlotOffer {
   day_of_week: number;
   day_name: string;
-  time_slots: string[];
-  time_slot: TimeSlot[];
+  time_slots: TimeSlotOffer[];
+  time_slot: {
+    from_time: string;
+    to_time: string;
+  };
 }
 
 export interface Calendar {

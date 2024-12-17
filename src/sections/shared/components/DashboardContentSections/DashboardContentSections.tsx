@@ -14,7 +14,7 @@ import {
 } from "react-icons/fa6";
 import { FullOffer, Offer } from "../../../../modules/offers/domain/Offer";
 import { Switch, Tooltip } from "@mui/material";
-import { TimeSlotOffer } from "modules/offers/domain/OfferCalendar";
+import { Calendar, TimeSlotOffer } from "modules/offers/domain/OfferCalendar";
 import { Company, User } from "modules/user/domain/User";
 import { CollabActionTypes, FullCollab } from "modules/collabs/domain/Collabs";
 import { getCollabStateClassname } from "./utils/getClassNames/getClassNames";
@@ -40,7 +40,8 @@ interface Props {
     | User
     | Company
     | Lead
-    | Plan;
+    | Plan
+    | Calendar;
   pageName: string;
   setIsDialogOpen: (value: boolean) => void;
   setCollabStateActionType?: (value: CollabActionTypes) => void;
@@ -61,6 +62,7 @@ const DashboardContentSections = ({
   const daysSet = new Set<string>();
   const { user } = useAuthContext();
   const { modifyOffer } = useOffersContext();
+
   switch (headerSection.property) {
     case "images":
       return (
@@ -123,6 +125,13 @@ const DashboardContentSections = ({
       );
 
     case "description":
+      if (pageName === "offerDetail") {
+        return (
+          <div className="dashboard__description">
+            <span>{(section as Customer).description}</span>
+          </div>
+        );
+      }
       return (
         <div className="dashboard__description">
           <span>{(section as Customer).description}</span>
@@ -421,6 +430,7 @@ const DashboardContentSections = ({
                 : (section as Influencer).id
             }`}
             className="dashboard__link-icon"
+            style={{ textDecoration: "underline" }}
           >
             <span className="dashboard__name">
               {(section as FullCollab).influencer_name}
@@ -709,6 +719,43 @@ const DashboardContentSections = ({
         </section>
       );
     }
+
+    case "calendar_detail": {
+      return (
+        <section
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <span className="dashboard__type">
+            {(section as Calendar).address}
+          </span>
+        </section>
+      );
+    }
+    // case "week": {
+    //   return (
+    //     <>
+    //       {(section as Calendar).week[0].map((day) => (
+    //         <section
+    //           style={{
+    //             display: "flex",
+    //             alignItems: "center",
+    //             justifyContent: "center",
+    //           }}
+    //         >
+    //           <span className="dashboard__type">
+    //             {day.time_slot.from_time}
+
+    //             {/* {(section as Calendar).week[0][0].time_slot.to_time} */}
+    //           </span>
+    //         </section>
+    //       ))}
+    //     </>
+    //   );
+    // }
     case "objective": {
       return (
         <section

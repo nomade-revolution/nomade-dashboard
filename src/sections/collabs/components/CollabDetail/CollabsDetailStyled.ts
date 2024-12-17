@@ -75,7 +75,7 @@ const CollabsDetailStyled = styled.div`
       padding: 0 40px;
       background: ${(props) => props.theme.colors.lightGrey};
       box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
-      padding: 20px 40px;
+      padding: 20px 20px;
       border-radius: 10px;
     }
 
@@ -152,7 +152,8 @@ const CollabsDetailStyled = styled.div`
 
     &__offer-section {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
+      justify-content: center;
       justify-content: space-between;
     }
 

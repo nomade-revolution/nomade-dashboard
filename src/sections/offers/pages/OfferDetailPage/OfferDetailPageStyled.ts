@@ -13,9 +13,10 @@ const OfferDetailPageStyled = styled.div`
   .images-container {
     display: flex;
     gap: 20px;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     max-width: 100%;
+    width: 100%;
     overflow: scroll;
     flex-wrap: wrap;
     margin-top: 20px;
@@ -54,9 +55,6 @@ const OfferDetailPageStyled = styled.div`
     }
 
     &__title {
-      font-size: ${(props) => props.theme.fontsSize.__XXL};
-      border-bottom: 2px solid ${(props) => props.theme.colors.mainColor};
-      padding-bottom: 10px;
       width: 100%;
 
       @media (min-width: 1000px) and (max-width: 1600px) {
