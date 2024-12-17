@@ -21,6 +21,7 @@ import { useCompanyContext } from "sections/company/CompanyContext/useCompanyCon
 import { formatDateWithDash } from "sections/shared/utils/formatDate/formatDate";
 import { Company } from "modules/user/domain/User";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
+import { Checkbox } from "@mui/material";
 
 interface Props {
   onSubmit: (values: FormData, id?: number) => void;
@@ -524,6 +525,16 @@ const CompanyForm = ({
                   </div>
                 </>
               )}
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Checkbox onChange={() => {}} value={true} />
+            <span>He leído y acepto las condiciones y terminos de uso</span>
           </div>
           <ReusableModal
             children={
