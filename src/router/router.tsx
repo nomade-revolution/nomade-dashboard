@@ -24,6 +24,7 @@ import LogoutPage from "sections/auth/pages/LogooutPage/LogoutPage";
 import CreateUserPage from "sections/user/pages/CreateUserPage/CreateUserPage";
 import PlanPage from "sections/plans/pages/Plan/PlanPage";
 import CreateInfluencerPage from "sections/user/pages/CreateInfluencerPage/CreateInfluencerPage";
+import UsersAppPage from "sections/user/pages/UsersAppPage/UsersAppPage";
 
 const routes: RouteObject[] = [
   {
@@ -46,6 +47,10 @@ const routes: RouteObject[] = [
       {
         path: appPaths.users,
         element: <UsersPage />,
+      },
+      {
+        path: appPaths.usersApp,
+        element: <UsersAppPage />,
       },
       {
         path: appPaths.influencers,

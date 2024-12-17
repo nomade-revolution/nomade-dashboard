@@ -24,4 +24,5 @@ export const appPaths = {
   createUser: "/create-user",
   plan: "/plan",
   createInfluencer: "/create-influencer",
+  usersApp: "/users-app/page/:page",
 };
