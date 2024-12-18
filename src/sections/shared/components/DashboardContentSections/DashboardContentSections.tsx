@@ -746,7 +746,7 @@ const DashboardContentSections = ({
           }}
         >
           <span className="dashboard__type">
-            {(section as Company).address.address}
+            {(section as Company)?.address?.address}
           </span>
         </section>
       );
