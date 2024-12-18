@@ -201,7 +201,58 @@ export const planTableSections: HeaderSection[] = [
     pageName: "offers",
   },
 ];
+export const userTableSections: HeaderSection[] = [
+  {
+    id: 8,
+    name: "Imagen",
+    property: "image",
+    sortTag: "",
+    pageName: "",
+  },
+  {
+    id: 3,
+    name: "Nombre comercial",
+    property: "company",
+    sortTag: "",
+    pageName: "",
+  },
+  {
+    id: 2,
+    name: "Nombre",
+    property: "company_name",
+    sortTag: "",
+    pageName: "",
+  },
 
+  {
+    id: 12,
+    name: "Teléfono",
+    property: "phone",
+    sortTag: "",
+    pageName: "",
+  },
+  {
+    id: 6,
+    name: "Email",
+    property: "email",
+    sortTag: "",
+    pageName: "",
+  },
+  {
+    id: 7,
+    name: "Web",
+    property: "web",
+    sortTag: "",
+    pageName: "",
+  },
+  {
+    id: 11,
+    name: "Dirección",
+    property: "address",
+    sortTag: "",
+    pageName: "",
+  },
+];
 export const companyPlanTableSections: HeaderSection[] = [
   {
     id: 3,

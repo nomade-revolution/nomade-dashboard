@@ -36,6 +36,14 @@ const SideBar = ({
   const sideBarUpperSections =
     user.type === "Company"
       ? [
+          {
+            id: 9,
+            icon: <IoIosStats />,
+            name: "Cuenta",
+            pathname: "plan",
+            quantity: 0,
+            path: `/plan`,
+          },
           ...getSideBarUpperSections(
             badgeUsers,
             badgeInfluencers,
@@ -45,14 +53,6 @@ const SideBar = ({
             (section) =>
               section.pathname === "collabs" || section.pathname === "oferta",
           ),
-          {
-            id: 9,
-            icon: <IoIosStats />,
-            name: "Uso plan",
-            pathname: "plan",
-            quantity: 0,
-            path: `/plan`,
-          },
         ]
       : getSideBarUpperSections(
           badgeUsers,

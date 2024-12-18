@@ -736,6 +736,21 @@ const DashboardContentSections = ({
         </section>
       );
     }
+    case "address": {
+      return (
+        <section
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <span className="dashboard__type">
+            {(section as Company).address.address}
+          </span>
+        </section>
+      );
+    }
 
     case "week": {
       return (

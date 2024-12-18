@@ -2,7 +2,10 @@ import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 import { useCallback, useEffect } from "react";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { usePlansContext } from "sections/plans/PlansContext/usePlansContext";
-import { planTableSections } from "sections/plans/utils/plansTableSections";
+import {
+  planTableSections,
+  userTableSections,
+} from "sections/plans/utils/plansTableSections";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
 import Loader from "sections/shared/components/Loader/Loader";
 import { SectionTypes } from "sections/shared/interfaces/interfaces";
@@ -10,12 +13,10 @@ import { SectionTypes } from "sections/shared/interfaces/interfaces";
 const PlanPage = (): React.ReactElement => {
   const { getPlan, plan, loading } = usePlansContext();
 
-  const {
-    user: { id },
-  } = useAuthContext();
+  const { user } = useAuthContext();
   const getPlansData = useCallback(() => {
-    getPlan(id);
-  }, [getPlan, id]);
+    getPlan(user.id);
+  }, [getPlan, user.id]);
 
   useEffect(() => {
     getPlansData();
@@ -23,6 +24,13 @@ const PlanPage = (): React.ReactElement => {
   return (
     <ReusablePageStyled className="plans-page">
       <>
+        <section className="plans-page__mensual">
+          <DashboardTable
+            bodySections={[user]}
+            headerSections={userTableSections}
+            pageName={""}
+          />
+        </section>
         {loading ? (
           <Loader width="20px" height="20px" />
         ) : (
