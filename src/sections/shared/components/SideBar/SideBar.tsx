@@ -10,6 +10,7 @@ import { Company, User } from "modules/user/domain/User";
 import { FullOffer } from "modules/offers/domain/Offer";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { Tooltip } from "@mui/material";
+import { IoInformation } from "react-icons/io5";
 
 interface SideBarProps {
   badgeUsers: number;
@@ -53,6 +54,14 @@ const SideBar = ({
             (section) =>
               section.pathname === "collabs" || section.pathname === "oferta",
           ),
+          {
+            id: 14,
+            icon: <IoInformation />,
+            name: "Terminos y condiciones",
+            pathname: "terms-conditions",
+            quantity: 0,
+            path: `/terms-conditions`,
+          },
         ]
       : getSideBarUpperSections(
           badgeUsers,

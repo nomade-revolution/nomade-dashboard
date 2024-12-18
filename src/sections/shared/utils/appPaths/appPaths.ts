@@ -25,4 +25,5 @@ export const appPaths = {
   plan: "/plan",
   createInfluencer: "/create-influencer",
   usersApp: "/users-app/page/:page",
+  termsConditions: "/terms-conditions",
 };

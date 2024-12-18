@@ -25,6 +25,7 @@ import CreateUserPage from "sections/user/pages/CreateUserPage/CreateUserPage";
 import PlanPage from "sections/plans/pages/Plan/PlanPage";
 import CreateInfluencerPage from "sections/user/pages/CreateInfluencerPage/CreateInfluencerPage";
 import UsersAppPage from "sections/user/pages/UsersAppPage/UsersAppPage";
+import TermConditionsPage from "sections/shared/pages/TermsConditions/TermsConditions";
 
 const routes: RouteObject[] = [
   {
@@ -107,6 +108,10 @@ const routes: RouteObject[] = [
       {
         path: appPaths.plans,
         element: <PlansPage />,
+      },
+      {
+        path: appPaths.termsConditions,
+        element: <TermConditionsPage />,
       },
       {
         path: appPaths.createUser,
