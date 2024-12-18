@@ -125,7 +125,7 @@ export default function ReusableStepper({
         collab.state?.id !== collabStates.COLAB_CANCELLED_STATE &&
         collab.state?.id !== collabStates.COLAB_REJECTED_STATE &&
         collab.state?.id !== collabStates.COLAB_SENT_STATE && (
-          <div className="stepper__btn-container">
+          <div className="stepper__btn-container" style={{ marginTop: "20px" }}>
             <button
               className="stepper__state-btn"
               onClick={handleClick}

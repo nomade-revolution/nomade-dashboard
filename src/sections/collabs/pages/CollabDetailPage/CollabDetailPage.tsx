@@ -118,21 +118,21 @@ const CollabDetailPage = (): React.ReactElement => {
                       text="Rechazar"
                       color={theme.colors.darkRed}
                     />
+
+                    <ActionButton
+                      onClick={() => setIsOpenEdit(true)}
+                      text="Editar"
+                      icon={<FaEdit />}
+                      color={theme.colors.darkBlue}
+                    />
+                    <ActionButton
+                      onClick={handleOpenDialogDelete}
+                      text="Borrar"
+                      icon={<FaRegTrashCan />}
+                      color={theme.colors.red}
+                    />
                   </>
                 )}
-
-              <ActionButton
-                onClick={() => setIsOpenEdit(true)}
-                text="Editar"
-                icon={<FaEdit />}
-                color={theme.colors.darkBlue}
-              />
-              <ActionButton
-                onClick={handleOpenDialogDelete}
-                text="Borrar"
-                icon={<FaRegTrashCan />}
-                color={theme.colors.red}
-              />
             </section>
           </header>
           <div className="detail-collab__data">
