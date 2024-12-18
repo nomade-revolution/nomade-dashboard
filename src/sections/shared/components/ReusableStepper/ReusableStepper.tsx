@@ -121,7 +121,7 @@ export default function ReusableStepper({
           ))}
         </Stepper>
       </Box>
-      {user.type === "Company" &&
+      {user.type !== "Company" &&
         collab.state?.id !== collabStates.COLAB_CANCELLED_STATE &&
         collab.state?.id !== collabStates.COLAB_REJECTED_STATE &&
         collab.state?.id !== collabStates.COLAB_SENT_STATE && (

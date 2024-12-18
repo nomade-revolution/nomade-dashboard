@@ -83,6 +83,7 @@ const CollabDetailPage = (): React.ReactElement => {
     getAddress(collab.addresses_id);
   }, [collab.addresses_id, getAddress]);
 
+  //Añadir botones para modificar estado en usuario company
   return (
     <>
       {loading || loadingInfluencer || loadingOffer ? (

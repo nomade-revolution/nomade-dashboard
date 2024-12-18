@@ -1,6 +1,8 @@
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
+import { Company } from "modules/user/domain/User";
 import { useCallback, useEffect } from "react";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
+import contactsHeader from "sections/company/pages/CompanyDetailPage/utils/contactsHeader";
 import { usePlansContext } from "sections/plans/PlansContext/usePlansContext";
 import {
   planTableSections,
@@ -35,19 +37,23 @@ const PlanPage = (): React.ReactElement => {
           <Loader width="20px" height="20px" />
         ) : (
           <section className="plans-page__mensual">
-            {Object.keys(plan).length > 0 ? (
-              <>
-                <DashboardTable
-                  bodySections={[plan]}
-                  headerSections={planTableSections}
-                  pageName={SectionTypes.plans}
-                />
-              </>
-            ) : (
-              <span>Sin plan asignado</span>
-            )}
+            <h3>Plan</h3>
+            <DashboardTable
+              bodySections={[plan]}
+              headerSections={planTableSections}
+              pageName={SectionTypes.plans}
+            />
           </section>
         )}
+
+        <section className="plans-page__mensual">
+          <h3>Contactos</h3>
+          <DashboardTable
+            bodySections={(user as Company)?.contacts}
+            headerSections={contactsHeader}
+            pageName={SectionTypes.plans}
+          />
+        </section>
       </>
     </ReusablePageStyled>
   );
