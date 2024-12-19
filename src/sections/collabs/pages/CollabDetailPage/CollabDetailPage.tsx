@@ -29,7 +29,8 @@ import ReusableModal from "sections/shared/components/ReusableModal/ReusableModa
 import EditCollabForm from "sections/collabs/components/CollabsForm/EditCollabsForm/EditCollabsForm";
 
 const CollabDetailPage = (): React.ReactElement => {
-  const { getCollabById, collab, loading } = useCollabsContext();
+  const { getCollabById, collab, loading, updateCollabState } =
+    useCollabsContext();
   const {
     getInfluencer,
     influencer,
@@ -52,6 +53,9 @@ const CollabDetailPage = (): React.ReactElement => {
   const handleOpenDialogRefuse = () => {
     handleIsDialogOpen(setIsDialogOpen);
     setIsAcceptOrRefuse(CollabActionTypes.refuse);
+  };
+  const handleMarkAsPublicated = async () => {
+    await updateCollabState(collab.id!, collabStates.COLAB_PUBLISHED_STATE);
   };
 
   const handleOpenDialogAccept = () => {
@@ -107,6 +111,12 @@ const CollabDetailPage = (): React.ReactElement => {
                   collab.state.id === COLAB_PENDING_NOMADE_STATE) &&
                 user.type === "Nomade" && (
                   <>
+                    <ActionButton
+                      icon={<FaCheckCircle />}
+                      onClick={handleMarkAsPublicated}
+                      text="Marcar como publicado"
+                      color={theme.colors.softGreen}
+                    />
                     <ActionButton
                       icon={<FaCheckCircle />}
                       onClick={handleOpenDialogAccept}

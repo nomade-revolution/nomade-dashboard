@@ -62,6 +62,7 @@ const CreateInfluencerPage = () => {
   const { influencerCategories, getInfluencerCategories } =
     useInfluencerContext();
   const [socials, setSocials] = useState<number[]>([]);
+
   const getCitiesFromCountry = async (
     countryId: number,
     type: "born" | "live" | "stats",
@@ -99,7 +100,6 @@ const CreateInfluencerPage = () => {
     formData.append("categories[]", JSON.stringify(1));
 
     const resp: any = await registerInfluencer(formData as any);
-    // console.log("ESTA ES LA RESP", resp);
     setIsSuccess(Boolean(resp.success));
     setIsLoading(false);
 
@@ -578,7 +578,7 @@ const CreateInfluencerPage = () => {
                 </div>
                 <div className="form-section">
                   <h5>% Por ciudades</h5>
-                  {citiesStats.map((city, cityIndex) => {
+                  {citiesStats.map((_city, cityIndex) => {
                     return (
                       <>
                         <div className="formInputsContainer">
@@ -659,7 +659,7 @@ const CreateInfluencerPage = () => {
 
                 <div className="form-section">
                   <h5>% Por países</h5>
-                  {countriesStats.map((countryStat, countryIndex) => {
+                  {countriesStats.map((_countryStat, countryIndex) => {
                     return (
                       <div className="formInputsContainer">
                         <ReusableSelect

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   CitySocialRequest,
   CountrySocialRequest,
@@ -11,6 +12,7 @@ import StadisticsDisplay from "../StatisticsDisplay/StatisticsDisplay";
 import { FaLink, FaUserFriends } from "react-icons/fa";
 import { IoStatsChart } from "react-icons/io5";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
+import { FaPlay } from "react-icons/fa6";
 
 interface Props {
   socialMedia: SocialMedia;
@@ -74,6 +76,20 @@ const SocialMediaCard = ({
         </span>
         <span className="social-card__text-icon">
           <FaUserFriends size={20} /> {socialMedia.followers} followers
+        </span>
+        {(socialMedia as any)?.stories_view && (
+          <span className="social-card__text-icon">
+            <FaPlay size={20} />{" "}
+            {(socialMedia as any)?.stories_view
+              ? (socialMedia as any)?.stories_view
+              : "-"}
+          </span>
+        )}
+        <span className="social-card__text-icon">
+          <FaPlay size={20} />{" "}
+          {(socialMedia as any)?.stories_view
+            ? (socialMedia as any)?.stories_view
+            : "-"}
         </span>
         <Link
           to={socialMedia.url}

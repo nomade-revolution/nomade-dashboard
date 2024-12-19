@@ -57,7 +57,7 @@ const SideBar = ({
           {
             id: 14,
             icon: <IoInformation />,
-            name: "Terminos y condiciones",
+            name: "Términos y condiciones",
             pathname: "terms-conditions",
             quantity: 0,
             path: `/terms-conditions`,
