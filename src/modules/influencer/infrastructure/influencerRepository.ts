@@ -3,6 +3,7 @@ import { Http } from "@core/application";
 import { HttpResponseInterface } from "@core/domain";
 import {
   INFLUENCER_BASE,
+  INFLUENCER_CATEGORIES,
   INFLUENCER_STATS,
 } from "@influencer/application/routes";
 import { Influencer } from "@influencer/domain";
@@ -80,6 +81,16 @@ export class InfluencerRepository {
   ): Promise<HttpResponseInterface<RegisterInfluencerInterface>> {
     try {
       const resp = await this.http.post<Influencer>(INFLUENCER_BASE, data);
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+  public async getCategories(): Promise<
+    HttpResponseInterface<RegisterInfluencerInterface>
+  > {
+    try {
+      const resp = await this.http.get(INFLUENCER_CATEGORIES);
       return resp;
     } catch (error) {
       return Promise.reject(error);

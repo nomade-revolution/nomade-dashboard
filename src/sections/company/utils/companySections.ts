@@ -74,7 +74,6 @@ export const companyTableHeaderSections: HeaderSection[] = [
     sortTag: "company_status",
     pageName: SectionTypes.customers,
   },
-
   {
     id: 10,
     name: "Comentarios",

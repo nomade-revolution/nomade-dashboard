@@ -24,7 +24,6 @@ const InfluencersPage = (): React.ReactElement => {
   const { getUsers, users_influencer, pagination, loading, order } =
     useUserContext();
   const { page } = useParams();
-
   const handleSearch = (text: string) => {
     getUsersData(text);
   };

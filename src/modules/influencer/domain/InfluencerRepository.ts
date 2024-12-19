@@ -15,4 +15,5 @@ export interface InfluencerRepository<I> {
   registerInfluencer(
     data: Partial<RegisterInfluencerInterface>,
   ): Promise<HttpResponseInterface<I>>;
+  getCategories(): Promise<HttpResponseInterface<I>>;
 }

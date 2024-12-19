@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface AuthLoginInterface {
   email: string;
   password: string;
@@ -29,17 +30,5 @@ export interface RegisterInfluencerInterface {
   email: string;
   password: string;
   password_confirmation: string;
-  socialMedia: [
-    {
-      social_media_id: number;
-      cities: { city_id: number; followers_percentage: number }[];
-      countries: { country_id: number; followers_percentage: number }[];
-      age_ranges: { id: number; followers_percentage: number }[];
-      genders: { id: number; followers_percentage: number }[];
-      followers: number;
-      main: true;
-      video: string;
-      account_name: string;
-    },
-  ];
+  socialMedia: any[];
 }

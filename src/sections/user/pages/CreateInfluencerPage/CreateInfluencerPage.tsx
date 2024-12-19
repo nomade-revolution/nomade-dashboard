@@ -14,6 +14,10 @@ import { City } from "modules/user/domain/User";
 import { useInfluencerContext } from "sections/influencer/InfluencerContext/useInfluencerContext";
 import CustomFileInput from "sections/shared/components/CustomFileInput/CustomFileInput";
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
+import ActionButton from "sections/shared/components/ActionButton/ActionButton";
+import { FaDeleteLeft, FaPlus } from "react-icons/fa6";
+import theme from "assets/styles/theme";
+import { Checkbox } from "@mui/material";
 
 const initialState: RegisterInfluencerInterface = {
   name: "",
@@ -30,19 +34,7 @@ const initialState: RegisterInfluencerInterface = {
   from_country_id: 0,
   living_city_id: 0,
   living_country_id: 0,
-  socialMedia: [
-    {
-      account_name: "",
-      age_ranges: [],
-      cities: [],
-      countries: [],
-      social_media_id: 0,
-      followers: 0,
-      genders: [],
-      main: true,
-      video: "",
-    },
-  ],
+  socialMedia: [],
 };
 
 const CreateInfluencerPage = () => {
@@ -53,14 +45,23 @@ const CreateInfluencerPage = () => {
   const [loading, setIsLoading] = useState<boolean>(false);
   const { getAllCities } = useCitiesContext();
   const { countries, getAllCountries } = useCountryContext();
+  const [countriesStats, setCountriesStates] = useState<number[]>([0]);
+  const [citiesStats, setCitiesStates] = useState<number[]>([0]);
+  const [mainSocial, setMainSocial] = useState<number>(0);
   const [citiesBorn, setCitiesBorn] = useState<City[]>([]);
   const [citiesLive, setCitiesLive] = useState<City[]>([]);
+  const [countryForCityStats, setCountryForCityStats] = useState<number>(0);
   const [bornCity, setBornCity] = useState<number>(0);
   const [liveCity, setLiveCity] = useState<number>(0);
   const [bornCountry, setBornCountry] = useState<number>(0);
   const [liveCountry, setLiveCountry] = useState<number>(0);
   const [socialMediaSelected, setSocialMediaSelected] = useState<number>(0);
   const [file, setFile] = useState<File[]>([]);
+  const [citiesPerPercentage, setCitiesPerPercentage] = useState<City[]>([]);
+  const [category, setCategory] = useState<number>(0);
+  const { influencerCategories, getInfluencerCategories } =
+    useInfluencerContext();
+  const [socials, setSocials] = useState<number[]>([]);
   const getCitiesFromCountry = async (
     countryId: number,
     type: "born" | "live" | "stats",
@@ -72,8 +73,10 @@ const CreateInfluencerPage = () => {
     if (type === "live") {
       setCitiesLive((resp as any).data);
     }
+    if (type === "stats") {
+      setCitiesPerPercentage((resp as any).data);
+    }
   };
-
   const handleSubmitForm = async (values: RegisterInfluencerInterface) => {
     setIsLoading(true);
     setIsFormSubmitted(true);
@@ -86,6 +89,7 @@ const CreateInfluencerPage = () => {
         formData.append(key, values[key]);
       }
     });
+
     if (file[0]) {
       formData.append("avatar", file[0]);
     }
@@ -95,7 +99,7 @@ const CreateInfluencerPage = () => {
     formData.append("categories[]", JSON.stringify(1));
 
     const resp: any = await registerInfluencer(formData as any);
-
+    // console.log("ESTA ES LA RESP", resp);
     setIsSuccess(Boolean(resp.success));
     setIsLoading(false);
 
@@ -113,6 +117,11 @@ const CreateInfluencerPage = () => {
     getAllCountries();
   }, [getAllCountries]);
 
+  useEffect(() => {
+    if (influencerCategories.length === 0) {
+      getInfluencerCategories();
+    }
+  }, [getInfluencerCategories, influencerCategories.length]);
   return (
     <ReusablePageStyled>
       <div className="header">
@@ -327,9 +336,13 @@ const CreateInfluencerPage = () => {
               <div className="form-section">
                 <ReusableSelect
                   label="Categoría de influencer"
-                  options={[]}
-                  setValue={() => {}}
-                  value=""
+                  options={influencerCategories.map((category) => ({
+                    id: category.id,
+                    name: category.name,
+                    value: category.id,
+                  }))}
+                  setValue={(v) => setCategory(+v)}
+                  value={category.toString()}
                 />
                 {errors.categories && touched.categories && (
                   <ErrorMessage
@@ -339,290 +352,15 @@ const CreateInfluencerPage = () => {
                   />
                 )}
               </div>
-              <div className="form-section" />
-            </div>
-            <h3 style={{ width: "100%", textAlign: "left" }}>Social Media</h3>
-
-            <div className="dobleContainer">
-              <div className="form-section">
-                <ReusableSelect
-                  label="Red social principal"
-                  options={[
-                    {
-                      id: 1,
-                      name: "Instagram",
-                      value: "1",
-                    },
-                    {
-                      value: "2",
-                      id: 2,
-                      name: "TikTok",
-                    },
-                    {
-                      value: "3",
-                      id: 3,
-                      name: "Twitch",
-                    },
-                    {
-                      value: "4",
-                      id: 4,
-                      name: "Youtube",
-                    },
-                  ]}
-                  setValue={(e) => {
-                    setSocialMediaSelected(+e);
-                    setFieldValue("socialMedia[0].social_media_id", +e);
-                  }}
-                  value={socialMediaSelected.toString()}
-                />
-                {errors.socialMedia && touched.socialMedia && (
-                  <ErrorMessage
-                    className="login-form__error-message"
-                    component="span"
-                    name="socialMedia"
-                  />
-                )}
-              </div>
-              <div className="form-section"></div>
-            </div>
-
-            <div className="dobleContainer">
-              <div className="form-section">
-                <label htmlFor="acountName" className="login-form__label">
-                  Nombre de la cuenta
-                </label>
-                <Field
-                  type="text"
-                  id="acountName"
-                  className="form-section__field"
-                  aria-label="acountName"
-                  {...getFieldProps("socialMedia[0].account_name")}
-                />
-                {errors.socialMedia && touched.socialMedia && (
-                  <ErrorMessage
-                    className="login-form__error-message"
-                    component="span"
-                    name="acountName"
-                  />
-                )}
-              </div>
-              <div className="form-section">
-                <label htmlFor="email" className="login-form__label">
-                  Followers
-                </label>
-                <Field
-                  type="text"
-                  id="followers"
-                  className="form-section__field"
-                  aria-label="followers"
-                  {...getFieldProps("socialMedia[0].followers")}
-                />
-                {errors.socialMedia && touched.socialMedia && (
-                  <ErrorMessage
-                    className="login-form__error-message"
-                    component="span"
-                    name="followers"
-                  />
-                )}
-              </div>
-            </div>
-
-            <CustomFileInput
-              file={file}
-              setFile={(e) => setFile(e)}
-              text="Avatar"
-            />
-            <div className="form-section">
-              <h5>% Por género</h5>
-              <label htmlFor="men" className="login-form__label">
-                Hombres
-              </label>
-              <Field
-                type="text"
-                id="men"
-                className="form-section__field"
-                aria-label="men"
-                {...getFieldProps("men")}
-              />
-              {errors.socialMedia && touched.socialMedia && (
-                <ErrorMessage
-                  className="login-form__error-message"
-                  component="span"
-                  name="men"
-                />
-              )}
-
-              <label htmlFor="women" className="login-form__label">
-                Mujeres
-              </label>
-              <Field
-                type="text"
-                id="women"
-                className="form-section__field"
-                aria-label="women"
-                {...getFieldProps("women")}
-              />
-              {errors.socialMedia && touched.socialMedia && (
-                <ErrorMessage
-                  className="login-form__error-message"
-                  component="span"
-                  name="women"
-                />
-              )}
             </div>
             <div className="form-section">
-              <h5>% Por ciudades</h5>
-              <ReusableSelect
-                label="Ciudad"
-                options={[]}
-                setValue={() => {}}
-                value=""
+              <CustomFileInput
+                file={file}
+                setFile={(e) => setFile(e)}
+                text="Avatar"
               />
-              <Field
-                type="text"
-                id="cityPercentage"
-                className="form-section__field"
-                aria-label="cityPercentage"
-                {...getFieldProps("cityPercentage")}
-              />
-              {errors.socialMedia && touched.socialMedia && (
-                <ErrorMessage
-                  className="login-form__error-message"
-                  component="span"
-                  name="cityPercentage"
-                />
-              )}
             </div>
 
-            <div className="form-section">
-              <h5>% Por países</h5>
-              <ReusableSelect
-                label="País"
-                options={[]}
-                setValue={() => {}}
-                value=""
-              />
-              <Field
-                type="text"
-                id="countryPercentage"
-                className="form-section__field"
-                aria-label="countryPercentage"
-                {...getFieldProps("countryPercentage")}
-              />
-              {errors.socialMedia && touched.socialMedia && (
-                <ErrorMessage
-                  className="login-form__error-message"
-                  component="span"
-                  name="countryPercentage"
-                />
-              )}
-            </div>
-            <div className="form-section">
-              <h5>% Por Franjas de edad</h5>
-
-              <label htmlFor="agePercentage1" className="login-form__label">
-                13-17
-              </label>
-              <Field
-                type="text"
-                id="agePercentage1"
-                className="form-section__field"
-                aria-label="agePercentage1"
-                {...getFieldProps("agePercentage1")}
-              />
-              {errors.socialMedia && touched.socialMedia && (
-                <ErrorMessage
-                  className="login-form__error-message"
-                  component="span"
-                  name="agePercentage1"
-                />
-              )}
-              <label htmlFor="agePercentage2" className="login-form__label">
-                18-24
-              </label>
-              <Field
-                type="text"
-                id="agePercentage2"
-                className="form-section__field"
-                aria-label="agePercentage2"
-                {...getFieldProps("agePercentage2")}
-              />
-              {errors.socialMedia && touched.socialMedia && (
-                <ErrorMessage
-                  className="login-form__error-message"
-                  component="span"
-                  name="agePercentage2"
-                />
-              )}
-              <label htmlFor="agePercentage3" className="login-form__label">
-                25-34
-              </label>
-              <Field
-                type="text"
-                id="agePercentage3"
-                className="form-section__field"
-                aria-label="agePercentage3"
-                {...getFieldProps("agePercentage3")}
-              />
-              {errors.socialMedia && touched.socialMedia && (
-                <ErrorMessage
-                  className="login-form__error-message"
-                  component="span"
-                  name="agePercentage3"
-                />
-              )}
-              <label htmlFor="agePercentage4" className="login-form__label">
-                34-44
-              </label>
-              <Field
-                type="text"
-                id="agePercentage4"
-                className="form-section__field"
-                aria-label="agePercentage4"
-                {...getFieldProps("agePercentage4")}
-              />
-              {errors.socialMedia && touched.socialMedia && (
-                <ErrorMessage
-                  className="login-form__error-message"
-                  component="span"
-                  name="agePercentage4"
-                />
-              )}
-              <label htmlFor="agePercentage5" className="login-form__label">
-                44-54
-              </label>
-              <Field
-                type="text"
-                id="agePercentage5"
-                className="form-section__field"
-                aria-label="agePercentage5"
-                {...getFieldProps("agePercentage5")}
-              />
-              {errors.socialMedia && touched.socialMedia && (
-                <ErrorMessage
-                  className="login-form__error-message"
-                  component="span"
-                  name="agePercentage5"
-                />
-              )}
-              <label htmlFor="agePercentage6" className="login-form__label">
-                65+
-              </label>
-              <Field
-                type="text"
-                id="agePercentage6"
-                className="form-section__field"
-                aria-label="agePercentage6"
-                {...getFieldProps("agePercentage6")}
-              />
-              {errors.socialMedia && touched.socialMedia && (
-                <ErrorMessage
-                  className="login-form__error-message"
-                  component="span"
-                  name="agePercentage6"
-                />
-              )}
-            </div>
             <h3 style={{ width: "100%", textAlign: "left" }}>Cuenta</h3>
             <div className="form-section">
               <label htmlFor="email" className="login-form__label">
@@ -688,6 +426,473 @@ const CreateInfluencerPage = () => {
                     />
                   )}
               </div>
+            </div>
+
+            <h3 style={{ width: "100%", textAlign: "left" }}>Social Media</h3>
+
+            {socials.map((social, index) => (
+              <div key={social} className="socialContainer">
+                <div className="dobleContainer">
+                  <div className="form-section">
+                    <ReusableSelect
+                      label="Red social"
+                      options={[
+                        {
+                          id: 1,
+                          name: "Instagram",
+                          value: "1",
+                        },
+                        {
+                          value: "2",
+                          id: 2,
+                          name: "TikTok",
+                        },
+                        {
+                          value: "3",
+                          id: 3,
+                          name: "Twitch",
+                        },
+                        {
+                          value: "4",
+                          id: 4,
+                          name: "Youtube",
+                        },
+                      ]}
+                      setValue={(e) => {
+                        setSocialMediaSelected(+e);
+                        setFieldValue(
+                          `socialMedia[${index}].social_media_id"`,
+                          +e,
+                        );
+                      }}
+                      value={socialMediaSelected.toString()}
+                    />
+                    {errors.socialMedia && touched.socialMedia && (
+                      <ErrorMessage
+                        className="login-form__error-message"
+                        component="span"
+                        name="socialMedia"
+                      />
+                    )}
+                  </div>
+                  <div className="form-section">
+                    {(mainSocial === social || !mainSocial) && (
+                      <label>
+                        Red Social Principal
+                        <Checkbox
+                          checked={mainSocial === social}
+                          onChange={(v) => {
+                            if (v.target.checked) {
+                              setMainSocial(social);
+                              setFieldValue(`socialMedia[${index}].main`, true);
+                              return;
+                            }
+                            setMainSocial(0);
+                            setFieldValue(`socialMedia[${index}].main`, false);
+                          }}
+                        />
+                      </label>
+                    )}
+                  </div>
+                </div>
+
+                <div className="dobleContainer">
+                  <div className="form-section">
+                    <label htmlFor="acountName" className="login-form__label">
+                      Nombre de la cuenta
+                    </label>
+                    <Field
+                      type="text"
+                      id="acountName"
+                      className="form-section__field"
+                      aria-label="acountName"
+                      {...getFieldProps(`socialMedia[${index}].account_name`)}
+                    />
+                    {errors.socialMedia && touched.socialMedia && (
+                      <ErrorMessage
+                        className="login-form__error-message"
+                        component="span"
+                        name="acountName"
+                      />
+                    )}
+                  </div>
+                  <div className="form-section">
+                    <label htmlFor="email" className="login-form__label">
+                      Followers
+                    </label>
+                    <Field
+                      type="text"
+                      id="followers"
+                      className="form-section__field"
+                      aria-label="followers"
+                      {...getFieldProps(`socialMedia[${index}].followers`)}
+                    />
+                    {errors.socialMedia && touched.socialMedia && (
+                      <ErrorMessage
+                        className="login-form__error-message"
+                        component="span"
+                        name="followers"
+                      />
+                    )}
+                  </div>
+                </div>
+
+                <div className="form-section">
+                  <h5>% Por género</h5>
+
+                  <label htmlFor="men" className="login-form__label">
+                    Hombres
+                  </label>
+                  <Field
+                    type="text"
+                    id="men"
+                    className="form-section__field"
+                    aria-label="men"
+                    {...getFieldProps(`socialMedia[${index}].gender.men`)}
+                  />
+                  {errors.socialMedia && touched.socialMedia && (
+                    <ErrorMessage
+                      className="login-form__error-message"
+                      component="span"
+                      name="men"
+                    />
+                  )}
+
+                  <label htmlFor="women" className="login-form__label">
+                    Mujeres
+                  </label>
+                  <Field
+                    type="text"
+                    id="women"
+                    className="form-section__field"
+                    aria-label="women"
+                    {...getFieldProps(`socialMedia[${index}].gender.women`)}
+                  />
+                  {errors.socialMedia && touched.socialMedia && (
+                    <ErrorMessage
+                      className="login-form__error-message"
+                      component="span"
+                      name="women"
+                    />
+                  )}
+                </div>
+                <div className="form-section">
+                  <h5>% Por ciudades</h5>
+                  {citiesStats.map((city, cityIndex) => {
+                    return (
+                      <>
+                        <div className="formInputsContainer">
+                          <ReusableSelect
+                            label="País"
+                            options={countries.map((country) => ({
+                              label: country.name,
+                              value: country.id,
+                              id: country.id,
+                              name: country.name,
+                            }))}
+                            setValue={(v) => {
+                              if (!v) {
+                                return;
+                              }
+                              setCountryForCityStats(+v);
+
+                              setFieldValue(
+                                `socialMedia[${index}].cities[${cityIndex}].countryId`,
+                                v,
+                              );
+                              getCitiesFromCountry(+v, "stats");
+                            }}
+                            value={countryForCityStats?.toString()}
+                          />
+                        </div>
+                        <div className="formInputsContainer">
+                          <ReusableSelect
+                            label="Ciudad"
+                            options={citiesPerPercentage.map((city) => ({
+                              id: city.id,
+                              label: city.name,
+                              value: city.id,
+                              name: city.name,
+                            }))}
+                            disabled={!countryForCityStats}
+                            setValue={(v) => {
+                              setFieldValue(
+                                `socialMedia[${index}].cities[${cityIndex}].cityId`,
+                                v,
+                              );
+                            }}
+                            value={`socialMedia[${index}].cities[${cityIndex}].cityId`}
+                          />
+                          <Field
+                            type="text"
+                            id="cityPercentage"
+                            className="form-section__field"
+                            aria-label="cityPercentage"
+                            {...getFieldProps(
+                              `socialMedia[${index}].cities[${cityIndex}].cityPercentage`,
+                            )}
+                          />
+                          {errors.socialMedia && touched.socialMedia && (
+                            <ErrorMessage
+                              className="login-form__error-message"
+                              component="span"
+                              name="cityPercentage"
+                            />
+                          )}
+                        </div>
+                      </>
+                    );
+                  })}
+
+                  <ActionButton
+                    color={theme.colors.darkBlue}
+                    text="Añadir ciudad"
+                    icon={<FaPlus />}
+                    onClick={() => {
+                      setCitiesStates([
+                        ...citiesStats,
+                        citiesStats[citiesStats.length - 1] + 1,
+                      ]);
+                    }}
+                  />
+                </div>
+
+                <div className="form-section">
+                  <h5>% Por países</h5>
+                  {countriesStats.map((countryStat, countryIndex) => {
+                    return (
+                      <div className="formInputsContainer">
+                        <ReusableSelect
+                          label="País"
+                          options={countries.map((country) => ({
+                            label: country.name,
+                            value: country.id,
+                            id: country.id,
+                            name: country.name,
+                          }))}
+                          setValue={(v) => {
+                            setFieldValue(
+                              `socialMedia[${index}].countries[${countryIndex}].countryId`,
+                              v,
+                            );
+                          }}
+                          value={`socialMedia[${index}].countries[${countryIndex}].countryId`}
+                        />
+                        <Field
+                          type="text"
+                          id="countryPercentage"
+                          className="form-section__field"
+                          aria-label="countryPercentage"
+                          {...getFieldProps(
+                            `socialMedia[${index}].countries[${countryIndex}].countryPercentage`,
+                          )}
+                        />
+                        {errors.socialMedia && touched.socialMedia && (
+                          <ErrorMessage
+                            className="login-form__error-message"
+                            component="span"
+                            name="countryPercentage"
+                          />
+                        )}
+                      </div>
+                    );
+                  })}
+                  <ActionButton
+                    color={theme.colors.darkBlue}
+                    text="Añadir país"
+                    icon={<FaPlus />}
+                    onClick={() => {
+                      setCountriesStates([
+                        ...countriesStats,
+                        countriesStats[countriesStats.length - 1] + 1,
+                      ]);
+                    }}
+                  />
+                </div>
+                <div className="form-section">
+                  <h5>% Por Franjas de edad</h5>
+
+                  <div className="formInputsContainer">
+                    <div>
+                      <label
+                        htmlFor="agePercentage1"
+                        className="login-form__label"
+                      >
+                        13-17
+                      </label>
+                      <Field
+                        type="text"
+                        id="agePercentage1"
+                        className="form-section__field"
+                        aria-label="agePercentage1"
+                        {...getFieldProps(
+                          `socialMedia[${index}].agePercentage[0]`,
+                        )}
+                      />
+                      {errors.socialMedia && touched.socialMedia && (
+                        <ErrorMessage
+                          className="login-form__error-message"
+                          component="span"
+                          name="agePercentage1"
+                        />
+                      )}
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="agePercentage2"
+                        className="login-form__label"
+                      >
+                        18-24
+                      </label>
+                      <Field
+                        type="text"
+                        id="agePercentage2"
+                        className="form-section__field"
+                        aria-label="agePercentage2"
+                        {...getFieldProps(
+                          `socialMedia[${index}].agePercentage[1]`,
+                        )}
+                      />
+                      {errors.socialMedia && touched.socialMedia && (
+                        <ErrorMessage
+                          className="login-form__error-message"
+                          component="span"
+                          name="agePercentage2"
+                        />
+                      )}
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="agePercentage3"
+                        className="login-form__label"
+                      >
+                        25-34
+                      </label>
+                      <Field
+                        type="text"
+                        id="agePercentage3"
+                        className="form-section__field"
+                        aria-label="agePercentage3"
+                        {...getFieldProps(
+                          `socialMedia[${index}].agePercentage[2]`,
+                        )}
+                      />
+                      {errors.socialMedia && touched.socialMedia && (
+                        <ErrorMessage
+                          className="login-form__error-message"
+                          component="span"
+                          name="agePercentage3"
+                        />
+                      )}
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="agePercentage4"
+                        className="login-form__label"
+                      >
+                        35-44
+                      </label>
+                      <Field
+                        type="text"
+                        id="agePercentage4"
+                        className="form-section__field"
+                        aria-label="agePercentage4"
+                        {...getFieldProps(
+                          `socialMedia[${index}].agePercentage[3]`,
+                        )}
+                      />
+                      {errors.socialMedia && touched.socialMedia && (
+                        <ErrorMessage
+                          className="login-form__error-message"
+                          component="span"
+                          name="agePercentage4"
+                        />
+                      )}
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="agePercentage5"
+                        className="login-form__label"
+                      >
+                        45-54
+                      </label>
+                      <Field
+                        type="text"
+                        id="agePercentage5"
+                        className="form-section__field"
+                        aria-label="agePercentage5"
+                        {...getFieldProps(
+                          `socialMedia[${index}].agePercentage[4]`,
+                        )}
+                      />
+                      {errors.socialMedia && touched.socialMedia && (
+                        <ErrorMessage
+                          className="login-form__error-message"
+                          component="span"
+                          name="agePercentage5"
+                        />
+                      )}
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="agePercentage6"
+                        className="login-form__label"
+                      >
+                        65+
+                      </label>
+                      <Field
+                        type="text"
+                        id="agePercentage6"
+                        className="form-section__field"
+                        aria-label="agePercentage6"
+                        {...getFieldProps(
+                          `socialMedia[${index}].agePercentage[5]`,
+                        )}
+                      />
+                      {errors.socialMedia && touched.socialMedia && (
+                        <ErrorMessage
+                          className="login-form__error-message"
+                          component="span"
+                          name="agePercentage6"
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "20px",
+              }}
+            >
+              <ActionButton
+                color={theme.colors.darkBlue}
+                icon={<FaPlus />}
+                onClick={() => {
+                  if (socials.length === 0) {
+                    setSocials([1]);
+                    return;
+                  }
+                  setSocials([...socials, socials[socials.length - 1] + 1]);
+                }}
+                text="Añadir red social"
+              />
+              <ActionButton
+                color={theme.colors.darkRed}
+                icon={<FaDeleteLeft />}
+                onClick={() => {
+                  if (socials.length === 0) {
+                    return;
+                  }
+                  const newSocials = socials.slice(0, -1);
+                  setSocials(newSocials!);
+                }}
+                text="Eliminar red social"
+              />
             </div>
             <button
               type="submit"

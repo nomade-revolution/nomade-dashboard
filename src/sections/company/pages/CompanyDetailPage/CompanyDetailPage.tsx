@@ -116,6 +116,12 @@ const InfluencerDetailPage = (): React.ReactElement => {
             headerSections={companyPlanTableSections}
             pageName={""}
           />
+          {/* <h2 style={{ marginBottom: "5px", alignSelf: "flex-start" }}>Histórico Plan</h2> */}
+          {/* <DashboardTable
+            bodySections={[company.plan]}
+            headerSections={companyPlanTableSections}
+            pageName={""}
+          /> */}
           {/* <CompanyCollabs company_id={+id!} /> */}
           <DialogDeleteConfirm
             handleClose={() => setIsDialogOpen(false)}

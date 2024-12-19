@@ -6,6 +6,7 @@ import {
   getInfluencers,
   editInfluencerStats,
   registerNewInfluencer,
+  getCategoriesInfluencer,
 } from "@influencer/application/influencer";
 import { InfluencerRepository } from "@influencer/domain/InfluencerRepository";
 import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
@@ -37,6 +38,7 @@ interface ContextState {
   ) => void;
   registerInfluencer: (data: Partial<RegisterInfluencerInterface>) => void;
   influencerCategories: InfluencerCategory[];
+  getInfluencerCategories: () => void;
 }
 
 export const InfluencerContext = createContext<ContextState>(
@@ -49,7 +51,9 @@ export const InfluencerContextProvider = ({
 }: React.PropsWithChildren<{
   repository: InfluencerRepository<{ success: boolean }>;
 }>) => {
-  const [influencerCategories] = useState<InfluencerCategory[]>([]);
+  const [influencerCategories, setInfluencerCategories] = useState<
+    InfluencerCategory[]
+  >([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -140,13 +144,25 @@ export const InfluencerContextProvider = ({
     },
     [repository],
   );
+  const getInfluencerCategories = useCallback(async () => {
+    const response = await getCategoriesInfluencer(repository);
+
+    if (isHttpSuccessResponse(response)) {
+      setInfluencerCategories(response.data as unknown as InfluencerCategory[]);
+      setIsSuccess(true);
+    } else {
+      setError(response.error as never);
+    }
+
+    return response;
+  }, [repository]);
 
   setTimeout(() => setIsSuccess(false), 3000);
   return (
     <InfluencerContext.Provider
       value={{
         influencerCategories,
-
+        getInfluencerCategories,
         registerInfluencer,
         loading,
         isSuccess,

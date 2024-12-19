@@ -32,6 +32,17 @@ const CreateInfluencerFormStyled = styled.form`
       max-width: 400px;
     }
   }
+  .socialContainer {
+    border: 1px solid ${(props) => props.theme.colors.darkBlue};
+    padding: 20px;
+    border-radius: 5px;
+  }
+
+  .formInputsContainer {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+  }
 
   .login-form {
     &__submit {

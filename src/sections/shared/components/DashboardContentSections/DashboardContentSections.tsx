@@ -400,9 +400,11 @@ const DashboardContentSections = ({
 
     case "categories":
       return (
-        <span className="dashboard__category">
-          {(section as Influencer).categories[0]?.name}
-        </span>
+        <>
+          {(section as Influencer).categories.map((category) => {
+            return <span className="dashboard__category">{category.name}</span>;
+          })}
+        </>
       );
 
     case "type":

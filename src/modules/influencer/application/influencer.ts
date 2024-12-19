@@ -46,3 +46,8 @@ export const registerNewInfluencer = (
 ) => {
   return influencerRepo.registerInfluencer(data);
 };
+export const getCategoriesInfluencer = (
+  influencerRepo: InfluencerRepository<Influencer>,
+) => {
+  return influencerRepo.getCategories();
+};
