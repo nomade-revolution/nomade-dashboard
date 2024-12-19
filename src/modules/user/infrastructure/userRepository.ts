@@ -4,6 +4,7 @@ import { User, UserApiResponse } from "../domain/User";
 import { GET_USERS } from "../application/routes";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
 import { AuthRegisterNomadeInterface } from "@auth";
+import { INFLUENCER_EXPORT } from "@company/application/routes";
 
 export class UsersRepository {
   private readonly http: Http = Http.getInstance();
@@ -65,4 +66,20 @@ export class UsersRepository {
       return Promise.reject(error);
     }
   }
+  public exportInfluencersData = async (token: string): Promise<Blob> => {
+    try {
+      const response = await fetch(`${INFLUENCER_EXPORT}/export`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.blob();
+
+      return data;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
 }

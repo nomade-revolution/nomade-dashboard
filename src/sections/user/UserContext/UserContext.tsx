@@ -15,10 +15,12 @@ import {
   deleteUser,
   getUsersBadge,
   getUsersFiltered,
+  exportInfluencersData,
 } from "modules/user/application/user";
 import { Influencer } from "@influencer";
 import { AuthRegisterNomadeInterface } from "@auth";
 import { HttpResponseInterface } from "../../../modules/core/domain/HttpResponseInterface";
+import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 
 export interface OrderItem {
   sortTag: string;
@@ -47,6 +49,7 @@ interface ContextState {
     data: AuthRegisterNomadeInterface,
   ) => Promise<HttpResponseInterface<User>>;
   users_infleuncerCompany: User[];
+  exportInfluencers: () => void;
 }
 
 export const UserContext = createContext<ContextState>({} as ContextState);
@@ -57,6 +60,7 @@ export const UserContextProvider = ({
 }: React.PropsWithChildren<{
   repository: UserRepository<UserApiResponse>;
 }>) => {
+  const { token } = useAuthContext();
   const [users_nomade, setUsersNomade] = useState<User[]>([]);
   const [users_influencer, setUsersInfluencer] = useState<Influencer[]>([]);
   const [users_company, setUsersCompany] = useState<Company[]>([]);
@@ -135,9 +139,28 @@ export const UserContextProvider = ({
     setLoading(false);
     return response;
   };
+
+  const exportInfluencers = useCallback(async () => {
+    const response = await exportInfluencersData(repository, token);
+
+    if (response && response instanceof Blob) {
+      const href = await URL.createObjectURL(response);
+      const link = document.createElement("a");
+      link.href = href;
+      link.download = `influencers`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      URL.revokeObjectURL(href);
+    }
+    return response;
+  }, [repository, token]);
+
   return (
     <UserContext.Provider
       value={{
+        exportInfluencers,
         registerUser,
         users_nomade,
         users_company,

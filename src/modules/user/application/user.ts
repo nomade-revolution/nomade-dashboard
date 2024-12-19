@@ -1,5 +1,4 @@
 import { HttpResponseInterface } from "@core/domain/HttpResponseInterface";
-
 import { FilterParams } from "sections/shared/interfaces/interfaces";
 import { UserRepository } from "../domain/UserRepository";
 import { UserApiResponse } from "../domain/User";
@@ -22,4 +21,11 @@ export const deleteUser = (
 
 export const getUsersBadge = (usersRepo: UserRepository<number>) => {
   return usersRepo.getUsersBadge();
+};
+export const exportInfluencersData = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  usersRepo: UserRepository<any>,
+  token: string,
+) => {
+  return usersRepo.exportInfluencersData(token);
 };

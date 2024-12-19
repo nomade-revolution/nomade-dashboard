@@ -13,4 +13,5 @@ export interface UserRepository<I> {
   registerUser: (
     data: AuthRegisterNomadeInterface,
   ) => Promise<HttpResponseInterface<I>>;
+  exportInfluencersData: (token: string) => Promise<HttpResponseInterface<I>>;
 }

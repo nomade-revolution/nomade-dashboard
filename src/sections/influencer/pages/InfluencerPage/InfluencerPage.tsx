@@ -8,6 +8,7 @@ import { influencersTableHeaderSections } from "sections/influencer/utils/influe
 import ActionButton from "sections/shared/components/ActionButton/ActionButton";
 import DashboardCardListMobile from "sections/shared/components/DashboardCardListMobile/DashboardCardListMobile";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
+import ExportFilesButton from "sections/shared/components/ExportButton/ExportButton";
 import Loader from "sections/shared/components/Loader/Loader";
 import PaginationComponent from "sections/shared/components/Pagination/PaginationComponent";
 import SearchBar from "sections/shared/components/SearchBar/SearchBar";
@@ -21,11 +22,20 @@ import { useUserContext } from "sections/user/UserContext/useUserContext";
 const InfluencersPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
   const navigate = useNavigate();
-  const { getUsers, users_influencer, pagination, loading, order } =
-    useUserContext();
+  const {
+    getUsers,
+    users_influencer,
+    pagination,
+    loading,
+    order,
+    exportInfluencers,
+  } = useUserContext();
   const { page } = useParams();
   const handleSearch = (text: string) => {
     getUsersData(text);
+  };
+  const handleExportInfluencers = () => {
+    exportInfluencers();
   };
   const getUsersData = useCallback(
     (text?: string) => {
@@ -58,12 +68,18 @@ const InfluencersPage = (): React.ReactElement => {
       ) : (
         <ReusablePageStyled className="dashboard">
           <div className="dashboard__search">
-            <ActionButton
-              color={theme.colors.darkBlue}
-              icon={<IoAddCircle className="dashboard__create--icon" />}
-              onClick={() => handleCreateUser()}
-              text="Crear influencer"
-            />
+            <div style={{ display: "flex", gap: "10px" }}>
+              <ActionButton
+                color={theme.colors.darkBlue}
+                icon={<IoAddCircle className="dashboard__create--icon" />}
+                onClick={() => handleCreateUser()}
+                text="Crear influencer"
+              />
+              <ExportFilesButton
+                action={() => handleExportInfluencers()}
+                text="Exportar influencers"
+              />
+            </div>
             <SearchBar
               pageName={SectionTypes.influencers}
               pageTypes={SectionTypes.influencers}
