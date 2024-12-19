@@ -13,5 +13,6 @@ export interface UserRepository<I> {
   registerUser: (
     data: AuthRegisterNomadeInterface,
   ) => Promise<HttpResponseInterface<I>>;
-  exportInfluencersData: (token: string) => Promise<HttpResponseInterface<I>>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  exportInfluencersData: (token: string) => Promise<any>;
 }

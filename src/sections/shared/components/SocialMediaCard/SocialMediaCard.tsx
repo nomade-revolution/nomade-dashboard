@@ -100,15 +100,15 @@ const SocialMediaCard = ({
           {socialMedia.url}
         </Link>
       </section>
-      {socialMedia.video && (
-        <section>
-          <h4 className="social-card__section-title">Vídeo</h4>
-          <video width="640" height="360" controls>
-            <source src={socialMedia.video} type="video/mp4" />
-            Tu navegador no soporta el elemento de video.
-          </video>
-        </section>
-      )}
+
+      <section>
+        <h4 className="social-card__section-title">Vídeo</h4>
+        <video width="640" height="360" controls>
+          <source src={socialMedia.video ?? ""} type="video/mp4" />
+          Tu navegador no soporta el elemento de video.
+        </video>
+      </section>
+
       <div className="stats-container">
         <section className="statsSection">
           <h4 className="social-card__section-title">
