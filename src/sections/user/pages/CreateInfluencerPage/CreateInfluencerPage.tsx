@@ -143,8 +143,8 @@ const CreateInfluencerPage = () => {
 
       setIsLoading(false);
 
-      if (isSuccess) {
-        navigate("/users");
+      if (resp.success) {
+        navigate("/influencers/page/1");
         return;
       }
     } catch (e) {
