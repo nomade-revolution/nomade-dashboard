@@ -45,8 +45,18 @@ const CreateInfluencerPage = () => {
   const [loading, setIsLoading] = useState<boolean>(false);
   const { getAllCities } = useCitiesContext();
   const { countries, getAllCountries } = useCountryContext();
-  const [countriesStats, setCountriesStates] = useState<number[]>([0]);
-  const [citiesStats, setCitiesStates] = useState<number[]>([0]);
+  const [countriesStats, setCountriesStates] = useState<string[]>([
+    "0",
+    "0",
+    "0",
+    "0",
+  ]);
+  const [citiesStats, setCitiesStates] = useState<string[]>([
+    "0",
+    "0",
+    "0",
+    "0",
+  ]);
   const [mainSocial, setMainSocial] = useState<number>(0);
   const [citiesBorn, setCitiesBorn] = useState<City[]>([]);
   const [citiesLive, setCitiesLive] = useState<City[]>([]);
@@ -84,7 +94,13 @@ const CreateInfluencerPage = () => {
     const formData = new FormData();
     values.socialMedia[0].main = true;
     Object.keys(values).forEach((key) => {
-      if (key !== "categories" && key !== "avatar" && key !== "socialMedia") {
+      if (
+        key !== "categories" &&
+        key !== "avatar" &&
+        key !== "socialMedia" &&
+        key !== "gender" &&
+        key !== "ageRanges"
+      ) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         formData.append(key, values[key]);
@@ -94,20 +110,42 @@ const CreateInfluencerPage = () => {
     if (file[0]) {
       formData.append("avatar", file[0]);
     }
-    formData.append("socialMedia[]", JSON.stringify(values.socialMedia));
-    formData.append("categories[]", JSON.stringify(3));
+    const newSocials = values.socialMedia.map((social) => {
+      return {
+        ...social,
+        social_media_id: social.social_media_id,
+        age_ranges: social.agePercentage.map((age: number, index: number) => {
+          return {
+            age_range_id: index + 1,
+            followers_percentage: age,
+          };
+        }),
 
-    formData.append("categories[]", JSON.stringify(1));
+        genders: [
+          { gender_id: 1, followers_percentage: social.gender.men },
+          { gender_id: 2, followers_percentage: social.gender.women },
+        ],
+      };
+    });
 
-    const resp: any = await registerInfluencer(formData as any);
-    setIsSuccess(Boolean(resp.success));
-    setIsLoading(false);
+    newSocials.forEach((social) => {
+      formData.append("socialMedia[]", JSON.stringify(social));
+    });
 
-    if (isSuccess) {
-      navigate("/users");
-      return;
+    formData.append("categories[]", JSON.stringify(category));
+
+    try {
+      const resp: any = await registerInfluencer(formData as any);
+      setIsSuccess(Boolean(resp.success));
+      setIsLoading(false);
+      if (isSuccess) {
+        navigate("/users");
+        return;
+      }
+    } catch (e) {
+      setIsSuccess(false);
+      setIsLoading(false);
     }
-
     setTimeout(() => {
       setIsFormSubmitted(false);
     }, 2000);
@@ -461,7 +499,7 @@ const CreateInfluencerPage = () => {
                       setValue={(e) => {
                         setSocialMediaSelected(+e);
                         setFieldValue(
-                          `socialMedia[${index}].social_media_id"`,
+                          `socialMedia[${index}].social_media_id`,
                           +e,
                         );
                       }}
@@ -580,31 +618,57 @@ const CreateInfluencerPage = () => {
                   <h5>% Por ciudades</h5>
                   {citiesStats.map((_city, cityIndex) => {
                     return (
-                      <>
-                        <div className="formInputsContainer">
-                          <ReusableSelect
-                            label="País"
-                            options={countries.map((country) => ({
-                              label: country.name,
-                              value: country.id,
-                              id: country.id,
-                              name: country.name,
-                            }))}
-                            setValue={(v) => {
-                              if (!v) {
-                                return;
-                              }
-                              setCountryForCityStats(+v);
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "10px",
+                          width: "100%",
+                          marginBottom: "20px",
+                        }}
+                      >
+                        {cityIndex === 0 && (
+                          <div
+                            className="formInputsContainer"
+                            style={{ marginBottom: "30px" }}
+                          >
+                            <ReusableSelect
+                              label="País"
+                              options={countries.map((country) => ({
+                                label: country.name,
+                                value: country.id,
+                                id: country.id,
+                                name: country.name,
+                              }))}
+                              setValue={(v) => {
+                                if (!v) {
+                                  return;
+                                }
+                                setCountryForCityStats(+v);
 
-                              setFieldValue(
-                                `socialMedia[${index}].cities[${cityIndex}].countryId`,
-                                v,
-                              );
-                              getCitiesFromCountry(+v, "stats");
-                            }}
-                            value={countryForCityStats?.toString()}
-                          />
-                        </div>
+                                setFieldValue(
+                                  `socialMedia[${index}].cities[${0}].country_id`,
+                                  v,
+                                );
+
+                                setFieldValue(
+                                  `socialMedia[${index}].cities[${1}].country_id`,
+                                  v,
+                                );
+                                setFieldValue(
+                                  `socialMedia[${index}].cities[${2}].country_id`,
+                                  v,
+                                );
+                                setFieldValue(
+                                  `socialMedia[${index}].cities[${3}].country_id`,
+                                  v,
+                                );
+                                getCitiesFromCountry(+v, "stats");
+                              }}
+                              value={countryForCityStats?.toString()}
+                            />
+                          </div>
+                        )}
                         <div className="formInputsContainer">
                           <ReusableSelect
                             label="Ciudad"
@@ -617,51 +681,50 @@ const CreateInfluencerPage = () => {
                             disabled={!countryForCityStats}
                             setValue={(v) => {
                               setFieldValue(
-                                `socialMedia[${index}].cities[${cityIndex}].cityId`,
+                                `socialMedia[${index}].cities[${cityIndex}].city_id`,
                                 v,
                               );
+                              setCitiesStates(
+                                citiesStats.map((cityId, indexMap) =>
+                                  indexMap === cityIndex ? v : cityId,
+                                ),
+                              );
                             }}
-                            value={`socialMedia[${index}].cities[${cityIndex}].cityId`}
+                            value={citiesStats[cityIndex].toString()}
                           />
-                          <Field
-                            type="text"
-                            id="cityPercentage"
-                            className="form-section__field"
-                            aria-label="cityPercentage"
-                            {...getFieldProps(
-                              `socialMedia[${index}].cities[${cityIndex}].cityPercentage`,
-                            )}
-                          />
-                          {errors.socialMedia && touched.socialMedia && (
-                            <ErrorMessage
-                              className="login-form__error-message"
-                              component="span"
-                              name="cityPercentage"
-                            />
-                          )}
                         </div>
-                      </>
+                        <Field
+                          type="text"
+                          id="followers_percentage"
+                          className="form-section__field"
+                          aria-label="followers_percentage"
+                          {...getFieldProps(
+                            `socialMedia[${index}].cities[${cityIndex}].followers_percentage`,
+                          )}
+                        />
+                        {errors.socialMedia && touched.socialMedia && (
+                          <ErrorMessage
+                            className="login-form__error-message"
+                            component="span"
+                            name=""
+                          />
+                        )}
+                      </div>
                     );
                   })}
-
-                  <ActionButton
-                    color={theme.colors.darkBlue}
-                    text="Añadir ciudad"
-                    icon={<FaPlus />}
-                    onClick={() => {
-                      setCitiesStates([
-                        ...citiesStats,
-                        citiesStats[citiesStats.length - 1] + 1,
-                      ]);
-                    }}
-                  />
                 </div>
 
                 <div className="form-section">
                   <h5>% Por países</h5>
                   {countriesStats.map((_countryStat, countryIndex) => {
                     return (
-                      <div className="formInputsContainer">
+                      <div
+                        className="formInputsContainer"
+                        style={{
+                          flexDirection: "column",
+                          marginBottom: "20px",
+                        }}
+                      >
                         <ReusableSelect
                           label="País"
                           options={countries.map((country) => ({
@@ -672,42 +735,36 @@ const CreateInfluencerPage = () => {
                           }))}
                           setValue={(v) => {
                             setFieldValue(
-                              `socialMedia[${index}].countries[${countryIndex}].countryId`,
+                              `socialMedia[${index}].countries[${countryIndex}].country_id`,
                               v,
                             );
+                            setCountriesStates(
+                              countriesStats.map((countryId, indexMap) =>
+                                indexMap === countryIndex ? v : countryId,
+                              ),
+                            );
                           }}
-                          value={`socialMedia[${index}].countries[${countryIndex}].countryId`}
+                          value={countriesStats[countryIndex].toString()}
                         />
                         <Field
                           type="text"
-                          id="countryPercentage"
+                          id="followers_percentage"
                           className="form-section__field"
-                          aria-label="countryPercentage"
+                          aria-label="followers_percentage"
                           {...getFieldProps(
-                            `socialMedia[${index}].countries[${countryIndex}].countryPercentage`,
+                            `socialMedia[${index}].countries[${countryIndex}].followers_percentage`,
                           )}
                         />
                         {errors.socialMedia && touched.socialMedia && (
                           <ErrorMessage
                             className="login-form__error-message"
                             component="span"
-                            name="countryPercentage"
+                            name=""
                           />
                         )}
                       </div>
                     );
                   })}
-                  <ActionButton
-                    color={theme.colors.darkBlue}
-                    text="Añadir país"
-                    icon={<FaPlus />}
-                    onClick={() => {
-                      setCountriesStates([
-                        ...countriesStats,
-                        countriesStats[countriesStats.length - 1] + 1,
-                      ]);
-                    }}
-                  />
                 </div>
                 <div className="form-section">
                   <h5>% Por Franjas de edad</h5>
