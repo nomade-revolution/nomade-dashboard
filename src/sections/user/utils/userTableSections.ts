@@ -35,7 +35,7 @@ export const usersAppTableHeaderSections: HeaderSection[] = [
   {
     id: 1,
     name: "Nombre",
-    property: "name",
+    property: "name_compa",
     sortTag: "name",
     pageName: "usersApp",
   },
@@ -45,13 +45,13 @@ export const usersAppTableHeaderSections: HeaderSection[] = [
     name: "Email",
     property: "email",
     sortTag: "email",
-    pageName: "user",
+    pageName: "usersApp",
   },
   {
     id: 3,
     name: "Cliente",
     property: "company",
     sortTag: "",
-    pageName: "user",
+    pageName: "usersApp",
   },
 ];

@@ -100,6 +100,19 @@ const DashboardContentSections = ({
         </>
       );
 
+    case "name_compa":
+      return (
+        <Tooltip title="Ver perfil">
+          <Link
+            to={`/cliente/${(section as Company).id}`}
+            className="dashboard__link-icon"
+          >
+            <span className="dashboard__name">
+              {(section as Influencer).name}
+            </span>
+          </Link>
+        </Tooltip>
+      );
     case "email":
       return (
         <Tooltip title="Enviar email">
