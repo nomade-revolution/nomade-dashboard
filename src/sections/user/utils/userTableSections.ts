@@ -54,11 +54,4 @@ export const usersAppTableHeaderSections: HeaderSection[] = [
     sortTag: "",
     pageName: "user",
   },
-  {
-    id: 4,
-    name: "Acciones",
-    property: "actions",
-    sortTag: "",
-    pageName: "user",
-  },
 ];
