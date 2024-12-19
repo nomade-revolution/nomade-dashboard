@@ -22,6 +22,10 @@ import useActions from "sections/shared/hooks/useActions/useActions";
 import DialogDeleteConfirm from "../DialogDeleteConfirm/DialogDeleteConfirm";
 import { SectionTypes } from "sections/shared/interfaces/interfaces";
 import { FaCheck } from "react-icons/fa6";
+import ActionButton from "../ActionButton/ActionButton";
+import { FaCheckCircle } from "react-icons/fa";
+import theme from "assets/styles/theme";
+import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
 interface Props {
   steps: State[];
   setCollabStateActionType: (value: CollabActionTypes) => void;
@@ -97,11 +101,14 @@ export default function ReusableStepper({
 
   const { user } = useAuthContext();
   const { handleCollabStateUpdate } = useActions();
-
+  const { updateCollabState } = useCollabsContext();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     event.stopPropagation();
     setAnchorEl(event.currentTarget);
+  };
+  const handleMarkAsPublicated = async () => {
+    await updateCollabState(collab.id!, collabStates.COLAB_PUBLISHED_STATE);
   };
   return (
     <ReusableStepperStyled className="stepper">
@@ -125,7 +132,10 @@ export default function ReusableStepper({
         collab.state?.id !== collabStates.COLAB_CANCELLED_STATE &&
         collab.state?.id !== collabStates.COLAB_REJECTED_STATE &&
         collab.state?.id !== collabStates.COLAB_SENT_STATE && (
-          <div className="stepper__btn-container" style={{ marginTop: "20px" }}>
+          <div
+            className="stepper__btn-container"
+            style={{ marginTop: "20px", display: "flex", gap: "20px" }}
+          >
             <button
               className="stepper__state-btn"
               onClick={handleClick}
@@ -133,6 +143,12 @@ export default function ReusableStepper({
             >
               Acciones <MdOutlineHistory size={20} />
             </button>
+            <ActionButton
+              icon={<FaCheckCircle />}
+              onClick={handleMarkAsPublicated}
+              text="Marcar como publicado"
+              color={theme.colors.softGreen}
+            />
           </div>
         )}
       <CustomDropdown
