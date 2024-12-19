@@ -132,11 +132,14 @@ const CreateInfluencerPage = () => {
 
     try {
       const resp: any = await registerInfluencer(formData as any);
-      const a = await modifyInfluencerStats(resp.data.id, {
+      if (newSocials.length === 0) {
+        return;
+      }
+      await modifyInfluencerStats(resp.data.id, {
         socialMedia: newSocials,
       });
 
-      setIsSuccess(Boolean((a as any).success));
+      setIsSuccess(Boolean(resp.success));
 
       setIsLoading(false);
 
@@ -149,8 +152,9 @@ const CreateInfluencerPage = () => {
       setIsLoading(false);
     }
     setTimeout(() => {
+      setIsLoading(false);
       setIsFormSubmitted(false);
-    }, 2000);
+    }, 1500);
   };
 
   useEffect(() => {

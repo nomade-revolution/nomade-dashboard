@@ -29,3 +29,8 @@ export const exportInfluencersData = (
 ) => {
   return usersRepo.exportInfluencersData(token);
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const getConditions = (usersRepo: any) => {
+  return usersRepo.getConditions();
+};

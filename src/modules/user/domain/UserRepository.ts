@@ -15,4 +15,6 @@ export interface UserRepository<I> {
   ) => Promise<HttpResponseInterface<I>>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   exportInfluencersData: (token: string) => Promise<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getConditions: () => Promise<any>;
 }

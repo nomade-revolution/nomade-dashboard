@@ -1,7 +1,7 @@
 import { Http } from "@core/application";
 import { HttpResponseInterface } from "@core/domain";
 import { User, UserApiResponse } from "../domain/User";
-import { GET_USERS } from "../application/routes";
+import { GET_CONDITIONS, GET_USERS } from "../application/routes";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
 import { AuthRegisterNomadeInterface } from "@auth";
 import { INFLUENCER_EXPORT } from "@company/application/routes";
@@ -82,4 +82,14 @@ export class UsersRepository {
       return Promise.reject(error);
     }
   };
+  public async getConditions(): Promise<HttpResponseInterface<string>> {
+    try {
+      const resp = await this.http.get(
+        GET_CONDITIONS + "?filters%5Btype%5D=company&filters%5Blast%5D=true",
+      );
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 }

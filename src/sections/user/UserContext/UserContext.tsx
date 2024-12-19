@@ -16,6 +16,7 @@ import {
   getUsersBadge,
   getUsersFiltered,
   exportInfluencersData,
+  getConditions as getConditionsData,
 } from "modules/user/application/user";
 import { Influencer } from "@influencer";
 import { AuthRegisterNomadeInterface } from "@auth";
@@ -50,6 +51,8 @@ interface ContextState {
   ) => Promise<HttpResponseInterface<User>>;
   users_infleuncerCompany: User[];
   exportInfluencers: () => void;
+  conditions: string;
+  getConditions: () => void;
 }
 
 export const UserContext = createContext<ContextState>({} as ContextState);
@@ -67,6 +70,7 @@ export const UserContextProvider = ({
   const [users_infleuncerCompany, setUsersInfleuncerCompany] = useState<User[]>(
     [],
   );
+  const [conditions, setConditions] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
@@ -157,6 +161,19 @@ export const UserContextProvider = ({
     return response;
   }, [repository, token]);
 
+  const getConditions = useCallback(async () => {
+    setLoading(true);
+    const response = await getConditionsData(repository);
+
+    if (isHttpSuccessResponse(response)) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      setConditions(((response as any)?.data[0]?.content as string) ?? "");
+    }
+
+    setLoading(false);
+    return response;
+  }, [repository]);
+
   return (
     <UserContext.Provider
       value={{
@@ -166,6 +183,7 @@ export const UserContextProvider = ({
         users_company,
         users_influencer,
         loading,
+        getConditions,
         error,
         pagination,
         order,
@@ -176,6 +194,7 @@ export const UserContextProvider = ({
         setOrder,
         getUsersStatusBadge,
         users_infleuncerCompany,
+        conditions,
       }}
     >
       {children}

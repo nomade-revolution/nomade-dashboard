@@ -18,6 +18,7 @@ const ActionButton = ({
       className="delete-button"
       onClick={onClick}
       $color={color}
+      type="button"
     >
       {icon}
       {text}
