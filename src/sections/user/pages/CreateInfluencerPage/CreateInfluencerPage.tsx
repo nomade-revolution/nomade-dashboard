@@ -40,7 +40,7 @@ const initialState: RegisterInfluencerInterface = {
 const CreateInfluencerPage = () => {
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
-  const { registerInfluencer } = useInfluencerContext();
+  const { registerInfluencer, modifyInfluencerStats } = useInfluencerContext();
   const navigate = useNavigate();
   const [loading, setIsLoading] = useState<boolean>(false);
   const { getAllCities } = useCitiesContext();
@@ -92,7 +92,6 @@ const CreateInfluencerPage = () => {
     setIsLoading(true);
     setIsFormSubmitted(true);
     const formData = new FormData();
-    values.socialMedia[0].main = true;
     Object.keys(values).forEach((key) => {
       if (
         key !== "categories" &&
@@ -114,6 +113,7 @@ const CreateInfluencerPage = () => {
       return {
         ...social,
         social_media_id: social.social_media_id,
+        main: mainSocial === social.social_media_id,
         age_ranges: social.agePercentage.map((age: number, index: number) => {
           return {
             age_range_id: index + 1,
@@ -128,16 +128,18 @@ const CreateInfluencerPage = () => {
       };
     });
 
-    newSocials.forEach((social) => {
-      formData.append("socialMedia[]", JSON.stringify(social));
-    });
-
     formData.append("categories[]", JSON.stringify(category));
 
     try {
       const resp: any = await registerInfluencer(formData as any);
-      setIsSuccess(Boolean(resp.success));
+      const a = await modifyInfluencerStats(resp.data.id, {
+        socialMedia: newSocials,
+      });
+
+      setIsSuccess(Boolean((a as any).success));
+
       setIsLoading(false);
+
       if (isSuccess) {
         navigate("/users");
         return;
