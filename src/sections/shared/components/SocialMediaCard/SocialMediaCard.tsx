@@ -75,7 +75,8 @@ const SocialMediaCard = ({
           {socialMedia.account_name}
         </span>
         <span className="social-card__text-icon">
-          <FaUserFriends size={20} /> {socialMedia.followers} followers
+          <FaUserFriends size={20} />{" "}
+          {(socialMedia.followers / 1000).toFixed(1)}k followers
         </span>
         {(socialMedia as any)?.stories_view && (
           <span className="social-card__text-icon">
