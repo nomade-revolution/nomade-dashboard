@@ -31,7 +31,7 @@ const InfluencerSocialMedia = ({
               {getSocialMediaIcons(media.name)}
               <span>{media.account_name}</span>
               <span className="social-media__followers">
-                {(media.followers / 1000).toFixed(1)} followers
+                {(media.followers / 1000).toFixed(1)}k followers
               </span>
             </button>
           ) : (
