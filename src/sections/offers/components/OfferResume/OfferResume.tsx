@@ -149,6 +149,7 @@ const OfferResume = ({
       ) : (
         resume?.map((schedule, index) => (
           <button
+            key={index}
             onClick={() => handleOnClick(schedule, index)}
             type="button"
             className={selectedIndex === index ? "selected" : ""}
