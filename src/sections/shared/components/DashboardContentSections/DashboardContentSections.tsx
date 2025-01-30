@@ -415,7 +415,11 @@ const DashboardContentSections = ({
       return (
         <>
           {(section as Influencer).categories.map((category) => {
-            return <span className="dashboard__category">{category.name}</span>;
+            return (
+              <span className="dashboard__category" key={category.name}>
+                {category.name}
+              </span>
+            );
           })}
         </>
       );
@@ -777,7 +781,7 @@ const DashboardContentSections = ({
             width: "500px",
           }}
         >
-          {(section as AddresTableData).time.map((day) => {
+          {(section as AddresTableData).time.map((day, index) => {
             return (
               <div
                 style={{
@@ -787,6 +791,7 @@ const DashboardContentSections = ({
                   alignItems: "flex-start",
                   padding: "10px",
                 }}
+                key={day.day + index}
               >
                 <span>{day.day}</span>
                 <span>{day.start_time}</span>

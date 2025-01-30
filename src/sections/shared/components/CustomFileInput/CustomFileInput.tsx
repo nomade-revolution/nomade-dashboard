@@ -59,13 +59,14 @@ const CustomFileInput = ({
               />
             ))
           ) : images ? (
-            images.map((image) => (
+            images.map((image, index) => (
               <ImageCustom
                 alt="Image preview"
                 className="create-fourth__image-preview"
                 height={80}
                 width={120}
                 image={image}
+                key={index}
               />
             ))
           ) : (
