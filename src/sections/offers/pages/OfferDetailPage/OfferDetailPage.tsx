@@ -38,6 +38,11 @@ const OfferDetailsPage = () => {
     getOffer(+id!);
   }, [id, getOffer]);
 
+  const parseScheduleHours = (schedule: string) => {
+    const splitted = schedule.split(":");
+    return `${splitted[0]}:${splitted[1]}`;
+  };
+
   const getOfferWithDayTime = (calendars: Calendar[]): AddresTableData[] => {
     const a = calendars.map((calendar) => {
       return {
@@ -48,9 +53,9 @@ const OfferDetailsPage = () => {
           return {
             day: week[0].day_name,
             //@ts-expect-error
-            start_time: week[0].time_slot.from_time,
+            start_time: parseScheduleHours(week[0].time_slot.from_time),
             //@ts-expect-error
-            end_time: week[0].time_slot.to_time,
+            end_time: parseScheduleHours(week[0].time_slot.to_time),
           };
         }),
       };
