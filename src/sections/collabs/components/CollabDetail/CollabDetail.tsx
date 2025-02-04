@@ -53,7 +53,7 @@ const CollabDetail = ({
         className="collab-detail__link"
         style={{ maxWidth: "120px" }}
       >
-        Ver orferta
+        Ver oferta
       </Link>
     </CollabsDetailStyled>
   );
