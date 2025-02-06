@@ -49,7 +49,6 @@ const DashboardCardMobile = ({
               {headerSection.name}
             </span>
             <DashboardContentSections
-              // @ts-expect-error TODO por arreglar
               headerSection={headerSection}
               section={bodySection}
               pageName={pageName}

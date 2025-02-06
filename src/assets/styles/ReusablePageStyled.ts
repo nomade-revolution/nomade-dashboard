@@ -49,6 +49,21 @@ const ReusablePageStyled = styled.main`
       }
     }
 
+    &__content_name_social_media {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    &__content_link {
+      color: ${(props) => props.theme.colors.mainColor};
+      text-decoration: underline;
+    }
+
+    &__content_bold {
+      font-weight: bold;
+    }
+
     &__searchContainer {
       display: flex;
       align-items: center;

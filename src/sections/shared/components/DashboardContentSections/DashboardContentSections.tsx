@@ -34,7 +34,6 @@ import { formatSliceString } from "sections/shared/utils/getDateIntoHourFormat/g
 import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
 import { AddresTableData } from "sections/offers/pages/OfferDetailPage/OfferDetailPage";
 import getSocialMediaIcons from "sections/shared/utils/getSocialMediaIcons/getSocialMediaIcons";
-import DashboardContentSectionsStyled from "./DashboardContentSections";
 import { toK } from "sections/influencer/utils/influencersSections";
 import { Fragment } from "react";
 
@@ -73,6 +72,7 @@ const DashboardContentSections = ({
 
   const getBusinessUserCompanies = (section: User) => {
     const { companies } = section;
+    if (!companies) return null;
     if (user.type !== "Company") {
       return companies.map((company: Company) => {
         return (
@@ -118,15 +118,13 @@ const DashboardContentSections = ({
     case "account_name": {
       if (pageName === SectionTypes.socialMedia) {
         return (
-          <DashboardContentSectionsStyled>
-            <Link
-              className="dashboard_content_link"
-              to={(section as SocialMedia).url}
-              target="_blank"
-            >
-              @{(section as SocialMedia).account_name}
-            </Link>
-          </DashboardContentSectionsStyled>
+          <Link
+            className="dashboard_content_link"
+            to={(section as SocialMedia).url}
+            target="_blank"
+          >
+            @{(section as SocialMedia).account_name}
+          </Link>
         );
       }
       return null;
@@ -135,11 +133,9 @@ const DashboardContentSections = ({
     case "followers": {
       if (pageName === SectionTypes.socialMedia) {
         return (
-          <DashboardContentSectionsStyled>
-            <span className="dashboard_content_bold">
-              {toK((section as SocialMedia).followers)}
-            </span>
-          </DashboardContentSectionsStyled>
+          <span className="dashboard_content_bold">
+            {toK((section as SocialMedia).followers)}
+          </span>
         );
       }
       return null;
@@ -149,16 +145,14 @@ const DashboardContentSections = ({
       if (pageName === SectionTypes.socialMedia) {
         if ((section as SocialMedia).video) {
           return (
-            <DashboardContentSectionsStyled>
-              <Link
-                className="dashboard_content_link"
-                // TODO por ver cuando tengamos un video de verdad que pasa al clicar en el video
-                to={(section as SocialMedia).video || ""}
-                target="_blank"
-              >
-                Ver video
-              </Link>
-            </DashboardContentSectionsStyled>
+            <Link
+              className="dashboard_content_link"
+              // TODO por ver cuando tengamos un video de verdad que pasa al clicar en el video
+              to={(section as SocialMedia).video || ""}
+              target="_blank"
+            >
+              Ver video
+            </Link>
           );
         }
         return "No video";
@@ -169,12 +163,10 @@ const DashboardContentSections = ({
     case "name":
       if (pageName === SectionTypes.socialMedia) {
         return (
-          <DashboardContentSectionsStyled>
-            <div className="dashboard_content_name_social_media">
-              {getSocialMediaIcons((section as SocialMedia).name)}
-              {(section as SocialMedia).name}
-            </div>
-          </DashboardContentSectionsStyled>
+          <div className="dashboard_content_name_social_media">
+            {getSocialMediaIcons((section as SocialMedia).name)}
+            {(section as SocialMedia).name}
+          </div>
         );
       }
 

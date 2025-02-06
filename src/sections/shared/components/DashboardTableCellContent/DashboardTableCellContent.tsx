@@ -50,18 +50,15 @@ const DashboardTableCellContent = ({
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   return (
     <>
-      {
-        <DashboardContentSections
-          // @ts-expect-error TODO por arreglar
-          headerSection={headerSection}
-          section={section}
-          setIsDialogOpen={setIsDialogOpen}
-          pageName={pageName}
-          setCollabStateActionType={setCollabStateActionType}
-          anchorEl={anchorEl}
-          setAnchorEl={setAnchorEl}
-        />
-      }
+      <DashboardContentSections
+        headerSection={headerSection}
+        section={section}
+        setIsDialogOpen={setIsDialogOpen}
+        pageName={pageName}
+        setCollabStateActionType={setCollabStateActionType}
+        anchorEl={anchorEl}
+        setAnchorEl={setAnchorEl}
+      />
 
       {isDialogOpen && (
         <DialogDeleteConfirm
