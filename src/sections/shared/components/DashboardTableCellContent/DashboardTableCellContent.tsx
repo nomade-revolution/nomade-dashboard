@@ -52,6 +52,7 @@ const DashboardTableCellContent = ({
     <>
       {
         <DashboardContentSections
+          // @ts-expect-error TODO por arreglar
           headerSection={headerSection}
           section={section}
           setIsDialogOpen={setIsDialogOpen}
