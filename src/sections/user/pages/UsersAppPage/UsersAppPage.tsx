@@ -17,7 +17,7 @@ import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 const UsersAppPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
   const { page } = useParams();
-  const { getUsers, users_infleuncerCompany, pagination, loading, order } =
+  const { getUsers, users_influencerCompany, pagination, loading, order } =
     useUserContext();
   const handleSearch = (searchText: string) => {
     getUsersData(searchText);
@@ -48,55 +48,52 @@ const UsersAppPage = (): React.ReactElement => {
   useEffect(() => {
     getUsersData();
   }, [getUsersData]);
+
+  if (loading) return <Loader width="20px" height="20px" />;
+
   return (
-    <>
-      {loading ? (
-        <Loader width="20px" height="20px" />
-      ) : (
-        <ReusablePageStyled className="dashboard">
-          <div className="dashboard__search-user">
-            {/* <button className="dashboard__create" onClick={handleCreateUser}>
+    <ReusablePageStyled className="dashboard">
+      <div className="dashboard__search-user">
+        {/* <button className="dashboard__create" onClick={handleCreateUser}>
               <IoAddCircle className="dashboard__create--icon" />
               Crear usuario
               
             </button> */}
-            <div></div>
-            <SearchBar
-              onReset={() => getUsersData()}
-              pageName={SectionTypes.usersApp}
-              pageTypes={SectionTypes.usersApp}
-              searchText={searchText!}
-              setSearchText={setSearchText}
-              onSearchSubmit={() => {
-                handleSearch(searchText!);
-              }}
-            />
-          </div>
-          <div className="dashboard__table">
-            <DashboardTable
-              bodySections={users_infleuncerCompany}
-              headerSections={usersAppTableHeaderSections}
-              pageName={SectionTypes.usersApp}
-            />
-          </div>
-          <div className="dashboard__mobile">
-            <h3>Usuarios</h3>
-            <DashboardCardListMobile
-              bodySections={users_infleuncerCompany}
-              headerSections={usersAppTableHeaderSections}
-              pageName={SectionTypes.usersApp}
-            />
-          </div>
-          <PaginationComponent
-            current_page={pagination.current_page}
-            last_page={pagination.last_page}
-            per_page={pagination.per_page}
-            pageName={SectionTypes.usersApp}
-            filterParams={""}
-          />
-        </ReusablePageStyled>
-      )}
-    </>
+        <div></div>
+        <SearchBar
+          onReset={() => getUsersData()}
+          pageName={SectionTypes.usersApp}
+          pageTypes={SectionTypes.usersApp}
+          searchText={searchText!}
+          setSearchText={setSearchText}
+          onSearchSubmit={() => {
+            handleSearch(searchText!);
+          }}
+        />
+      </div>
+      <div className="dashboard__table">
+        <DashboardTable
+          bodySections={users_influencerCompany}
+          headerSections={usersAppTableHeaderSections}
+          pageName={SectionTypes.usersApp}
+        />
+      </div>
+      <div className="dashboard__mobile">
+        <h3>Usuarios</h3>
+        <DashboardCardListMobile
+          bodySections={users_influencerCompany}
+          headerSections={usersAppTableHeaderSections}
+          pageName={SectionTypes.usersApp}
+        />
+      </div>
+      <PaginationComponent
+        current_page={pagination.current_page}
+        last_page={pagination.last_page}
+        per_page={pagination.per_page}
+        pageName={SectionTypes.usersApp}
+        filterParams={""}
+      />
+    </ReusablePageStyled>
   );
 };
 

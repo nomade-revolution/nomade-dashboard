@@ -49,7 +49,7 @@ interface ContextState {
   registerUser: (
     data: AuthRegisterNomadeInterface,
   ) => Promise<HttpResponseInterface<User>>;
-  users_infleuncerCompany: User[];
+  users_influencerCompany: User[];
   exportInfluencers: () => void;
   conditions: string;
   getConditions: () => void;
@@ -67,7 +67,7 @@ export const UserContextProvider = ({
   const [users_nomade, setUsersNomade] = useState<User[]>([]);
   const [users_influencer, setUsersInfluencer] = useState<Influencer[]>([]);
   const [users_company, setUsersCompany] = useState<Company[]>([]);
-  const [users_infleuncerCompany, setUsersInfleuncerCompany] = useState<User[]>(
+  const [users_influencerCompany, setUsersInfleuncerCompany] = useState<User[]>(
     [],
   );
   const [conditions, setConditions] = useState<string>("");
@@ -193,7 +193,7 @@ export const UserContextProvider = ({
         deleteUserById,
         setOrder,
         getUsersStatusBadge,
-        users_infleuncerCompany,
+        users_influencerCompany,
         conditions,
       }}
     >

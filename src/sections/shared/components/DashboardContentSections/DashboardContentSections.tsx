@@ -36,6 +36,7 @@ import { AddresTableData } from "sections/offers/pages/OfferDetailPage/OfferDeta
 import getSocialMediaIcons from "sections/shared/utils/getSocialMediaIcons/getSocialMediaIcons";
 import DashboardContentSectionsStyled from "./DashboardContentSections";
 import { toK } from "sections/influencer/utils/influencersSections";
+import { Fragment } from "react";
 
 interface Props {
   headerSection: HeaderSection;
@@ -69,6 +70,38 @@ const DashboardContentSections = ({
   const daysSet = new Set<string>();
   const { user } = useAuthContext();
   const { modifyOffer } = useOffersContext();
+
+  const getBusinessUserCompanies = (section: User) => {
+    const { companies } = section;
+    if (user.type !== "Company") {
+      return companies.map((company: Company) => {
+        return (
+          <Fragment key={company.id}>
+            <Tooltip title="Ver cliente">
+              <Link
+                to={`/cliente/${company.id}`}
+                style={{
+                  textDecoration: "underline",
+                  color: theme.colors.mainColor,
+                  textDecorationColor: theme.colors.mainColor,
+                }}
+              >
+                <span className="dashboard__name">{company.company}</span>
+              </Link>
+            </Tooltip>
+          </Fragment>
+        );
+      });
+    }
+
+    return companies.map((company) => {
+      return (
+        <Fragment>
+          <span className="dashboard__name">{company.company}</span>
+        </Fragment>
+      );
+    });
+  };
 
   switch (headerSection.property) {
     case "images":
@@ -256,6 +289,14 @@ const DashboardContentSections = ({
       );
 
     case "company":
+      if (pageName === SectionTypes.usersApp) {
+        return (
+          <div className="dashboard__btns-section">
+            {getBusinessUserCompanies(section as User)}
+          </div>
+        );
+      }
+
       return (
         <>
           {user.type !== "Company" ? (

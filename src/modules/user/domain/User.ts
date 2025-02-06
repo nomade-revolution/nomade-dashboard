@@ -11,6 +11,8 @@ export interface User {
   email: string;
   type: "Company" | "Influencer" | "Nomade";
   roles: number[];
+  user_id: number;
+  companies: Company[];
 }
 
 export interface Company extends User {
