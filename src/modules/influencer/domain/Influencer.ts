@@ -21,4 +21,5 @@ export interface Influencer {
   new: boolean;
   email: string;
   state: { id: number; name: string };
+  influencer_state_id?: number;
 }

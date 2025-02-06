@@ -7,6 +7,7 @@ import {
   editInfluencerStats,
   registerNewInfluencer,
   getCategoriesInfluencer,
+  editInfluencer,
 } from "@influencer/application/influencer";
 import { InfluencerRepository } from "@influencer/domain/InfluencerRepository";
 import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
@@ -46,6 +47,7 @@ interface ContextState {
   setSocialMediaSelected: (value: SocialMedia) => void;
   isSocialMediaModalOpen: boolean;
   setIsSocialMediaModalOpen: (value: boolean) => void;
+  modifyInfluencer: (influencer_id: number, data: Partial<Influencer>) => void;
 }
 
 export const InfluencerContext = createContext<ContextState>(
@@ -122,6 +124,20 @@ export const InfluencerContextProvider = ({
     return response;
   }, [repository]);
 
+  const modifyInfluencer = useCallback(
+    async (influencer_id: number, data: Partial<Influencer>) => {
+      const response = await editInfluencer(repository, data, influencer_id);
+      if (isHttpSuccessResponse(response)) {
+        setIsSuccess(true);
+      } else {
+        setError(response.error as never);
+      }
+
+      return response;
+    },
+    [repository],
+  );
+
   const modifyInfluencerStats = useCallback(
     async (influencer_id: number, stats: EditInfluencerSocials) => {
       const response = await editInfluencerStats(
@@ -189,6 +205,7 @@ export const InfluencerContextProvider = ({
         getInfluencersStatusBadge,
         getInfluencersWithParams,
         modifyInfluencerStats,
+        modifyInfluencer,
         isSocialMediaModalOpen,
         setIsSocialMediaModalOpen,
       }}

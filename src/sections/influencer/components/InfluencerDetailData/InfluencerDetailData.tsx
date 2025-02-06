@@ -57,6 +57,15 @@ const InfluencerDetailData = ({
               </span>
             </div>
           )}
+          {user.type === "Nomade" && (
+            <div className="influencer-data__from-country">
+              <span>Estado:</span>
+              <span className="influencer-data__country">
+                {" "}
+                {influencer?.state?.name || ""}
+              </span>
+            </div>
+          )}
         </div>
       </div>
       {influencer.categories && (

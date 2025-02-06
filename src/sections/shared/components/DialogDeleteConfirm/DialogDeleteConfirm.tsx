@@ -32,6 +32,7 @@ interface DialogDeleteConfirmProps {
   pageName: string;
   accept_state_id?: number;
   type?: string;
+  successText?: string;
 }
 
 export default function DialogDeleteConfirm({
@@ -41,6 +42,7 @@ export default function DialogDeleteConfirm({
   pageName,
   type,
   accept_state_id,
+  successText,
 }: DialogDeleteConfirmProps) {
   const [reason, setReason] = useState<number>(0);
   const { getFunctionForDialog, isSuccess } = useDialog();
@@ -94,7 +96,11 @@ export default function DialogDeleteConfirm({
             sx={{ color: "#000", fontWeight: 700 }}
             disabled={false}
           >
-            {isSuccess ? <SuccessFeedback text="Borrado" /> : "Aceptar"}
+            {isSuccess ? (
+              <SuccessFeedback text={successText || "Borrado"} />
+            ) : (
+              "Aceptar"
+            )}
           </Button>
 
           <Button onClick={handleClose} sx={{ color: "#000", fontWeight: 700 }}>

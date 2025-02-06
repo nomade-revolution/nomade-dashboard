@@ -76,6 +76,21 @@ export class InfluencerRepository {
     }
   }
 
+  public async editInfluencer(
+    data: EditInfluencerSocials,
+    influencer_id: number,
+  ): Promise<HttpResponseInterface<Influencer>> {
+    try {
+      const resp = await this.http.put<Influencer>(
+        INFLUENCER_STATS(influencer_id),
+        data,
+      );
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
   public async registerInfluencer(
     data: Partial<RegisterInfluencerInterface>,
   ): Promise<HttpResponseInterface<RegisterInfluencerInterface>> {

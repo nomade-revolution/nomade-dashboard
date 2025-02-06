@@ -32,6 +32,14 @@ export const getInfluencers = (
   return influencerRepo.getInfluencers(params);
 };
 
+export const editInfluencer = (
+  influencerRepo: InfluencerRepository<Influencer>,
+  data: Partial<Influencer>,
+  influencer_id: number,
+) => {
+  return influencerRepo.editInfluencer(data, influencer_id);
+};
+
 export const editInfluencerStats = (
   influencerRepo: InfluencerRepository<Influencer>,
   data: EditInfluencerSocials,

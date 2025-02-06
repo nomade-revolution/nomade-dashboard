@@ -17,6 +17,8 @@ import SocialMediaCard from "sections/shared/components/SocialMediaCard/SocialMe
 import SocialMediaForm from "sections/shared/components/SocialMediaForm/SocialMediaForm";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import InfluencerSocialMediaList from "sections/influencer/components/InfluencerSocialMediaList/InfluencerSocialMediaList";
+import { MdDoNotDisturbOn } from "react-icons/md";
+import { FaCheckCircle } from "react-icons/fa";
 
 const InfluencerDetailPage = (): React.ReactElement => {
   const {
@@ -32,11 +34,19 @@ const InfluencerDetailPage = (): React.ReactElement => {
   const { user } = useAuthContext();
   const [isOpenModalEdit, setIsOpenModalEdit] = useState<boolean>(false);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [isDialogEditStateOpen, setIsDialogEditStateOpen] =
+    useState<boolean>(false);
+  const [influencerState, setInfluencerState] = useState<number>(0);
 
   const { id } = useParams();
 
   const handleDeleteButton = () => {
     handleIsDialogOpen(setIsDialogOpen);
+  };
+
+  const handleModifyStateButton = (state: number) => {
+    setInfluencerState(state);
+    handleIsDialogOpen(setIsDialogEditStateOpen);
   };
 
   useEffect(() => {
@@ -52,14 +62,32 @@ const InfluencerDetailPage = (): React.ReactElement => {
         <div className="influencer-detail__title">
           <h2>Influencer</h2>
         </div>
-        {user.type === "Nomade" && (
-          <ActionButton
-            onClick={handleDeleteButton}
-            text="Borrar"
-            icon={<FaRegTrashCan />}
-            color={theme.colors.red}
-          />
-        )}
+        <div style={{ display: "flex", gap: 10 }}>
+          {user.type === "Nomade" && influencer.state?.id !== 2 && (
+            <ActionButton
+              onClick={() => handleModifyStateButton(2)}
+              text="Aceptar influencer"
+              icon={<FaCheckCircle />}
+              color={theme.colors.softGreen}
+            />
+          )}
+          {user.type === "Nomade" && influencer.state?.id !== 3 && (
+            <ActionButton
+              onClick={() => handleModifyStateButton(3)}
+              text="Rechazar influencer"
+              icon={<MdDoNotDisturbOn />}
+              color={theme.colors.darkRed}
+            />
+          )}
+          {user.type === "Nomade" && (
+            <ActionButton
+              onClick={handleDeleteButton}
+              text="Borrar"
+              icon={<FaRegTrashCan />}
+              color={theme.colors.red}
+            />
+          )}
+        </div>
       </section>
       <section className="influencer-detail__info">
         <InfluencerDetailData
@@ -72,12 +100,24 @@ const InfluencerDetailPage = (): React.ReactElement => {
       <InfluencerSocialMediaList socialMedias={influencer.socialMedia} />
 
       {user.type === "Nomade" && <InfluencerCollabs influencer_id={+id!} />}
+
       <DialogDeleteConfirm
         handleClose={() => setIsDialogOpen(false)}
         open={isDialogOpen}
         sectionId={influencer.id!}
         pageName={SectionTypes.influencers}
       />
+
+      <DialogDeleteConfirm
+        handleClose={() => setIsDialogEditStateOpen(false)}
+        open={isDialogEditStateOpen}
+        sectionId={influencer.id!}
+        accept_state_id={influencerState}
+        type="modifyState"
+        pageName={SectionTypes.influencers}
+        successText="Estado modificado"
+      />
+
       <ReusableModal
         children={
           <SocialMediaCard

@@ -19,6 +19,9 @@ const getDialogText = (pageName: string, type?: string) => {
     case SectionTypes.customers:
       return dialogTexts.deleteCompany;
     case SectionTypes.influencers:
+      if (type === "modifyState") {
+        return dialogTexts.modifyInfluencerState;
+      }
       return dialogTexts.deleteInfluencer;
     default:
       return "";

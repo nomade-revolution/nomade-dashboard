@@ -1,6 +1,7 @@
 const dialogTexts = {
   deleteNomadeUser: `¿Estás seguro/a de borrar este usuario? Haciendo click en aceptar,
             borrarás el usuario permanentemente de la base de datos.`,
+  modifyInfluencerState: `¿Estás seguro/a de modificar el estado de este influencer? Haciendo click en aceptar, modificarás el estado del influencer.`,
   deleteInfluencer: `¿Estás seguro/a de borrar este influencer? Haciendo click en aceptar,
             borrarás el influencer permanentemente de la base de datos.`,
   deleteCompany: `¿Estás seguro/a de borrar a este cliente? Haciendo click en aceptar,

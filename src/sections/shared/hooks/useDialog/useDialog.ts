@@ -13,7 +13,7 @@ const useDialog = () => {
   const navigate = useNavigate();
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const { deleteUserById } = useUserContext();
-  const { deleteInfluencerById } = useInfluencerContext();
+  const { deleteInfluencerById, modifyInfluencer } = useInfluencerContext();
   const { deleteCompanyById } = useCompanyContext();
   const { deleteOfferById } = useOffersContext();
   const { deleteCollabById } = useCollabsContext();
@@ -33,6 +33,17 @@ const useDialog = () => {
 
   const handleDeleteCompany = async (sectionId: number) => {
     const response = await deleteCompanyById(sectionId!);
+    setIsSuccess(response!);
+    setTimeout(() => navigate(-1), 1500);
+  };
+
+  const handleUpdateCompanyState = async (
+    sectionId: number,
+    newState: number,
+  ) => {
+    const response = await modifyInfluencer(sectionId!, {
+      influencer_state_id: newState,
+    });
     setIsSuccess(response!);
     setTimeout(() => navigate(-1), 1500);
   };
@@ -70,6 +81,9 @@ const useDialog = () => {
       case SectionTypes.customers:
         return handleDeleteCompany(sectionId);
       case SectionTypes.influencers:
+        if (type === "modifyState") {
+          return handleUpdateCompanyState(sectionId, accept_state_id);
+        }
         return handleDeleteInfluencer(sectionId);
       case SectionTypes.users:
         return handleDeleteUsers(sectionId);
@@ -85,6 +99,7 @@ const useDialog = () => {
     handleDeleteOffer,
     handleDeleteCollab,
     getFunctionForDialog,
+    handleUpdateCompanyState,
     isSuccess,
   };
 };
