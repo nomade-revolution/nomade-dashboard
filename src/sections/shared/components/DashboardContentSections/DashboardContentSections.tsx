@@ -24,12 +24,18 @@ import { Lead } from "modules/leads/domain/Leads";
 import { Plan } from "modules/plans/domain/Plan";
 import LinearBuffer from "../LinearBuffer/LinearBuffer";
 import { COLAB_PUBLISHED_STATE } from "sections/collabs/utils/collabsStates";
-import { SocialMediaTypes } from "@influencer/domain/InfluencerSocialMedia";
+import {
+  SocialMedia,
+  SocialMediaTypes,
+} from "@influencer/domain/InfluencerSocialMedia";
 import theme from "assets/styles/theme";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { formatSliceString } from "sections/shared/utils/getDateIntoHourFormat/getDateIntoHourFormat";
 import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
 import { AddresTableData } from "sections/offers/pages/OfferDetailPage/OfferDetailPage";
+import getSocialMediaIcons from "sections/shared/utils/getSocialMediaIcons/getSocialMediaIcons";
+import DashboardContentSectionsStyled from "./DashboardContentSections";
+import { toK } from "sections/influencer/utils/influencersSections";
 
 interface Props {
   headerSection: HeaderSection;
@@ -76,7 +82,69 @@ const DashboardContentSections = ({
         />
       );
 
+    case "account_name": {
+      if (pageName === SectionTypes.socialMedia) {
+        return (
+          <DashboardContentSectionsStyled>
+            <Link
+              className="dashboard_content_link"
+              to={(section as SocialMedia).url}
+              target="_blank"
+            >
+              @{(section as SocialMedia).account_name}
+            </Link>
+          </DashboardContentSectionsStyled>
+        );
+      }
+      return null;
+    }
+
+    case "followers": {
+      if (pageName === SectionTypes.socialMedia) {
+        return (
+          <DashboardContentSectionsStyled>
+            <span className="dashboard_content_bold">
+              {toK((section as SocialMedia).followers)}
+            </span>
+          </DashboardContentSectionsStyled>
+        );
+      }
+      return null;
+    }
+
+    case "video": {
+      if (pageName === SectionTypes.socialMedia) {
+        if ((section as SocialMedia).video) {
+          return (
+            <DashboardContentSectionsStyled>
+              <Link
+                className="dashboard_content_link"
+                // TODO por ver cuando tengamos un video de verdad que pasa al clicar en el video
+                to={(section as SocialMedia).video || ""}
+                target="_blank"
+              >
+                Ver video
+              </Link>
+            </DashboardContentSectionsStyled>
+          );
+        }
+        return "No video";
+      }
+      return null;
+    }
+
     case "name":
+      if (pageName === SectionTypes.socialMedia) {
+        return (
+          <DashboardContentSectionsStyled>
+            <div className="dashboard_content_name_social_media">
+              {getSocialMediaIcons((section as SocialMedia).name)}
+              {(section as SocialMedia).name}
+            </div>
+          </DashboardContentSectionsStyled>
+        );
+      }
+
       return (
         <>
           {pageName !== SectionTypes.users ? (
@@ -715,11 +783,7 @@ const DashboardContentSections = ({
           ) : (
             ""
           )}
-          <span>
-            {main_social
-              ? (main_social?.followers / 1000).toFixed(1) + "k"
-              : "-"}
-          </span>
+          <span>{main_social ? toK(main_social?.followers) : "-"}</span>
         </div>
       );
     }

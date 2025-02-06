@@ -1,5 +1,5 @@
 import ReusableFormStyled from "assets/styles/ReusableFormStyled";
-import { Formik, FormikHelpers } from "formik";
+import { Field, Formik, FormikHelpers } from "formik";
 
 import {
   AgeRangeSocialRequest,
@@ -262,6 +262,26 @@ const SocialMediaForm = ({
         {({ handleSubmit, getFieldProps, isSubmitting }) => (
           <ReusableFormStyled onSubmit={handleSubmit}>
             <h3>Estadísticas {social?.account_name}</h3>
+
+            <section className="stats__section">
+              <h5 className="stats__title">Followers</h5>
+              <Field
+                type="number"
+                className="select--small"
+                aria-label="Followers"
+                {...getFieldProps("followers")}
+              />
+            </section>
+
+            <section className="stats__section">
+              <h5 className="stats__title">Visualizaciones</h5>
+              <Field
+                type="number"
+                className="select--small"
+                aria-label="Followers"
+                {...getFieldProps("stories_view")}
+              />
+            </section>
 
             <section className="stats__section">
               <h5 className="stats__title">Ciudades</h5>

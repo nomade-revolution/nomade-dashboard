@@ -3,6 +3,7 @@ import getSocialMediaIcons from "../../../shared/utils/getSocialMediaIcons/getSo
 import InfluencerSocialMediaStyles from "./InfluencerSocialMediaStyled";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { Link } from "react-router-dom";
+import { toK } from "sections/influencer/utils/influencersSections";
 
 interface Props {
   socialMedia: SocialMedia[];
@@ -31,7 +32,7 @@ const InfluencerSocialMedia = ({
               {getSocialMediaIcons(media.name)}
               <span>{media.account_name}</span>
               <span className="social-media__followers">
-                {(media.followers / 1000).toFixed(1)}k followers
+                {toK(media.followers)} followers
               </span>
             </button>
           ) : (
@@ -43,7 +44,7 @@ const InfluencerSocialMedia = ({
               {getSocialMediaIcons(media.name)}
               <span>{media.account_name}</span>
               <span className="social-media__followers">
-                {(media.followers / 1000).toFixed(1)}k followers
+                {toK(media.followers)} followers
               </span>
             </Link>
           )}

@@ -18,6 +18,9 @@ const InfluencerDetailData = ({
   setSocialMediaSelected,
 }: Props): React.ReactElement => {
   const { user } = useAuthContext();
+  const mainSocialNetworks =
+    influencer.socialMedia?.filter((rrss) => rrss.main === true) || [];
+
   return (
     <InfluecerDetailDataStyled className="influencer-data">
       <div className="influencer-data__mainData">
@@ -60,7 +63,7 @@ const InfluencerDetailData = ({
         <InfluencerCategories categories={influencer.categories} />
       )}
       <InfluencerSocialMedia
-        socialMedia={influencer.socialMedia}
+        socialMedia={mainSocialNetworks}
         setSocialMediaSelected={setSocialMediaSelected}
         setIsModalOpen={setIsModalOpen}
       />

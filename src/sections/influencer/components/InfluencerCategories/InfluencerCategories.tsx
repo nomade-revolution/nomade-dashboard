@@ -8,7 +8,7 @@ interface Props {
 const InfluencerCategories = ({ categories }: Props): React.ReactElement => {
   return (
     <InfluencerCategoriesStyled className="categories">
-      <h4 className="categories__title">Categorías</h4>
+      <span className="categories__title">Categorías</span>
       <ul className="categories__list">
         {categories.map((category) => (
           <li key={category?.name}>{category?.name}</li>

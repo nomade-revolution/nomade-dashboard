@@ -31,12 +31,15 @@ const InfluencersPage = (): React.ReactElement => {
     exportInfluencers,
   } = useUserContext();
   const { page } = useParams();
+
   const handleSearch = (text: string) => {
     getUsersData(text);
   };
+
   const handleExportInfluencers = () => {
     exportInfluencers();
   };
+
   const getUsersData = useCallback(
     (text?: string) => {
       const filters: FilterParams = {
@@ -55,66 +58,65 @@ const InfluencersPage = (): React.ReactElement => {
     },
     [getUsers, order.direction, order.sortTag, page],
   );
+
   const handleCreateUser = () => {
     navigate(appPaths.createInfluencer);
   };
+
   useEffect(() => {
     getUsersData();
   }, [page, order, getUsersData]);
-  return (
-    <>
-      {loading ? (
-        <Loader width="20px" height="20px" />
-      ) : (
-        <ReusablePageStyled className="dashboard">
-          <div className="dashboard__search">
-            <div style={{ display: "flex", gap: "10px" }}>
-              <ActionButton
-                color={theme.colors.darkBlue}
-                icon={<IoAddCircle className="dashboard__create--icon" />}
-                onClick={() => handleCreateUser()}
-                text="Crear influencer"
-              />
-              <ExportFilesButton
-                action={() => handleExportInfluencers()}
-                text="Exportar influencers"
-              />
-            </div>
-            <SearchBar
-              pageName={SectionTypes.influencers}
-              pageTypes={SectionTypes.influencers}
-              searchText={searchText!}
-              setSearchText={setSearchText}
-              onSearchSubmit={() => handleSearch(searchText)}
-              onReset={() => getUsersData()}
-            />
-          </div>
 
-          <div className="dashboard__table">
-            <DashboardTable
-              bodySections={users_influencer}
-              headerSections={influencersTableHeaderSections}
-              pageName={SectionTypes.influencers}
-            />
-          </div>
-          <div className="dashboard__mobile">
-            <h3>Influencers</h3>
-            <DashboardCardListMobile
-              bodySections={users_influencer}
-              headerSections={influencersTableHeaderSections}
-              pageName={SectionTypes.influencers}
-            />
-          </div>
-          <PaginationComponent
-            current_page={pagination.current_page}
-            last_page={pagination.last_page}
-            per_page={pagination.per_page}
-            pageName={SectionTypes.influencers}
-            filterParams={""}
+  if (loading) return <Loader width="20px" height="20px" />;
+
+  return (
+    <ReusablePageStyled className="dashboard">
+      <div className="dashboard__search">
+        <div style={{ display: "flex", gap: "10px" }}>
+          <ActionButton
+            color={theme.colors.darkBlue}
+            icon={<IoAddCircle className="dashboard__create--icon" />}
+            onClick={() => handleCreateUser()}
+            text="Crear influencer"
           />
-        </ReusablePageStyled>
-      )}
-    </>
+          <ExportFilesButton
+            action={() => handleExportInfluencers()}
+            text="Exportar influencers"
+          />
+        </div>
+        <SearchBar
+          pageName={SectionTypes.influencers}
+          pageTypes={SectionTypes.influencers}
+          searchText={searchText!}
+          setSearchText={setSearchText}
+          onSearchSubmit={() => handleSearch(searchText)}
+          onReset={() => getUsersData()}
+        />
+      </div>
+
+      <div className="dashboard__table">
+        <DashboardTable
+          bodySections={users_influencer}
+          headerSections={influencersTableHeaderSections}
+          pageName={SectionTypes.influencers}
+        />
+      </div>
+      <div className="dashboard__mobile">
+        <h3>Influencers</h3>
+        <DashboardCardListMobile
+          bodySections={users_influencer}
+          headerSections={influencersTableHeaderSections}
+          pageName={SectionTypes.influencers}
+        />
+      </div>
+      <PaginationComponent
+        current_page={pagination.current_page}
+        last_page={pagination.last_page}
+        per_page={pagination.per_page}
+        pageName={SectionTypes.influencers}
+        filterParams={""}
+      />
+    </ReusablePageStyled>
   );
 };
 

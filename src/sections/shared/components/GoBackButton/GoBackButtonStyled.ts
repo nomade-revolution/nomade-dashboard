@@ -4,11 +4,11 @@ const GoBackButtonStyled = styled.div`
   display: flex;
   align-items: center;
   font-weight: bold;
-
   .goback-button {
-    &__button {
-      font-weight: bold;
-    }
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    font-weight: bold;
   }
 `;
 

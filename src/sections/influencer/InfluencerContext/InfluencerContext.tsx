@@ -12,7 +12,10 @@ import { InfluencerRepository } from "@influencer/domain/InfluencerRepository";
 import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
 import { Influencer } from "@influencer";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
-import { EditInfluencerSocials } from "@influencer/domain/InfluencerSocialMedia";
+import {
+  EditInfluencerSocials,
+  SocialMedia,
+} from "@influencer/domain/InfluencerSocialMedia";
 import { RegisterInfluencerInterface } from "@auth";
 
 interface InfluencerCategory {
@@ -39,6 +42,10 @@ interface ContextState {
   registerInfluencer: (data: Partial<RegisterInfluencerInterface>) => void;
   influencerCategories: InfluencerCategory[];
   getInfluencerCategories: () => void;
+  socialMediaSelected: SocialMedia;
+  setSocialMediaSelected: (value: SocialMedia) => void;
+  isSocialMediaModalOpen: boolean;
+  setIsSocialMediaModalOpen: (value: boolean) => void;
 }
 
 export const InfluencerContext = createContext<ContextState>(
@@ -60,6 +67,11 @@ export const InfluencerContextProvider = ({
   const [influencer, setInfluencer] = useState<Influencer>({} as Influencer);
   const [badgeCount, setBadgeCount] = useState<number>(0);
   const [influencers, setInfluencers] = useState<Influencer[]>([]);
+  const [socialMediaSelected, setSocialMediaSelected] = useState<SocialMedia>(
+    {} as SocialMedia,
+  );
+  const [isSocialMediaModalOpen, setIsSocialMediaModalOpen] =
+    useState<boolean>(false);
 
   const deleteInfluencerById = async (influencer_id: number) => {
     const response = await deleteInfluencer(repository, influencer_id);
@@ -164,6 +176,8 @@ export const InfluencerContextProvider = ({
         influencerCategories,
         getInfluencerCategories,
         registerInfluencer,
+        socialMediaSelected,
+        setSocialMediaSelected,
         loading,
         isSuccess,
         influencer,
@@ -175,6 +189,8 @@ export const InfluencerContextProvider = ({
         getInfluencersStatusBadge,
         getInfluencersWithParams,
         modifyInfluencerStats,
+        isSocialMediaModalOpen,
+        setIsSocialMediaModalOpen,
       }}
     >
       {children}

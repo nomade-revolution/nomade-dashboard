@@ -13,6 +13,7 @@ import { FaLink, FaUserFriends } from "react-icons/fa";
 import { IoStatsChart } from "react-icons/io5";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { FaPlay } from "react-icons/fa6";
+import { toK } from "sections/influencer/utils/influencersSections";
 
 interface Props {
   socialMedia: SocialMedia;
@@ -46,6 +47,7 @@ const SocialMediaCard = ({
   const sortedCountries = sortByFollowers(socialMedia.countries);
   const genders = sortById(socialMedia.genders);
   const ageRanges = sortById(socialMedia.ageRanges);
+
   return (
     <SocialMediaCardStyled className="social-card">
       {user.type === "Nomade" && (
@@ -75,23 +77,16 @@ const SocialMediaCard = ({
           {socialMedia.account_name}
         </span>
         <span className="social-card__text-icon">
-          <FaUserFriends size={20} />{" "}
-          {(socialMedia.followers / 1000).toFixed(1)}k followers
+          <FaUserFriends size={20} /> {toK(socialMedia.followers)} followers
         </span>
         {(socialMedia as any)?.stories_view && (
           <span className="social-card__text-icon">
             <FaPlay size={20} />{" "}
             {(socialMedia as any)?.stories_view
-              ? (socialMedia as any)?.stories_view
+              ? `${toK((socialMedia as any)?.stories_view)} visualizaciones`
               : "-"}
           </span>
         )}
-        <span className="social-card__text-icon">
-          <FaPlay size={20} />{" "}
-          {(socialMedia as any)?.stories_view
-            ? (socialMedia as any)?.stories_view
-            : "-"}
-        </span>
         <Link
           to={socialMedia.url}
           className="social-card__text-link"
@@ -104,10 +99,14 @@ const SocialMediaCard = ({
 
       <section>
         <h4 className="social-card__section-title">Vídeo</h4>
-        <video width="640" height="360" controls>
-          <source src={socialMedia.video ?? ""} type="video/mp4" />
-          Tu navegador no soporta el elemento de video.
-        </video>
+        {socialMedia.video ? (
+          <video width="640" height="360" controls>
+            <source src={socialMedia.video} type="video/mp4" />
+            Tu navegador no soporta el elemento de video.
+          </video>
+        ) : (
+          "No hay video"
+        )}
       </section>
 
       <div className="stats-container">

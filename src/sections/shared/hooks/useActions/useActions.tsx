@@ -4,10 +4,14 @@ import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsCon
 
 import { useLeadsContext } from "sections/leads/LeadsContext/useLeadsContext";
 import { Collab, CollabActionTypes } from "modules/collabs/domain/Collabs";
+import { useInfluencerContext } from "sections/influencer/InfluencerContext/useInfluencerContext";
 
 const useActions = () => {
   const { sendLinkForLead } = useLeadsContext();
   const { updateCollabState } = useCollabsContext();
+  const { setSocialMediaSelected, setIsSocialMediaModalOpen } =
+    useInfluencerContext();
+
   const navigate = useNavigate();
 
   const handleIsDialogOpen = (setter: (value: boolean) => void) => {
@@ -71,6 +75,8 @@ const useActions = () => {
     handleSendLeadLink,
     handleCollabStateUpdate,
     cancelCollab,
+    setSocialMediaSelected,
+    setIsSocialMediaModalOpen,
   };
 };
 

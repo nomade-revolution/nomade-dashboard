@@ -14,12 +14,12 @@ const GoBackButton = ({ onClick }: Props): React.ReactElement => {
   };
 
   return (
-    <GoBackButtonStyled className="goback-button">
-      <MdArrowBackIosNew className="goback-button__icon" />
+    <GoBackButtonStyled>
       <button
         onClick={onClick ? onClick : handleGoBack}
-        className="goback-button__button"
+        className="goback-button"
       >
+        <MdArrowBackIosNew />
         Volver
       </button>
     </GoBackButtonStyled>

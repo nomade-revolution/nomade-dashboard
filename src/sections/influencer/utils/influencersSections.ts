@@ -124,3 +124,45 @@ export const influencerCollabsHeaderSections: HeaderSection[] = [
     pageName: "collabs",
   },
 ];
+
+export const influencerSocialMediaListHeaderSections: HeaderSection[] = [
+  {
+    id: 1,
+    name: "Red",
+    property: "name",
+    sortTag: "",
+    pageName: "socialMedia",
+  },
+  {
+    id: 2,
+    name: "Usuario",
+    property: "account_name",
+    sortTag: "",
+    pageName: "socialMedia",
+  },
+  {
+    id: 3,
+    name: "Followers",
+    property: "followers",
+    sortTag: "",
+    pageName: "socialMedia",
+  },
+  {
+    id: 5,
+    name: "Video",
+    property: "video",
+    sortTag: "",
+    pageName: "socialMedia",
+  },
+  {
+    id: 6,
+    name: "Estadísticas",
+    property: "actions",
+    sortTag: "",
+    pageName: "socialMedia",
+  },
+];
+
+export const toK = (number: number): string => {
+  return `${(number / 1000).toFixed(1)}k`;
+};

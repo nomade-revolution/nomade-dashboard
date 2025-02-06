@@ -25,6 +25,7 @@ import CustomDropdown from "../CustomDropdown/CustomDropdown";
 import theme from "assets/styles/theme";
 import LeadDialog from "../DialogDeleteConfirm/LeadDialog";
 import { useState } from "react";
+import { SocialMedia } from "@influencer/domain/InfluencerSocialMedia";
 
 interface ActionsProps {
   pageName: string;
@@ -44,8 +45,14 @@ const Actions = ({
   setAnchorEl,
 }: ActionsProps): React.ReactElement => {
   let buttons: React.ReactNode;
-  const { handleIsDialogOpen, handleCollabStateUpdate } = useActions();
+  const {
+    handleIsDialogOpen,
+    handleCollabStateUpdate,
+    setSocialMediaSelected,
+    setIsSocialMediaModalOpen,
+  } = useActions();
   const { user } = useAuthContext();
+
   const [isLeadOpen, setIsLeadOpen] = useState(false);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -242,7 +249,22 @@ const Actions = ({
         </>
       );
       break;
-
+    case SectionTypes.socialMedia:
+      buttons = (
+        <>
+          <Tooltip title="Ver estadísticas">
+            <button
+              onClick={() => {
+                setIsSocialMediaModalOpen(true);
+                setSocialMediaSelected(section as SocialMedia);
+              }}
+            >
+              <FaEye className={"icon"} />
+            </button>
+          </Tooltip>
+        </>
+      );
+      break;
     default:
       buttons = null;
   }

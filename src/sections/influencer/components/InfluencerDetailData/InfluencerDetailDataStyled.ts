@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const InfluecerDetailDataStyled = styled.section`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
   gap: 40px;
