@@ -36,6 +36,7 @@ import { AddresTableData } from "sections/offers/pages/OfferDetailPage/OfferDeta
 import getSocialMediaIcons from "sections/shared/utils/getSocialMediaIcons/getSocialMediaIcons";
 import { toK } from "sections/influencer/utils/influencersSections";
 import { Fragment } from "react";
+import useActions from "sections/shared/hooks/useActions/useActions";
 
 interface Props {
   headerSection: HeaderSection;
@@ -69,6 +70,7 @@ const DashboardContentSections = ({
   const daysSet = new Set<string>();
   const { user } = useAuthContext();
   const { modifyOffer } = useOffersContext();
+  const { setSocialMediaSelected, setIsSocialMediaModalOpen } = useActions();
 
   const getBusinessUserCompanies = (section: User) => {
     const { companies } = section;
@@ -119,7 +121,11 @@ const DashboardContentSections = ({
       if (pageName === SectionTypes.socialMedia) {
         return (
           <Link
-            className="dashboard_content_link"
+            className="dashboard__content_link"
+            style={{
+              color: theme.colors.mainColor,
+              textDecoration: "underline",
+            }}
             to={(section as SocialMedia).url}
             target="_blank"
           >
@@ -133,7 +139,11 @@ const DashboardContentSections = ({
     case "followers": {
       if (pageName === SectionTypes.socialMedia) {
         return (
-          <span className="dashboard_content_bold">
+          <span
+            style={{
+              fontWeight: "bold",
+            }}
+          >
             {toK((section as SocialMedia).followers)}
           </span>
         );
@@ -146,8 +156,10 @@ const DashboardContentSections = ({
         if ((section as SocialMedia).video) {
           return (
             <Link
-              className="dashboard_content_link"
-              // TODO por ver cuando tengamos un video de verdad que pasa al clicar en el video
+              style={{
+                color: theme.colors.mainColor,
+                textDecoration: "underline",
+              }}
               to={(section as SocialMedia).video || ""}
               target="_blank"
             >
@@ -155,7 +167,7 @@ const DashboardContentSections = ({
             </Link>
           );
         }
-        return "No video";
+        return "-";
       }
       return null;
     }
@@ -163,10 +175,27 @@ const DashboardContentSections = ({
     case "name":
       if (pageName === SectionTypes.socialMedia) {
         return (
-          <div className="dashboard_content_name_social_media">
+          <button
+            style={{
+              display: "flex",
+              gap: 10,
+              alignItems: "center",
+            }}
+            onClick={() => {
+              setIsSocialMediaModalOpen(true);
+              setSocialMediaSelected(section as SocialMedia);
+            }}
+          >
             {getSocialMediaIcons((section as SocialMedia).name)}
-            {(section as SocialMedia).name}
-          </div>
+            <span
+              style={{
+                color: theme.colors.mainColor,
+                textDecoration: "underline",
+              }}
+            >
+              {(section as SocialMedia).name}
+            </span>
+          </button>
         );
       }
 
