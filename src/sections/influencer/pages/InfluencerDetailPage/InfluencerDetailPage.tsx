@@ -17,8 +17,30 @@ import SocialMediaCard from "sections/shared/components/SocialMediaCard/SocialMe
 import SocialMediaForm from "sections/shared/components/SocialMediaForm/SocialMediaForm";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import InfluencerSocialMediaList from "sections/influencer/components/InfluencerSocialMediaList/InfluencerSocialMediaList";
-import { MdDoNotDisturbOn } from "react-icons/md";
-import { FaCheckCircle } from "react-icons/fa";
+import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
+
+const STATES_OPTIONS = [
+  {
+    id: "1",
+    name: "Pendiente",
+  },
+  {
+    id: "2",
+    name: "Activo",
+  },
+  {
+    id: "3",
+    name: "Rechazado",
+  },
+  {
+    id: "4",
+    name: "Deshabilitado",
+  },
+  {
+    id: "5",
+    name: "Baneado",
+  },
+];
 
 const InfluencerDetailPage = (): React.ReactElement => {
   const {
@@ -44,8 +66,9 @@ const InfluencerDetailPage = (): React.ReactElement => {
     handleIsDialogOpen(setIsDialogOpen);
   };
 
-  const handleModifyStateButton = (state: number) => {
-    setInfluencerState(state);
+  const handleModifyStateButton = (event: SelectChangeEvent<string>) => {
+    const newValue = parseInt(event.target.value);
+    setInfluencerState(newValue);
     handleIsDialogOpen(setIsDialogEditStateOpen);
   };
 
@@ -55,6 +78,10 @@ const InfluencerDetailPage = (): React.ReactElement => {
 
   if (loading) return <Loader width="20px" height="20px" />;
 
+  const currentState = STATES_OPTIONS.find(
+    (state) => state.id === String(influencer.state?.id),
+  )?.id;
+
   return (
     <InfluencerDetailPageStyled className="influencer-detail">
       <GoBackButton />
@@ -62,23 +89,20 @@ const InfluencerDetailPage = (): React.ReactElement => {
         <div className="influencer-detail__title">
           <h2>Influencer</h2>
         </div>
-        <div style={{ display: "flex", gap: 10 }}>
-          {user.type === "Nomade" && influencer.state?.id !== 2 && (
-            <ActionButton
-              onClick={() => handleModifyStateButton(2)}
-              text="Aceptar influencer"
-              icon={<FaCheckCircle />}
-              color={theme.colors.softGreen}
-            />
-          )}
-          {user.type === "Nomade" && influencer.state?.id !== 3 && (
-            <ActionButton
-              onClick={() => handleModifyStateButton(3)}
-              text="Rechazar influencer"
-              icon={<MdDoNotDisturbOn />}
-              color={theme.colors.darkRed}
-            />
-          )}
+        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={currentState}
+            label="Estado"
+            onChange={handleModifyStateButton}
+          >
+            {STATES_OPTIONS.map((state) => (
+              <MenuItem value={state.id} disabled={state.id === "1"}>
+                {state.name}
+              </MenuItem>
+            ))}
+          </Select>
           {user.type === "Nomade" && (
             <ActionButton
               onClick={handleDeleteButton}
