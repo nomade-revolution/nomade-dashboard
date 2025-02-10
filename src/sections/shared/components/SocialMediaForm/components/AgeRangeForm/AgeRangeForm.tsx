@@ -35,6 +35,10 @@ const AgeRangeForm = ({ social, getFieldProps }: Props): React.ReactElement => {
                 className="select--small"
                 placeholder="0"
                 {...getFieldProps(`ageRanges[${index}].followers_percentage`)}
+                value={
+                  getFieldProps(`ageRanges[${index}].followers_percentage`)
+                    .value || ""
+                }
               />
             </div>
           </li>
@@ -58,6 +62,10 @@ const AgeRangeForm = ({ social, getFieldProps }: Props): React.ReactElement => {
                 className="select--small"
                 placeholder="0"
                 {...getFieldProps(`ageRanges[${index}].followers_percentage`)}
+                value={
+                  getFieldProps(`ageRanges[${index}].followers_percentage`)
+                    .value || ""
+                }
               />
             </div>
           </li>

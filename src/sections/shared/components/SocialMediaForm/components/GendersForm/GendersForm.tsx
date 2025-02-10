@@ -45,6 +45,10 @@ const GendersForm = ({ social, getFieldProps }: Props): React.ReactElement => {
                 className="select--small"
                 placeholder="0"
                 {...getFieldProps(`genders[${index}].followers_percentage`)}
+                value={
+                  getFieldProps(`genders[${index}].followers_percentage`)
+                    .value || ""
+                }
               />
             </div>
           </li>
@@ -68,6 +72,10 @@ const GendersForm = ({ social, getFieldProps }: Props): React.ReactElement => {
                 className="select--small"
                 placeholder="0"
                 {...getFieldProps(`genders[${index}].followers_percentage`)}
+                value={
+                  getFieldProps(`genders[${index}].followers_percentage`)
+                    .value || ""
+                }
               />
             </div>
           </li>
