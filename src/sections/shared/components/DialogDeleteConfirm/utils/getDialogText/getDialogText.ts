@@ -5,13 +5,19 @@ import { CollabActionTypes } from "modules/collabs/domain/Collabs";
 const getDialogText = (pageName: string, type?: string) => {
   switch (pageName) {
     case SectionTypes.collabs:
-      return type === CollabActionTypes.accept
-        ? dialogTexts.acceptCollab
-        : type === CollabActionTypes.refuse
-          ? dialogTexts.refuseCollab
-          : type === CollabActionTypes.cancel
-            ? dialogTexts.cancelCollab
-            : dialogTexts.deleteCollab;
+      if (type === "modifyState") {
+        return dialogTexts.modifyCollabState;
+      }
+      if (type === CollabActionTypes.accept) {
+        return dialogTexts.acceptCollab;
+      }
+      if (type === CollabActionTypes.refuse) {
+        return dialogTexts.refuseCollab;
+      }
+      if (type === CollabActionTypes.cancel) {
+        return dialogTexts.cancelCollab;
+      }
+      return dialogTexts.deleteCollab;
     case SectionTypes.offers:
       return dialogTexts.deleteOffer;
     case SectionTypes.users:

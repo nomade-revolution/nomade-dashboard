@@ -33,6 +33,7 @@ interface DialogDeleteConfirmProps {
   accept_state_id?: number;
   type?: string;
   successText?: string;
+  onAccept?: (sectionId: number, reason?: number) => void;
 }
 
 export default function DialogDeleteConfirm({
@@ -43,8 +44,9 @@ export default function DialogDeleteConfirm({
   type,
   accept_state_id,
   successText,
+  onAccept,
 }: DialogDeleteConfirmProps) {
-  const [reason, setReason] = useState<number>(0);
+  const [reason, setReason] = useState<number | undefined>(undefined);
   const { getFunctionForDialog, isSuccess } = useDialog();
   const { collabRejectedReasons, getAllRejectedCollabReasons } =
     useCollabsContext();
@@ -52,6 +54,20 @@ export default function DialogDeleteConfirm({
   useEffect(() => {
     type === CollabActionTypes.refuse && getAllRejectedCollabReasons();
   }, [getAllRejectedCollabReasons, type]);
+
+  const handleOnAccept = () => {
+    if (onAccept) {
+      onAccept(sectionId, reason);
+      setReason(undefined);
+      return;
+    }
+    getFunctionForDialog(sectionId, pageName, accept_state_id!, type, reason!);
+  };
+
+  const handleOnClose = () => {
+    handleClose();
+    setReason(undefined);
+  };
 
   return (
     <div>
@@ -79,20 +95,12 @@ export default function DialogDeleteConfirm({
           {type === CollabActionTypes.refuse && (
             <CollabsRejectedReasons
               rejectedReasons={collabRejectedReasons}
-              reason={reason}
+              reason={reason || 0}
               setReason={setReason}
             />
           )}
           <Button
-            onClick={() =>
-              getFunctionForDialog(
-                sectionId,
-                pageName,
-                accept_state_id!,
-                type,
-                reason!,
-              )
-            }
+            onClick={handleOnAccept}
             sx={{ color: "#000", fontWeight: 700 }}
             disabled={false}
           >
@@ -103,7 +111,10 @@ export default function DialogDeleteConfirm({
             )}
           </Button>
 
-          <Button onClick={handleClose} sx={{ color: "#000", fontWeight: 700 }}>
+          <Button
+            onClick={handleOnClose}
+            sx={{ color: "#000", fontWeight: 700 }}
+          >
             Cancelar
           </Button>
         </DialogActions>

@@ -16,6 +16,8 @@ const dialogTexts = {
             rechazarás la collab.`,
   cancelCollab: `¿Estás seguro/a de cancelar esta collab? Haciendo click en aceptar,
             cancelarás la collab.`,
+  modifyCollabState: `¿Estás seguro/a de modificar el estado de esta collab? Haciendo click en aceptar,
+            modificarás el estado de la collab.`,
 };
 
 export default dialogTexts;
