@@ -170,8 +170,9 @@ export const CollabsContextProvider = ({
       setLoading(true);
       setError(null);
       const response = await editCollabById(repository, id, colab);
-      if (response) {
+      if (isHttpSuccessResponse(response)) {
         setLoading(false);
+        setCollab(response.data);
         return true;
       }
       return false;

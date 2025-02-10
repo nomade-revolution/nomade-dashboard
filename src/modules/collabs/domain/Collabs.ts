@@ -29,6 +29,7 @@ export interface FullCollab extends Collab {
   offer_id: number;
   addresses_id: number;
   conditions: string;
+  note: string | null;
 }
 
 export interface State {

@@ -115,12 +115,15 @@ export class CollabsRepository {
   public async editCollabById(
     id: number,
     collab: Partial<FullCollab>,
-  ): Promise<boolean> {
+  ): Promise<HttpResponseInterface<FullCollab>> {
     try {
-      await this.http.put<FullCollab>(`${COLLABS_BASE}/${id}`, collab);
-      return true;
+      const resp = await this.http.put<FullCollab>(
+        `${COLLABS_BASE}/${id}`,
+        collab,
+      );
+      return resp;
     } catch (error) {
-      return false;
+      return Promise.reject(error);
     }
   }
 }

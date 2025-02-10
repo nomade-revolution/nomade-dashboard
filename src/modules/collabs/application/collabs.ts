@@ -67,6 +67,6 @@ export const editCollabById = (
   collabsRepo: CollabsRepository<FullCollab>,
   id: number,
   colab: Partial<FullCollab>,
-): Promise<boolean> => {
+): Promise<HttpResponseInterface<FullCollab>> => {
   return collabsRepo.editCollabById(id, colab);
 };

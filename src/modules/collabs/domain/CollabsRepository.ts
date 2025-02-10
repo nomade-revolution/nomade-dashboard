@@ -18,5 +18,8 @@ export interface CollabsRepository<I> {
   getCollab(collab_id: number): Promise<HttpResponseInterface<I>>;
   createCollab(collab: FormData): Promise<HttpResponseInterface<I>>;
   exportCollabs(token: string): Promise<Blob>;
-  editCollabById(id: number, collab: Partial<FullCollab>): Promise<boolean>;
+  editCollabById(
+    id: number,
+    collab: Partial<FullCollab>,
+  ): Promise<HttpResponseInterface<FullCollab>>;
 }

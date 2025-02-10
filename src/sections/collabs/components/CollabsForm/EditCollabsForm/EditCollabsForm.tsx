@@ -27,7 +27,18 @@ interface Props {
 }
 
 const EditCollabForm = ({ collab, setIsOpen }: Props): React.ReactElement => {
-  const [initialData] = useState<FullCollab>({ ...collab });
+  const [initialData, setInitialData] = useState<FullCollab>({
+    ...collab,
+    note: collab.note || "",
+  });
+
+  useEffect(() => {
+    setInitialData({
+      ...collab,
+      note: collab.note || "",
+    });
+  }, [collab]);
+
   // const [company, setCompany] = useState<Company>({} as Company);
   // const [offer, setOffer] = useState<FullOffer>({} as FullOffer);
   // const [influencer, setInfluencer] = useState<Influencer>({} as Influencer);
@@ -63,7 +74,7 @@ const EditCollabForm = ({ collab, setIsOpen }: Props): React.ReactElement => {
     // formData.append("offer_id", JSON.stringify(offer.id));
     // formData.append("collabable", JSON.stringify(collabable));
 
-    const resp = await editCollab(collab.id, { comment: values.comment });
+    const resp = await editCollab(collab.id, { note: values.note });
 
     setSubmitting(false);
     if (resp) {
@@ -133,22 +144,22 @@ const EditCollabForm = ({ collab, setIsOpen }: Props): React.ReactElement => {
           <h3>Collab</h3>
 
           <div className="form-subsection">
-            <label htmlFor="comment" className="form-subsection__label">
-              Comentario
+            <label htmlFor="note" className="form-subsection__label">
+              Notas internas
             </label>
             <Field
               type="text"
-              id="comment"
+              id="note"
               className="form-subsection__field-textarea--company"
-              aria-label="Comentario"
+              aria-label="Notas internas"
               as={"textarea"}
-              {...getFieldProps("comment")}
+              {...getFieldProps("note")}
             />
-            {errors.comment && touched.comment && (
+            {errors.note && touched.note && (
               <ErrorMessage
                 className="form-subsection__error-message"
                 component="span"
-                name="comment"
+                name="note"
               />
             )}
           </div>
