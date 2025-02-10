@@ -68,7 +68,7 @@ export class UsersRepository {
   }
   public exportInfluencersData = async (token: string): Promise<Blob> => {
     try {
-      const response = await fetch(`${INFLUENCER_EXPORT}/export`, {
+      const response = await fetch(INFLUENCER_EXPORT, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,

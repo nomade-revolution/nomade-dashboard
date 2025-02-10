@@ -405,9 +405,16 @@ const CompanyForm = ({
             />
             {registerAddress && (
               <section className="lead-form__address">
-                <span>{registerAddress.address}</span>
-                <span>{registerAddress.province}</span>
-                <span>{registerAddress.zip_code}</span>
+                <span>{registerAddress.name}</span>
+                <span>{registerAddress.contact_name}</span>
+                <span>{registerAddress.contact_phone}</span>
+                <span>
+                  {registerAddress.address} {registerAddress.address_2 || ""}
+                </span>
+                <span>
+                  {registerAddress.province} {registerAddress.zip_code}
+                </span>
+                <span>{registerAddress.country}</span>
               </section>
             )}
             <div className="datasheet-form__address-section">
