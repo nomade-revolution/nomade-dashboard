@@ -38,7 +38,7 @@ const CompanyForm = ({
   setIsOpen,
 }: Props): React.ReactElement => {
   const [formState, setFormState] = useState<{ company_plan_id: string }>({
-    company_plan_id: client?.plan.plan_id.toString() || "",
+    company_plan_id: client?.plan?.plan_id.toString() || "",
   });
   const { user } = useAuthContext();
   const [file, setFile] = useState<File[] | null>(() => {
@@ -191,7 +191,7 @@ const CompanyForm = ({
     ...client,
     plan: {
       ...client?.plan,
-      start_date: convertDateToISO(client?.plan.start_date?.slice(0, 10)),
+      start_date: convertDateToISO(client?.plan?.start_date?.slice(0, 10)),
     },
   };
 
@@ -404,7 +404,8 @@ const CompanyForm = ({
                     handleFormStateChange("company_plan_id", value);
                   }}
                   value={
-                    client?.plan.plan_id.toString() || formState.company_plan_id
+                    client?.plan?.plan_id.toString() ||
+                    formState.company_plan_id
                   }
                 />
               </div>
@@ -508,12 +509,12 @@ const CompanyForm = ({
                 className="datasheet-form__add-contact"
                 onClick={handleIsContactModalOpen}
               >
-                {registerContacts.length > 0 ? (
+                {registerContacts?.length > 0 ? (
                   <FaEdit className="datasheet-form__create--icon" />
                 ) : (
                   <IoAddCircle className="datasheet-form__create--icon" />
                 )}
-                {registerContacts.length > 0
+                {registerContacts?.length > 0
                   ? "Modificar contacto"
                   : "Añadir contacto"}
               </button>
