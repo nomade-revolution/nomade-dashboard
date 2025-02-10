@@ -728,6 +728,14 @@ const DashboardContentSections = ({
             : "-"}
         </span>
       );
+    case "start_payment_date":
+      return (
+        <span className="dashboard__end-date">
+          {(section as Plan).start_payment_date
+            ? (section as Plan).start_payment_date?.split(" ")[0]
+            : "-"}
+        </span>
+      );
 
     case "remaining":
       return (

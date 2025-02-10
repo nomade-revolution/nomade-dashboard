@@ -201,9 +201,16 @@ const SocialMediaForm = ({
       };
     });
 
+    const parsedSocials = formatedSocials.map((socials) => {
+      return {
+        ...socials,
+        video: null,
+      };
+    });
+
     const response = await modifyInfluencerStats(influencer_id, {
       socialMedia: [
-        ...formatedSocials,
+        ...parsedSocials,
         {
           ...values,
           social_media_id: social.id,
@@ -211,6 +218,7 @@ const SocialMediaForm = ({
           countries,
           genders,
           age_ranges: ageRanges,
+          video: null,
         },
       ],
     });
@@ -267,7 +275,7 @@ const SocialMediaForm = ({
               <h5 className="stats__title">Followers</h5>
               <Field
                 type="number"
-                className="select--small"
+                className="form-subsection__field"
                 aria-label="Followers"
                 {...getFieldProps("followers")}
               />
@@ -277,7 +285,7 @@ const SocialMediaForm = ({
               <h5 className="stats__title">Visualizaciones</h5>
               <Field
                 type="number"
-                className="select--small"
+                className="form-subsection__field"
                 aria-label="Followers"
                 {...getFieldProps("stories_view")}
               />

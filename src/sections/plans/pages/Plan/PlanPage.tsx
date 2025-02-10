@@ -16,6 +16,7 @@ const PlanPage = (): React.ReactElement => {
   const { getPlan, plan, loading } = usePlansContext();
 
   const { user } = useAuthContext();
+
   const getPlansData = useCallback(() => {
     getPlan(user.id);
   }, [getPlan, user.id]);
@@ -23,6 +24,7 @@ const PlanPage = (): React.ReactElement => {
   useEffect(() => {
     getPlansData();
   }, [getPlansData]);
+
   return (
     <ReusablePageStyled className="plans-page">
       <>

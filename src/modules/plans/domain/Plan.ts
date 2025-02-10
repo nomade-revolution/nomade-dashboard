@@ -13,6 +13,7 @@ export interface Plan {
   remaining: string;
   start_date: string | null;
   end_date: string | null;
+  start_payment_date: string | null;
 }
 
 export interface PlansApiResponse {
