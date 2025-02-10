@@ -37,6 +37,7 @@ export interface State {
   name: string;
   created_at: string;
   type: string;
+  limit_date?: string;
 }
 
 export interface CollabsApiResponse {

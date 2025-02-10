@@ -79,10 +79,6 @@ export const allCollabStatesOptions = [
     name: "Modificación en progreso",
     id: COLAB_MODIFICATION_IN_PROGRESS_STATE,
   },
-  // {name: "Hecha", id: COLAB_DONE_STATE},
-  { name: "Finalizar", id: COLAB_FINISHED_STATE },
-  { name: "Cancelar", id: COLAB_CANCELLED_STATE },
-  { name: "Rechazar", id: COLAB_REJECTED_STATE },
   {
     name: "Producto enviado/entregado",
     id: COLAB_SENT_STATE,
@@ -95,6 +91,10 @@ export const allCollabStatesOptions = [
   },
   // { name: "Incidencia", id: COLAB_INCIDENT_STATE },
   { name: "Marcar como publicada", id: COLAB_PUBLISHED_STATE },
+  // {name: "Hecha", id: COLAB_DONE_STATE},
+  { name: "Finalizar", id: COLAB_FINISHED_STATE },
+  { name: "Cancelar", id: COLAB_CANCELLED_STATE },
+  { name: "Rechazar", id: COLAB_REJECTED_STATE },
 ];
 
 export const collabsFiltersCompany = [
