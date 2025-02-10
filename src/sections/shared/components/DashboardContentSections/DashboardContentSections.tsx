@@ -34,7 +34,7 @@ import { formatSliceString } from "sections/shared/utils/getDateIntoHourFormat/g
 import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
 import { AddresTableData } from "sections/offers/pages/OfferDetailPage/OfferDetailPage";
 import getSocialMediaIcons from "sections/shared/utils/getSocialMediaIcons/getSocialMediaIcons";
-import { toK } from "sections/influencer/utils/influencersSections";
+import { parseFollowers } from "sections/influencer/utils/influencersSections";
 import { Fragment } from "react";
 import useActions from "sections/shared/hooks/useActions/useActions";
 
@@ -144,7 +144,7 @@ const DashboardContentSections = ({
               fontWeight: "bold",
             }}
           >
-            {toK((section as SocialMedia).followers)}
+            {parseFollowers((section as SocialMedia).followers)}
           </span>
         );
       }
@@ -853,7 +853,9 @@ const DashboardContentSections = ({
           ) : (
             ""
           )}
-          <span>{main_social ? toK(main_social?.followers) : "-"}</span>
+          <span>
+            {main_social ? parseFollowers(main_social?.followers) : "-"}
+          </span>
         </div>
       );
     }

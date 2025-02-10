@@ -13,6 +13,7 @@ export const clientSchema = yup.object().shape({
   company_name: yup.string().required("La razón social es un campo requerido"),
   description: yup.string().required("La descripción es un campo requerido"),
   phone: yup.string(),
+  instagram: yup.string(),
   web: yup.string(),
   start_date: yup
     .string()
@@ -40,6 +41,7 @@ export const initialData: PartialCompany = {
   company_name: "",
   description: "",
   phone: "",
+  instagram: "",
   web: "",
   start_date: "",
   email: "",

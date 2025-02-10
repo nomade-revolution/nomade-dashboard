@@ -163,6 +163,10 @@ export const influencerSocialMediaListHeaderSections: HeaderSection[] = [
   },
 ];
 
+export const parseFollowers = (number: number): string => {
+  return `${number}K`;
+};
+
 export const toK = (number: number): string => {
   return `${(number / 1000).toFixed(1)}k`;
 };

@@ -272,11 +272,11 @@ const SocialMediaForm = ({
             <h3>Estadísticas {social?.account_name}</h3>
 
             <section className="stats__section">
-              <h5 className="stats__title">Followers</h5>
+              <h5 className="stats__title">Followers (k)</h5>
               <Field
                 type="number"
                 className="form-subsection__field"
-                aria-label="Followers"
+                aria-label="Followers (k)"
                 {...getFieldProps("followers")}
               />
             </section>
@@ -286,7 +286,7 @@ const SocialMediaForm = ({
               <Field
                 type="number"
                 className="form-subsection__field"
-                aria-label="Followers"
+                aria-label="Visualizaciones"
                 {...getFieldProps("stories_view")}
               />
             </section>

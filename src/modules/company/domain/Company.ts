@@ -25,4 +25,5 @@ export type PartialCompany = Pick<
   password_confirmation: string;
   comments: string;
   plan_comments: string;
+  instagram: string;
 };

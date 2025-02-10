@@ -562,7 +562,7 @@ const CreateInfluencerPage = () => {
                   </div>
                   <div className="form-section">
                     <label htmlFor="email" className="login-form__label">
-                      Followers
+                      Followers (k)
                     </label>
                     <Field
                       type="text"

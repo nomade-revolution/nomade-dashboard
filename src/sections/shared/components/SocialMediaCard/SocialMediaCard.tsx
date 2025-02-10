@@ -13,7 +13,10 @@ import { FaLink, FaUserFriends } from "react-icons/fa";
 import { IoStatsChart } from "react-icons/io5";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { FaPlay } from "react-icons/fa6";
-import { toK } from "sections/influencer/utils/influencersSections";
+import {
+  parseFollowers,
+  toK,
+} from "sections/influencer/utils/influencersSections";
 
 interface Props {
   socialMedia: SocialMedia;
@@ -77,7 +80,8 @@ const SocialMediaCard = ({
           {socialMedia.account_name}
         </span>
         <span className="social-card__text-icon">
-          <FaUserFriends size={20} /> {toK(socialMedia.followers)} followers
+          <FaUserFriends size={20} /> {parseFollowers(socialMedia.followers)}{" "}
+          followers
         </span>
         {(socialMedia as any)?.stories_view && (
           <span className="social-card__text-icon">

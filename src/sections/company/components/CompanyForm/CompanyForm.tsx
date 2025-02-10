@@ -23,6 +23,7 @@ import { Company } from "modules/user/domain/User";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { Checkbox } from "@mui/material";
 
+const EXCLUDED_FIELDS = ["id", "instagram", "socialMedia", "contacts"];
 interface Props {
   onSubmit: (values: FormData, id?: number) => void;
   type?: string;
@@ -97,7 +98,7 @@ const CompanyForm = ({
     const formattedDate = formatDateWithDash(values.start_date);
 
     Object.keys(values).forEach((key) => {
-      if (key !== "id") {
+      if (!EXCLUDED_FIELDS.includes(key)) {
         const value =
           key === "plan[start_date]"
             ? formattedDate
@@ -119,8 +120,34 @@ const CompanyForm = ({
     if (checkedTerms) {
       formData.append("terms", JSON.stringify(checkedTerms));
     }
+
     if (registerContacts.length > 0) {
       formData.append("contacts", JSON.stringify(registerContacts));
+    }
+
+    if (values.instagram) {
+      // caso "ya hay socialMedia" -> buscar y actualizar instagram
+      if (client?.socialMedia?.length) {
+        const newSocialMedias = client.socialMedia.map((socialMedia) => {
+          if (socialMedia.name === "Instagram") {
+            return {
+              social_media_id: socialMedia.id,
+              account_name: values.instagram,
+            };
+          }
+          return socialMedia;
+        });
+        formData.append("socialMedia", JSON.stringify(newSocialMedias));
+      } else {
+        // caso "no hay socialMedia" -> crear uno nuevo con instagram
+        const newSocialMedias = [
+          {
+            social_media_id: 1, // hardcoded id for instagram
+            account_name: values.instagram,
+          },
+        ];
+        formData.append("socialMedia", JSON.stringify(newSocialMedias));
+      }
     }
 
     formData.append("name", values.company_name);
@@ -155,14 +182,19 @@ const CompanyForm = ({
     const [day, month, year] = date.split("-");
     return `${year}-${month}-${day}`;
   };
+
   const initialValues = {
     ...initialData,
+    instagram:
+      client?.socialMedia?.find((s) => s.name === "Instagram")?.account_name ||
+      "",
     ...client,
     plan: {
       ...client?.plan,
       start_date: convertDateToISO(client?.plan.start_date?.slice(0, 10)),
     },
   };
+
   return (
     <Formik
       initialValues={initialValues}
@@ -271,6 +303,26 @@ const CompanyForm = ({
                   className="form-subsection__error-message"
                   component="span"
                   name="phone"
+                />
+              )}
+            </div>
+
+            <div className="form-subsection">
+              <label htmlFor="instagram" className="form-subsection__label">
+                instagram
+              </label>
+              <Field
+                type="text"
+                id="instagram"
+                className="form-subsection__field-large--company"
+                aria-label="Alias"
+                {...getFieldProps("instagram")}
+              />
+              {errors.instagram && touched.instagram && (
+                <ErrorMessage
+                  className="form-subsection__error-message"
+                  component="span"
+                  name="instagram"
                 />
               )}
             </div>

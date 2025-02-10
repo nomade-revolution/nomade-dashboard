@@ -1,5 +1,4 @@
 import { Influencer } from "@influencer";
-import { SocialMedia } from "@influencer/domain/InfluencerSocialMedia";
 import { FullAddress } from "modules/address/domain/Address";
 import { Contact } from "modules/contact/domain/Contact";
 import { Plan } from "modules/plans/domain/Plan";
@@ -23,7 +22,7 @@ export interface Company extends User {
   web: string;
   description: string;
   image: string;
-  socialMedia: SocialMedia[];
+  socialMedia: CompanySocialMedia[];
   user_id: number;
   address: FullAddress;
   contacts: Array<
@@ -41,6 +40,14 @@ export interface Company extends User {
   goCardless: number;
   status: string;
   company_comments: string;
+}
+
+export interface CompanySocialMedia {
+  id: number;
+  name: string;
+  url: string;
+  account_name: string;
+  followers?: number;
 }
 
 export interface Account {
