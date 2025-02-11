@@ -40,6 +40,7 @@ export interface Company extends User {
   goCardless: number;
   status: string;
   company_comments: string;
+  offer_id?: number;
 }
 
 export interface CompanySocialMedia {

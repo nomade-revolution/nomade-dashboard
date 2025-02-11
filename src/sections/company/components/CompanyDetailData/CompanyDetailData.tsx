@@ -30,13 +30,11 @@ const CompanyDetailData = ({ company }: Props): React.ReactElement => {
       },
     });
   };
+
   const handleNavigateOffers = () => {
-    navigate("/ofertas/page/1", {
-      state: {
-        search: company.company,
-      },
-    });
+    navigate(`/oferta/${company.offer_id}`);
   };
+
   return (
     <CompanyDetailDataStyled>
       <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
@@ -109,12 +107,14 @@ const CompanyDetailData = ({ company }: Props): React.ReactElement => {
                 icon={<FaRegCommentDots />}
                 onClick={() => setIsDialogOpen(true)}
               />
-              <ActionButton
-                onClick={handleNavigateOffers}
-                text="Ver Oferta"
-                icon={<FaEye />}
-                color={theme.colors.darkBlue}
-              />
+              {company.offer_id ? (
+                <ActionButton
+                  onClick={handleNavigateOffers}
+                  text="Ver Oferta"
+                  icon={<FaEye />}
+                  color={theme.colors.darkBlue}
+                />
+              ) : null}
               <ActionButton
                 onClick={handleNavigate}
                 text="Ver Collabs"
