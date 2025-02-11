@@ -18,6 +18,8 @@ import SocialMediaForm from "sections/shared/components/SocialMediaForm/SocialMe
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import InfluencerSocialMediaList from "sections/influencer/components/InfluencerSocialMediaList/InfluencerSocialMediaList";
 import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { FaEdit } from "react-icons/fa";
+import EditInfluencerForm from "sections/influencer/components/EditInfluencerForm/EditInfluencerForm";
 
 const STATES_OPTIONS = [
   {
@@ -55,6 +57,7 @@ const InfluencerDetailPage = (): React.ReactElement => {
   const { handleIsDialogOpen } = useActions();
   const { user } = useAuthContext();
   const [isOpenModalEdit, setIsOpenModalEdit] = useState<boolean>(false);
+  const [isEditFormOpen, setIsEditFormOpen] = useState<boolean>(false);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [isDialogEditStateOpen, setIsDialogEditStateOpen] =
     useState<boolean>(false);
@@ -75,6 +78,11 @@ const InfluencerDetailPage = (): React.ReactElement => {
   useEffect(() => {
     getInfluencer(+id!);
   }, [getInfluencer, id]);
+
+  const handleOnSubmit = () => {
+    setIsEditFormOpen(false);
+    getInfluencer(+id!);
+  };
 
   if (loading) return <Loader width="20px" height="20px" />;
 
@@ -103,6 +111,14 @@ const InfluencerDetailPage = (): React.ReactElement => {
               </MenuItem>
             ))}
           </Select>
+          {user.type === "Nomade" && (
+            <ActionButton
+              onClick={() => setIsEditFormOpen(true)}
+              text="Editar Influencer"
+              icon={<FaEdit />}
+              color={theme.colors.darkBlue}
+            />
+          )}
           {user.type === "Nomade" && (
             <ActionButton
               onClick={handleDeleteButton}
@@ -140,6 +156,18 @@ const InfluencerDetailPage = (): React.ReactElement => {
         type="modifyState"
         pageName={SectionTypes.influencers}
         successText="Estado modificado"
+      />
+
+      <ReusableModal
+        children={
+          <EditInfluencerForm
+            initialState={influencer}
+            onSubmit={handleOnSubmit}
+          />
+        }
+        openModal={isEditFormOpen}
+        setIsModalOpen={setIsEditFormOpen}
+        type="client"
       />
 
       <ReusableModal
