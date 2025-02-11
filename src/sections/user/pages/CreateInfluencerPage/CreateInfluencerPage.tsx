@@ -37,26 +37,26 @@ const initialState: RegisterInfluencerInterface = {
   socialMedia: [],
 };
 
+const DEFAULT_STATS = ["0", "0", "0", "0"];
+const EXCLUDED_KEYS = [
+  "categories",
+  "avatar",
+  "socialMedia",
+  "gender",
+  "ageRanges",
+];
+
 const CreateInfluencerPage = () => {
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
-  const { registerInfluencer, modifyInfluencerStats } = useInfluencerContext();
+  const { registerInfluencer } = useInfluencerContext();
   const navigate = useNavigate();
   const [loading, setIsLoading] = useState<boolean>(false);
   const { getAllCities } = useCitiesContext();
   const { countries, getAllCountries } = useCountryContext();
-  const [countriesStats, setCountriesStates] = useState<string[]>([
-    "0",
-    "0",
-    "0",
-    "0",
-  ]);
-  const [citiesStats, setCitiesStates] = useState<string[]>([
-    "0",
-    "0",
-    "0",
-    "0",
-  ]);
+  const [countriesStats, setCountriesStates] =
+    useState<string[]>(DEFAULT_STATS);
+  const [citiesStats, setCitiesStates] = useState<string[]>(DEFAULT_STATS);
   const [mainSocial, setMainSocial] = useState<number>(0);
   const [citiesBorn, setCitiesBorn] = useState<City[]>([]);
   const [citiesLive, setCitiesLive] = useState<City[]>([]);
@@ -69,8 +69,12 @@ const CreateInfluencerPage = () => {
   const [file, setFile] = useState<File[]>([]);
   const [citiesPerPercentage, setCitiesPerPercentage] = useState<City[]>([]);
   const [category, setCategory] = useState<number>(0);
-  const { influencerCategories, getInfluencerCategories } =
-    useInfluencerContext();
+  const [subcategory, setSubcategory] = useState<number>(0);
+  const {
+    influencerCategories,
+    parentInfluencerCategories,
+    getInfluencerCategories,
+  } = useInfluencerContext();
   const [socials, setSocials] = useState<number[]>([]);
 
   const getCitiesFromCountry = async (
@@ -93,13 +97,7 @@ const CreateInfluencerPage = () => {
     setIsFormSubmitted(true);
     const formData = new FormData();
     Object.keys(values).forEach((key) => {
-      if (
-        key !== "categories" &&
-        key !== "avatar" &&
-        key !== "socialMedia" &&
-        key !== "gender" &&
-        key !== "ageRanges"
-      ) {
+      if (!EXCLUDED_KEYS.includes(key)) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         formData.append(key, values[key]);
@@ -114,30 +112,30 @@ const CreateInfluencerPage = () => {
         ...social,
         social_media_id: social.social_media_id,
         main: mainSocial === social.social_media_id,
-        age_ranges: social.agePercentage.map((age: number, index: number) => {
+        age_ranges: social.agePercentage?.map((age: number, index: number) => {
           return {
             age_range_id: index + 1,
-            followers_percentage: age,
+            followers_percentage: age || 0,
           };
         }),
 
         genders: [
-          { gender_id: 1, followers_percentage: social.gender.men },
-          { gender_id: 2, followers_percentage: social.gender.women },
+          { gender_id: 1, followers_percentage: social.gender?.men || 0 },
+          { gender_id: 2, followers_percentage: social.gender?.women || 0 },
         ],
       };
     });
 
-    formData.append("categories[]", JSON.stringify(category));
+    const categories = [category, subcategory];
+
+    categories.forEach((category, index) => {
+      formData.append(`categories[${index}]`, String(category));
+    });
+
+    formData.append("socialMedia", JSON.stringify(newSocials));
 
     try {
       const resp: any = await registerInfluencer(formData as any);
-      if (newSocials.length === 0) {
-        return;
-      }
-      await modifyInfluencerStats(resp.data.id, {
-        socialMedia: newSocials,
-      });
 
       setIsSuccess(Boolean(resp.success));
 
@@ -166,6 +164,11 @@ const CreateInfluencerPage = () => {
       getInfluencerCategories();
     }
   }, [getInfluencerCategories, influencerCategories.length]);
+
+  const filteredCategories = influencerCategories.filter(
+    (cat) => cat.parent_id === category,
+  );
+
   return (
     <ReusablePageStyled>
       <div className="header">
@@ -380,13 +383,32 @@ const CreateInfluencerPage = () => {
               <div className="form-section">
                 <ReusableSelect
                   label="Categoría de influencer"
-                  options={influencerCategories.map((category) => ({
+                  options={parentInfluencerCategories.map((category) => ({
                     id: category.id,
                     name: category.name,
                     value: category.id,
                   }))}
                   setValue={(v) => setCategory(+v)}
                   value={category.toString()}
+                />
+                {errors.categories && touched.categories && (
+                  <ErrorMessage
+                    className="login-form__error-message"
+                    component="span"
+                    name="categories"
+                  />
+                )}
+              </div>
+              <div className="form-section">
+                <ReusableSelect
+                  label="Subcategoría de influencer"
+                  options={filteredCategories.map((category) => ({
+                    id: category.id,
+                    name: category.name,
+                    value: category.id,
+                  }))}
+                  setValue={(v) => setSubcategory(+v)}
+                  value={subcategory.toString()}
                 />
                 {errors.categories && touched.categories && (
                   <ErrorMessage
@@ -569,6 +591,7 @@ const CreateInfluencerPage = () => {
                       id="followers"
                       className="form-section__field"
                       aria-label="followers"
+                      placeholder="0"
                       {...getFieldProps(`socialMedia[${index}].followers`)}
                     />
                     {errors.socialMedia && touched.socialMedia && (
@@ -592,6 +615,7 @@ const CreateInfluencerPage = () => {
                     id="men"
                     className="form-section__field"
                     aria-label="men"
+                    placeholder="0"
                     {...getFieldProps(`socialMedia[${index}].gender.men`)}
                   />
                   {errors.socialMedia && touched.socialMedia && (
@@ -610,6 +634,7 @@ const CreateInfluencerPage = () => {
                     id="women"
                     className="form-section__field"
                     aria-label="women"
+                    placeholder="0"
                     {...getFieldProps(`socialMedia[${index}].gender.women`)}
                   />
                   {errors.socialMedia && touched.socialMedia && (
@@ -704,6 +729,7 @@ const CreateInfluencerPage = () => {
                           id="followers_percentage"
                           className="form-section__field"
                           aria-label="followers_percentage"
+                          placeholder="0"
                           {...getFieldProps(
                             `socialMedia[${index}].cities[${cityIndex}].followers_percentage`,
                           )}
@@ -757,6 +783,7 @@ const CreateInfluencerPage = () => {
                           id="followers_percentage"
                           className="form-section__field"
                           aria-label="followers_percentage"
+                          placeholder="0"
                           {...getFieldProps(
                             `socialMedia[${index}].countries[${countryIndex}].followers_percentage`,
                           )}
@@ -788,6 +815,7 @@ const CreateInfluencerPage = () => {
                         id="agePercentage1"
                         className="form-section__field"
                         aria-label="agePercentage1"
+                        placeholder="0"
                         {...getFieldProps(
                           `socialMedia[${index}].agePercentage[0]`,
                         )}
@@ -812,6 +840,7 @@ const CreateInfluencerPage = () => {
                         id="agePercentage2"
                         className="form-section__field"
                         aria-label="agePercentage2"
+                        placeholder="0"
                         {...getFieldProps(
                           `socialMedia[${index}].agePercentage[1]`,
                         )}
@@ -836,6 +865,7 @@ const CreateInfluencerPage = () => {
                         id="agePercentage3"
                         className="form-section__field"
                         aria-label="agePercentage3"
+                        placeholder="0"
                         {...getFieldProps(
                           `socialMedia[${index}].agePercentage[2]`,
                         )}
@@ -860,6 +890,7 @@ const CreateInfluencerPage = () => {
                         id="agePercentage4"
                         className="form-section__field"
                         aria-label="agePercentage4"
+                        placeholder="0"
                         {...getFieldProps(
                           `socialMedia[${index}].agePercentage[3]`,
                         )}
@@ -884,6 +915,7 @@ const CreateInfluencerPage = () => {
                         id="agePercentage5"
                         className="form-section__field"
                         aria-label="agePercentage5"
+                        placeholder="0"
                         {...getFieldProps(
                           `socialMedia[${index}].agePercentage[4]`,
                         )}
@@ -908,6 +940,7 @@ const CreateInfluencerPage = () => {
                         id="agePercentage6"
                         className="form-section__field"
                         aria-label="agePercentage6"
+                        placeholder="0"
                         {...getFieldProps(
                           `socialMedia[${index}].agePercentage[5]`,
                         )}

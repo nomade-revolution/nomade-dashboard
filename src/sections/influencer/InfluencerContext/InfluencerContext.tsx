@@ -43,6 +43,7 @@ interface ContextState {
   registerInfluencer: (data: Partial<RegisterInfluencerInterface>) => void;
   influencerCategories: InfluencerCategory[];
   getInfluencerCategories: () => void;
+  parentInfluencerCategories: InfluencerCategory[];
   socialMediaSelected: SocialMedia;
   setSocialMediaSelected: (value: SocialMedia) => void;
   isSocialMediaModalOpen: boolean;
@@ -61,6 +62,9 @@ export const InfluencerContextProvider = ({
   repository: InfluencerRepository<{ success: boolean }>;
 }>) => {
   const [influencerCategories, setInfluencerCategories] = useState<
+    InfluencerCategory[]
+  >([]);
+  const [parentInfluencerCategories, setParentInfluencerCategories] = useState<
     InfluencerCategory[]
   >([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -176,7 +180,12 @@ export const InfluencerContextProvider = ({
     const response = await getCategoriesInfluencer(repository);
 
     if (isHttpSuccessResponse(response)) {
-      setInfluencerCategories(response.data as unknown as InfluencerCategory[]);
+      const categories = response.data as unknown as InfluencerCategory[];
+      setInfluencerCategories(categories);
+      const parentsCategories = categories.filter(
+        (cat) => cat.parent_id === null,
+      );
+      setParentInfluencerCategories(parentsCategories);
       setIsSuccess(true);
     } else {
       setError(response.error as never);
@@ -191,6 +200,7 @@ export const InfluencerContextProvider = ({
       value={{
         influencerCategories,
         getInfluencerCategories,
+        parentInfluencerCategories,
         registerInfluencer,
         socialMediaSelected,
         setSocialMediaSelected,
