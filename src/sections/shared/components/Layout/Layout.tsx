@@ -42,8 +42,10 @@ const Layout = (): React.ReactElement => {
 
   useEffect(() => {
     if (user.type === "Company") {
+      const userData = user as Company;
+      const companyId = userData.companies ? userData.companies[0].id : 0;
       const filters = {
-        filters: { company_id: (user as Company).id },
+        filters: { company_id: companyId },
       };
       getAllOffers(1, 1, filters);
     }

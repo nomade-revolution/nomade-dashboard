@@ -756,7 +756,7 @@ const DashboardContentSections = ({
       return (
         <span className="dashboard__date">
           {headerSection.property === "created_at"
-            ? (section as Lead).created_at.split(" ")[0]
+            ? (section as Lead).created_at?.split(" ")[0]
             : (section as Lead).sent_at
               ? (section as Lead).sent_at
               : "No enviado"}
