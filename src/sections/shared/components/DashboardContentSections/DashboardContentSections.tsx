@@ -37,6 +37,7 @@ import getSocialMediaIcons from "sections/shared/utils/getSocialMediaIcons/getSo
 import { parseFollowers } from "sections/influencer/utils/influencersSections";
 import { Fragment } from "react";
 import useActions from "sections/shared/hooks/useActions/useActions";
+import { useInfluencerContext } from "sections/influencer/InfluencerContext/useInfluencerContext";
 
 interface Props {
   headerSection: HeaderSection;
@@ -69,6 +70,7 @@ const DashboardContentSections = ({
   const calendar = (section as FullOffer).calendar;
   const daysSet = new Set<string>();
   const { user } = useAuthContext();
+  const { influencer } = useInfluencerContext();
   const { modifyOffer } = useOffersContext();
   const { setSocialMediaSelected, setIsSocialMediaModalOpen } = useActions();
 
@@ -160,7 +162,7 @@ const DashboardContentSections = ({
                 color: theme.colors.mainColor,
                 textDecoration: "underline",
               }}
-              to={(section as SocialMedia).video || ""}
+              to={`/influencer/${influencer.id}/video`}
               target="_blank"
             >
               Ver video

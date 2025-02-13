@@ -14,6 +14,7 @@ export const appPaths = {
   collab: "/collab/:id",
   influencers: "/influencers/page/:page",
   influencer: "/influencer/:id",
+  influencerVideo: "/influencer/:id/video",
   leads: "/leads/page/:page",
   leadsSubmit: "/client/register",
   categories: "/categories",

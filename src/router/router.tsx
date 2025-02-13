@@ -26,6 +26,7 @@ import PlanPage from "sections/plans/pages/Plan/PlanPage";
 import CreateInfluencerPage from "sections/user/pages/CreateInfluencerPage/CreateInfluencerPage";
 import UsersAppPage from "sections/user/pages/UsersAppPage/UsersAppPage";
 import TermConditionsPage from "sections/shared/pages/TermsConditions/TermsConditions";
+import InfluencerVideoPage from "sections/influencer/pages/InfluencerVideoPage/InfluencerVideoPage";
 
 const routes: RouteObject[] = [
   {
@@ -60,6 +61,10 @@ const routes: RouteObject[] = [
       {
         path: appPaths.influencer,
         element: <InfluencerDetailPage />,
+      },
+      {
+        path: appPaths.influencerVideo,
+        element: <InfluencerVideoPage />,
       },
       {
         path: appPaths.clients,
