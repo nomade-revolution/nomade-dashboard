@@ -60,9 +60,11 @@ const CollabsPage = (): React.ReactElement => {
 
   const getCollabs = useCallback(
     (text?: string) => {
+      const companyId = user.companies ? user.companies[0].id : 0;
+
       const filters: FilterParams =
         user.type === "Company"
-          ? { filters: { company_id: user.id } }
+          ? { filters: { company_id: companyId } }
           : { filters: {} };
 
       if (order?.sortTag) {
