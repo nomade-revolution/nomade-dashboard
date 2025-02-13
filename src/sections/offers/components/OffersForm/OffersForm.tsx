@@ -30,13 +30,6 @@ import {
 } from "sections/shared/interfaces/interfaces";
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
 import CustomFileInput from "sections/shared/components/CustomFileInput/CustomFileInput";
-import {
-  BRAND_OFFER_ID,
-  LODGING_OFFER_ID,
-  RESTAURANT_OFFER_ID,
-  DELIVERY_OFFER_ID,
-  ACTIVITY_OFFER_ID,
-} from "sections/offers/utils/offersCategories";
 import OffersScheduling from "../OffersScheduling/OffersScheduling";
 import { Company } from "modules/user/domain/User";
 import OfferResume from "../OfferResume/OfferResume";
@@ -47,6 +40,7 @@ import Loader from "sections/shared/components/Loader/Loader";
 import { Calendar } from "modules/offers/domain/OfferCalendar";
 import formatOfferResume from "sections/offers/utils/formatOfferResume";
 import formatOfferScheduling from "sections/offers/utils/formatOfferScheduling";
+import { OfferTypes } from "modules/offers/domain/Offer";
 
 interface Props {
   offer?: FullOffer;
@@ -91,7 +85,8 @@ const OffersForm = ({
     country: string;
     city: string;
     location: string;
-    category: string;
+    categories: number[];
+    type: OfferTypes | string;
     offerable_type: string;
     address: string;
   }>({
@@ -101,7 +96,8 @@ const OffersForm = ({
         : "",
     city: "",
     location: offer ? offer.location_type : "",
-    category: offer ? String(offer?.offer_category_id) : "",
+    categories: offer ? offer?.offer_categories?.map((cat) => cat.id) : [],
+    type: offer?.type || "",
     offerable_type: "",
     address: offer?.calendar
       ? String((offer?.calendar as Calendar[])[0]?.address_id)
@@ -110,35 +106,61 @@ const OffersForm = ({
         : "",
   });
 
+  const offerType = offer?.type;
+
+  const parseSchedulingState = () => {
+    const data: {
+      restaurant: OfferableRestaurant[];
+      delivery: OfferableDelivery;
+      activity: OfferableActivity[];
+      brand: object;
+      lodging: OfferableLodging[];
+    } = {
+      restaurant: [],
+      // @ts-expect-error TODO: fix this
+      delivery: {},
+      activity: [],
+      brand: [],
+      lodging: [],
+    };
+    if (offerType === OfferTypes.restaurant) {
+      if (offerResumeFormat[0]) {
+        // @ts-expect-error TODO: fix this
+        data.restaurant = offerResumeFormat[0];
+      }
+    }
+
+    if (offerType === OfferTypes.delivery) {
+      if (offerResumeFormat[0]) {
+        // @ts-expect-error TODO: fix this
+        data.delivery = offerResumeFormat[0];
+      }
+    }
+
+    if (offerType === OfferTypes.activity) {
+      if (offerResumeFormat[0]) {
+        // @ts-expect-error TODO: fix this
+        data.activity = offerResumeFormat[0];
+      }
+    }
+
+    if (offerType === OfferTypes.lodging) {
+      if (offerResumeFormat[0]) {
+        // @ts-expect-error TODO: fix this
+        data.lodging = offerResumeFormat[0];
+      }
+    }
+
+    return data;
+  };
+
   const [schedulingState, setSchedulingState] = useState<{
     restaurant: OfferableRestaurant[];
     delivery: OfferableDelivery;
     activity: OfferableActivity[];
     brand: object;
     lodging: OfferableLodging[];
-  }>({
-    restaurant:
-      offer?.offer_category_id === RESTAURANT_OFFER_ID
-        ? ((
-            offerResumeFormat as OfferableRestaurant[][]
-          )[0] as OfferableRestaurant[])
-        : [],
-    delivery:
-      offer?.offer_category_id === DELIVERY_OFFER_ID
-        ? (offerResumeFormat! as OfferableDelivery[])[0]
-        : ({} as OfferableDelivery),
-    activity:
-      offer?.offer_category_id === ACTIVITY_OFFER_ID
-        ? ((
-            offerResumeFormat as OfferableActivity[][]
-          )[0] as OfferableActivity[])
-        : [],
-    brand: {},
-    lodging:
-      offer?.offer_category_id === LODGING_OFFER_ID
-        ? ((offerResumeFormat as OfferableLodging[][])[0] as OfferableLodging[])
-        : [],
-  });
+  }>(parseSchedulingState());
 
   const [week, setWeek] = useState<WeekDay[]>([]);
   const [selectedDays, setSelectedDays] = useState<SelectedDay[]>(
@@ -190,7 +212,7 @@ const OffersForm = ({
       true,
       company.id,
       file!,
-      +formState.category,
+      formState.categories,
     );
 
     await onSubmit(formData, offer && offer?.id);
@@ -206,7 +228,7 @@ const OffersForm = ({
   const handleSchedulingStateDelete = () => {
     setSchedulingState({
       activity: [],
-      brand: {},
+      brand: [],
       delivery: {} as OfferableDelivery,
       lodging: [],
       restaurant: [],
@@ -257,39 +279,41 @@ const OffersForm = ({
   }, [companySearch, getCompaniesWithParams]);
 
   useEffect(() => {
-    const offerTypeMap: { [key: number]: string } = {
-      [RESTAURANT_OFFER_ID]: "App\\Models\\OfferableRestaurant",
-      [BRAND_OFFER_ID]: "App\\Models\\OfferableBrand",
-      [LODGING_OFFER_ID]: "App\\Models\\OfferableLodging",
-      [DELIVERY_OFFER_ID]: "App\\Models\\OfferableDelivery",
-      [ACTIVITY_OFFER_ID]: "App\\Models\\OfferableActivity",
+    // @ts-expect-error TODO fix this
+    const offerTypeMap: { [key: OfferTypes]: string } = {
+      [OfferTypes.restaurant]: "App\\Models\\OfferableRestaurant",
+      [OfferTypes.brand]: "App\\Models\\OfferableBrand",
+      [OfferTypes.lodging]: "App\\Models\\OfferableLodging",
+      [OfferTypes.delivery]: "App\\Models\\OfferableDelivery",
+      [OfferTypes.activity]: "App\\Models\\OfferableActivity",
     };
 
-    if (formState.category) {
+    if (formState.type) {
       handleFormStateChange(
         "offerable_type",
-        offerTypeMap[+formState.category],
+        // @ts-expect-error TODO fix this
+        offerTypeMap[formState.type],
       );
     }
-  }, [formState.category]);
+  }, [formState.type]);
 
   useEffect(() => {
     const offerSchedule = Object.values(schedulingState).find((state) => {
       return Array.isArray(state) && state.length > 0;
     });
 
-    switch (+formState.category) {
-      case BRAND_OFFER_ID:
-        setOfferResume({});
+    switch (formState.type) {
+      case OfferTypes.brand:
+        setOfferResume([]);
         break;
-      case DELIVERY_OFFER_ID:
+      case OfferTypes.delivery:
         setOfferResume(schedulingState["delivery"]);
         break;
       default:
         setOfferResume(offerSchedule as never);
         break;
     }
-  }, [formState.category, schedulingState]);
+  }, [formState.type, schedulingState]);
 
   // useEffect(() => {
   //   if (isSuccess) {
@@ -433,44 +457,46 @@ const OffersForm = ({
                     />
                   )}
                 </div>
-                <OfferResume
-                  company={company}
-                  offerResume={offerResume as never}
-                  category={formState.category}
-                  offer={offer}
-                  onOfferResumeChange={handleOfferResumeChange}
-                  setSelectedDays={setSelectedDays}
-                  setWeek={setWeek}
-                  onSchedulingStateDelete={handleSchedulingStateDelete}
-                  schedulingState={schedulingState}
-                  setSchedulingState={setSchedulingState}
-                  selectedIndex={selectedIndex}
-                  setSelectedIndex={setSelectedIndex}
-                />
+
+                {offerType !== OfferTypes.brand ? (
+                  <OfferResume
+                    company={company}
+                    offerResume={offerResume as never}
+                    type={formState.type}
+                    offer={offer}
+                    onOfferResumeChange={handleOfferResumeChange}
+                    setSelectedDays={setSelectedDays}
+                    setWeek={setWeek}
+                    onSchedulingStateDelete={handleSchedulingStateDelete}
+                    schedulingState={schedulingState}
+                    setSchedulingState={setSchedulingState}
+                    selectedIndex={selectedIndex}
+                    setSelectedIndex={setSelectedIndex}
+                  />
+                ) : null}
               </section>
               <section className="datasheet-form__section">
                 <section className="form-offer__select-data">
                   <div className="form-offer__selects">
                     <div className="form-subsection">
                       <label htmlFor="email" className="form-subsection__label">
-                        Categoría
+                        Tipo
                       </label>
                       <ReusableSelect
-                        label="Categorías"
+                        label="Tipo"
                         options={categories}
                         setValue={(value) =>
-                          handleFormStateChange("category", value)
+                          handleFormStateChange("type", value)
                         }
-                        value={formState.category}
+                        value={formState.type}
                       />
-                      {errors.offer_category_id &&
-                        touched.offer_category_id && (
-                          <ErrorMessage
-                            className="form-subsection__error-message"
-                            component="span"
-                            name="email"
-                          />
-                        )}
+                      {errors.type && touched.type && (
+                        <ErrorMessage
+                          className="form-subsection__error-message"
+                          component="span"
+                          name="email"
+                        />
+                      )}
                     </div>
                     <section className="datasheet-form__section">
                       <div className="form-subsection">
@@ -534,7 +560,7 @@ const OffersForm = ({
                     multiple
                   />
                   <OffersScheduling
-                    category={+formState.category}
+                    type={formState.type}
                     errors={
                       errors as FormikErrors<
                         | OfferableRestaurant
@@ -564,6 +590,7 @@ const OffersForm = ({
                     selectedDays={selectedDays}
                     setSelectedDays={setSelectedDays}
                     setWeek={setWeek}
+                    // @ts-expect-error TODO: fix this
                     week={week}
                     offer={offer!}
                     selectedIndex={selectedIndex}
@@ -587,9 +614,9 @@ const OffersForm = ({
               type="submit"
               disabled={
                 isSubmitting ||
-                (!offerResume && offer?.offer_category_id !== LODGING_OFFER_ID)
+                (!offerResume && offerType !== OfferTypes.lodging)
                 // (!formState.address &&
-                //   offer?.offer_category_id !== DELIVERY_OFFER_ID)
+                //   categoryId !== DELIVERY_OFFER_ID)
               }
               className={
                 isSuccess

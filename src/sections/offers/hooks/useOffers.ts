@@ -5,13 +5,8 @@ import {
   OfferableLodging,
   OfferableRestaurant,
   OfferFormStructure,
+  OfferTypes,
 } from "modules/offers/domain/Offer";
-import {
-  RESTAURANT_OFFER_ID,
-  DELIVERY_OFFER_ID,
-  ACTIVITY_OFFER_ID,
-  LODGING_OFFER_ID,
-} from "../utils/offersCategories";
 
 const useOffers = () => {
   const handleOfferFormData = (
@@ -28,7 +23,7 @@ const useOffers = () => {
     active: boolean,
     company_id: number,
     images: File[],
-    offer_category_id: number,
+    categories: number[],
   ) => {
     const formData = new FormData();
 
@@ -39,7 +34,7 @@ const useOffers = () => {
       "location_id",
       "active",
       "company_id",
-      "offer_category_id",
+      "categories",
       "images",
     ];
 
@@ -55,7 +50,7 @@ const useOffers = () => {
     formData.append("location_id", JSON.stringify(location_id));
     formData.append("active", JSON.stringify(active));
     formData.append("company_id", JSON.stringify(company_id));
-    formData.append("offer_category_id", JSON.stringify(offer_category_id));
+    formData.append("offer_categories", JSON.stringify(categories));
 
     images.forEach((image) => formData.append("images[]", image));
 
@@ -70,16 +65,16 @@ const useOffers = () => {
       brand: object;
       lodging: OfferableLodging[];
     },
-    category: string,
+    type: OfferTypes | string,
   ) => {
-    switch (+category) {
-      case RESTAURANT_OFFER_ID:
+    switch (type) {
+      case OfferTypes.restaurant:
         return schedulingState.restaurant;
-      case DELIVERY_OFFER_ID:
+      case OfferTypes.delivery:
         return schedulingState.delivery;
-      case ACTIVITY_OFFER_ID:
+      case OfferTypes.activity:
         return schedulingState.activity;
-      case LODGING_OFFER_ID:
+      case OfferTypes.lodging:
         return schedulingState.lodging;
       default:
         return schedulingState.brand;

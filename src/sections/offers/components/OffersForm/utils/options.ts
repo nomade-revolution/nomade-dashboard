@@ -1,10 +1,4 @@
-import {
-  BRAND_OFFER_ID,
-  DELIVERY_OFFER_ID,
-  LODGING_OFFER_ID,
-  RESTAURANT_OFFER_ID,
-  ACTIVITY_OFFER_ID,
-} from "sections/offers/utils/offersCategories";
+import { OfferTypes } from "modules/offers/domain/Offer";
 import { OptionsStructure } from "sections/shared/interfaces/interfaces";
 
 export const locationTypes: OptionsStructure[] = [
@@ -21,9 +15,9 @@ export const locationTypes: OptionsStructure[] = [
 ];
 
 export const categories: OptionsStructure[] = [
-  { id: 1, name: "Restaurante", value: RESTAURANT_OFFER_ID },
-  { id: 2, name: "Delivery", value: DELIVERY_OFFER_ID },
-  { id: 3, name: "Moda", value: BRAND_OFFER_ID },
-  { id: 4, name: "Alojamiento", value: LODGING_OFFER_ID },
-  { id: 5, name: "Bienestar", value: ACTIVITY_OFFER_ID },
+  { id: 1, name: "Restaurante", value: OfferTypes.restaurant },
+  { id: 2, name: "Delivery", value: OfferTypes.delivery },
+  { id: 3, name: "Moda", value: OfferTypes.brand },
+  { id: 4, name: "Alojamiento", value: OfferTypes.lodging },
+  { id: 5, name: "Bienestar", value: OfferTypes.activity },
 ];

@@ -67,8 +67,9 @@ export const offerSchema = yup.object().shape({
 
 export const initialData: OfferFormStructure = {
   company_id: 0,
+  type: "",
   description: "",
-  offer_category_id: 0,
+  categories: [],
   in_exchange: "",
   conditions: "",
   images: [],

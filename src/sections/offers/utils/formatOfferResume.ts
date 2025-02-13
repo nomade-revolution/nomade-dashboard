@@ -1,4 +1,4 @@
-import { FullOffer } from "modules/offers/domain/Offer";
+import { FullOffer, OfferTypes } from "modules/offers/domain/Offer";
 import { Calendar } from "modules/offers/domain/OfferCalendar";
 
 const formatOfferResume = (offer: FullOffer) => {
@@ -25,8 +25,9 @@ const formatOfferResume = (offer: FullOffer) => {
   });
 
   switch (offer?.type) {
-    case "Restaurant":
-    case "Activity": {
+    case OfferTypes.restaurant:
+    case OfferTypes.lodging:
+    case OfferTypes.activity: {
       return combinedWeek.map((week) =>
         week.map((slot) => ({
           type: offer.type,
@@ -44,16 +45,7 @@ const formatOfferResume = (offer: FullOffer) => {
       );
     }
 
-    case "Lodging": {
-      return offer.addresses.map((week) => ({
-        type: offer.type,
-        address_id: week.address_id,
-        min_guests: week.min_guests,
-        max_guests: week.max_guests,
-      }));
-    }
-
-    case "Delivery": {
+    case OfferTypes.delivery: {
       return combinedWeek.map((week) =>
         week.map((slot) => ({
           type: offer.type,
@@ -69,8 +61,8 @@ const formatOfferResume = (offer: FullOffer) => {
       );
     }
 
-    case "Brand": {
-      return {};
+    case OfferTypes.brand: {
+      return [];
     }
 
     default:

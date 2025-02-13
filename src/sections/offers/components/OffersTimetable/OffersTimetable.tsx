@@ -9,22 +9,18 @@ import {
 } from "formik";
 import {
   FullOffer,
+  OfferTypes,
   SelectedDay,
   TimeSlot,
   WeekDay,
 } from "modules/offers/domain/Offer";
 import { useEffect } from "react";
 
-import {
-  RESTAURANT_OFFER_ID,
-  ACTIVITY_OFFER_ID,
-  DELIVERY_OFFER_ID,
-} from "sections/offers/utils/offersCategories";
 import { offersTimetable } from "sections/offers/utils/offersTimetable";
 import CustomCheckbox from "sections/shared/components/CustomCheckbox/CustomCheckbox";
 
 interface Props {
-  category: number;
+  type: OfferTypes | string;
   errors: FormikErrors<TimeSlot>;
   getFieldProps: <Value = FormikValues>(
     props: string | FieldConfig<Value>,
@@ -42,7 +38,7 @@ interface Props {
 }
 
 const OffersTimetable = ({
-  category,
+  type,
   errors,
   getFieldProps,
   touched,
@@ -122,6 +118,7 @@ const OffersTimetable = ({
         acc.push({
           day_name: day.day_name,
           day_of_week: day.day_number,
+          // @ts-expect-error TODO: fix this
           time_slot: timeSlot,
         });
       }
@@ -133,10 +130,11 @@ const OffersTimetable = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getFieldProps, selectedDays, setWeek]);
 
+  const offerType = offer.type;
   useEffect(() => {
     if (
-      offer?.offer_category_id === RESTAURANT_OFFER_ID ||
-      offer?.offer_category_id === ACTIVITY_OFFER_ID
+      offerType === OfferTypes.restaurant ||
+      offerType === OfferTypes.activity
     ) {
       selectedDays.forEach((day) => {
         if (day.shifts?.firstShift.from_time !== undefined) {
@@ -168,13 +166,13 @@ const OffersTimetable = ({
         }
       });
     }
-  }, [offer?.offer_category_id, selectedDays, setFieldValue]);
+  }, [offerType, selectedDays, setFieldValue]);
 
   return (
     <section>
-      {(category === RESTAURANT_OFFER_ID ||
-        category === ACTIVITY_OFFER_ID ||
-        category === DELIVERY_OFFER_ID) && (
+      {(type === OfferTypes.restaurant ||
+        type === OfferTypes.activity ||
+        type === OfferTypes.delivery) && (
         <div>
           <ul className="scheduling__list">
             {offersTimetable.map((time, index) => (

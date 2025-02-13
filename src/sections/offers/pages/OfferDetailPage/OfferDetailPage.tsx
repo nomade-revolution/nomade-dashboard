@@ -24,6 +24,16 @@ export interface AddresTableData {
   time: { day: string; start_time: string; end_time: string }[];
 }
 
+export const parseCalendar = (calendar: Calendar | Calendar[]) => {
+  if (calendar) {
+    if (Array.isArray(calendar)) {
+      return calendar;
+    }
+    return [calendar];
+  }
+  return [];
+};
+
 const OfferDetailsPage = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { user } = useAuthContext();
@@ -63,86 +73,88 @@ const OfferDetailsPage = () => {
     return a;
   };
 
+  if (loading) {
+    return <Loader width="20px" height="20px" />;
+  }
+
+  if (!offer) {
+    return (
+      <button
+        onClick={handleIsModalOpen}
+        className="offer-detail__edit-btn"
+        type="button"
+      >
+        <MdOutlineLibraryAdd />
+        Crear oferta
+      </button>
+    );
+  }
+
+  const parsedCalendar = parseCalendar(offer.calendar);
+
   return (
-    <>
-      {loading ? (
-        <Loader width="20px" height="20px" />
-      ) : !offer ? (
-        <>
+    <OfferDetailPageStyled>
+      <GoBackButton />
+      <div className="offer-detail__heading">
+        <h3 className="offer-detail__title">
+          {offer.company}{" "}
+          <span className={getTypesClassNames(offer, "offer-detail")}>
+            ( {offer.type} )
+          </span>
+        </h3>
+        {user.type === UserTypes.nomade && (
           <button
             onClick={handleIsModalOpen}
             className="offer-detail__edit-btn"
-            type="button"
           >
-            <MdOutlineLibraryAdd />
-            Crear oferta
+            <FaEdit />
+            Editar oferta
           </button>
-        </>
-      ) : (
-        <OfferDetailPageStyled>
-          <GoBackButton />
-          <div className="offer-detail__heading">
-            <h3 className="offer-detail__title">
-              {offer.company}{" "}
-              <span className={getTypesClassNames(offer, "offer-detail")}>
-                ( {offer.type} )
-              </span>
-            </h3>
-            {user.type === UserTypes.nomade && (
-              <button
-                onClick={handleIsModalOpen}
-                className="offer-detail__edit-btn"
-              >
-                <FaEdit />
-                Editar oferta
-              </button>
-            )}
-          </div>
-          <div className="images-container">
-            {offer.images?.length > 0 &&
-              offer.images.map((image) => (
-                <ImageCustom
-                  key={image.alt}
-                  alt="Imágen de la oferta"
-                  className="offer-detail__offer-img"
-                  height={200}
-                  width={250}
-                  image={image.url}
-                />
-              ))}
-          </div>
+        )}
+      </div>
+      <div className="images-container">
+        {offer.images?.length > 0 &&
+          offer.images.map((image) => (
+            <ImageCustom
+              key={image.alt}
+              alt="Imágen de la oferta"
+              className="offer-detail__offer-img"
+              height={200}
+              width={250}
+              image={image.url}
+            />
+          ))}
+      </div>
+      <DashboardTable
+        bodySections={[offer]}
+        headerSections={headerOffers}
+        pageName="offerDetail"
+      />
+
+      {offer?.calendar && (
+        <>
+          <h3>Direcciones</h3>
+
           <DashboardTable
-            bodySections={[offer]}
-            headerSections={headerOffers}
+            bodySections={getOfferWithDayTime(parsedCalendar)}
+            headerSections={headerAddressOffers}
             pageName="offerDetail"
           />
-
-          {offer?.calendar && (
-            <>
-              <h3>Direcciones</h3>
-
-              <DashboardTable
-                bodySections={getOfferWithDayTime(offer.calendar as Calendar[])}
-                headerSections={headerAddressOffers}
-                pageName="offerDetail"
-              />
-            </>
-          )}
-          <ReusableModal
-            children={
-              <OffersForm
-                offer={offer}
-                onSubmit={modifyOffer}
-                onCancel={setIsModalOpen}
-              />
-            }
-            openModal={isModalOpen}
-            setIsModalOpen={setIsModalOpen}
-            type="offer"
-          />
-        </OfferDetailPageStyled>
+        </>
       )}
-    </>
+      <ReusableModal
+        children={
+          <OffersForm
+            offer={offer}
+            onSubmit={modifyOffer}
+            onCancel={setIsModalOpen}
+          />
+        }
+        openModal={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        type="offer"
+      />
+    </OfferDetailPageStyled>
   );
 };
 

@@ -10,11 +10,6 @@ import {
 
 import { Calendar, TimeSlotOffer } from "modules/offers/domain/OfferCalendar";
 import { Value } from "react-calendar/src/shared/types.js";
-import {
-  ACTIVITY_OFFER_ID,
-  LODGING_OFFER_ID,
-  RESTAURANT_OFFER_ID,
-} from "sections/offers/utils/offersCategories";
 import CustomCalendar from "sections/shared/components/CustomCalendar/CustomCalendar";
 import { DefaultCollabableSectionStyled } from "./CollabableTypeStyled";
 import {
@@ -22,7 +17,7 @@ import {
   CollabCollabableCreateDelivery,
   CollabCollabableCreateLodging,
 } from "modules/collabs/domain/Collabs";
-import { FullOffer } from "modules/offers/domain/Offer";
+import { FullOffer, OfferTypes } from "modules/offers/domain/Offer";
 
 interface Props {
   errors: FormikErrors<
@@ -63,12 +58,13 @@ const CollabableType = ({
     ? (offer.calendar[0] as Calendar)
     : (offer.calendar as Calendar);
 
+  const offerType = offer.type;
   return (
     <DefaultCollabableSectionStyled className="default-section">
-      {offer?.offer_category_id &&
-        (offer.offer_category_id === RESTAURANT_OFFER_ID ||
-          offer.offer_category_id === LODGING_OFFER_ID ||
-          offer.offer_category_id === ACTIVITY_OFFER_ID) && (
+      {offerType &&
+        (offerType === OfferTypes.restaurant ||
+          offerType === OfferTypes.lodging ||
+          offerType === OfferTypes.activity) && (
           <>
             <div className="form-subsection">
               <label htmlFor="in_exchange" className="form-subsection__label">
@@ -82,7 +78,7 @@ const CollabableType = ({
                     className="form-subsection__field"
                     aria-label="Correo electrónico"
                     value={
-                      offer.offer_category_id === RESTAURANT_OFFER_ID
+                      offerType === OfferTypes.restaurant
                         ? (offer.calendar as Calendar[])[0].address
                         : offer.addresses[0].address
                     }
@@ -119,7 +115,7 @@ const CollabableType = ({
         <CustomCalendar
           onChange={onChangeDate}
           value={valueDate}
-          selectRange={offer.offer_category_id === LODGING_OFFER_ID}
+          selectRange={offerType === OfferTypes.lodging}
         />
       </div>
       {offer?.calendar && (

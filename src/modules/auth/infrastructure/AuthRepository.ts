@@ -66,7 +66,6 @@ export class AuthRepository
     }
   }
 
-  // TODO: Promise<HttpResponseInterface<unknown>> el back ha de formatear la respuesta
   public async signUp(
     data: AuthRegisterNomadeInterface,
   ): Promise<HttpResponseInterface<SignUpResponseInterface>> {

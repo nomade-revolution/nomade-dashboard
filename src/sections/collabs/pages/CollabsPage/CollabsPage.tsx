@@ -329,6 +329,7 @@ const CollabsPage = (): React.ReactElement => {
             children={<CollabsForm />}
             openModal={isModalOpen}
             setIsModalOpen={setIsModalOpen}
+            type="social"
           />
         </ReusablePageStyled>
       )}

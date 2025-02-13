@@ -17,18 +17,13 @@ import { Company } from "modules/user/domain/User";
 import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
 import { useInfluencerContext } from "sections/influencer/InfluencerContext/useInfluencerContext";
 import { Influencer } from "@influencer";
-import { FullOffer } from "modules/offers/domain/Offer";
+import { FullOffer, OfferTypes } from "modules/offers/domain/Offer";
 import { Value } from "react-calendar/src/shared/types.js";
 import CollabableType from "../CollabableType/CollabableType";
-import {
-  BRAND_OFFER_ID,
-  DELIVERY_OFFER_ID,
-  LODGING_OFFER_ID,
-} from "sections/offers/utils/offersCategories";
 import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
 import { Calendar } from "modules/offers/domain/OfferCalendar";
 
-const CompanyForm = (): React.ReactElement => {
+const CollabsForm = (): React.ReactElement => {
   const [formState, setFormState] = useState<{
     category: string;
     offer_id: string;
@@ -105,11 +100,11 @@ const CompanyForm = (): React.ReactElement => {
   const handleCollabable = (values: CollabCollabableCreateDefault) => {
     let collabable = {};
 
-    switch (offer.offer_category_id) {
-      case BRAND_OFFER_ID:
+    switch (offer.type) {
+      case OfferTypes.brand:
         collabable = {};
         break;
-      case DELIVERY_OFFER_ID:
+      case OfferTypes.delivery:
         collabable = {
           day:
             valueDate &&
@@ -117,7 +112,7 @@ const CompanyForm = (): React.ReactElement => {
           time: `${selectedTime}:00`,
         };
         break;
-      case LODGING_OFFER_ID:
+      case OfferTypes.lodging:
         collabable = {
           address_id: offer.addresses[0].address_id,
           from_day:
@@ -355,4 +350,4 @@ const CompanyForm = (): React.ReactElement => {
   );
 };
 
-export default CompanyForm;
+export default CollabsForm;

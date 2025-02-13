@@ -9,13 +9,6 @@ import {
   useFormikContext,
 } from "formik";
 import { Company } from "modules/user/domain/User";
-import {
-  ACTIVITY_OFFER_ID,
-  BRAND_OFFER_ID,
-  DELIVERY_OFFER_ID,
-  LODGING_OFFER_ID,
-  RESTAURANT_OFFER_ID,
-} from "sections/offers/utils/offersCategories";
 import ReusableSelect from "sections/shared/components/ReusableSelect/ReusableSelect";
 import OfferSchedulingStyled from "./OffersSchedulingStyled";
 import OffersTimetable from "../OffersTimetable/OffersTimetable";
@@ -26,6 +19,7 @@ import {
   OfferableDelivery,
   OfferableLodging,
   OfferableRestaurant,
+  OfferTypes,
   SelectedDay,
   TimeSlot,
   WeekDay,
@@ -33,7 +27,7 @@ import {
 import { Dispatch, SetStateAction, useEffect } from "react";
 
 interface Props {
-  category: number;
+  type: OfferTypes | string;
   errors: FormikErrors<
     | OfferableRestaurant
     | OfferableActivity
@@ -70,7 +64,7 @@ interface Props {
     lodging: OfferableLodging[];
   };
   selectedDays: SelectedDay[];
-  week: WeekDay[];
+  week: WeekDay[][];
   setSelectedDays: Dispatch<SetStateAction<SelectedDay[]>>;
   setWeek: (value: WeekDay[]) => void;
   offer: FullOffer;
@@ -78,7 +72,7 @@ interface Props {
 }
 
 const OffersScheduling = ({
-  category,
+  type,
   getFieldProps,
   touched,
   errors,
@@ -97,13 +91,13 @@ const OffersScheduling = ({
   const { setFieldValue, values } = useFormikContext();
 
   const schedulingStateSelected =
-    category === RESTAURANT_OFFER_ID
+    type === OfferTypes.restaurant
       ? schedulingState.restaurant
-      : category === LODGING_OFFER_ID
+      : type === OfferTypes.lodging
         ? schedulingState.lodging
-        : category === DELIVERY_OFFER_ID
+        : type === OfferTypes.delivery
           ? schedulingState.delivery
-          : category === ACTIVITY_OFFER_ID
+          : type === OfferTypes.activity
             ? schedulingState.activity
             : schedulingState.brand;
 
@@ -150,8 +144,8 @@ const OffersScheduling = ({
   const handleOfferTimetables = () => {
     const updatedSchedulingState = { ...schedulingState };
 
-    switch (category) {
-      case RESTAURANT_OFFER_ID: {
+    switch (type) {
+      case OfferTypes.restaurant: {
         const key =
           offer?.type.toLocaleLowerCase() as keyof typeof schedulingState;
 
@@ -186,7 +180,7 @@ const OffersScheduling = ({
         break;
       }
 
-      case LODGING_OFFER_ID: {
+      case OfferTypes.lodging: {
         const newOfferableLodging: OfferableLodging = {
           address_id: +address,
           min_guests: +getFieldProps("min_guests").value || 0,
@@ -210,7 +204,7 @@ const OffersScheduling = ({
         break;
       }
 
-      case ACTIVITY_OFFER_ID: {
+      case OfferTypes.activity: {
         const newOfferableActivity: OfferableActivity = {
           address_id: +address,
           min_guests: +getFieldProps("min_guests").value || 0,
@@ -236,7 +230,7 @@ const OffersScheduling = ({
         break;
       }
 
-      case DELIVERY_OFFER_ID: {
+      case OfferTypes.delivery: {
         const newOfferableDelivery: OfferableDelivery = {
           advance_notice_time: +getFieldProps("advance_notice_time").value || 0,
           week: week,
@@ -257,9 +251,13 @@ const OffersScheduling = ({
     }
 
     week.forEach((day) => {
+      // @ts-expect-error TODO: fix this
       setFieldValue(`from_time_day_${day.day_of_week}_1`, "");
+      // @ts-expect-error TODO: fix this
       setFieldValue(`to_time_day_${day.day_of_week}_1`, "");
+      // @ts-expect-error TODO: fix this
       setFieldValue(`from_time_day_${day.day_of_week}_2`, "");
+      // @ts-expect-error TODO: fix this
       setFieldValue(`to_time_day_${day.day_of_week}_2`, "");
     });
     setWeek([]);
@@ -271,9 +269,9 @@ const OffersScheduling = ({
 
   return (
     <OfferSchedulingStyled className="scheduling">
-      {(category === RESTAURANT_OFFER_ID ||
-        category === ACTIVITY_OFFER_ID ||
-        category === LODGING_OFFER_ID) && (
+      {(type === OfferTypes.restaurant ||
+        type === OfferTypes.activity ||
+        type === OfferTypes.lodging) && (
         <div className="scheduling--restaurant">
           <h4>Configura los horarios</h4>
           <section className="scheduling__section">
@@ -382,7 +380,7 @@ const OffersScheduling = ({
           />
         </div>
       )}
-      {category === DELIVERY_OFFER_ID && (
+      {type === OfferTypes.delivery && (
         <div className="form-subsection">
           <label
             htmlFor="advance_notice_time"
@@ -408,7 +406,7 @@ const OffersScheduling = ({
         </div>
       )}
       <OffersTimetable
-        category={category}
+        type={type}
         errors={errors as FormikErrors<TimeSlot>}
         getFieldProps={getFieldProps}
         touched={touched as FormikTouched<TimeSlot>}
@@ -419,7 +417,7 @@ const OffersScheduling = ({
         offer={offer}
       />
       <div className="scheduling__btn-container">
-        {category && category !== BRAND_OFFER_ID ? (
+        {type && type !== OfferTypes.brand ? (
           <button
             type="button"
             className="scheduling__save-btn"

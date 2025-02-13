@@ -12,11 +12,6 @@ import { useOffersContext } from "sections/offers/OffersContext/useOffersContext
 // import { Influencer } from "@influencer";
 // import { FullOffer } from "modules/offers/domain/Offer";
 // import { Value } from "react-calendar/src/shared/types.js";
-// import {
-//   BRAND_OFFER_ID,
-//   DELIVERY_OFFER_ID,
-//   LODGING_OFFER_ID,
-// } from "sections/offers/utils/offersCategories";
 import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
 // import { Calendar } from "modules/offers/domain/OfferCalendar";
 import editCollabValitaionScheme from "./validations";
@@ -85,7 +80,7 @@ const EditCollabForm = ({ collab, setIsOpen }: Props): React.ReactElement => {
   // const handleCollabable = (values: CollabCollabableCreateDefault) => {
   //   let collabable = {};
 
-  //   switch (offer.offer_category_id) {
+  //   switch (offer.type) {
   //     case BRAND_OFFER_ID:
   //       collabable = {};
   //       break;

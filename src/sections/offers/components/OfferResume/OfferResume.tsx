@@ -7,6 +7,7 @@ import {
   FullOffer,
   WeekDay,
   SelectedDay,
+  OfferTypes,
 } from "modules/offers/domain/Offer";
 import { Company } from "modules/user/domain/User";
 import { offersTimetable } from "sections/offers/utils/offersTimetable";
@@ -15,17 +16,12 @@ import { FaClock, FaLocationDot } from "react-icons/fa6";
 import { PiUsersThreeFill } from "react-icons/pi";
 import { MdLogin } from "react-icons/md";
 import { BiLogOut } from "react-icons/bi";
-import {
-  ACTIVITY_OFFER_ID,
-  DELIVERY_OFFER_ID,
-  LODGING_OFFER_ID,
-  RESTAURANT_OFFER_ID,
-} from "sections/offers/utils/offersCategories";
 import { FaTrashAlt } from "react-icons/fa";
 import { useFormikContext } from "formik";
 import formatOfferScheduling from "sections/offers/utils/formatOfferScheduling";
 import { Calendar } from "modules/offers/domain/OfferCalendar";
 import useOffers from "sections/offers/hooks/useOffers";
+import { parseCalendar } from "sections/offers/pages/OfferDetailPage/OfferDetailPage";
 
 interface Props {
   offerResume:
@@ -35,7 +31,7 @@ interface Props {
     | OfferableLodging[];
 
   company: Company;
-  category: string;
+  type: OfferTypes | string;
   offer?: FullOffer;
   onOfferResumeChange: (
     updatedResume:
@@ -70,8 +66,7 @@ interface Props {
 
 const OfferResume = ({
   offerResume,
-  company,
-  category,
+  type,
   offer,
   onOfferResumeChange,
   setSelectedDays,
@@ -94,21 +89,11 @@ const OfferResume = ({
     setSelectedDays([]);
   };
 
-  const resume = Array.isArray(offerResume)
-    ? offerResume
-    : offerResume
-      ? [offerResume]
-      : Array.isArray(offer?.calendar)
-        ? offer.calendar
-        : offer?.calendar
-          ? [offer.calendar]
-          : [];
-
   const handleOnClick = (
     schedule: OfferableLodging | OfferableDelivery | Calendar,
     index: number,
   ) => {
-    const schedulingField = getSchedulingStateField(schedulingState, category);
+    const schedulingField = getSchedulingStateField(schedulingState, type);
 
     const updatedSchedulingState = { ...schedulingState };
 
@@ -131,6 +116,23 @@ const OfferResume = ({
     setSelectedIndex(selectedIndex === index ? null : index);
   };
 
+  const getResume = () => {
+    if (offer?.calendar) {
+      return parseCalendar(offer.calendar);
+    }
+
+    if (offerResume) {
+      if (Array.isArray(offerResume)) {
+        return offerResume;
+      }
+      return [offerResume];
+    }
+
+    return [];
+  };
+
+  const resume = getResume();
+
   return (
     <OfferResumeStyled className="offer-resume">
       <div className="offer-resume__top-section">
@@ -144,124 +146,145 @@ const OfferResume = ({
           </button>
         )}
       </div>
-      {!offerResume || offerResume.length === 0 ? (
+      {!resume || resume.length === 0 ? (
         <span>No has configurado nada</span>
       ) : (
-        resume?.map((schedule, index) => (
-          <button
-            key={index}
-            onClick={() => handleOnClick(schedule, index)}
-            type="button"
-            className={selectedIndex === index ? "selected" : ""}
-          >
-            <div className="offer-resume__content" key={index}>
-              {(+category === RESTAURANT_OFFER_ID ||
-                +category === LODGING_OFFER_ID ||
-                +category === ACTIVITY_OFFER_ID) && (
-                <>
-                  <span className="offer-resume__text-icon">
-                    <FaLocationDot color={"#AD6975"} />
-                    {company.address?.address}
-                  </span>
-
-                  <div className="offer-resume__section-row">
-                    <PiUsersThreeFill />
-                    <span>Max - </span>
+        resume?.map((schedule, index) => {
+          return (
+            <button
+              key={index}
+              onClick={() => handleOnClick(schedule, index)}
+              type="button"
+              className={selectedIndex === index ? "selected" : ""}
+            >
+              <div className="offer-resume__content" key={index}>
+                {(type === OfferTypes.restaurant ||
+                  type === OfferTypes.lodging ||
+                  type === OfferTypes.activity) && (
+                  <>
                     <span className="offer-resume__text-icon">
-                      {
-                        (
-                          schedule as
-                            | OfferableRestaurant
-                            | OfferableActivity
-                            | OfferableLodging
-                        )?.max_guests
-                      }{" "}
+                      <FaLocationDot color={"#AD6975"} />
+                      {(
+                        schedule as
+                          | OfferableRestaurant
+                          | OfferableActivity
+                          | OfferableLodging
+                      ).address || ""}
                     </span>
-                  </div>
-                  <div className="offer-resume__section-row">
-                    <PiUsersThreeFill />
 
-                    <span>Min - </span>
-                    <span className="offer-resume__text-icon">
-                      {
-                        (
-                          schedule as
-                            | OfferableRestaurant
-                            | OfferableActivity
-                            | OfferableLodging
-                        )?.min_guests
-                      }{" "}
-                    </span>
-                  </div>
-                </>
-              )}
-              {+category === DELIVERY_OFFER_ID && (
-                <div className="offer-resume__section-row">
-                  <div className="offer-resume__text-icon">
-                    <FaClock color={"#8C9B6E"} />
-                    <span>Tiempo previo de aviso - </span>
-                  </div>
-                  <span>
-                    {(schedule as OfferableDelivery).advance_notice_time}
-                  </span>
-                  <span>minutos</span>
-                </div>
-              )}
-              {(+category === RESTAURANT_OFFER_ID ||
-                +category === LODGING_OFFER_ID ||
-                +category === ACTIVITY_OFFER_ID ||
-                +category === DELIVERY_OFFER_ID) &&
-                (
-                  schedule as
-                    | OfferableRestaurant
-                    | OfferableActivity
-                    | OfferableDelivery
-                ).week?.map((day) => (
-                  <section
-                    className="offer-resume__time time"
-                    key={day.day_of_week + day.time_slot[0]?.from_time}
-                  >
-                    <span className="offer-resume__text-bold">
-                      {offersTimetable.find(
-                        (time) => time.day_number === day.day_of_week,
-                      )?.name ?? day.day_name}
-                    </span>
-                    <div className="time__shift">
-                      <span className="offer-resume__text-bold">1er turno</span>
-                      <div>
-                        <span className="offer-resume__text-icon">
-                          <MdLogin color={"green"} />
-                          {day?.time_slot[0]?.from_time}h
-                        </span>
-                        <span className="offer-resume__text-icon">
-                          <BiLogOut color="red" />
-                          {day?.time_slot[0]?.to_time}h
-                        </span>
-                      </div>
+                    <div className="offer-resume__section-row">
+                      <PiUsersThreeFill />
+                      <span>Max - </span>
+                      <span className="offer-resume__text-icon">
+                        {
+                          (
+                            schedule as
+                              | OfferableRestaurant
+                              | OfferableActivity
+                              | OfferableLodging
+                          )?.max_guests
+                        }{" "}
+                      </span>
                     </div>
-                    {day.time_slot[1] && (
-                      <div className="time__shift">
+                    <div className="offer-resume__section-row">
+                      <PiUsersThreeFill />
+
+                      <span>Min - </span>
+                      <span className="offer-resume__text-icon">
+                        {
+                          (
+                            schedule as
+                              | OfferableRestaurant
+                              | OfferableActivity
+                              | OfferableLodging
+                          )?.min_guests
+                        }{" "}
+                      </span>
+                    </div>
+                  </>
+                )}
+                {type === OfferTypes.delivery && (
+                  <div className="offer-resume__section-row">
+                    <div className="offer-resume__text-icon">
+                      <FaClock color={"#8C9B6E"} />
+                      <span>Tiempo previo de aviso - </span>
+                    </div>
+                    <span>
+                      {(schedule as OfferableDelivery).advance_notice_time}
+                    </span>
+                    <span>minutos</span>
+                  </div>
+                )}
+                {(type === OfferTypes.restaurant ||
+                  type === OfferTypes.lodging ||
+                  type === OfferTypes.activity ||
+                  type === OfferTypes.delivery) &&
+                  (
+                    schedule as
+                      | OfferableRestaurant
+                      | OfferableActivity
+                      | OfferableDelivery
+                  ).week?.map((day) => {
+                    if (!day.length) return null;
+
+                    const firstTurn = day[0];
+                    const secondTurn = day[1];
+                    return (
+                      <section
+                        className="offer-resume__time time"
+                        key={
+                          firstTurn.day_of_week + firstTurn.time_slot?.from_time
+                        }
+                      >
                         <span className="offer-resume__text-bold">
-                          2o turno
+                          {offersTimetable.find(
+                            (time) => time.day_number === firstTurn.day_of_week,
+                          )?.name ?? firstTurn.day_name}
                         </span>
-                        <div>
-                          <span className="offer-resume__text-icon">
-                            <MdLogin color={"green"} />{" "}
-                            {day?.time_slot[1]?.from_time}
+                        <div className="time__shift">
+                          <span className="offer-resume__text-bold">
+                            1er turno
                           </span>
-                          <span className="offer-resume__text-icon">
-                            {" "}
-                            <BiLogOut color="red" />{" "}
-                            {day?.time_slot[1]?.to_time}
-                          </span>
+                          {firstTurn?.time_slot ? (
+                            <div>
+                              <span className="offer-resume__text-icon">
+                                <MdLogin color={"green"} />
+                                {firstTurn.time_slot.from_time}h
+                              </span>
+                              <span className="offer-resume__text-icon">
+                                <BiLogOut color="red" />
+                                {firstTurn.time_slot.to_time}h
+                              </span>
+                            </div>
+                          ) : null}
                         </div>
-                      </div>
-                    )}
-                  </section>
-                ))}
-            </div>
-          </button>
-        ))
+                        {secondTurn && (
+                          <div className="time__shift">
+                            <span className="offer-resume__text-bold">
+                              2o turno
+                            </span>
+                            {secondTurn?.time_slot ? (
+                              <div>
+                                <span className="offer-resume__text-icon">
+                                  <MdLogin color={"green"} />{" "}
+                                  {secondTurn?.time_slot?.from_time}
+                                </span>
+                                <span className="offer-resume__text-icon">
+                                  {" "}
+                                  <BiLogOut color="red" />{" "}
+                                  {secondTurn?.time_slot?.to_time}
+                                </span>
+                              </div>
+                            ) : null}
+                          </div>
+                        )}
+                      </section>
+                    );
+                  })}
+              </div>
+            </button>
+          );
+        })
       )}
     </OfferResumeStyled>
   );

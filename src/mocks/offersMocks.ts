@@ -1,4 +1,4 @@
-import { FullOffer } from "modules/offers/domain/Offer";
+import { FullOffer, OfferTypes } from "modules/offers/domain/Offer";
 
 export const mockOffers: FullOffer[] = [
   {
@@ -15,8 +15,8 @@ export const mockOffers: FullOffer[] = [
     company: "Restaurante El Sabor Auténtico",
     company_id: 101,
     description: "Disfruta de la auténtica sazón en cada bocado.",
-    offer_category_id: 1,
-    type: "Restaurant",
+    offer_categories: [{ id: 1, name: "dummy" }],
+    type: OfferTypes.restaurant,
     in_exchange: "Compra de platos principales",
     conditions: "¡2x1 en platos principales todos los jueves!",
     advance_notice_time: null,
@@ -68,8 +68,8 @@ export const mockOffers: FullOffer[] = [
     company: "Pizzería Bella Napoli",
     company_id: 102,
     description: "Las mejores pizzas de la ciudad.",
-    offer_category_id: 2,
-    type: "Restaurant",
+    offer_categories: [{ id: 2, name: "dummy" }],
+    type: OfferTypes.restaurant,
     in_exchange: "Compra de pizzas grandes",
     conditions:
       "Obtén un 20% de descuento en cualquier pizza grande los viernes",
@@ -122,8 +122,8 @@ export const mockOffers: FullOffer[] = [
     company: "Cafetería Aroma de la Mañana",
     company_id: 103,
     description: "El mejor café para empezar tu día.",
-    offer_category_id: 3,
-    type: "Restaurant",
+    offer_categories: [{ id: 3, name: "dummy" }],
+    type: OfferTypes.restaurant,
     in_exchange: "Compra de desayunos completos",
     conditions: "Café gratis con la compra de cualquier desayuno completo",
     advance_notice_time: null,
