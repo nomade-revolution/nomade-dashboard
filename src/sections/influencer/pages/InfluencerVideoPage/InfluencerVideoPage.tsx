@@ -17,37 +17,6 @@ const InfluencerVideoPage = (): React.ReactElement => {
 
   if (loading) return <Loader width="20px" height="20px" />;
 
-  const dummySocial = [
-    {
-      id: 1,
-      main: true,
-      name: "Instagram",
-      url: "https://www.instagram.com/influencertest",
-      account_name: "influencertest",
-      followers: 95,
-      video:
-        "https://nomade-dev.fruntera.space/storage/videos/cUxpnKtub6splqZSM4rCmgkuSThCiTKYOwzdSddW.mov?expires=1739438155&signature=678aa8f53f53faee640c18bc3ce02cebf9a84e44bfb3f6daec84969ea1427cf9",
-    },
-    {
-      id: 2,
-      main: false,
-      name: "TikTok",
-      url: "https://www.tiktok.com/influencertest",
-      account_name: "dummytiktokkk",
-      followers: 95,
-      video:
-        "https://nomade-dev.fruntera.space/storage/videos/cUxpnKtub6splqZSM4rCmgkuSThCiTKYOwzdSddW.mov?expires=1739438155&signature=678aa8f53f53faee640c18bc3ce02cebf9a84e44bfb3f6daec84969ea1427cf9",
-    },
-    {
-      id: 3,
-      main: false,
-      name: "Twitch",
-      url: "https://www.tiktok.com/influencertest",
-      account_name: "dummytwwiiiikkk",
-      followers: 95,
-      video: null,
-    },
-  ];
   return (
     <InfluencerVideoPageStyled className="influencer-detail">
       <GoBackButton />
@@ -59,7 +28,7 @@ const InfluencerVideoPage = (): React.ReactElement => {
         </div>
       </section>
       <section className="influencer-detail__info">
-        {dummySocial?.map((socialMedia) => {
+        {influencer.socialMedia?.map((socialMedia) => {
           return (
             <div key={socialMedia.id}>
               <h4 style={{ display: "flex", alignItems: "center", gap: 5 }}>

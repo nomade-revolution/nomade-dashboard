@@ -41,7 +41,7 @@ const InfluencerDetailData = ({
           {influencer.email && <span>{influencer.email}</span>}
           {influencer.from_country && (
             <div className="influencer-data__from-country">
-              <span>País de orígen:</span>
+              <span>País de origen:</span>
               <span className="influencer-data__country">
                 {" "}
                 {influencer?.from_country.name}
@@ -50,7 +50,7 @@ const InfluencerDetailData = ({
           )}
           {influencer.living_country && (
             <div className="influencer-data__living-country">
-              <span>País de residéncia:</span>
+              <span>País de residencia:</span>
               <span className="influencer-data__country">
                 {" "}
                 {influencer?.living_country.name}

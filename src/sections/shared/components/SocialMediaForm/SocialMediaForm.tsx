@@ -272,6 +272,16 @@ const SocialMediaForm = ({
             <h3>Estadísticas {social?.account_name}</h3>
 
             <section className="stats__section">
+              <h5 className="stats__title">Nombre de usuario</h5>
+              <Field
+                type="text"
+                className="form-subsection__field"
+                aria-label="Nombre de usuario"
+                {...getFieldProps("account_name")}
+              />
+            </section>
+
+            <section className="stats__section">
               <h5 className="stats__title">Followers (k)</h5>
               <Field
                 type="number"

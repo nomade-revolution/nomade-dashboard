@@ -9,7 +9,7 @@ import getSocialMediaIcons from "sections/shared/utils/getSocialMediaIcons/getSo
 import SocialMediaCardStyled from "./SocialMediaCardStyled";
 import { Link } from "react-router-dom";
 import StadisticsDisplay from "../StatisticsDisplay/StatisticsDisplay";
-import { FaLink, FaUserFriends } from "react-icons/fa";
+import { FaUserFriends } from "react-icons/fa";
 import { IoStatsChart } from "react-icons/io5";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { FaPlay } from "react-icons/fa6";
@@ -17,6 +17,7 @@ import {
   parseFollowers,
   toK,
 } from "sections/influencer/utils/influencersSections";
+import theme from "assets/styles/theme";
 
 interface Props {
   socialMedia: SocialMedia;
@@ -66,39 +67,39 @@ const SocialMediaCard = ({
         </button>
       )}
       <section className="social-card__data">
-        <span
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: 10,
-            fontSize: 16,
-            fontWeight: "bold",
-          }}
+        <Link
+          className={`dashboard__content_link`}
+          to={socialMedia.url}
+          target="_blank"
         >
-          {getSocialMediaIcons(socialMedia.name, 30)} @
-          {socialMedia.account_name}
-        </span>
+          <span
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 8,
+              fontSize: 16,
+              fontWeight: "bold",
+              textDecoration: "underline",
+              color: theme.colors.mainColor,
+            }}
+          >
+            {getSocialMediaIcons(socialMedia.name, 30)} @
+            {socialMedia.account_name}
+          </span>
+        </Link>
         <span className="social-card__text-icon">
           <FaUserFriends size={20} /> {parseFollowers(socialMedia.followers)}{" "}
           followers
         </span>
-        {(socialMedia as any)?.stories_view && (
+        {socialMedia?.stories_view && (
           <span className="social-card__text-icon">
             <FaPlay size={20} />{" "}
-            {(socialMedia as any)?.stories_view
-              ? `${toK((socialMedia as any)?.stories_view)} visualizaciones`
+            {socialMedia?.stories_view
+              ? `${toK(socialMedia?.stories_view)} visualizaciones`
               : "-"}
           </span>
         )}
-        <Link
-          to={socialMedia.url}
-          className="social-card__text-link"
-          target="_blank"
-        >
-          <FaLink color="#0a66c2" />
-          {socialMedia.url}
-        </Link>
       </section>
 
       <section>

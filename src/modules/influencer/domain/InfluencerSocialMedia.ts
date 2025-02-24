@@ -10,6 +10,7 @@ export interface SocialMedia {
   countries: CountrySocialRequest[] | CountryRequest[];
   ageRanges: SocialMediaStatistic[] | AgeRangeSocialRequest[];
   genders: SocialMediaStatistic[] | GenderSocialRequest[];
+  stories_view?: number;
 }
 
 export interface SocialMediaStatistic {

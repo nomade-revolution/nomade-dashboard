@@ -10,6 +10,7 @@ import { City } from "modules/user/domain/User";
 import { useInfluencerContext } from "sections/influencer/InfluencerContext/useInfluencerContext";
 import { Influencer } from "@influencer";
 import { editInfluencerScheme } from "./utils/validations/validations";
+import CustomFileInput from "sections/shared/components/CustomFileInput/CustomFileInput";
 // import CustomFileInput from "sections/shared/components/CustomFileInput/CustomFileInput";
 // import ActionButton from "sections/shared/components/ActionButton/ActionButton";
 
@@ -19,6 +20,9 @@ interface Props {
 }
 
 interface EditInfluencerFormState {
+  name: string;
+  surnames: string;
+  // email: string;
   prefix: string;
   phone: string;
   from_country_id: number;
@@ -57,7 +61,7 @@ const EditInfluencerForm = ({ initialState, onSubmit }: Props) => {
   const [bornCountry, setBornCountry] = useState<number>(0);
   const [liveCountry, setLiveCountry] = useState<number>(0);
   // const [socialMediaSelected, setSocialMediaSelected] = useState<number>(0);
-  // const [file, setFile] = useState<File[]>([]);
+  const [file, setFile] = useState<File[]>([]);
   // const [citiesPerPercentage, setCitiesPerPercentage] = useState<City[]>([]);
   const [category, setCategory] = useState<number>(0);
   const [subcategory, setSubcategory] = useState<number>(0);
@@ -80,6 +84,9 @@ const EditInfluencerForm = ({ initialState, onSubmit }: Props) => {
     const livingCity = initialState.living_city?.id || 0;
 
     const parsedInitialState: EditInfluencerFormState = {
+      name: initialState.name,
+      surnames: initialState.surnames,
+      // email: initialState.email,
       prefix: initialState.prefix,
       phone: initialState.phone,
       from_country_id: fromCountry,
@@ -136,38 +143,15 @@ const EditInfluencerForm = ({ initialState, onSubmit }: Props) => {
       }
     });
 
-    // if (file[0]) {
-    //   formData.append("avatar", file[0]);
-    // }
-
-    // const newSocials = values.socialMedia.map((social) => {
-    //   return {
-    //     ...social,
-    //     social_media_id: social.social_media_id,
-    //     main: mainSocial === social.social_media_id,
-    //     age_ranges: social.agePercentage?.map((age: number, index: number) => {
-    //       return {
-    //         age_range_id: index + 1,
-    //         followers_percentage: age || 0,
-    //       };
-    //     }),
-
-    //     genders: [
-    //       { gender_id: 1, followers_percentage: social.gender?.men || 0 },
-    //       { gender_id: 2, followers_percentage: social.gender?.women || 0 },
-    //     ],
-    //   };
-    // });
-
-    // formData.append("socialMedia", JSON.stringify(newSocials));
+    if (file[0]) {
+      formData.append("avatar", file[0]);
+    }
 
     const categories = [category, subcategory];
 
     categories.forEach((category, index) => {
       formData.append(`categories[${index}]`, String(category));
     });
-
-    // formData.append(`categories`, JSON.stringify(categories));
 
     try {
       const resp: any = await modifyInfluencer(
@@ -221,7 +205,7 @@ const EditInfluencerForm = ({ initialState, onSubmit }: Props) => {
           style={{ width: "80%" }}
         >
           <h3 style={{ width: "100%", textAlign: "left" }}>Datos</h3>
-          {/* <div className="dobleContainer">
+          <div className="dobleContainer">
             <div className="form-section">
               <label htmlFor="name" className="login-form__label">
                 Nombre
@@ -260,7 +244,36 @@ const EditInfluencerForm = ({ initialState, onSubmit }: Props) => {
                 />
               )}
             </div>
+          </div>
+
+          {/* TODO tiene que venir de back y en principio será editable asi como está */}
+          {/* <div className="form-section">
+            <label htmlFor="email" className="login-form__label">
+              Email
+            </label>
+            <Field
+              type="text"
+              id="email"
+              className="form-section__field"
+              aria-label="email"
+              {...getFieldProps("email")}
+            />
+            {errors.email && touched.email && (
+              <ErrorMessage
+                className="login-form__error-message"
+                component="span"
+                name="email"
+              />
+            )}
           </div> */}
+
+          <div className="form-section">
+            <CustomFileInput
+              file={file}
+              setFile={(e) => setFile(e)}
+              text="Avatar"
+            />
+          </div>
 
           <div className="dobleContainer">
             <div className="form-section">
