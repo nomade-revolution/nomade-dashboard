@@ -30,7 +30,7 @@ const InfluencerSocialMedia = ({
               }}
             >
               {getSocialMediaIcons(media.name)}
-              <span>{media.account_name}</span>
+              <span>@{media.account_name}</span>
               <span className="social-media__followers">
                 {parseFollowers(media.followers)} followers
               </span>
@@ -42,10 +42,7 @@ const InfluencerSocialMedia = ({
               target="_blank"
             >
               {getSocialMediaIcons(media.name)}
-              <span>{media.account_name}</span>
-              <span className="social-media__followers">
-                {parseFollowers(media.followers)} followers
-              </span>
+              <span>@{media.account_name}</span>
             </Link>
           )}
         </li>

@@ -1,14 +1,18 @@
 import { SocialMedia } from "@influencer/domain/InfluencerSocialMedia";
-import { influencerSocialMediaListHeaderSections } from "sections/influencer/utils/influencersSections";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
-import { SectionTypes } from "sections/shared/interfaces/interfaces";
+import {
+  HeaderSection,
+  SectionTypes,
+} from "sections/shared/interfaces/interfaces";
 
 interface Props {
   socialMedias: SocialMedia[];
+  headerSections: HeaderSection[];
 }
 
 const InfluencerSocialMediaList = ({
   socialMedias,
+  headerSections,
 }: Props): React.ReactElement => {
   return (
     <div style={{ width: "100%" }}>
@@ -22,7 +26,7 @@ const InfluencerSocialMediaList = ({
       >
         <DashboardTable
           bodySections={socialMedias}
-          headerSections={influencerSocialMediaListHeaderSections}
+          headerSections={headerSections}
           pageName={SectionTypes.socialMedia}
         />
       </section>

@@ -20,6 +20,10 @@ import InfluencerSocialMediaList from "sections/influencer/components/Influencer
 import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { FaEdit } from "react-icons/fa";
 import EditInfluencerForm from "sections/influencer/components/EditInfluencerForm/EditInfluencerForm";
+import {
+  influencerSocialMediaListCompanyHeaderSections,
+  influencerSocialMediaListHeaderSections,
+} from "sections/influencer/utils/influencersSections";
 
 const STATES_OPTIONS = [
   {
@@ -98,19 +102,21 @@ const InfluencerDetailPage = (): React.ReactElement => {
           <h2>Influencer</h2>
         </div>
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={currentState}
-            label="Estado"
-            onChange={handleModifyStateButton}
-          >
-            {STATES_OPTIONS.map((state) => (
-              <MenuItem value={state.id} disabled={state.id === "1"}>
-                {state.name}
-              </MenuItem>
-            ))}
-          </Select>
+          {user.type === "Nomade" ? (
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={currentState}
+              label="Estado"
+              onChange={handleModifyStateButton}
+            >
+              {STATES_OPTIONS.map((state) => (
+                <MenuItem value={state.id} disabled={state.id === "1"}>
+                  {state.name}
+                </MenuItem>
+              ))}
+            </Select>
+          ) : null}
           {user.type === "Nomade" && (
             <ActionButton
               onClick={() => setIsEditFormOpen(true)}
@@ -137,7 +143,14 @@ const InfluencerDetailPage = (): React.ReactElement => {
         />
       </section>
 
-      <InfluencerSocialMediaList socialMedias={influencer.socialMedia} />
+      <InfluencerSocialMediaList
+        socialMedias={influencer.socialMedia}
+        headerSections={
+          user.type === "Nomade"
+            ? influencerSocialMediaListHeaderSections
+            : influencerSocialMediaListCompanyHeaderSections
+        }
+      />
 
       {user.type === "Nomade" && <InfluencerCollabs influencer_id={+id!} />}
 

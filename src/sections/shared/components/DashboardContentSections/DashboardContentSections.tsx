@@ -200,7 +200,9 @@ const DashboardContentSections = ({
               display: "flex",
               gap: 10,
               alignItems: "center",
+              pointerEvents: user.type === "Company" ? "none" : "auto",
             }}
+            disabled={user.type === "Company"}
             onClick={() => {
               setIsSocialMediaModalOpen(true);
               setSocialMediaSelected(section as SocialMedia);
@@ -208,10 +210,14 @@ const DashboardContentSections = ({
           >
             {getSocialMediaIcons((section as SocialMedia).name)}
             <span
-              style={{
-                color: theme.colors.mainColor,
-                textDecoration: "underline",
-              }}
+              style={
+                user.type === "Company"
+                  ? { color: "black" }
+                  : {
+                      color: theme.colors.mainColor,
+                      textDecoration: "underline",
+                    }
+              }
             >
               {(section as SocialMedia).name}
             </span>

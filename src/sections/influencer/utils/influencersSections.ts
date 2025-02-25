@@ -170,6 +170,23 @@ export const influencerSocialMediaListHeaderSections: HeaderSection[] = [
   },
 ];
 
+export const influencerSocialMediaListCompanyHeaderSections: HeaderSection[] = [
+  {
+    id: 1,
+    name: "Red",
+    property: "name",
+    sortTag: "",
+    pageName: "socialMedia",
+  },
+  {
+    id: 2,
+    name: "Usuario",
+    property: "account_name",
+    sortTag: "",
+    pageName: "socialMedia",
+  },
+];
+
 export const parseFollowers = (number: number): string => {
   return `${number}K`;
 };

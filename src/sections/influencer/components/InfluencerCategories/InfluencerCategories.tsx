@@ -9,7 +9,7 @@ const InfluencerCategories = ({ categories }: Props): React.ReactElement => {
   const parentCategory = categories.find(
     (category) => category.parent_id === null,
   );
-  const childCategory = categories.find(
+  const childCategories = categories.filter(
     (category) => category.parent_id !== null,
   );
 
@@ -21,12 +21,16 @@ const InfluencerCategories = ({ categories }: Props): React.ReactElement => {
           <li key={parentCategory.name}>{parentCategory.name}</li>
         ) : null}
       </ul>
-      <span className="categories__title">Subcategoría</span>
-      <ul className="categories__list">
-        {childCategory ? (
-          <li key={childCategory.name}>{childCategory.name}</li>
-        ) : null}
-      </ul>
+      {childCategories.length ? (
+        <>
+          <span className="categories__title">Subcategoría</span>
+          <ul className="categories__list">
+            {childCategories.map((cat) => {
+              return <li key={cat.name}>{cat.name}</li>;
+            })}
+          </ul>
+        </>
+      ) : null}
       {categories.length === 0 && <p>Sin categorías asignadas</p>}
     </InfluencerCategoriesStyled>
   );

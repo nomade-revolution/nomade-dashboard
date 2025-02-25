@@ -31,6 +31,7 @@ const InfluencerDetailData = ({
           height={80}
           width={80}
         />
+
         <div className="influencer-data__data">
           <div className="influencer-data__names">
             <span className="influencer-data__name">{influencer?.name}</span>
@@ -38,39 +39,46 @@ const InfluencerDetailData = ({
             <span>{influencer?.surnames}</span>
           </div>
           {user.type === "Nomade" && <span>{influencer.phone}</span>}
+
           {influencer.email && <span>{influencer.email}</span>}
-          {influencer.from_country && (
-            <div className="influencer-data__from-country">
-              <span>País de origen:</span>
-              <span className="influencer-data__country">
-                {" "}
-                {influencer?.from_country.name}
-              </span>
-            </div>
-          )}
-          {influencer.living_country && (
-            <div className="influencer-data__living-country">
-              <span>País de residencia:</span>
-              <span className="influencer-data__country">
-                {" "}
-                {influencer?.living_country.name}
-              </span>
-            </div>
-          )}
+
           {user.type === "Nomade" && (
-            <div className="influencer-data__from-country">
-              <span>Estado:</span>
-              <span className="influencer-data__country">
-                {" "}
-                {influencer?.state?.name || ""}
-              </span>
-            </div>
+            <>
+              {influencer.from_country && (
+                <div className="influencer-data__from-country">
+                  <span>País de origen:</span>
+                  <span className="influencer-data__country">
+                    {" "}
+                    {influencer?.from_country.name}
+                  </span>
+                </div>
+              )}
+              {influencer.living_country && (
+                <div className="influencer-data__living-country">
+                  <span>País de residencia:</span>
+                  <span className="influencer-data__country">
+                    {" "}
+                    {influencer?.living_country.name}
+                  </span>
+                </div>
+              )}
+
+              <div className="influencer-data__from-country">
+                <span>Estado:</span>
+                <span className="influencer-data__country">
+                  {" "}
+                  {influencer?.state?.name || ""}
+                </span>
+              </div>
+            </>
           )}
         </div>
       </div>
-      {influencer.categories && (
+
+      {influencer.categories && user.type === "Nomade" && (
         <InfluencerCategories categories={influencer.categories} />
       )}
+
       <InfluencerSocialMedia
         socialMedia={mainSocialNetworks}
         setSocialMediaSelected={setSocialMediaSelected}
