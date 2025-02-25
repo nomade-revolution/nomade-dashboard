@@ -70,13 +70,25 @@ const CollabsStateTimelineV2 = ({ collab, isCompany }: Props) => {
               <div key={index} style={styles.stepContainer}>
                 <div style={styles.leftSection}>
                   <div style={styles.circleAndLineContainer}>
-                    <div style={{ ...getCircleStyle(step, nextStep?.id || 0) }}>
-                      <>
-                        {renderCheck && (
-                          <FaCheck size={10} color="white" />
-                          // color={lightTheme.colors.background}
-                        )}
-                      </>
+                    <div
+                      style={{
+                        height: 20,
+                        width: 20,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <div
+                        style={{ ...getCircleStyle(step, nextStep?.id || 0) }}
+                      >
+                        <>
+                          {renderCheck && (
+                            <FaCheck size={10} color="white" />
+                            // color={lightTheme.colors.background}
+                          )}
+                        </>
+                      </div>
                     </div>
                     {
                       // Si no es el último estado, se pone una línea
@@ -87,23 +99,21 @@ const CollabsStateTimelineV2 = ({ collab, isCompany }: Props) => {
                   </div>
                 </div>
                 <div style={styles.rightSection}>
-                  <>
-                    <p style={styles.label}>{step?.name}</p>
-                    <p style={styles.subLabel}>
-                      {step?.type}
-                      {getLeftContent(
-                        step,
-                        // (nextStep?.id || 0) === step.id,
-                        index,
-                        isCompany,
-                      )}
-                      {step.limit_date ? (
-                        <p style={styles.errorText}>
-                          Fecha límite: {step.limit_date}
-                        </p>
-                      ) : null}
-                    </p>
-                  </>
+                  <p style={styles.label}>{step?.name}</p>
+                  <p style={styles.subLabel}>
+                    {step?.type}
+                    {getLeftContent(
+                      step,
+                      // (nextStep?.id || 0) === step.id,
+                      index,
+                      isCompany,
+                    )}
+                    {step.limit_date ? (
+                      <p style={styles.errorText}>
+                        Fecha límite: {step.limit_date}
+                      </p>
+                    ) : null}
+                  </p>
                 </div>
               </div>
             </Fragment>
@@ -133,7 +143,7 @@ const collabsStateTimeLineStyles: { [key: string]: React.CSSProperties } = {
   },
   rightSection: {
     flex: 1,
-    marginTop: -8,
+    marginTop: -10,
   },
   dateContainer: {
     justifyContent: "flex-start",
@@ -169,18 +179,15 @@ const collabsStateTimeLineStyles: { [key: string]: React.CSSProperties } = {
     alignItems: "center",
     justifyContent: "center",
     marginTop: 4,
-    marginRight: -1.5,
   },
   circlePending: {
     width: 10,
     height: 10,
     backgroundColor: "#C8C7CC",
-    marginTop: 0,
   },
   circleError: {
     width: 10,
     height: 10,
-    marginRight: -1.5,
     backgroundColor: "#7B3C47",
   },
   circleCompleted: {
