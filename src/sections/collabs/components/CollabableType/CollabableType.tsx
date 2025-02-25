@@ -18,6 +18,7 @@ import {
   CollabCollabableCreateLodging,
 } from "modules/collabs/domain/Collabs";
 import { FullOffer, OfferTypes } from "modules/offers/domain/Offer";
+import ReusableSelect from "sections/shared/components/ReusableSelect/ReusableSelect";
 
 interface Props {
   errors: FormikErrors<
@@ -38,6 +39,8 @@ interface Props {
   onChangeDate: (value: Value) => void;
   setSelectedTime: (value: string) => void;
   selectedTime: string | null;
+  selectedAddress: number | null;
+  setSelectedAddress: (value: number) => void;
 }
 
 const CollabableType = ({
@@ -49,16 +52,26 @@ const CollabableType = ({
   valueDate,
   setSelectedTime,
   selectedTime,
+  selectedAddress,
+  setSelectedAddress,
 }: Props): React.ReactElement => {
   const handleButtonClick = (time: string) => {
     setSelectedTime(time);
   };
 
-  const calendar: Calendar | Calendar[] = Array.isArray(offer.calendar)
-    ? (offer.calendar[0] as Calendar)
-    : (offer.calendar as Calendar);
+  let calendars: Calendar[] = [];
+
+  if (offer?.calendar) {
+    calendars = Array.isArray(offer.calendar)
+      ? offer.calendar
+      : [offer.calendar];
+  }
 
   const offerType = offer.type;
+  const currentCalendar = calendars.length
+    ? calendars?.find((calendar) => calendar.address_id === selectedAddress)
+    : null;
+
   return (
     <DefaultCollabableSectionStyled className="default-section">
       {offerType &&
@@ -70,22 +83,20 @@ const CollabableType = ({
               <label htmlFor="in_exchange" className="form-subsection__label">
                 Dirección
               </label>
-              {(offer?.calendar as Calendar[])?.[0]?.address ||
-                (offer.addresses && (
-                  <Field
-                    type="text"
-                    id="guests"
-                    className="form-subsection__field"
-                    aria-label="Correo electrónico"
-                    value={
-                      offerType === OfferTypes.restaurant
-                        ? (offer.calendar as Calendar[])[0].address
-                        : offer.addresses[0].address
-                    }
-                    readOnly
-                  />
-                ))}
+              <ReusableSelect
+                label=""
+                options={calendars.map((calendar) => ({
+                  id: calendar.address_id,
+                  name: calendar.address,
+                  value: String(calendar.address_id),
+                }))}
+                setValue={(value) => {
+                  setSelectedAddress(parseInt(value));
+                }}
+                value={String(currentCalendar?.address_id)}
+              />
             </div>
+
             <div className="form-subsection">
               <label htmlFor="guests" className="form-subsection__label">
                 Número de personas
@@ -118,12 +129,12 @@ const CollabableType = ({
           selectRange={offerType === OfferTypes.lodging}
         />
       </div>
-      {offer?.calendar && (
+      {currentCalendar && offerType !== OfferTypes.lodging && (
         <>
           <div className="default-section__days-hours">
             <h4>Horas por día</h4>
-            {offer.calendar &&
-              calendar?.week.map((week) => {
+            {currentCalendar &&
+              currentCalendar?.week.map((week) => {
                 const groupedDays: Record<string, string[]> = week.reduce(
                   (acc: Record<string, string[]>, day: TimeSlotOffer) => {
                     if (!acc[day.day_name]) {

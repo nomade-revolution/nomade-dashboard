@@ -27,3 +27,9 @@ export const formatDateWithTime = (isoDateString: string): string => {
 
   return `${day}/${month}/${year} - ${hours}:${minutes}`;
 };
+
+// function that converts DD-MM-YYYY to YYYY-MM-DD
+export const formatDateToISO = (date: string): Date => {
+  const [day, month, year] = date.split("-");
+  return new Date(`${year}-${month}-${day}`);
+};

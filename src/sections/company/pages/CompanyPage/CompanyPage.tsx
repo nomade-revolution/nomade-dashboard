@@ -65,70 +65,66 @@ const CompaniesPage = (): React.ReactElement => {
   useEffect(() => {
     gteCompaniesData();
   }, [page, gteCompaniesData]);
+
+  if (loading) {
+    return <Loader width="20px" height="20px" />;
+  }
+
   return (
-    <>
-      {loading ? (
-        <Loader width="20px" height="20px" />
-      ) : (
-        <ReusablePageStyled className="dashboard">
-          <div className="dashboard__searchContainer">
-            <section className="dashboard__btns-section">
-              <ActionButton
-                color={theme.colors.darkBlue}
-                icon={<IoAddCircle className="dashboard__create--icon" />}
-                onClick={() => setIsModalOpen(true)}
-                text="Crear cliente"
-              />
-              <ExportFilesButton
-                action={() => exportCompaniesExcel()}
-                text="Exportar clientes"
-              />
-            </section>
-            <SearchBar
-              pageName={SectionTypes.customers}
-              pageTypes={SectionTypes.customers}
-              searchText={searchText!}
-              setSearchText={setSearchText}
-              onSearchSubmit={() => handleSearch(searchText)}
-              onReset={() => gteCompaniesData()}
-            />
-          </div>
-          <div className="dashboard__table">
-            <DashboardTable
-              bodySections={companies}
-              headerSections={companyTableHeaderSections}
-              pageName={SectionTypes.customers}
-            />
-          </div>
-          <div className="dashboard__mobile">
-            <h3>Clientes</h3>
-            <DashboardCardListMobile
-              bodySections={companies}
-              headerSections={companyTableHeaderSections}
-              pageName={SectionTypes.customers}
-            />
-          </div>
-          <PaginationComponent
-            current_page={pagination.current_page}
-            last_page={pagination.last_page}
-            per_page={pagination.per_page}
-            pageName={SectionTypes.customers}
-            filterParams={""}
+    <ReusablePageStyled className="dashboard">
+      <div className="dashboard__searchContainer">
+        <section className="dashboard__btns-section">
+          <ActionButton
+            color={theme.colors.darkBlue}
+            icon={<IoAddCircle className="dashboard__create--icon" />}
+            onClick={() => setIsModalOpen(true)}
+            text="Crear cliente"
           />
-          <ReusableModal
-            children={
-              <CompanyForm
-                onSubmit={postCompanyCms}
-                setIsOpen={setIsModalOpen}
-              />
-            }
-            openModal={isModalOpen}
-            setIsModalOpen={setIsModalOpen}
-            type="client"
+          <ExportFilesButton
+            action={() => exportCompaniesExcel()}
+            text="Exportar clientes"
           />
-        </ReusablePageStyled>
-      )}
-    </>
+        </section>
+        <SearchBar
+          pageName={SectionTypes.customers}
+          pageTypes={SectionTypes.customers}
+          searchText={searchText!}
+          setSearchText={setSearchText}
+          onSearchSubmit={() => handleSearch(searchText)}
+          onReset={() => gteCompaniesData()}
+        />
+      </div>
+      <div className="dashboard__table">
+        <DashboardTable
+          bodySections={companies}
+          headerSections={companyTableHeaderSections}
+          pageName={SectionTypes.customers}
+        />
+      </div>
+      <div className="dashboard__mobile">
+        <h3>Clientes</h3>
+        <DashboardCardListMobile
+          bodySections={companies}
+          headerSections={companyTableHeaderSections}
+          pageName={SectionTypes.customers}
+        />
+      </div>
+      <PaginationComponent
+        current_page={pagination.current_page}
+        last_page={pagination.last_page}
+        per_page={pagination.per_page}
+        pageName={SectionTypes.customers}
+        filterParams={""}
+      />
+      <ReusableModal
+        children={
+          <CompanyForm onSubmit={postCompanyCms} setIsOpen={setIsModalOpen} />
+        }
+        openModal={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        type="client"
+      />
+    </ReusablePageStyled>
   );
 };
 

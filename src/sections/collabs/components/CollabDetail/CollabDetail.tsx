@@ -48,6 +48,15 @@ const CollabDetail = ({
           {collab.comment ? collab.comment : "Sin observaciones"}
         </span>
       </section>
+
+      <h3>Notas internas</h3>
+      <section className="collab-detail__data">
+        <div className="collab-detail__offer-section"></div>
+        <span style={{ fontSize: "14px", width: "100%", textAlign: "left" }}>
+          {collab.note ? collab.note : "Sin observaciones"}
+        </span>
+      </section>
+
       <Link
         to={`/oferta/${offer.id}`}
         className="collab-detail__link"

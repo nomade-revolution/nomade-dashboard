@@ -22,16 +22,15 @@ import { Value } from "react-calendar/src/shared/types.js";
 import CollabableType from "../CollabableType/CollabableType";
 import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
 import { Calendar } from "modules/offers/domain/OfferCalendar";
+import { extractCollabableDate } from "./EditCollabsForm/EditCollabsForm";
 
 const CollabsForm = (): React.ReactElement => {
   const [formState, setFormState] = useState<{
     category: string;
     offer_id: string;
-    address: string;
   }>({
     category: "",
     offer_id: "",
-    address: "",
   });
   const [showCompanySuggestions, setShowCompanySuggestions] =
     useState<boolean>(false);
@@ -45,6 +44,13 @@ const CollabsForm = (): React.ReactElement => {
   const [valueDate, onChangeDate] = useState<Value>(null);
   const [offersFormat, setOffersFormat] = useState<OptionsStructure[]>([]);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
+
+  const firstCalendar: Calendar = Array.isArray(offer.calendar)
+    ? offer.calendar[0]
+    : offer.calendar;
+  const [selectedAddress, setSelectedAddress] = useState<number | null>(
+    firstCalendar?.address_id,
+  );
 
   const { companies, getCompaniesWithParams } = useCompanyContext();
   const { getAllOffers, offers } = useOffersContext();
@@ -106,30 +112,24 @@ const CollabsForm = (): React.ReactElement => {
         break;
       case OfferTypes.delivery:
         collabable = {
-          day:
-            valueDate &&
-            new Date(valueDate.toString()).toISOString().split("T")[0],
+          day: extractCollabableDate(valueDate),
           time: `${selectedTime}:00`,
         };
         break;
       case OfferTypes.lodging:
         collabable = {
-          address_id: offer.addresses[0].address_id,
+          address_id: selectedAddress,
           from_day:
-            Array.isArray(valueDate) &&
-            new Date(valueDate[0]!).toISOString().split("T")[0],
+            Array.isArray(valueDate) && extractCollabableDate(valueDate[0]!),
           to_day:
-            Array.isArray(valueDate) &&
-            new Date(valueDate[1]!).toISOString().split("T")[0],
+            Array.isArray(valueDate) && extractCollabableDate(valueDate[1]!),
           guests: values.guests,
         };
         break;
       default:
         collabable = {
-          address_id: (offer.calendar as Calendar[])[0].address_id,
-          day:
-            valueDate &&
-            new Date(valueDate.toString()).toISOString().split("T")[0],
+          address_id: selectedAddress,
+          day: extractCollabableDate(valueDate),
           time: `${selectedTime}:00`,
           guests: values.guests,
         };
@@ -270,10 +270,14 @@ const CollabsForm = (): React.ReactElement => {
                       <button
                         onClick={() => {
                           handleInfluencerSelect(suggestion.name);
+                          // TODO entiendo que estaría bien mostrar el surname tambien, por ahora oculto
+                          // handleInfluencerSelect(
+                          //   `${suggestion.name} ${suggestion.surnames}`,
+                          // );
                           setInfluencer(suggestion);
                         }}
                       >
-                        {suggestion.name}
+                        {suggestion.name} {suggestion.surnames}
                       </button>
                     </li>
                   ))
@@ -292,15 +296,30 @@ const CollabsForm = (): React.ReactElement => {
             )}
           </div>
 
+          {offer.type !== OfferTypes.brand && Object.keys(offer).length ? (
+            <CollabableType
+              errors={errors as never}
+              getFieldProps={getFieldProps}
+              offer={offer}
+              onChangeDate={onChangeDate}
+              touched={touched as never}
+              valueDate={valueDate}
+              setSelectedTime={setSelectedTime}
+              selectedTime={selectedTime}
+              selectedAddress={selectedAddress}
+              setSelectedAddress={setSelectedAddress}
+            />
+          ) : null}
+
           <div className="form-subsection">
             <label htmlFor="comment" className="form-subsection__label">
-              Comentario
+              Observaciones influencer
             </label>
             <Field
               type="text"
               id="comment"
               className="form-subsection__field-textarea--company"
-              aria-label="Comentario"
+              aria-label="Observaciones influencer"
               as={"textarea"}
               {...getFieldProps("comment")}
             />
@@ -312,16 +331,27 @@ const CollabsForm = (): React.ReactElement => {
               />
             )}
           </div>
-          <CollabableType
-            errors={errors as never}
-            getFieldProps={getFieldProps}
-            offer={offer}
-            onChangeDate={onChangeDate}
-            touched={touched as never}
-            valueDate={valueDate}
-            setSelectedTime={setSelectedTime}
-            selectedTime={selectedTime}
-          />
+
+          <div className="form-subsection">
+            <label htmlFor="note" className="form-subsection__label">
+              Notas internas
+            </label>
+            <Field
+              type="text"
+              id="note"
+              className="form-subsection__field-textarea--company"
+              aria-label="Notas internas"
+              as={"textarea"}
+              {...getFieldProps("note")}
+            />
+            {errors.note && touched.note && (
+              <ErrorMessage
+                className="form-subsection__error-message"
+                component="span"
+                name="note"
+              />
+            )}
+          </div>
 
           <button
             type="submit"

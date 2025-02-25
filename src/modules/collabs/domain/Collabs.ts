@@ -61,6 +61,7 @@ export interface CollabsRequestStructure {
   offer_id: string;
   influencer_id: string;
   comment?: string;
+  note?: string;
   collabable: CollabableRestaurant | CollabableDelivery | CollabableBrand;
 }
 

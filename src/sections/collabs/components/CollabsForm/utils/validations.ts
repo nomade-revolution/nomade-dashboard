@@ -14,4 +14,5 @@ export const initialData: CollabsRequestStructure = {
   influencer_id: "",
   offer_id: "",
   comment: "",
+  note: "",
 };

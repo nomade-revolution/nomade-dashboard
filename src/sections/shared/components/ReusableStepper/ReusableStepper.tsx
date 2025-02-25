@@ -43,9 +43,6 @@ export default function ReusableStepper({
     event.stopPropagation();
     setAnchorEl(event.currentTarget);
   };
-  const handleMarkAsPublicated = async () => {
-    await updateCollabState(collab.id!, collabStates.COLAB_PUBLISHED_STATE);
-  };
 
   const handleActionSelected = (state_id: number) => {
     setIsDialogOpen(true);
@@ -98,7 +95,9 @@ export default function ReusableStepper({
           </button>
           <ActionButton
             icon={<FaCheckCircle size={20} />}
-            onClick={handleMarkAsPublicated}
+            onClick={() =>
+              handleActionSelected(collabStates.COLAB_PUBLISHED_STATE)
+            }
             text="Marcar como publicado"
             color={theme.colors.softGreen}
           />

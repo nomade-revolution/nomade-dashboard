@@ -157,7 +157,11 @@ const CollabDetailPage = (): React.ReactElement => {
               openModal={isOpenEdit}
               setIsModalOpen={setIsOpenEdit}
             >
-              <EditCollabForm collab={collab} setIsOpen={setIsOpenEdit} />
+              <EditCollabForm
+                collab={collab}
+                offer={offer}
+                setIsOpen={setIsOpenEdit}
+              />
             </ReusableModal>
             <DialogDeleteConfirm
               handleClose={() => setIsDialogOpen(false)}
