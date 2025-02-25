@@ -104,8 +104,7 @@ const CollabDetailPage = (): React.ReactElement => {
               )}
               {collab.state &&
                 (collab.state.id === COLAB_PENDING_COMPANY_STATE ||
-                  collab.state.id === COLAB_PENDING_NOMADE_STATE) &&
-                user.type === "Nomade" && (
+                  collab.state.id === COLAB_PENDING_NOMADE_STATE) && (
                   <>
                     <ActionButton
                       icon={<FaCheckCircle />}
@@ -120,18 +119,22 @@ const CollabDetailPage = (): React.ReactElement => {
                       color={theme.colors.darkRed}
                     />
 
-                    <ActionButton
-                      onClick={() => setIsOpenEdit(true)}
-                      text="Editar"
-                      icon={<FaEdit />}
-                      color={theme.colors.darkBlue}
-                    />
-                    <ActionButton
-                      onClick={handleOpenDialogDelete}
-                      text="Borrar"
-                      icon={<FaRegTrashCan />}
-                      color={theme.colors.red}
-                    />
+                    {user.type === "Nomade" && (
+                      <>
+                        <ActionButton
+                          onClick={() => setIsOpenEdit(true)}
+                          text="Editar"
+                          icon={<FaEdit />}
+                          color={theme.colors.darkBlue}
+                        />
+                        <ActionButton
+                          onClick={handleOpenDialogDelete}
+                          text="Borrar"
+                          icon={<FaRegTrashCan />}
+                          color={theme.colors.red}
+                        />
+                      </>
+                    )}
                   </>
                 )}
             </section>
