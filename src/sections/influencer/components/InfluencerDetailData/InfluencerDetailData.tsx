@@ -64,6 +64,13 @@ const InfluencerDetailData = ({
               )}
 
               <div className="influencer-data__from-country">
+                <span>Fecha de creación:</span>
+                <span className="influencer-data__country">
+                  {" "}
+                  {influencer?.created_at || ""}
+                </span>
+              </div>
+              <div className="influencer-data__from-country">
                 <span>Estado:</span>
                 <span className="influencer-data__country">
                   {" "}

@@ -22,4 +22,5 @@ export interface Influencer {
   email: string;
   state: { id: number; name: string };
   influencer_state_id?: number;
+  created_at: string;
 }
