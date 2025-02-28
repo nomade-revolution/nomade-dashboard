@@ -8,6 +8,7 @@ export interface Influencer {
   name: string;
   surnames: string;
   user_name: string;
+  gender?: string;
   prefix: string;
   phone: string;
   from_country?: CountryInterface;

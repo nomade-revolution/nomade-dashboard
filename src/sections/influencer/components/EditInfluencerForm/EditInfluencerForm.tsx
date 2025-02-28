@@ -22,7 +22,7 @@ interface Props {
 interface EditInfluencerFormState {
   name: string;
   surnames: string;
-  // email: string;
+  email: string;
   prefix: string;
   phone: string;
   from_country_id: number;
@@ -39,6 +39,12 @@ const EXCLUDED_KEYS = [
   "ageRanges",
 ];
 
+export const GENDER_OPTIONS = [
+  { id: 1, name: "Mujer", value: "1" },
+  { id: 2, name: "Hombre", value: "2" },
+  { id: 3, name: "Prefiero no decirlo", value: "3" },
+];
+
 const EditInfluencerForm = ({ initialState, onSubmit }: Props) => {
   const [formState, setFormState] = useState<EditInfluencerFormState | null>(
     null,
@@ -53,6 +59,7 @@ const EditInfluencerForm = ({ initialState, onSubmit }: Props) => {
   //   useState<string[]>(DEFAULT_STATS);
   // const [citiesStats, setCitiesStates] = useState<string[]>(DEFAULT_STATS);
   // const [mainSocial, setMainSocial] = useState<number>(0);
+  const [gender, setGender] = useState<string>("");
   const [citiesBorn, setCitiesBorn] = useState<City[]>([]);
   const [citiesLive, setCitiesLive] = useState<City[]>([]);
   // const [countryForCityStats, setCountryForCityStats] = useState<number>(0);
@@ -86,7 +93,7 @@ const EditInfluencerForm = ({ initialState, onSubmit }: Props) => {
     const parsedInitialState: EditInfluencerFormState = {
       name: initialState.name,
       surnames: initialState.surnames,
-      // email: initialState.email,
+      email: initialState.email,
       prefix: initialState.prefix,
       phone: initialState.phone,
       from_country_id: fromCountry,
@@ -96,6 +103,12 @@ const EditInfluencerForm = ({ initialState, onSubmit }: Props) => {
     };
 
     setFormState(parsedInitialState);
+
+    if (initialState.gender) {
+      setGender(
+        GENDER_OPTIONS.find((g) => g.name === initialState.gender)?.value || "",
+      );
+    }
 
     if (initialState.categories?.length) {
       setCategory(initialState.categories[0].id);
@@ -152,6 +165,10 @@ const EditInfluencerForm = ({ initialState, onSubmit }: Props) => {
     categories.forEach((category, index) => {
       formData.append(`categories[${index}]`, String(category));
     });
+
+    if (gender) {
+      formData.append("gender_id", gender);
+    }
 
     try {
       const resp: any = await modifyInfluencer(
@@ -246,8 +263,7 @@ const EditInfluencerForm = ({ initialState, onSubmit }: Props) => {
             </div>
           </div>
 
-          {/* TODO tiene que venir de back y en principio será editable asi como está */}
-          {/* <div className="form-section">
+          <div className="form-section">
             <label htmlFor="email" className="login-form__label">
               Email
             </label>
@@ -265,7 +281,7 @@ const EditInfluencerForm = ({ initialState, onSubmit }: Props) => {
                 name="email"
               />
             )}
-          </div> */}
+          </div>
 
           <div className="form-section">
             <CustomFileInput
@@ -314,6 +330,18 @@ const EditInfluencerForm = ({ initialState, onSubmit }: Props) => {
                 />
               )}
             </div>
+          </div>
+
+          <div className="form-section">
+            <ReusableSelect
+              label="Género"
+              options={GENDER_OPTIONS}
+              setValue={(value) => {
+                if (!value) return;
+                setGender(value);
+              }}
+              value={gender}
+            />
           </div>
 
           <div className="dobleContainer">

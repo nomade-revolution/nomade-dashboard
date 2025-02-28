@@ -18,6 +18,7 @@ import ActionButton from "sections/shared/components/ActionButton/ActionButton";
 import { FaDeleteLeft, FaPlus } from "react-icons/fa6";
 import theme from "assets/styles/theme";
 import { Checkbox } from "@mui/material";
+import { GENDER_OPTIONS } from "sections/influencer/components/EditInfluencerForm/EditInfluencerForm";
 
 const initialState: RegisterInfluencerInterface = {
   name: "",
@@ -54,6 +55,7 @@ const CreateInfluencerPage = () => {
   const [loading, setIsLoading] = useState<boolean>(false);
   const { getAllCities } = useCitiesContext();
   const { countries, getAllCountries } = useCountryContext();
+  const [gender, setGender] = useState<string>("");
   const [countriesStats, setCountriesStates] =
     useState<string[]>(DEFAULT_STATS);
   const [citiesStats, setCitiesStates] = useState<string[]>(DEFAULT_STATS);
@@ -107,6 +109,11 @@ const CreateInfluencerPage = () => {
     if (file[0]) {
       formData.append("avatar", file[0]);
     }
+
+    if (gender) {
+      formData.append("gender_id", gender);
+    }
+
     const newSocials = values.socialMedia.map((social) => {
       return {
         ...social,
@@ -270,6 +277,18 @@ const CreateInfluencerPage = () => {
                   />
                 )}
               </div>
+            </div>
+
+            <div className="form-section">
+              <ReusableSelect
+                label="Género"
+                options={GENDER_OPTIONS}
+                setValue={(value) => {
+                  if (!value) return;
+                  setGender(value);
+                }}
+                value={gender}
+              />
             </div>
 
             <div className="dobleContainer">
