@@ -52,7 +52,8 @@ const InfluencersPage = (): React.ReactElement => {
       }
 
       if (text) {
-        filters.filters = { search: text };
+        // @ts-expect-error any
+        filters.filters.search = text;
       }
       getUsers(+page!, 10, filters, UserTypes.influencer);
     },

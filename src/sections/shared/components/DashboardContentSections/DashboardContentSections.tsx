@@ -522,7 +522,7 @@ const DashboardContentSections = ({
       if (pageName === "influencers") {
         return (
           <span className="dashboard__country">
-            {(section as Influencer).state.name}
+            {(section as Influencer).state?.name || ""}
           </span>
         );
       }
@@ -561,7 +561,7 @@ const DashboardContentSections = ({
     case "categories":
       return (
         <>
-          {(section as Influencer).categories.map((category) => {
+          {(section as Influencer).categories?.map((category) => {
             return (
               <span className="dashboard__category" key={category.name}>
                 {category.name}
@@ -803,7 +803,12 @@ const DashboardContentSections = ({
       );
 
     case "social_media_mainRRSS": {
-      const main_social = (section as Influencer).socialMedia.find(
+      const sectionData = section as Influencer;
+      if (!sectionData.socialMedia || sectionData.socialMedia.length === 0) {
+        return null;
+      }
+
+      const main_social = (sectionData as Influencer).socialMedia.find(
         (social) => social.main,
       );
       return (
@@ -854,6 +859,11 @@ const DashboardContentSections = ({
     }
 
     case "social_media_followers": {
+      const sectionData = section as Influencer;
+      if (!sectionData.socialMedia || sectionData.socialMedia.length === 0) {
+        return null;
+      }
+
       const main_social = (section as Influencer).socialMedia.find(
         (social) => social.main,
       );

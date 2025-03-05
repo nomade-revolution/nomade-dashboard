@@ -69,6 +69,7 @@ const EditInfluencerForm = ({ initialState, onSubmit }: Props) => {
   const [liveCountry, setLiveCountry] = useState<number>(0);
   // const [socialMediaSelected, setSocialMediaSelected] = useState<number>(0);
   const [file, setFile] = useState<File[]>([]);
+  const [deleteImageMode, setDeleteImageMode] = useState<boolean>(false);
   // const [citiesPerPercentage, setCitiesPerPercentage] = useState<City[]>([]);
   const [category, setCategory] = useState<number>(0);
   const [subcategory, setSubcategory] = useState<number>(0);
@@ -147,6 +148,18 @@ const EditInfluencerForm = ({ initialState, onSubmit }: Props) => {
   const handleSubmitForm = async (values: EditInfluencerFormState) => {
     setIsLoading(true);
     setIsFormSubmitted(true);
+
+    try {
+      if (deleteImageMode) {
+        await modifyInfluencer(initialState.id, {
+          // @ts-expect-error any
+          avatar: null,
+        });
+      }
+    } catch (error) {
+      //
+    }
+
     const formData = new FormData();
     Object.keys(values).forEach((key) => {
       if (!EXCLUDED_KEYS.includes(key)) {
@@ -156,7 +169,7 @@ const EditInfluencerForm = ({ initialState, onSubmit }: Props) => {
       }
     });
 
-    if (file[0]) {
+    if (!deleteImageMode && file[0]) {
       formData.append("avatar", file[0]);
     }
 
@@ -203,6 +216,15 @@ const EditInfluencerForm = ({ initialState, onSubmit }: Props) => {
       getInfluencerCategories();
     }
   }, [getInfluencerCategories, influencerCategories.length]);
+
+  const handleDeleteAvatarMode = (status: false | undefined) => {
+    if (status === false) {
+      setDeleteImageMode(false);
+      return;
+    }
+    setDeleteImageMode(true);
+    setFile([]);
+  };
 
   const filteredCategories = influencerCategories.filter(
     (cat) => cat.parent_id === category,
@@ -288,6 +310,13 @@ const EditInfluencerForm = ({ initialState, onSubmit }: Props) => {
               file={file}
               setFile={(e) => setFile(e)}
               text="Avatar"
+              // this fix the image cache
+              images={
+                !file.length && !deleteImageMode && initialState.avatar
+                  ? [initialState.avatar + "?" + Date.now()]
+                  : []
+              }
+              onDeleteImage={handleDeleteAvatarMode}
             />
           </div>
 

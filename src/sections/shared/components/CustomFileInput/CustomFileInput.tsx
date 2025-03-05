@@ -8,6 +8,7 @@ interface Props {
   text?: string;
   images?: string[];
   multiple?: boolean;
+  onDeleteImage?: (status?: false) => void;
 }
 
 const CustomFileInput = ({
@@ -16,6 +17,7 @@ const CustomFileInput = ({
   images,
   multiple = false,
   text,
+  onDeleteImage,
 }: Props): React.ReactElement => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [fileNames, setFileNames] = useState<string[]>([]);
@@ -28,6 +30,9 @@ const CustomFileInput = ({
       return () => {
         newObjectUrls.forEach((url) => URL.revokeObjectURL(url));
       };
+    } else {
+      setObjectUrls([]);
+      setFileNames([]);
     }
   }, [file]);
 
@@ -40,8 +45,12 @@ const CustomFileInput = ({
   };
 
   const handleClick = () => {
+    if (onDeleteImage) onDeleteImage(false);
     fileInputRef.current?.click();
   };
+
+  const showDeleteButton =
+    onDeleteImage && (file?.length > 0 || (images && images?.length > 0));
 
   return (
     <FileInputWrapper className="file">
@@ -88,6 +97,14 @@ const CustomFileInput = ({
             ? "Modificar"
             : "Subir"}
         </label>
+        {showDeleteButton ? (
+          <label
+            className="file-input-label-delete"
+            onClick={() => (onDeleteImage ? onDeleteImage(undefined) : null)}
+          >
+            Eliminar
+          </label>
+        ) : null}
         <input
           type="file"
           ref={fileInputRef}

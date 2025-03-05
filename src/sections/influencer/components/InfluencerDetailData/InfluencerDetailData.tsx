@@ -25,7 +25,8 @@ const InfluencerDetailData = ({
     <InfluecerDetailDataStyled className="influencer-data">
       <div className="influencer-data__mainData">
         <ImageCustom
-          image={influencer.avatar}
+          // this fix the image cache
+          image={influencer.avatar + "?" + Date.now()}
           alt={influencer.name}
           className="avatar"
           height={80}
