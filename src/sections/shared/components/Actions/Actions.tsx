@@ -44,7 +44,6 @@ const Actions = ({
   anchorEl,
   setAnchorEl,
 }: ActionsProps): React.ReactElement => {
-  let buttons: React.ReactNode;
   const {
     handleIsDialogOpen,
     handleCollabStateUpdate,
@@ -52,11 +51,31 @@ const Actions = ({
     setIsSocialMediaModalOpen,
   } = useActions();
   const { user } = useAuthContext();
-
   const [isLeadOpen, setIsLeadOpen] = useState(false);
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
+  let buttons: React.ReactNode;
+
+  let showAcceptAndRefuseButtons = false;
+  if (pageName === SectionTypes.collabs) {
+    if (
+      user.type === "Nomade" &&
+      (section as FullCollab).state.id ===
+        collabStates.COLAB_PENDING_NOMADE_STATE
+    ) {
+      showAcceptAndRefuseButtons = true;
+    } else if (
+      user.type === "Company" &&
+      (section as FullCollab).state.id ===
+        collabStates.COLAB_PENDING_COMPANY_STATE
+    ) {
+      showAcceptAndRefuseButtons = true;
+    }
+  }
+
   switch (pageName) {
     case SectionTypes.collabs:
       buttons = (
@@ -71,10 +90,7 @@ const Actions = ({
             </Link>
           </Tooltip>
 
-          {((section as FullCollab).state.id ===
-            collabStates.COLAB_PENDING_NOMADE_STATE ||
-            (section as FullCollab).state.id ===
-              collabStates.COLAB_PENDING_COMPANY_STATE) && (
+          {showAcceptAndRefuseButtons && (
             <>
               <Tooltip title="Aceptar">
                 <button
@@ -212,7 +228,6 @@ const Actions = ({
         </Tooltip>
       );
       break;
-
     case SectionTypes.leads:
       buttons = (
         <>
