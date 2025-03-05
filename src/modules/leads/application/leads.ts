@@ -26,3 +26,7 @@ export const getLeadsForm = (
 ): Promise<HttpResponseInterface<CompanyRegisterStructure>> => {
   return leadsRepo.getLeadsForm(hash);
 };
+
+export const getLeadsBadge = (leadsRepo: LeadsRepository<number>) => {
+  return leadsRepo.getLeadsBadge();
+};

@@ -48,4 +48,13 @@ export class LeadsRepository {
       return Promise.reject(error);
     }
   }
+
+  public async getLeadsBadge(): Promise<HttpResponseInterface<number>> {
+    try {
+      const resp = await this.http.get<number>(`${LEADS_BASE}/status/badge`);
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 }

@@ -9,4 +9,5 @@ export interface LeadsRepository<I> {
   ): Promise<HttpResponseInterface<I>>;
   sendLeadLink(lead_id: number): Promise<HttpResponseInterface<I>>;
   getLeadsForm(hash: string): Promise<HttpResponseInterface<I>>;
+  getLeadsBadge(): Promise<HttpResponseInterface<I>>;
 }

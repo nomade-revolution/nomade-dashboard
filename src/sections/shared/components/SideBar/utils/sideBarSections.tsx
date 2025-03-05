@@ -9,7 +9,8 @@ import { AiFillFileAdd } from "react-icons/ai";
 export const getSideBarUpperSections = (
   usersQuantity: number,
   influencersQuantity: number,
-  // companiesQuantity: number,
+  companiesQuantity: number,
+  leadsQuantity: number,
   offer_id?: number,
 ) => {
   const sideBarUpperSections = [
@@ -46,7 +47,7 @@ export const getSideBarUpperSections = (
       icon: <FaUserTie />,
       name: "Clientes",
       pathname: "clientes",
-      quantity: 0,
+      quantity: companiesQuantity,
       path: `/clientes/page/1`,
       subSection: "cliente",
     },
@@ -81,7 +82,7 @@ export const getSideBarUpperSections = (
       icon: <AiFillFileAdd />,
       name: "Leads",
       pathname: "leads",
-      quantity: 0,
+      quantity: leadsQuantity,
       path: "/leads/page/1",
     },
     {

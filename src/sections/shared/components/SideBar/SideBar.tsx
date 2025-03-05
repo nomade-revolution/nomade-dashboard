@@ -16,6 +16,7 @@ interface SideBarProps {
   badgeUsers: number;
   badgeInfluencers: number;
   badgeCompanies: number;
+  badgeLeads: number;
   user: Company | User;
   offer: FullOffer;
   isMinimized: boolean;
@@ -26,6 +27,7 @@ const SideBar = ({
   badgeUsers,
   badgeInfluencers,
   badgeCompanies,
+  badgeLeads,
   user,
   offer,
   isMinimized,
@@ -48,7 +50,8 @@ const SideBar = ({
           ...getSideBarUpperSections(
             badgeUsers,
             badgeInfluencers,
-            // badgeCompanies,
+            badgeCompanies,
+            badgeLeads,
             offer?.id,
           ).filter(
             (section) =>
@@ -67,6 +70,7 @@ const SideBar = ({
           badgeUsers,
           badgeInfluencers,
           badgeCompanies,
+          badgeLeads,
         ).filter((section) => section.pathname !== "oferta");
 
   const handleLogout = () => {

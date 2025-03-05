@@ -8,6 +8,7 @@ import { LeadsRepository } from "modules/leads/domain/LeadsRepository";
 import { Lead, LeadsApiResponse } from "modules/leads/domain/Leads";
 import {
   getLeads,
+  getLeadsBadge,
   getLeadsForm,
   sendLeadLink,
 } from "modules/leads/application/leads";
@@ -30,6 +31,8 @@ interface ContextState {
   order: OrderItem;
   sendLinkForLead: (lead_id: number) => void;
   getLeadFromHash: (hash: string) => void;
+  badgeCount: number;
+  getLeadsStatusBadge: () => void;
 }
 
 export const LeadsContext = createContext<ContextState>({} as ContextState);
@@ -48,6 +51,7 @@ export const LeadsContextProvider = ({
   );
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [badgeCount, setBadgeCount] = useState<number>(0);
   const [pagination, setPagination] = useState<PaginationStucture>(
     {} as PaginationStucture,
   );
@@ -75,6 +79,15 @@ export const LeadsContextProvider = ({
 
     return response;
   };
+
+  const getLeadsStatusBadge = useCallback(async () => {
+    const response = await getLeadsBadge(repository);
+    if (isHttpSuccessResponse(response)) {
+      setBadgeCount(response.data);
+    }
+
+    return response;
+  }, [repository]);
 
   const getLeadFromHash = useCallback(
     async (hash: string) => {
@@ -104,6 +117,8 @@ export const LeadsContextProvider = ({
         error,
         isSuccess,
         pagination,
+        badgeCount,
+        getLeadsStatusBadge,
         getLeadsPaginated,
         sendLinkForLead,
         getLeadFromHash,

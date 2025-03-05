@@ -11,6 +11,7 @@ import { Company } from "modules/user/domain/User";
 import { useInfluencerContext } from "sections/influencer/InfluencerContext/useInfluencerContext";
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
 import { useMediaQuery } from "@mui/material";
+import { useLeadsContext } from "sections/leads/LeadsContext/useLeadsContext";
 
 const Layout = (): React.ReactElement => {
   const location = useLocation();
@@ -25,6 +26,9 @@ const Layout = (): React.ReactElement => {
     useInfluencerContext();
   const { getCompaniesStatusBadge, badgeCount: badgeCountCompanies } =
     useCompanyContext();
+
+  const { getLeadsStatusBadge, badgeCount: badgeCountLeads } =
+    useLeadsContext();
 
   const navigate = useNavigate();
 
@@ -58,6 +62,10 @@ const Layout = (): React.ReactElement => {
   useEffect(() => {
     getCompaniesStatusBadge();
   }, [getCompaniesStatusBadge]);
+
+  useEffect(() => {
+    getLeadsStatusBadge();
+  }, [getLeadsStatusBadge]);
 
   useEffect(() => {
     if (!user) {
@@ -102,6 +110,7 @@ const Layout = (): React.ReactElement => {
                 badgeUsers={0}
                 badgeInfluencers={badgeCountInfluencers}
                 badgeCompanies={badgeCountCompanies}
+                badgeLeads={badgeCountLeads}
                 user={user}
                 offer={offers[0]}
                 isMinimized={isMinimized}
