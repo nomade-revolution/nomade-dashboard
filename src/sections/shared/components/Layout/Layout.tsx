@@ -123,6 +123,7 @@ const Layout = (): React.ReactElement => {
             badgeCountUsers={0}
             badgeCountInfluencers={badgeCountInfluencers}
             badgeCountCompanies={badgeCountCompanies}
+            badgeCountsLeads={badgeCountLeads}
             offer={offers[0]}
             user={user}
           />

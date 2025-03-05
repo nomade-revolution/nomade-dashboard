@@ -12,6 +12,7 @@ describe("Given a Header component", () => {
           badgeCountCompanies={1}
           badgeCountInfluencers={1}
           badgeCountUsers={1}
+          badgeCountsLeads={1}
           offer={mockOffers[0]}
           user={mockUsers[0]}
         />,

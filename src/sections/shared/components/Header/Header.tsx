@@ -14,6 +14,7 @@ interface HeaderProps {
   badgeCountUsers: number;
   badgeCountInfluencers: number;
   badgeCountCompanies: number;
+  badgeCountsLeads: number;
   user: User;
   offer: FullOffer;
 }
@@ -22,6 +23,7 @@ const Header = ({
   badgeCountUsers,
   badgeCountInfluencers,
   badgeCountCompanies,
+  badgeCountsLeads,
   user,
   offer,
 }: HeaderProps): React.ReactElement => {
@@ -71,6 +73,7 @@ const Header = ({
           badgeCountUsers={badgeCountUsers}
           badgeCountInfluencers={badgeCountInfluencers}
           badgeCountCompanies={badgeCountCompanies}
+          badgeCountsLeads={badgeCountsLeads}
           offer={offer}
           user={user}
         />

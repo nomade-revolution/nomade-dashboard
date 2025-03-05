@@ -14,6 +14,7 @@ interface DropdownMenuProps {
   badgeCountUsers: number;
   badgeCountInfluencers: number;
   badgeCountCompanies: number;
+  badgeCountsLeads: number;
   user: User;
   offer: FullOffer;
 }
@@ -24,6 +25,7 @@ const DropdownMenu = ({
   badgeCountUsers,
   badgeCountInfluencers,
   badgeCountCompanies,
+  badgeCountsLeads,
   user,
   offer,
 }: DropdownMenuProps): React.ReactElement => {
@@ -34,7 +36,8 @@ const DropdownMenu = ({
       ? getSideBarUpperSections(
           badgeCountUsers,
           badgeCountInfluencers,
-          // badgeCountCompanies,
+          badgeCountCompanies,
+          badgeCountsLeads,
           offer?.id,
         ).filter(
           (section) =>
@@ -44,6 +47,7 @@ const DropdownMenu = ({
           badgeCountUsers,
           badgeCountInfluencers,
           badgeCountCompanies,
+          badgeCountsLeads,
         ).filter((section) => section.pathname !== "oferta");
 
   return (
