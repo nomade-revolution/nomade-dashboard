@@ -27,6 +27,7 @@ import CreateInfluencerPage from "sections/user/pages/CreateInfluencerPage/Creat
 import UsersAppPage from "sections/user/pages/UsersAppPage/UsersAppPage";
 import TermConditionsPage from "sections/shared/pages/TermsConditions/TermsConditions";
 import InfluencerVideoPage from "sections/influencer/pages/InfluencerVideoPage/InfluencerVideoPage";
+import UsersDetailPage from "sections/user/pages/UsersPage/UsersDetailPage/UsersDetailPage";
 
 const routes: RouteObject[] = [
   {
@@ -49,6 +50,10 @@ const routes: RouteObject[] = [
       {
         path: appPaths.users,
         element: <UsersPage />,
+      },
+      {
+        path: appPaths.user,
+        element: <UsersDetailPage />,
       },
       {
         path: appPaths.usersApp,

@@ -1,7 +1,11 @@
 import { Http } from "@core/application";
 import { HttpResponseInterface } from "@core/domain";
-import { User, UserApiResponse } from "../domain/User";
-import { GET_CONDITIONS, GET_USERS } from "../application/routes";
+import { User, UserApiResponse, UserRol } from "../domain/User";
+import {
+  GET_CONDITIONS,
+  GET_USER_ROLES,
+  GET_USERS,
+} from "../application/routes";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
 import { AuthRegisterNomadeInterface } from "@auth";
 import { INFLUENCER_EXPORT } from "@company/application/routes";
@@ -26,12 +30,38 @@ export class UsersRepository {
     }
   }
 
+  public async getUserData(
+    user_id: number,
+  ): Promise<HttpResponseInterface<User>> {
+    try {
+      const resp = await this.http.get<User>(`${GET_USERS}/${user_id}`);
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
   public async deleteUser(
     user_id: number,
   ): Promise<HttpResponseInterface<{ success: boolean }>> {
     try {
       const resp = await this.http.delete<UserApiResponse>(
         `${GET_USERS}/${user_id}`,
+      );
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  public async modifyUser(
+    user_id: number,
+    data: User,
+  ): Promise<HttpResponseInterface<{ success: boolean }>> {
+    try {
+      const resp = await this.http.put<UserApiResponse>(
+        `${GET_USERS}/${user_id}`,
+        data,
       );
       return resp;
     } catch (error) {
@@ -87,6 +117,15 @@ export class UsersRepository {
       const resp = await this.http.get(
         GET_CONDITIONS + "?filters%5Btype%5D=company&filters%5Blast%5D=true",
       );
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  public async getRolesList(): Promise<HttpResponseInterface<UserRol[]>> {
+    try {
+      const resp = await this.http.get<UserRol[]>(`${GET_USER_ROLES}`);
       return resp;
     } catch (error) {
       return Promise.reject(error);

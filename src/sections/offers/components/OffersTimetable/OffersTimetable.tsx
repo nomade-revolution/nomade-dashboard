@@ -130,7 +130,7 @@ const OffersTimetable = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getFieldProps, selectedDays, setWeek]);
 
-  const offerType = offer.type;
+  const offerType = offer?.type;
   useEffect(() => {
     if (
       offerType === OfferTypes.restaurant ||

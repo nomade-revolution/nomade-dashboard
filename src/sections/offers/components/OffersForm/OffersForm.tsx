@@ -96,6 +96,7 @@ const OffersForm = ({
         : "",
     city: "",
     location: offer ? offer.location_type : "",
+    // TODO rellenar esto en el form de creación para que funcione
     categories: offer ? offer?.offer_categories?.map((cat) => cat.id) : [],
     type: offer?.type || "",
     offerable_type: "",
@@ -483,7 +484,7 @@ const OffersForm = ({
                         Tipo
                       </label>
                       <ReusableSelect
-                        label="Tipo"
+                        label=""
                         options={categories}
                         setValue={(value) =>
                           handleFormStateChange("type", value)
@@ -507,7 +508,7 @@ const OffersForm = ({
                           Área
                         </label>
                         <ReusableSelect
-                          label="Área"
+                          label=""
                           options={locationTypes}
                           setValue={(value) =>
                             handleFormStateChange("location", value)
@@ -524,7 +525,7 @@ const OffersForm = ({
                             País
                           </label>
                           <ReusableSelect
-                            label="País"
+                            label=""
                             options={countriesFormat}
                             setValue={(value) =>
                               handleFormStateChange("country", value)
@@ -541,7 +542,7 @@ const OffersForm = ({
                               Ciudad
                             </label>
                             <ReusableSelect
-                              label="Ciudad"
+                              label=""
                               options={citiesFormat}
                               setValue={(value) =>
                                 handleFormStateChange("city", value)

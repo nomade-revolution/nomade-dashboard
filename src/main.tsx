@@ -28,6 +28,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <CategoriesContextProvider repository={repositories.categories}>
         <OffersContextProvider repository={repositories.offers}>
           <CollabsContextProvider repository={repositories.collabs}>
+            {/* @ts-expect-error TODO por arreglar */}
             <UserContextProvider repository={repositories.users}>
               {/* @ts-expect-error TODO por arreglar */}
               <InfluencerContextProvider repository={repositories.influencers}>

@@ -216,16 +216,26 @@ const Actions = ({
       //   </>
       // );
       break;
-    case SectionTypes.users && SectionTypes.usersApp:
+    case SectionTypes.users:
       buttons = (
-        <Tooltip title="Borrar usuario">
+        <>
+          <Tooltip title="Editar usuario">
+            <Link
+              to={`/usuario/${(section as User).id}`}
+              className="dashboard__link-icon"
+            >
+              <FaEye className={"icon"} />
+            </Link>
+          </Tooltip>
+          {/* <Tooltip title="Borrar usuario">
           <button
             aria-label="Borrar usuario"
             onClick={() => handleIsDialogOpen(setIsDialogOpen)}
           >
             <RiDeleteBin6Line className={"icon"} color="red" />
           </button>
-        </Tooltip>
+        </Tooltip> */}
+        </>
       );
       break;
     case SectionTypes.leads:

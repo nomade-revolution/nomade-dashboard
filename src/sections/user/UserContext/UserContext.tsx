@@ -5,6 +5,7 @@ import {
   Company,
   User,
   UserApiResponse,
+  UserRol,
   UserTypes,
 } from "modules/user/domain/User";
 import {
@@ -17,6 +18,9 @@ import {
   getUsersFiltered,
   exportInfluencersData,
   getConditions as getConditionsData,
+  getRolesListData,
+  getUserData,
+  modifyUser,
 } from "modules/user/application/user";
 import { Influencer } from "@influencer";
 import { AuthRegisterNomadeInterface } from "@auth";
@@ -53,6 +57,11 @@ interface ContextState {
   exportInfluencers: () => void;
   conditions: string;
   getConditions: () => void;
+  getRolesList: () => void;
+  rolesList: UserRol[];
+  getUser: (user_id: number) => void;
+  userData: User | null;
+  modifyUserById: (user_id: number, data: FormData) => void;
 }
 
 export const UserContext = createContext<ContextState>({} as ContextState);
@@ -64,6 +73,7 @@ export const UserContextProvider = ({
   repository: UserRepository<UserApiResponse>;
 }>) => {
   const { token } = useAuthContext();
+  const [userData, setUserData] = useState<User | null>(null);
   const [users_nomade, setUsersNomade] = useState<User[]>([]);
   const [users_influencer, setUsersInfluencer] = useState<Influencer[]>([]);
   const [users_company, setUsersCompany] = useState<Company[]>([]);
@@ -79,6 +89,7 @@ export const UserContextProvider = ({
   );
   const [order, setOrder] = useState<OrderItem>({} as OrderItem);
   const [badgeCount, setBadgeCount] = useState<number>(0);
+  const [rolesList, setRolesList] = useState<UserRol[]>([]);
 
   const getUsers = useCallback(
     async (
@@ -118,8 +129,28 @@ export const UserContextProvider = ({
     [repository],
   );
 
+  const getUser = useCallback(
+    async (user_id: number) => {
+      setLoading(true);
+      const response = await getUserData(repository, user_id);
+      // @ts-expect-error fix this
+      setUserData(response.data);
+      setLoading(false);
+      return response;
+    },
+    [repository],
+  );
+
   const deleteUserById = async (user_id: number) => {
     const response = await deleteUser(repository, user_id);
+
+    setIsSuccess(response.success);
+
+    return response;
+  };
+
+  const modifyUserById = async (user_id: number, data: FormData) => {
+    const response = await modifyUser(repository, user_id, data);
 
     setIsSuccess(response.success);
 
@@ -174,6 +205,19 @@ export const UserContextProvider = ({
     return response;
   }, [repository]);
 
+  const getRolesList = useCallback(async () => {
+    setLoading(true);
+    const response = await getRolesListData(repository);
+
+    if (isHttpSuccessResponse(response)) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      setRolesList((response as any)?.data);
+    }
+
+    setLoading(false);
+    return response;
+  }, [repository]);
+
   return (
     <UserContext.Provider
       value={{
@@ -195,6 +239,11 @@ export const UserContextProvider = ({
         getUsersStatusBadge,
         users_influencerCompany,
         conditions,
+        getRolesList,
+        rolesList,
+        getUser,
+        userData,
+        modifyUserById,
       }}
     >
       {children}

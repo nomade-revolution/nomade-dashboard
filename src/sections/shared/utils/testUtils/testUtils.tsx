@@ -19,6 +19,7 @@ export const renderWithProviders = (ui: React.ReactElement) => {
       <AuthContextProvider repository={repositories.user}>
         <OffersContextProvider repository={repositories.offers}>
           <CollabsContextProvider repository={repositories.collabs}>
+            {/* @ts-expect-error TODO por arreglar */}
             <UserContextProvider repository={repositories.users}>
               {/* @ts-expect-error TODO por arreglar */}
               <InfluencerContextProvider repository={repositories.influencers}>

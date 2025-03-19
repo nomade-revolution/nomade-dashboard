@@ -126,3 +126,8 @@ export interface CompanyRegisterStructure {
   password_confirmation: string;
   address: FullAddress;
 }
+
+export interface UserRol {
+  id: number;
+  name: string;
+}
