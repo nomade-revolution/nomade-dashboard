@@ -68,6 +68,8 @@ export interface CollabsRequestStructure {
 export interface RejectedCollab {
   id: number;
   name: string;
+  need_reason_text?: boolean;
+  reason_text_placeholder?: string;
 }
 
 export enum CollabTypes {

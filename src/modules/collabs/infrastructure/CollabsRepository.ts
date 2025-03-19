@@ -45,13 +45,23 @@ export class CollabsRepository {
     collab_id: number,
     state_id: number,
     rejected_colab_reason_id?: number,
+    rejected_colab_reason_text?: string,
   ): Promise<HttpResponseInterface<FullCollab>> {
     try {
+      const data: {
+        rejected_colab_reason_id?: number;
+        rejected_colab_reason_text?: string;
+      } = {};
+
+      if (rejected_colab_reason_id) {
+        data["rejected_colab_reason_id"] = rejected_colab_reason_id;
+      }
+      if (rejected_colab_reason_text) {
+        data["rejected_colab_reason_text"] = rejected_colab_reason_text;
+      }
       const resp = await this.http.put<FullCollab>(
         `${COLLABS_BASE}/${collab_id}/push-history/${state_id}`,
-        {
-          rejected_colab_reason_id,
-        },
+        data,
       );
       return resp;
     } catch (error) {

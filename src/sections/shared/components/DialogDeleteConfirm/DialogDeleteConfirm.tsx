@@ -33,7 +33,7 @@ interface DialogDeleteConfirmProps {
   accept_state_id?: number;
   type?: string;
   successText?: string;
-  onAccept?: (sectionId: number, reason?: number) => void;
+  onAccept?: (sectionId: number, reason?: number, reasonText?: string) => void;
 }
 
 export default function DialogDeleteConfirm({
@@ -47,6 +47,7 @@ export default function DialogDeleteConfirm({
   onAccept,
 }: DialogDeleteConfirmProps) {
   const [reason, setReason] = useState<number | undefined>(undefined);
+  const [reasonText, setReasonText] = useState<string>("");
   const { getFunctionForDialog, isSuccess } = useDialog();
   const { collabRejectedReasons, getAllRejectedCollabReasons } =
     useCollabsContext();
@@ -57,11 +58,18 @@ export default function DialogDeleteConfirm({
 
   const handleOnAccept = () => {
     if (onAccept) {
-      onAccept(sectionId, reason);
+      onAccept(sectionId, reason, reasonText);
       setReason(undefined);
       return;
     }
-    getFunctionForDialog(sectionId, pageName, accept_state_id!, type, reason!);
+    getFunctionForDialog(
+      sectionId,
+      pageName,
+      accept_state_id!,
+      type,
+      reason!,
+      reasonText,
+    );
   };
 
   const handleOnClose = () => {
@@ -97,6 +105,8 @@ export default function DialogDeleteConfirm({
               rejectedReasons={collabRejectedReasons}
               reason={reason || 0}
               setReason={setReason}
+              reasonText={reasonText}
+              setReasonText={setReasonText}
             />
           )}
           <Button

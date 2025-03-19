@@ -56,9 +56,13 @@ export default function ReusableStepper({
     // TODO añadir el mismo modo que "rechazar" para "incidencia"
   };
 
-  const handleOnAccept = async (id: number, reason?: number) => {
+  const handleOnAccept = async (
+    id: number,
+    reason?: number,
+    reasonText?: string,
+  ) => {
     if (!selectedStateToModify) return;
-    await updateCollabState(id, selectedStateToModify, reason);
+    await updateCollabState(id, selectedStateToModify, reason, reasonText);
     setIsDialogOpen(false);
   };
 

@@ -35,6 +35,7 @@ interface ContextState {
     collab_id: number,
     state_id: number,
     reject_collab_reason_id?: number,
+    reject_collab_reason_text?: string,
   ) => void;
   getAllRejectedCollabReasons: () => void;
   setOrder: (order: OrderItem) => void;
@@ -92,12 +93,14 @@ export const CollabsContextProvider = ({
     collab_id: number,
     state_id: number,
     rejected_collab_reason_id?: number,
+    rejected_colab_reason_text?: string,
   ) => {
     const response = await updateCollabHistoryState(
       repository,
       collab_id,
       state_id,
       rejected_collab_reason_id,
+      rejected_colab_reason_text,
     );
     if (isHttpSuccessResponse(response)) {
       setCollab(response.data);

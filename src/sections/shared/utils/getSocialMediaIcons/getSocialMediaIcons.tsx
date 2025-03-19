@@ -12,7 +12,7 @@ const getSocialMediaIcons = (type: string, size?: number) => {
     case SocialMediaTypes.instagram:
       return (
         <Tooltip title={"Instagram"}>
-          <FaInstagramSquare color="#ff38c0" size={size} />
+          <FaInstagramSquare color="#8C9B6E" size={size} />
         </Tooltip>
       );
     case SocialMediaTypes.tiktok:

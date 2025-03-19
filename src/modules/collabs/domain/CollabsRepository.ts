@@ -13,6 +13,7 @@ export interface CollabsRepository<I> {
     collab_id: number,
     state_id: number,
     rejected_colab_reason_id?: number,
+    rejected_colab_reason_text?: string,
   ): Promise<HttpResponseInterface<I>>;
   getRejectedCollabReasons(): Promise<HttpResponseInterface<I>>;
   getCollab(collab_id: number): Promise<HttpResponseInterface<I>>;

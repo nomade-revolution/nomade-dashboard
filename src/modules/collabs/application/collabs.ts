@@ -28,11 +28,13 @@ export const updateCollabHistoryState = (
   collab_id: number,
   state_id: number,
   rejected_collab_reason_id?: number,
+  rejected_colab_reason_text?: string,
 ): Promise<HttpResponseInterface<FullCollab>> => {
   return collabsRepo.updateCollabHistoryState(
     collab_id,
     state_id,
     rejected_collab_reason_id,
+    rejected_colab_reason_text,
   );
 };
 

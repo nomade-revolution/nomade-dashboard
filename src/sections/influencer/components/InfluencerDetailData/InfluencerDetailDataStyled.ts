@@ -39,6 +39,7 @@ const InfluecerDetailDataStyled = styled.section`
     &__data {
       display: flex;
       flex-direction: column;
+      align-self: center;
       gap: 10px;
     }
 

@@ -192,6 +192,20 @@ export const influencerSocialMediaListCompanyHeaderSections: HeaderSection[] = [
     sortTag: "",
     pageName: "socialMedia",
   },
+  {
+    id: 3,
+    name: "Followers",
+    property: "followers",
+    sortTag: "",
+    pageName: "socialMedia",
+  },
+  {
+    id: 4,
+    name: "Visualizaciones",
+    property: "stories_view",
+    sortTag: "",
+    pageName: "socialMedia",
+  },
 ];
 
 export const parseFollowers = (number: number): string => {

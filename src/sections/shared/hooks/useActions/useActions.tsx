@@ -35,11 +35,13 @@ const useActions = () => {
   const rejectCollab = async (
     collabId: number,
     rejected_collab_reason_id: number,
+    reasonText?: string,
   ) => {
     await updateCollabState(
       collabId,
       collabStates.COLAB_REJECTED_STATE,
       rejected_collab_reason_id,
+      reasonText,
     );
 
     setTimeout(() => navigate(0), 1500);
