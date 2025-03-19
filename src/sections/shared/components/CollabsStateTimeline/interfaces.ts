@@ -24,4 +24,5 @@ export interface State {
   type: string;
   reason?: string;
   limit_date?: string;
+  rejected_colab_reason_text?: string;
 }

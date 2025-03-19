@@ -38,7 +38,22 @@ const getLeftContent = (
   //     return <p style={styles.errorText}>Pendiente</p>;
   //   }
   if (step?.reason) {
-    return <span style={styles.errorText}> - {step.reason}</span>;
+    return (
+      <span style={styles.errorText}>
+        {" - "}
+        {step.reason}{" "}
+        {step.rejected_colab_reason_text ? (
+          <>
+            <br />
+            <span style={styles.errorReasonText}>
+              {`${step.rejected_colab_reason_text}`}
+            </span>
+          </>
+        ) : (
+          ""
+        )}
+      </span>
+    );
   }
 
   if (step?.created_at) {
@@ -228,6 +243,12 @@ const collabsStateTimeLineStyles: { [key: string]: React.CSSProperties } = {
     // textAlign: "left",
     fontSize: "small",
     fontWeight: "bold",
+  },
+  errorReasonText: {
+    color: "#7B3C47",
+    // textAlign: "left",
+    fontSize: "small",
+    fontWeight: "normal",
   },
 };
 
