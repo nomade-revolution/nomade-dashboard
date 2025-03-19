@@ -23,7 +23,18 @@ import { Company } from "modules/user/domain/User";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { Checkbox } from "@mui/material";
 
-const EXCLUDED_FIELDS = ["id", "instagram", "socialMedia", "contacts"];
+const EXCLUDED_FIELDS = [
+  "id",
+  "instagram",
+  "socialMedia",
+  "contacts",
+  "start_date",
+];
+
+interface SubmitValues extends PartialCompany {
+  plan: { start_date: string };
+}
+
 interface Props {
   onSubmit: (values: FormData, id?: number) => void;
   type?: string;
@@ -86,7 +97,7 @@ const CompanyForm = ({
     setIsChecked(!isCheked);
   };
   const handleSubmitForm = async (
-    values: PartialCompany,
+    values: SubmitValues,
     { setSubmitting, setErrors }: FormikHelpers<PartialCompany>,
   ) => {
     if (!checkedTerms) {
@@ -95,14 +106,11 @@ const CompanyForm = ({
 
     setSubmitting(true);
     const formData = new FormData();
-    const formattedDate = formatDateWithDash(values.start_date);
+    const formattedDate = formatDateWithDash(values.plan?.start_date);
 
     Object.keys(values).forEach((key) => {
       if (!EXCLUDED_FIELDS.includes(key)) {
-        const value =
-          key === "plan[start_date]"
-            ? formattedDate
-            : values[key as keyof PartialCompany];
+        const value = values[key as keyof PartialCompany];
         formData.append(key, value || "");
       }
     });
@@ -115,6 +123,8 @@ const CompanyForm = ({
       };
       formData.append("address", JSON.stringify(newAddress));
     }
+
+    formData.append("start_date", formattedDate);
 
     //BUSCAR COMO SE LLAMA LA PROP PARA EL BACK
     if (checkedTerms) {
@@ -162,6 +172,7 @@ const CompanyForm = ({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     formData.append("comments", (values as any)?.company_comments);
     formData.append("plan_id", formState.company_plan_id);
+
     await onSubmit(formData, client && client?.id);
 
     if (isSuccess) {
@@ -404,8 +415,9 @@ const CompanyForm = ({
                     handleFormStateChange("company_plan_id", value);
                   }}
                   value={
+                    formState.company_plan_id ||
                     client?.plan?.plan_id.toString() ||
-                    formState.company_plan_id
+                    ""
                   }
                 />
               </div>

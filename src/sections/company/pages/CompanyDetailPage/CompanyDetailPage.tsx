@@ -72,7 +72,7 @@ const InfluencerDetailPage = (): React.ReactElement => {
               {company.plan?.plan_name !== "Pendiente" && (
                 <ActionButton
                   onClick={() => setIsPlanModalOpen(true)}
-                  text="Modificar Plan"
+                  text="Extender Plan"
                   icon={<FaEdit />}
                   color={theme.colors.darkBlue}
                 />
