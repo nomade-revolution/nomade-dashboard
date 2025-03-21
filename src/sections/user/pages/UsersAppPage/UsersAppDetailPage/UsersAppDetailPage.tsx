@@ -60,7 +60,7 @@ const UsersAppDetailPage = (): React.ReactElement => {
         <GoBackButton />
         <section className="influencer-detail__header">
           <div className="influencer-detail__title">
-            <h2>Usuario</h2>
+            <h2>Usuario (Empresa)</h2>
           </div>
           <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
             {/* TODO restaurar cuando venga el estado actual */}

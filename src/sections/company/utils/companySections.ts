@@ -162,13 +162,13 @@ export const companyFromUsersTableHeaderSections: HeaderSection[] = [
     sortTag: "",
     pageName: SectionTypes.customers,
   },
-  {
-    id: 10,
-    name: "Acciones",
-    property: "actions",
-    sortTag: "",
-    pageName: SectionTypes.customers,
-  },
+  // {
+  //   id: 10,
+  //   name: "Acciones",
+  //   property: "actions",
+  //   sortTag: "",
+  //   pageName: SectionTypes.customers,
+  // },
 ];
 
 export const companyCollabsHeaderSections: HeaderSection[] = [
