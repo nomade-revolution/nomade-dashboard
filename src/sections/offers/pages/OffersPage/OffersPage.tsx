@@ -28,6 +28,14 @@ const OffersPage = (): React.ReactElement => {
     setIsModalOpen(true);
   };
 
+  const handleCreateNewOffer = async (offer: FormData) => {
+    const res = await createNewOffer(offer);
+    if (res.success) {
+      setIsModalOpen(false);
+      getOffers();
+    }
+  };
+
   const handleSearch = (text: string) => {
     if (text === "") {
       getOffers();
@@ -35,6 +43,7 @@ const OffersPage = (): React.ReactElement => {
     }
     getOffers(text);
   };
+
   const getOffers = useCallback(
     (search?: string) => {
       const filters: FilterParams = { filters: {} };
@@ -117,7 +126,7 @@ const OffersPage = (): React.ReactElement => {
             />
           </div>
           <ReusableModal
-            children={<OffersForm onSubmit={createNewOffer} />}
+            children={<OffersForm onSubmit={handleCreateNewOffer} />}
             openModal={isModalOpen}
             setIsModalOpen={setIsModalOpen}
             type="offer"

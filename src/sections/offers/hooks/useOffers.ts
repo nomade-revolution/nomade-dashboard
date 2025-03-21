@@ -50,7 +50,9 @@ const useOffers = () => {
     formData.append("location_id", JSON.stringify(location_id));
     formData.append("active", JSON.stringify(active));
     formData.append("company_id", JSON.stringify(company_id));
-    formData.append("offer_categories", JSON.stringify(categories));
+    categories.forEach((category, index) => {
+      formData.append(`offer_categories[${index}]`, String(category));
+    });
 
     images.forEach((image) => formData.append("images[]", image));
 

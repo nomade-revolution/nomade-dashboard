@@ -26,6 +26,12 @@ export const getOfferById = (
   return offersRepo.getOfferById(offer_id);
 };
 
+export const getOfferCategoriesList = (
+  offersRepo: OffersRepository<FullOffer>,
+) => {
+  return offersRepo.getOfferCategoriesList();
+};
+
 export const createOffer = (
   offersRepo: OffersRepository<{
     data: FullOffer;

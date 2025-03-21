@@ -1,6 +1,6 @@
 import { Http } from "@core/application";
 import { HttpResponseInterface } from "@core/domain";
-import { OFFERS_BASE } from "../application/routes";
+import { OFFERS_BASE, OFFERS_CATEGORIES } from "../application/routes";
 import { FullOffer, OffersApiResponse } from "../domain/Offer";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
 
@@ -43,6 +43,15 @@ export class OffersRepository {
   ): Promise<HttpResponseInterface<FullOffer>> {
     try {
       const resp = await this.http.get<FullOffer>(`${OFFERS_BASE}/${offer_id}`);
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  public async getOfferCategoriesList() {
+    try {
+      const resp = await this.http.get(`${OFFERS_CATEGORIES}`);
       return resp;
     } catch (error) {
       return Promise.reject(error);

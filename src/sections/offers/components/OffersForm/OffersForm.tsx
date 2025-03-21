@@ -32,7 +32,7 @@ import { useCompanyContext } from "sections/company/CompanyContext/useCompanyCon
 import CustomFileInput from "sections/shared/components/CustomFileInput/CustomFileInput";
 import OffersScheduling from "../OffersScheduling/OffersScheduling";
 import { Company } from "modules/user/domain/User";
-import OfferResume from "../OfferResume/OfferResume";
+// import OfferResume from "../OfferResume/OfferResume";
 import useOffers from "sections/offers/hooks/useOffers";
 import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
 // import { useNavigate } from "react-router-dom";
@@ -41,12 +41,21 @@ import { Calendar } from "modules/offers/domain/OfferCalendar";
 import formatOfferResume from "sections/offers/utils/formatOfferResume";
 import formatOfferScheduling from "sections/offers/utils/formatOfferScheduling";
 import { OfferTypes } from "modules/offers/domain/Offer";
+import { Checkbox } from "@mui/material";
 
 interface Props {
   offer?: FullOffer;
   onSubmit: (offer: FormData, id?: number) => void;
   onCancel?: (state: boolean) => void;
 }
+
+const OFFER_CATEGORIES_BY_TYPE = {
+  Restaurant: 1,
+  Activity: 8,
+  Lodging: 7,
+  Delivery: 5,
+  Brand: 6,
+};
 
 const OffersForm = ({
   offer,
@@ -56,12 +65,15 @@ const OffersForm = ({
   const { getAllCountries, countries } = useCountryContext();
   const { cities, getAllCities } = useCitiesContext();
   const { companies, getCompaniesWithParams } = useCompanyContext();
-  const { isSuccess, error } = useOffersContext();
+  const { isSuccess, error, getOfferCategories } = useOffersContext();
   const { handleOfferFormData } = useOffers();
 
   // const navigate = useNavigate();
   const offerResumeFormat = formatOfferResume(offer!);
 
+  const [categoriesList, setCategoriesList] = useState<
+    { id: number; name: string; data: OptionsStructure[] }[]
+  >([]);
   const [companySearch, setCompanySearch] = useState<string>(
     offer?.company ?? "",
   );
@@ -69,7 +81,7 @@ const OffersForm = ({
   const [countriesFormat, setCountriesFormat] = useState<OptionsStructure[]>(
     [],
   );
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(0);
+  const [selectedIndex /*setSelectedIndex*/] = useState<number | null>(0);
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
   const [citiesFormat, setCitiesFormat] = useState<OptionsStructure[]>([]);
   const [file, setFile] = useState<File[] | []>([]);
@@ -96,7 +108,6 @@ const OffersForm = ({
         : "",
     city: "",
     location: offer ? offer.location_type : "",
-    // TODO rellenar esto en el form de creación para que funcione
     categories: offer ? offer?.offer_categories?.map((cat) => cat.id) : [],
     type: offer?.type || "",
     offerable_type: "",
@@ -172,16 +183,16 @@ const OffersForm = ({
     setFormState((prevState) => ({ ...prevState, [field]: value }));
   };
 
-  const handleOfferResumeChange = (
-    updatedResume:
-      | OfferableRestaurant[]
-      | OfferableLodging[]
-      | OfferableActivity[]
-      | OfferableDelivery
-      | object,
-  ) => {
-    setOfferResume(updatedResume);
-  };
+  // const handleOfferResumeChange = (
+  //   updatedResume:
+  //     | OfferableRestaurant[]
+  //     | OfferableLodging[]
+  //     | OfferableActivity[]
+  //     | OfferableDelivery
+  //     | object,
+  // ) => {
+  //   setOfferResume(updatedResume);
+  // };
 
   const handleSchedulingStateChange = (
     field: string,
@@ -203,6 +214,11 @@ const OffersForm = ({
       formState.location === "App\\Models\\Country"
         ? +formState.country
         : +formState.city;
+    const offerCategories = [
+      // @ts-expect-error TODO: fix this
+      OFFER_CATEGORIES_BY_TYPE[formState.type],
+      ...formState.categories,
+    ];
 
     const formData = handleOfferFormData(
       values,
@@ -213,7 +229,7 @@ const OffersForm = ({
       true,
       company.id,
       file!,
-      formState.categories,
+      offerCategories,
     );
 
     await onSubmit(formData, offer && offer?.id);
@@ -226,15 +242,15 @@ const OffersForm = ({
     setShowSuggestions(false);
   };
 
-  const handleSchedulingStateDelete = () => {
-    setSchedulingState({
-      activity: [],
-      brand: [],
-      delivery: {} as OfferableDelivery,
-      lodging: [],
-      restaurant: [],
-    });
-  };
+  // const handleSchedulingStateDelete = () => {
+  //   setSchedulingState({
+  //     activity: [],
+  //     brand: [],
+  //     delivery: {} as OfferableDelivery,
+  //     lodging: [],
+  //     restaurant: [],
+  //   });
+  // };
 
   useEffect(() => {
     getAllCountries();
@@ -249,6 +265,27 @@ const OffersForm = ({
 
     setCountriesFormat(countriesArr);
   }, [countries]);
+
+  useEffect(() => {
+    if (!formState.type) {
+      return;
+    }
+    (async () => {
+      const filtersResponse = await getOfferCategories();
+
+      // @ts-expect-error TODO fix this
+      const selectedCatId = OFFER_CATEGORIES_BY_TYPE[formState.type];
+      // @ts-expect-error TODO fix this
+      const filtersByCategory = filtersResponse.find(
+        // @ts-expect-error TODO fix this
+        (filter) => filter.id === selectedCatId,
+      );
+
+      if (!filtersByCategory?.children.length) return;
+
+      setCategoriesList(filtersByCategory.children);
+    })();
+  }, [formState.type, getOfferCategories]);
 
   useEffect(() => {
     const filters: FilterParams = {
@@ -332,6 +369,7 @@ const OffersForm = ({
       setShowSuggestions(false);
     }
   }, [offer]);
+
   return (
     <Formik
       initialValues={initialValues as OfferFormStructure}
@@ -459,7 +497,50 @@ const OffersForm = ({
                   )}
                 </div>
 
-                {offerType !== OfferTypes.brand ? (
+                <div>
+                  <h4>Categorías</h4>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+                    {categoriesList?.map((category) => (
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 4,
+                          flex: "1 1 calc(50% - 10px)",
+                          boxSizing: "border-box",
+                        }}
+                      >
+                        <Checkbox
+                          value={category.id}
+                          key={category.id}
+                          style={{
+                            padding: 0,
+                          }}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              // @ts-expect-error TODO: fix this
+                              handleFormStateChange("categories", [
+                                ...formState.categories,
+                                category.id,
+                              ]);
+                            } else {
+                              handleFormStateChange(
+                                "categories",
+                                // @ts-expect-error TODO: fix this
+                                formState.categories.filter(
+                                  (cat) => cat !== category.id,
+                                ),
+                              );
+                            }
+                          }}
+                        />
+                        <label>{category.name}</label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* {offerType !== OfferTypes.brand ? (
                   <OfferResume
                     company={company}
                     offerResume={offerResume as never}
@@ -474,7 +555,7 @@ const OffersForm = ({
                     selectedIndex={selectedIndex}
                     setSelectedIndex={setSelectedIndex}
                   />
-                ) : null}
+                ) : null} */}
               </section>
               <section className="datasheet-form__section">
                 <section className="form-offer__select-data">

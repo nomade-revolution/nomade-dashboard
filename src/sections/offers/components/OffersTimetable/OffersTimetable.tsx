@@ -60,6 +60,7 @@ const OffersTimetable = ({
         );
       } else {
         return [
+          ...prevDays,
           {
             day_number: selectedDay.day_number,
             day_name: selectedDay.name,

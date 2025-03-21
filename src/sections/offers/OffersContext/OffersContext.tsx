@@ -5,6 +5,7 @@ import {
   deleteOffer,
   editOffer,
   getOfferById,
+  getOfferCategoriesList,
   offersGetAll,
 } from "modules/offers/application/offers";
 import { FullOffer } from "modules/offers/domain/Offer";
@@ -14,6 +15,7 @@ import {
   PaginationStucture,
 } from "sections/shared/interfaces/interfaces";
 import { OrderItem } from "sections/user/UserContext/UserContext";
+import { HttpResponseInterface } from "@core";
 
 interface ContextState {
   offers: FullOffer[];
@@ -25,10 +27,17 @@ interface ContextState {
   getAllOffers: (page: number, per_page: number, params: FilterParams) => void;
   deleteOfferById: (offer_id: number) => void;
   getOffer: (offer_id: number) => void;
-  createNewOffer: (offer: FormData) => void;
+  createNewOffer: (offer: FormData) => Promise<
+    HttpResponseInterface<{
+      data: FullOffer;
+      success: boolean;
+      error: string;
+    }>
+  >;
   modifyOffer: (offer: FormData, offer_id?: number) => void;
   order: OrderItem;
   setOrder: (order: OrderItem) => void;
+  getOfferCategories: () => Promise<HttpResponseInterface<FullOffer>>;
 }
 
 export const OffersContext = createContext<ContextState>({} as ContextState);
@@ -82,6 +91,12 @@ export const OffersContextProvider = ({
     },
     [repository],
   );
+
+  const getOfferCategories = useCallback(async () => {
+    const response = await getOfferCategoriesList(repository);
+    // @ts-expect-error TODO fix this
+    return response.data;
+  }, [repository]);
 
   const createNewOffer = async (offer: FormData) => {
     const response = await createOffer(repository, offer);
@@ -141,6 +156,7 @@ export const OffersContextProvider = ({
         deleteOfferById,
         getOffer,
         createNewOffer,
+        getOfferCategories,
         modifyOffer,
         order,
         setOrder,

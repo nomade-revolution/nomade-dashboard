@@ -236,11 +236,7 @@ const OffersScheduling = ({
           week: week,
         };
 
-        if (selectedIndex !== null) {
-          updatedSchedulingState.delivery = newOfferableDelivery;
-        } else {
-          updatedSchedulingState.delivery = newOfferableDelivery;
-        }
+        updatedSchedulingState.delivery = newOfferableDelivery;
 
         handleScheduling("delivery", updatedSchedulingState.delivery);
         break;
@@ -274,6 +270,18 @@ const OffersScheduling = ({
         type === OfferTypes.lodging) && (
         <div className="scheduling--restaurant">
           <h4>Configura los horarios</h4>
+          <ReusableSelect
+            label="Direcciones"
+            options={[
+              {
+                id: company.address?.id,
+                name: company.address?.address,
+                value: company.address?.id,
+              },
+            ]}
+            setValue={setAddress}
+            value={address}
+          />
           <section className="scheduling__section">
             <div className="form-subsection">
               <label htmlFor="min_guests" className="form-subsection__label">
@@ -366,18 +374,6 @@ const OffersScheduling = ({
                 )}
             </div>
           </section>
-          <ReusableSelect
-            label="Direcciones"
-            options={[
-              {
-                id: company.address?.id,
-                name: company.address?.address,
-                value: company.address?.id,
-              },
-            ]}
-            setValue={setAddress}
-            value={address}
-          />
         </div>
       )}
       {type === OfferTypes.delivery && (
