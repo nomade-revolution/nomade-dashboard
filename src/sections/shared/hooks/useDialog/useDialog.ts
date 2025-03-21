@@ -37,7 +37,19 @@ const useDialog = () => {
     setTimeout(() => navigate(-1), 1500);
   };
 
-  const handleUpdateCompanyState = async (
+  const handleUpdateCompanyState = async () =>
+    // sectionId: number,
+    // newState: number,) =>
+    {
+      // TODO implementar
+      // const response = await modifyInfluencer(sectionId!, {
+      //   influencer_state_id: newState,
+      // });
+      // setIsSuccess(response!);
+      // setTimeout(() => navigate(-1), 1500);
+    };
+
+  const handleUpdateInfluencerState = async (
     sectionId: number,
     newState: number,
   ) => {
@@ -81,9 +93,16 @@ const useDialog = () => {
               : handleDeleteCollab(sectionId);
       case SectionTypes.customers:
         return handleDeleteCompany(sectionId);
+      case SectionTypes.usersApp:
+        if (type === "modifyState") {
+          return null;
+          // TODO restaurar cuando tengamos state en usuarios
+          // return handleUpdateCompanyState(sectionId, accept_state_id);
+        }
+        return null;
       case SectionTypes.influencers:
         if (type === "modifyState") {
-          return handleUpdateCompanyState(sectionId, accept_state_id);
+          return handleUpdateInfluencerState(sectionId, accept_state_id);
         }
         return handleDeleteInfluencer(sectionId);
       case SectionTypes.users:
@@ -101,6 +120,7 @@ const useDialog = () => {
     handleDeleteCollab,
     getFunctionForDialog,
     handleUpdateCompanyState,
+    handleUpdateInfluencerState,
     isSuccess,
   };
 };

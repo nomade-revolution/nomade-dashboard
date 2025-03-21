@@ -79,7 +79,7 @@ const UsersAppPage = (): React.ReactElement => {
         />
       </div>
       <div className="dashboard__mobile">
-        <h3>Usuarios</h3>
+        <h3>Usuarios (Empresa)</h3>
         <DashboardCardListMobile
           bodySections={users_influencerCompany}
           headerSections={usersAppTableHeaderSections}

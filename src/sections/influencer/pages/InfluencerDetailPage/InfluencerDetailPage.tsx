@@ -24,8 +24,9 @@ import {
   influencerSocialMediaListCompanyHeaderSections,
   influencerSocialMediaListHeaderSections,
 } from "sections/influencer/utils/influencersSections";
+import DashboardCardListMobile from "sections/shared/components/DashboardCardListMobile/DashboardCardListMobile";
 
-const STATES_OPTIONS = [
+export const STATES_OPTIONS = [
   {
     id: "1",
     name: "Pendiente",
@@ -151,6 +152,17 @@ const InfluencerDetailPage = (): React.ReactElement => {
             : influencerSocialMediaListCompanyHeaderSections
         }
       />
+      <div className="list-mobile">
+        <DashboardCardListMobile
+          bodySections={influencer.socialMedia}
+          headerSections={
+            user.type === "Nomade"
+              ? influencerSocialMediaListHeaderSections
+              : influencerSocialMediaListCompanyHeaderSections
+          }
+          pageName={SectionTypes.socialMedia}
+        />
+      </div>
 
       {user.type === "Nomade" && <InfluencerCollabs influencer_id={+id!} />}
 

@@ -28,6 +28,7 @@ import UsersAppPage from "sections/user/pages/UsersAppPage/UsersAppPage";
 import TermConditionsPage from "sections/shared/pages/TermsConditions/TermsConditions";
 import InfluencerVideoPage from "sections/influencer/pages/InfluencerVideoPage/InfluencerVideoPage";
 import UsersDetailPage from "sections/user/pages/UsersPage/UsersDetailPage/UsersDetailPage";
+import UsersAppDetailPage from "sections/user/pages/UsersAppPage/UsersAppDetailPage/UsersAppDetailPage";
 
 const routes: RouteObject[] = [
   {
@@ -58,6 +59,10 @@ const routes: RouteObject[] = [
       {
         path: appPaths.usersApp,
         element: <UsersAppPage />,
+      },
+      {
+        path: appPaths.userApp,
+        element: <UsersAppDetailPage />,
       },
       {
         path: appPaths.influencers,

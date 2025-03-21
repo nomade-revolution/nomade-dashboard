@@ -20,7 +20,7 @@ const DashboardCardListMobile = ({
 }: DashboardCardListMobileProps): React.ReactElement => {
   return (
     <DashboardCardListMobileStyled className="dashboard-list">
-      {bodySections.map((section) => (
+      {bodySections?.map((section) => (
         <li key={Math.random()} className="dashboard-list__item">
           <DashboardCardMobile
             bodySection={section}

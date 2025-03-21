@@ -225,33 +225,40 @@ const DashboardContentSections = ({
         );
       }
 
-      return (
-        <>
-          {pageName !== SectionTypes.users ? (
-            <Tooltip title="Ver perfil">
-              <Link
-                to={`/influencer/${(section as Influencer).id}`}
-                className="dashboard__link-icon"
-              >
-                <span className="dashboard__name">{`${
-                  (section as Influencer).name
-                } ${
-                  (section as Influencer).surnames
-                    ? (section as Influencer).surnames
-                    : ""
-                }`}</span>
-              </Link>
-            </Tooltip>
-          ) : (
-            <span>{(section as User).name}</span>
-          )}
-        </>
-      );
+      if (pageName !== SectionTypes.users) {
+        return (
+          <Tooltip title="Ver perfil">
+            <Link
+              to={`/influencer/${(section as Influencer).id}`}
+              className="dashboard__link-icon"
+            >
+              <span className="dashboard__name">{`${
+                (section as Influencer).name
+              } ${
+                (section as Influencer).surnames
+                  ? (section as Influencer).surnames
+                  : ""
+              }`}</span>
+            </Link>
+          </Tooltip>
+        );
+      }
+
+      return <span>{(section as User).name}</span>;
 
     case "name_compa":
+      // if (pageName === SectionTypes.usersApp) {
       return (
-        <span className="dashboard__name">{(section as Influencer).name}</span>
+        <Tooltip title="Ver perfil">
+          <Link
+            to={`/user-app/${(section as User).id}`}
+            className="dashboard__link-icon"
+          >
+            <span className="dashboard__name">{(section as User).name}</span>
+          </Link>
+        </Tooltip>
       );
+    // }
     case "email":
       return (
         <Tooltip title="Enviar email">

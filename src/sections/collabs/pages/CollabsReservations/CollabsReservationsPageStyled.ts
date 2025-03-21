@@ -32,14 +32,6 @@ const CollabsReservationsPageStyled = styled.div`
     }
   }
 
-  .list-mobile {
-    display: flex;
-
-    @media (min-width: 768px) {
-      display: none;
-    }
-  }
-
   .dashboard {
     &__type-section {
       font-weight: bold;

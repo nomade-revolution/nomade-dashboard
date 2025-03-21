@@ -27,5 +27,6 @@ export const appPaths = {
   plan: "/plan",
   createInfluencer: "/create-influencer",
   usersApp: "/users-app/page/:page",
+  userApp: "/user-app/:id",
   termsConditions: "/terms-conditions",
 };

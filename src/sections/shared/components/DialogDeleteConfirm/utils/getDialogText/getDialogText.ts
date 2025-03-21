@@ -24,6 +24,11 @@ const getDialogText = (pageName: string, type?: string) => {
       return dialogTexts.deleteNomadeUser;
     case SectionTypes.customers:
       return dialogTexts.deleteCompany;
+    case SectionTypes.usersApp:
+      if (type === "modifyState") {
+        return dialogTexts.modifyUserState;
+      }
+      return dialogTexts.deleteNomadeUser;
     case SectionTypes.influencers:
       if (type === "modifyState") {
         return dialogTexts.modifyInfluencerState;

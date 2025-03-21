@@ -33,6 +33,14 @@ button{
   font-family: inherit;
 }
 
+.list-mobile {
+  display: flex;
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
 a, :visited {
 text-decoration: none;
 color: inherit;

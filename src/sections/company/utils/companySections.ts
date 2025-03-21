@@ -91,6 +91,86 @@ export const companyTableHeaderSections: HeaderSection[] = [
   // },
 ];
 
+export const companyFromUsersTableHeaderSections: HeaderSection[] = [
+  // {
+  //   id: 1,
+  //   name: "Logo",
+  //   property: "image",
+  //   sortTag: "",
+  //   pageName: SectionTypes.customers,
+  // },
+  {
+    id: 2,
+    name: "Cliente",
+    property: "company",
+    sortTag: "",
+    pageName: SectionTypes.customers,
+  },
+  // {
+  //   id: 3,
+  //   name: "Web",
+  //   property: "web",
+  //   sortTag: "",
+  //   pageName: SectionTypes.customers,
+  // },
+  // {
+  //   id: 4,
+  //   name: "Teléfono",
+  //   property: "phone",
+  //   sortTag: "",
+  //   pageName: SectionTypes.customers,
+  // },
+  // {
+  //   id: 5,
+  //   name: "Progreso",
+  //   property: "percentage",
+  //   sortTag: "",
+  //   pageName: SectionTypes.customers,
+  // },
+  // {
+  //   id: 6,
+  //   name: "NIF",
+  //   property: "nif",
+  //   sortTag: "nif",
+  //   pageName: SectionTypes.customers,
+  // },
+  {
+    id: 7,
+    name: "Plan",
+    property: "company_plan",
+    sortTag: "",
+    pageName: SectionTypes.customers,
+  },
+  {
+    id: 8,
+    name: "Tipo de pago",
+    property: "company_billing",
+    sortTag: "",
+    pageName: SectionTypes.customers,
+  },
+  {
+    id: 12,
+    name: "Fecha de alta",
+    property: "created_at",
+    sortTag: "",
+    pageName: SectionTypes.customers,
+  },
+  {
+    id: 9,
+    name: "Status",
+    property: "status",
+    sortTag: "",
+    pageName: SectionTypes.customers,
+  },
+  {
+    id: 10,
+    name: "Acciones",
+    property: "actions",
+    sortTag: "",
+    pageName: SectionTypes.customers,
+  },
+];
+
 export const companyCollabsHeaderSections: HeaderSection[] = [
   {
     id: 1,
