@@ -6,6 +6,7 @@ import { FullOffer } from "modules/offers/domain/Offer";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
 import { SocialMedia } from "@influencer/domain/InfluencerSocialMedia";
 import { collabDataTableData, collabDetailTableData } from "./collabTableData";
+import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 
 interface Props {
   collab: FullCollab;
@@ -21,6 +22,8 @@ const CollabDetail = ({
   influencer,
   offer,
 }: Props): React.ReactElement => {
+  const { user } = useAuthContext();
+
   return (
     <CollabsDetailStyled className="collab-detail">
       <DashboardTable
@@ -34,7 +37,7 @@ const CollabDetail = ({
         <>
           <h3>Reserva</h3>
           <DashboardTable
-            headerSections={collabDataTableData(collab.type)}
+            headerSections={collabDataTableData(collab.type, user.type)}
             bodySections={[collab]}
             pageName="collabs"
           />
@@ -49,13 +52,19 @@ const CollabDetail = ({
         </span>
       </section>
 
-      <h3>Notas internas</h3>
-      <section className="collab-detail__data">
-        <div className="collab-detail__offer-section"></div>
-        <span style={{ fontSize: "14px", width: "100%", textAlign: "left" }}>
-          {collab.note ? collab.note : "Sin observaciones"}
-        </span>
-      </section>
+      {user.type === "Nomade" && (
+        <>
+          <h3>Notas internas</h3>
+          <section className="collab-detail__data">
+            <div className="collab-detail__offer-section"></div>
+            <span
+              style={{ fontSize: "14px", width: "100%", textAlign: "left" }}
+            >
+              {collab.note ? collab.note : "Sin observaciones"}
+            </span>
+          </section>
+        </>
+      )}
 
       <Link
         to={`/oferta/${offer.id}`}

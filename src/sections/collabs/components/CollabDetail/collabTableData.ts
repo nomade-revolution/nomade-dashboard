@@ -1,3 +1,4 @@
+import { User } from "modules/user/domain/User";
 import { HeaderSection } from "sections/shared/interfaces/interfaces";
 
 export const collabDetailTableData: HeaderSection[] = [
@@ -31,16 +32,27 @@ export const collabDetailTableData: HeaderSection[] = [
   },
 ];
 
-export const collabDataTableData = (collabType: string): HeaderSection[] => {
+export const collabDataTableData = (
+  collabType: string,
+  userType: User["type"],
+): HeaderSection[] => {
+  const typeField = {
+    id: 1,
+    name: "Tipo",
+    property: "type",
+    sortTag: "",
+    pageName: "",
+  };
+
+  const initialFields = [];
+
+  if (userType === "Nomade") {
+    initialFields.push(typeField);
+  }
+
   if (collabType === "Lodging") {
     return [
-      {
-        id: 1,
-        name: "Tipo",
-        property: "type",
-        sortTag: "",
-        pageName: "",
-      },
+      ...initialFields,
       {
         id: 5,
         name: "Dirección",
@@ -72,13 +84,7 @@ export const collabDataTableData = (collabType: string): HeaderSection[] => {
     ];
   }
   return [
-    {
-      id: 1,
-      name: "Tipo",
-      property: "type",
-      sortTag: "",
-      pageName: "",
-    },
+    ...initialFields,
     {
       id: 5,
       name: "Dirección",
