@@ -40,7 +40,9 @@ const InfluencerDetailData = ({
             <span>{influencer?.surnames}</span>
           </div>
 
-          {influencer.email && <span>{influencer.email}</span>}
+          {user.type === "Nomade" && influencer.email && (
+            <span>{influencer.email}</span>
+          )}
           {user.type === "Nomade" && <span>{influencer.phone}</span>}
 
           {influencer.gender && <span>Género: {influencer.gender}</span>}
