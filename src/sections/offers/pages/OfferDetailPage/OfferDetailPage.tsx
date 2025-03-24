@@ -48,6 +48,15 @@ const OfferDetailsPage = () => {
     getOffer(+id!);
   }, [id, getOffer]);
 
+  const handleModifyOffer = async (offer: FormData, offer_id?: number) => {
+    const res = await modifyOffer(offer, offer_id);
+    // @ts-expect-error
+    if (res.success) {
+      setIsModalOpen(false);
+      getOffer(+id!);
+    }
+  };
+
   const parseScheduleHours = (schedule: string) => {
     const splitted = schedule.split(":");
     return `${splitted[0]}:${splitted[1]}`;
@@ -116,7 +125,7 @@ const OfferDetailsPage = () => {
         {offer.images?.length > 0 &&
           offer.images.map((image) => (
             <ImageCustom
-              key={image.alt}
+              key={image.url}
               alt="Imágen de la oferta"
               className="offer-detail__offer-img"
               height={200}
@@ -146,7 +155,7 @@ const OfferDetailsPage = () => {
         children={
           <OffersForm
             offer={offer}
-            onSubmit={modifyOffer}
+            onSubmit={handleModifyOffer}
             onCancel={setIsModalOpen}
           />
         }

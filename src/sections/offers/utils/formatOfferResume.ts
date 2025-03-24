@@ -24,41 +24,39 @@ const formatOfferResume = (offer: FullOffer) => {
     return Object.values(dayMap);
   });
 
+  // console.log("LA WEEK", calendar?.week, combinedWeek);
+
   switch (offer?.type) {
     case OfferTypes.restaurant:
     case OfferTypes.lodging:
     case OfferTypes.activity: {
-      return combinedWeek.map((week) =>
-        week.map((slot) => ({
+      return [
+        {
           type: offer.type,
           address_id: calendar.address_id,
           min_guests: calendar.min_guests,
           max_guests: calendar.max_guests,
-          week: [
-            {
-              day_of_week: slot.day_of_week,
-              time_slot: slot.time_slot,
-              day_name: slot.day_name,
-            },
-          ],
-        })),
-      );
+          week: combinedWeek.map((daySlots) => ({
+            day_of_week: daySlots[0].day_of_week,
+            day_name: daySlots[0].day_name,
+            time_slot: daySlots[0].time_slot,
+          })),
+        },
+      ];
     }
 
     case OfferTypes.delivery: {
-      return combinedWeek.map((week) =>
-        week.map((slot) => ({
+      return [
+        {
           type: offer.type,
           advance_notice_time: offer.advance_notice_time,
-          week: [
-            {
-              day_of_week: slot.day_of_week,
-              time_slot: slot.time_slot,
-              day_name: slot.day_name,
-            },
-          ],
-        })),
-      );
+          week: combinedWeek.map((daySlots) => ({
+            day_of_week: daySlots[0].day_of_week,
+            day_name: daySlots[0].day_name,
+            time_slot: daySlots[0].time_slot,
+          })),
+        },
+      ];
     }
 
     case OfferTypes.brand: {

@@ -30,6 +30,8 @@ const useOffers = () => {
     const excludedKeys = [
       "offerable",
       "offerable_type",
+      "offer_categories",
+      "calendar",
       "location_type",
       "location_id",
       "active",

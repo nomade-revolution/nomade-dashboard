@@ -110,7 +110,11 @@ const OfferResume = ({
     setSchedulingState(updatedSchedulingState);
 
     setSelectedDays(
-      formatOfferScheduling(updatedSchedulingState) as unknown as SelectedDay[],
+      formatOfferScheduling(
+        // @ts-expect-error TODO fix this
+        updatedSchedulingState,
+        key,
+      ) as unknown as SelectedDay[],
     );
 
     setSelectedIndex(selectedIndex === index ? null : index);

@@ -64,7 +64,7 @@ const OffersForm = ({
 }: Props): React.ReactElement => {
   const { getAllCountries, countries } = useCountryContext();
   const { cities, getAllCities } = useCitiesContext();
-  const { companies, getCompaniesWithParams } = useCompanyContext();
+  const { companies, getCompaniesWithParams, getCompany } = useCompanyContext();
   const { isSuccess, error, getOfferCategories } = useOffersContext();
   const { handleOfferFormData } = useOffers();
 
@@ -77,10 +77,15 @@ const OffersForm = ({
   const [companySearch, setCompanySearch] = useState<string>(
     offer?.company ?? "",
   );
-  const [company, setCompany] = useState<Company>({} as Company);
+  const [loaded, setLoaded] = useState<boolean>(false);
+  const [company, setCompany] = useState<Company>(
+    // @ts-expect-error TODO: fix this
+    {},
+  );
   const [countriesFormat, setCountriesFormat] = useState<OptionsStructure[]>(
     [],
   );
+  // TODO ver como usamos el selectedIndex
   const [selectedIndex /*setSelectedIndex*/] = useState<number | null>(0);
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
   const [citiesFormat, setCitiesFormat] = useState<OptionsStructure[]>([]);
@@ -135,33 +140,10 @@ const OffersForm = ({
       brand: [],
       lodging: [],
     };
-    if (offerType === OfferTypes.restaurant) {
-      if (offerResumeFormat[0]) {
-        // @ts-expect-error TODO: fix this
-        data.restaurant = offerResumeFormat[0];
-      }
-    }
+    if (offerType === OfferTypes.brand || !offerType) return data;
 
-    if (offerType === OfferTypes.delivery) {
-      if (offerResumeFormat[0]) {
-        // @ts-expect-error TODO: fix this
-        data.delivery = offerResumeFormat[0];
-      }
-    }
-
-    if (offerType === OfferTypes.activity) {
-      if (offerResumeFormat[0]) {
-        // @ts-expect-error TODO: fix this
-        data.activity = offerResumeFormat[0];
-      }
-    }
-
-    if (offerType === OfferTypes.lodging) {
-      if (offerResumeFormat[0]) {
-        // @ts-expect-error TODO: fix this
-        data.lodging = offerResumeFormat[0];
-      }
-    }
+    // @ts-expect-error TODO: fix this
+    data[offerType.toLowerCase()] = offerResumeFormat;
 
     return data;
   };
@@ -174,11 +156,25 @@ const OffersForm = ({
     lodging: OfferableLodging[];
   }>(parseSchedulingState());
 
+  // console.log(
+  //   "el ",
+  //   // formatOfferScheduling(schedulingState, offer?.type),
+  //   schedulingState,
+  // );
+
   const [week, setWeek] = useState<WeekDay[]>([]);
   const [selectedDays, setSelectedDays] = useState<SelectedDay[]>(
-    offer ? (formatOfferScheduling(schedulingState)[0] as SelectedDay[]) : [],
+    // @ts-expect-error TODO: fix this
+    offer
+      ? formatOfferScheduling(
+          // @ts-expect-error TODO: fix this
+          schedulingState[offer.type.toLowerCase()],
+          offer.type,
+        )[0]
+      : [],
   );
 
+  // TODO si pudieramos ver un caso con multiple address para ver que pasa si deja editar cada dirección con su horario y min_max guests
   const handleFormStateChange = (field: string, value: string) => {
     setFormState((prevState) => ({ ...prevState, [field]: value }));
   };
@@ -214,15 +210,30 @@ const OffersForm = ({
       formState.location === "App\\Models\\Country"
         ? +formState.country
         : +formState.city;
-    const offerCategories = [
+
+    const hasAlreadyParentCategory =
       // @ts-expect-error TODO: fix this
-      OFFER_CATEGORIES_BY_TYPE[formState.type],
-      ...formState.categories,
-    ];
+      formState.categories[0] === OFFER_CATEGORIES_BY_TYPE[formState.type];
+
+    const offerCategories = hasAlreadyParentCategory
+      ? [...formState.categories]
+      : // @ts-expect-error TODO: fix this
+        [OFFER_CATEGORIES_BY_TYPE[formState.type], ...formState.categories];
+
+    let parsedOfferResume = offerResume as never;
+    // @ts-expect-error TODO: fix this
+    if (offerType === OfferTypes.delivery && offerResume?.length) {
+      parsedOfferResume = {
+        // @ts-expect-error TODO: fix this
+        advance_notice_time: offerResume[0].advance_notice_time,
+        // @ts-expect-error TODO: fix this
+        week: offerResume[0].week,
+      } as never;
+    }
 
     const formData = handleOfferFormData(
       values,
-      offerResume as never,
+      parsedOfferResume as never,
       formState.offerable_type,
       formState.location,
       location_id,
@@ -370,6 +381,21 @@ const OffersForm = ({
     }
   }, [offer]);
 
+  const fetchCompanyData = async () => {
+    if (offer?.company_id) {
+      const companyData = await getCompany(offer.company_id);
+      // @ts-expect-error TODO: fix this
+      setCompany(companyData.data);
+      setLoaded(true);
+    }
+  };
+
+  useEffect(() => {
+    if (loaded) return;
+    fetchCompanyData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [offer?.company_id]);
+
   return (
     <Formik
       initialValues={initialValues as OfferFormStructure}
@@ -509,8 +535,10 @@ const OffersForm = ({
                           flex: "1 1 calc(50% - 10px)",
                           boxSizing: "border-box",
                         }}
+                        key={category.id}
                       >
                         <Checkbox
+                          checked={formState.categories.includes(category.id)}
                           value={category.id}
                           key={category.id}
                           style={{

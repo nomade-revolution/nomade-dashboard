@@ -135,7 +135,8 @@ const OffersTimetable = ({
   useEffect(() => {
     if (
       offerType === OfferTypes.restaurant ||
-      offerType === OfferTypes.activity
+      offerType === OfferTypes.activity ||
+      offerType === OfferTypes.delivery
     ) {
       selectedDays.forEach((day) => {
         if (day.shifts?.firstShift.from_time !== undefined) {

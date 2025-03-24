@@ -68,7 +68,7 @@ const DashboardTableCellContent = ({
           pageName={pageName}
           type={type}
           accept_state_id={
-            (section as FullCollab).state.id === COLAB_PENDING_NOMADE_STATE
+            (section as FullCollab).state?.id === COLAB_PENDING_NOMADE_STATE
               ? COLAB_PENDING_COMPANY_STATE
               : COLAB_ACCEPTED_STATE
           }
