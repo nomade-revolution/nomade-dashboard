@@ -4,11 +4,11 @@ import * as yup from "yup";
 export const clientSchema = yup.object().shape({
   nif: yup
     .string()
+    .required("El NIF es un campo requerido")
     .matches(
       /^[A-Za-z0-9]{8,9}$/,
       "El NIF debe ser de 8 - 9 caracteres alfanuméricos",
-    )
-    .nullable(),
+    ),
   company: yup.string().nullable(),
   company_name: yup.string().required("La razón social es un campo requerido"),
   description: yup.string().required("La descripción es un campo requerido"),
@@ -20,6 +20,7 @@ export const clientSchema = yup.object().shape({
     .typeError("La fecha debe tener un formato válido")
     .nullable(),
 
+  email: yup.string().required("El email es un campo requerido").email(),
   password: yup
     .string()
     .min(8, "Debe contener almenos 8 caracteres")
@@ -27,12 +28,32 @@ export const clientSchema = yup.object().shape({
     .matches(/[a-z]/, "Debe contener almenos una minuscula")
     .matches(/[0-9]/, "Debe contener almenos un número")
     .matches(
-      /[!@#$%^&*(),.?":{}|<>_]/,
+      /[!@#$%^&*(),-.?":{}|<>_]/,
       "Debe contener almenos un carácter especial",
     ),
   password_confirmation: yup
     .string()
     .oneOf([yup.ref("password")], "Las contraseñas deben coincidir"),
+});
+
+export const editClientSchema = yup.object().shape({
+  nif: yup
+    .string()
+    .required("El NIF es un campo requerido")
+    .matches(
+      /^[A-Za-z0-9]{8,9}$/,
+      "El NIF debe ser de 8 - 9 caracteres alfanuméricos",
+    ),
+  company: yup.string().nullable(),
+  company_name: yup.string().required("La razón social es un campo requerido"),
+  description: yup.string().required("La descripción es un campo requerido"),
+  phone: yup.string(),
+  instagram: yup.string(),
+  web: yup.string(),
+  start_date: yup
+    .string()
+    .typeError("La fecha debe tener un formato válido")
+    .nullable(),
 });
 
 export const initialData: PartialCompany = {

@@ -15,6 +15,11 @@ const ReusableFormStyled = styled.form<Props>`
   border-radius: ${(props) => props.theme.borderRadius.badges};
   box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
 
+  .dobleContainer {
+    display: flex;
+    width: 100%;
+    gap: 20px;
+  }
   .datasheet-form {
     &__content {
       display: flex;

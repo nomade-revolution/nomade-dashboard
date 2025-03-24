@@ -3,7 +3,11 @@ import { Formik, Field, ErrorMessage, FormikHelpers } from "formik";
 import { useEffect, useState } from "react";
 import CustomFileInput from "sections/shared/components/CustomFileInput/CustomFileInput";
 import ReusableSelect from "sections/shared/components/ReusableSelect/ReusableSelect";
-import { clientSchema, initialData } from "./utils/validations/validations";
+import {
+  clientSchema,
+  editClientSchema,
+  initialData,
+} from "./utils/validations/validations";
 import { PartialCompany } from "@company";
 import { FullAddress } from "modules/address/domain/Address";
 import { FaEdit, FaEyeSlash, FaEye, FaLink } from "react-icons/fa";
@@ -126,9 +130,8 @@ const CompanyForm = ({
 
     formData.append("start_date", formattedDate);
 
-    //BUSCAR COMO SE LLAMA LA PROP PARA EL BACK
     if (checkedTerms) {
-      formData.append("terms", JSON.stringify(checkedTerms));
+      formData.append("accept_conditions", JSON.stringify(checkedTerms));
     }
 
     if (registerContacts.length > 0) {
@@ -209,7 +212,7 @@ const CompanyForm = ({
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={clientSchema}
+      validationSchema={type !== "edit" ? clientSchema : editClientSchema}
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-expect-error
       onSubmit={handleSubmitForm}
@@ -381,26 +384,106 @@ const CompanyForm = ({
                 />
               )}
             </div>
-            <section className="lead-form__section">
-              <h4 className="lead-form__title">Información de facturación</h4>
-              <div className="lead-form__section-link">
-                <span className="lead-form__thirdparty-link">
-                  Completar los datos de facturación el siguiente enlace:
-                </span>
-                <Link
-                  to="https://pay.gocardless.com/AL0005R1W7RZ3V"
-                  target="_blank"
-                  className="lead-form__link"
-                >
-                  <FaLink size={12} />
-                  GoCardless - Nomade
-                </Link>
-              </div>
-              <div className="lead-form__checkbox-container">
-                <CustomCheckbox onChange={handleIsChecked} checked={isCheked} />
-                <span>Se ha rellenado la información en Gocardless.com</span>
-              </div>
-            </section>
+
+            {type !== "edit" ? (
+              <section className="lead-form__section">
+                <h4 className="lead-form__title">Cuenta</h4>
+                <div className="form-subsection">
+                  <label htmlFor="email" className="form-subsection__label">
+                    Email
+                  </label>
+                  <Field
+                    type="email"
+                    id="email"
+                    className="form-subsection__field-large--company"
+                    aria-label="email"
+                    {...getFieldProps("email")}
+                  />
+                  {errors.email && touched.email && (
+                    <ErrorMessage
+                      className="form-subsection__error-message"
+                      component="span"
+                      name="email"
+                    />
+                  )}
+                </div>
+
+                <div className="dobleContainer">
+                  <div className="form-subsection">
+                    <label
+                      htmlFor="password"
+                      className="form-subsection__label"
+                    >
+                      Contraseña
+                    </label>
+                    <Field
+                      type="password"
+                      id="password"
+                      className="form-subsection__field-large--company"
+                      aria-label="password"
+                      {...getFieldProps("password")}
+                    />
+                    {errors.password && touched.password && (
+                      <ErrorMessage
+                        className="form-subsection__error-message"
+                        component="span"
+                        name="password"
+                      />
+                    )}
+                  </div>
+                  <div className="form-subsection">
+                    <label
+                      htmlFor="password_confirmation"
+                      className="form-subsection__label"
+                    >
+                      Repetir contraseña
+                    </label>
+
+                    <Field
+                      type="password"
+                      id="password_confirmation"
+                      className="form-subsection__field-large--company"
+                      aria-label="password_confirmation"
+                      {...getFieldProps("password_confirmation")}
+                    />
+                    {errors.password_confirmation &&
+                      touched.password_confirmation && (
+                        <ErrorMessage
+                          className="form-subsection__error-message"
+                          component="span"
+                          name="password_confirmation"
+                        />
+                      )}
+                  </div>
+                </div>
+              </section>
+            ) : null}
+
+            {type !== "edit" ? (
+              <section className="lead-form__section">
+                <h4 className="lead-form__title">Información de facturación</h4>
+                <div className="lead-form__section-link">
+                  <span className="lead-form__thirdparty-link">
+                    Completar los datos de facturación el siguiente enlace:
+                  </span>
+                  <Link
+                    to="https://pay.gocardless.com/AL0005R1W7RZ3V"
+                    target="_blank"
+                    className="lead-form__link"
+                  >
+                    <FaLink size={12} />
+                    GoCardless - Nomade
+                  </Link>
+                </div>
+                <div className="lead-form__checkbox-container">
+                  <CustomCheckbox
+                    onChange={handleIsChecked}
+                    checked={isCheked}
+                  />
+                  <span>Se ha rellenado la información en Gocardless.com</span>
+                </div>
+              </section>
+            ) : null}
 
             <h4 className="datasheet-form__title">Información del plan</h4>
             <section className="datasheet-form__section">
@@ -607,20 +690,22 @@ const CompanyForm = ({
                 </>
               )}
           </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Checkbox
-              onChange={(e) => setIsCheckedTerms(e.target.checked)}
-              value={checkedTerms}
-              checked={checkedTerms}
-            />
-            <span>He leído y acepto las condiciones y términos de uso</span>
-          </div>
+          {type !== "edit" ? (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Checkbox
+                onChange={(e) => setIsCheckedTerms(e.target.checked)}
+                value={checkedTerms}
+                checked={checkedTerms}
+              />
+              <span>He leído y acepto las condiciones y términos de uso</span>
+            </div>
+          ) : null}
           <ReusableModal
             children={
               <AddressForm
