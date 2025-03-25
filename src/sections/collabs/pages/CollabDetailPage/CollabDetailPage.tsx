@@ -28,6 +28,13 @@ import * as collabStates from "../../utils/collabsStates";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
 import EditCollabForm from "sections/collabs/components/CollabsForm/EditCollabsForm/EditCollabsForm";
 
+const HIDE_CANCEL_BUTTON_STATES = [
+  collabStates.COLAB_REJECTED_STATE,
+  collabStates.COLAB_CANCELLED_STATE,
+  collabStates.COLAB_FINISHED_STATE,
+  collabStates.COLAB_PUBLISHED_STATE,
+];
+
 const CollabDetailPage = (): React.ReactElement => {
   const { getCollabById, collab, loading } = useCollabsContext();
   const {
@@ -83,6 +90,16 @@ const CollabDetailPage = (): React.ReactElement => {
     getAddress(collab.addresses_id);
   }, [collab.addresses_id, getAddress]);
 
+  const showCancelButton = () => {
+    if (collab.state && HIDE_CANCEL_BUTTON_STATES.includes(collab.state.id)) {
+      return false;
+    }
+    if (user.type !== "Nomade") {
+      return false;
+    }
+    return true;
+  };
+
   //Añadir botones para modificar estado en usuario company
   return (
     <>
@@ -94,7 +111,7 @@ const CollabDetailPage = (): React.ReactElement => {
           <header className="detail-collab__header">
             <h2>Collab</h2>
             <section className="detail-collab__actions">
-              {user.type === "Nomade" && (
+              {showCancelButton() && (
                 <ActionButton
                   icon={<IoMdCloseCircleOutline size={15} />}
                   onClick={handleOpenDialogCancel}
@@ -159,6 +176,7 @@ const CollabDetailPage = (): React.ReactElement => {
             <ReusableModal
               openModal={isOpenEdit}
               setIsModalOpen={setIsOpenEdit}
+              type="Collab"
             >
               <EditCollabForm
                 collab={collab}

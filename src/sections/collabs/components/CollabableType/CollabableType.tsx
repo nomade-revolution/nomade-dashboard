@@ -59,6 +59,48 @@ const CollabableType = ({
     setSelectedTime(time);
   };
 
+  const renderHours = () => {
+    if (!currentCalendar) return null;
+
+    const currentDayHours = currentCalendar.week.find(
+      // @ts-expect-error TODO fix this
+      (day) => day[0]?.day_of_week === new Date(valueDate).getDay() - 1,
+    );
+
+    if (!currentDayHours) return <span>No hay horas disponibles</span>;
+
+    const groupedDays: Record<string, string[]> = currentDayHours.reduce(
+      (acc: Record<string, string[]>, day: TimeSlotOffer) => {
+        if (!acc[day.day_name]) {
+          acc[day.day_name] = [];
+        }
+        acc[day.day_name].push(...day.time_slots);
+        return acc;
+      },
+      {},
+    );
+
+    return Object.entries(groupedDays).map(([dayName, timeSlots]) => (
+      <div key={dayName} className="default-section__timeslot">
+        <span className="default-section__text-bold">{dayName}</span>
+        <div className="default-section__time-btns">
+          {timeSlots.map((time, index) => (
+            <button
+              key={index}
+              className={`default-section__time-btn ${
+                selectedTime === time ? "selected" : ""
+              }`}
+              onClick={() => handleButtonClick(time)}
+              type="button"
+            >
+              {time}
+            </button>
+          ))}
+        </div>
+      </div>
+    ));
+  };
+
   let calendars: Calendar[] = [];
 
   if (offer?.calendar) {
@@ -92,6 +134,7 @@ const CollabableType = ({
                 }))}
                 setValue={(value) => {
                   setSelectedAddress(parseInt(value));
+                  setSelectedTime("");
                 }}
                 value={String(currentCalendar?.address_id)}
               />
@@ -124,7 +167,10 @@ const CollabableType = ({
       <div>
         <h4>Escoger días</h4>
         <CustomCalendar
-          onChange={onChangeDate}
+          onChange={(value) => {
+            onChangeDate(value);
+            setSelectedTime("");
+          }}
           value={valueDate}
           selectRange={offerType === OfferTypes.lodging}
         />
@@ -133,43 +179,7 @@ const CollabableType = ({
         <>
           <div className="default-section__days-hours">
             <h4>Horas por día</h4>
-            {currentCalendar &&
-              currentCalendar?.week.map((week) => {
-                const groupedDays: Record<string, string[]> = week.reduce(
-                  (acc: Record<string, string[]>, day: TimeSlotOffer) => {
-                    if (!acc[day.day_name]) {
-                      acc[day.day_name] = [];
-                    }
-                    acc[day.day_name].push(...day.time_slots);
-                    return acc;
-                  },
-                  {},
-                );
-
-                return Object.entries(groupedDays).map(
-                  ([dayName, timeSlots]) => (
-                    <div key={dayName} className="default-section__timeslot">
-                      <span className="default-section__text-bold">
-                        {dayName}
-                      </span>
-                      <div className="default-section__time-btns">
-                        {timeSlots.map((time, index) => (
-                          <button
-                            key={index}
-                            className={`default-section__time-btn ${
-                              selectedTime === time ? "selected" : ""
-                            }`}
-                            onClick={() => handleButtonClick(time)}
-                            type="button"
-                          >
-                            {time}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  ),
-                );
-              })}
+            {renderHours()}
           </div>
         </>
       )}
