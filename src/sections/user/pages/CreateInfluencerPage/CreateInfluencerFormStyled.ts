@@ -48,14 +48,15 @@ const CreateInfluencerFormStyled = styled.form`
     &__submit {
       background: ${(props) => props.theme.colors.mainColor};
       color: ${(props) => props.theme.fontsColors.light};
-      font-weight: ${(props) => props.theme.fontWeights.mediumBold};
-      height: ${(props) => props.theme.heights.inputs};
+      font-weight: 700;
+      padding: 10px 20px;
+      width: 200px;
       border-radius: ${(props) => props.theme.borderRadius.submitButton};
-      width: 100%;
-      align-self: center;
-      max-width: 300px;
-      margin-top: 20px;
-      margin-bottom: 60px;
+      border-radius: 5px;
+      &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
     }
 
     &__label {
@@ -68,6 +69,15 @@ const CreateInfluencerFormStyled = styled.form`
 
     &__error-message {
       color: ${(props) => props.theme.fontsColors.error};
+    }
+
+    &__error {
+      background: ${(props) => props.theme.colors.red};
+      color: ${(props) => props.theme.fontsColors.light};
+      font-weight: 700;
+      padding: 10px 20px;
+      width: 200px;
+      border-radius: 5px;
     }
   }
 `;

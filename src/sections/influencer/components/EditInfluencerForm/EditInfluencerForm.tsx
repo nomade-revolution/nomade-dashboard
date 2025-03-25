@@ -17,6 +17,7 @@ import CustomFileInput from "sections/shared/components/CustomFileInput/CustomFi
 interface Props {
   initialState: Influencer;
   onSubmit: () => void;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
 interface EditInfluencerFormState {
@@ -45,7 +46,7 @@ export const GENDER_OPTIONS = [
   { id: 3, name: "Prefiero no decirlo", value: "3" },
 ];
 
-const EditInfluencerForm = ({ initialState, onSubmit }: Props) => {
+const EditInfluencerForm = ({ initialState, onSubmit, setIsOpen }: Props) => {
   const [formState, setFormState] = useState<EditInfluencerFormState | null>(
     null,
   );
@@ -528,25 +529,41 @@ const EditInfluencerForm = ({ initialState, onSubmit }: Props) => {
             />
           </div> */}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="login-form__submit"
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              width: "100%",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
           >
-            {loading ? (
-              <Loader width="20px" height="20px" />
-            ) : !isSuccess && isFormSubmitted ? (
-              <span className="login-form__error-message">
-                Datos no validos
-              </span>
-            ) : isFormSubmitted && isSuccess ? (
-              <Loader width="20px" height="20px" />
-            ) : isSuccess && isFormSubmitted ? (
-              "Usuario editado"
-            ) : (
-              "Editar usuario"
-            )}
-          </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="login-form__submit"
+            >
+              {loading ? (
+                <Loader width="20px" height="20px" />
+              ) : !isSuccess && isFormSubmitted ? (
+                <span className="login-form__error-message">
+                  Datos no validos
+                </span>
+              ) : isFormSubmitted && isSuccess ? (
+                <Loader width="20px" height="20px" />
+              ) : isSuccess && isFormSubmitted ? (
+                "Usuario editado"
+              ) : (
+                "Guardar cambios"
+              )}
+            </button>
+            <button
+              onClick={() => setIsOpen(false)}
+              className={"login-form__error"}
+            >
+              Cancelar
+            </button>
+          </div>
         </CreateInfluencerFormStyled>
       )}
     </Formik>

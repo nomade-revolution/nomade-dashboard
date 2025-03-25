@@ -266,27 +266,43 @@ const EditCollabForm = ({
             )}
           </div>
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className={
-              isSuccess
-                ? "datasheet-form__success"
-                : error
-                  ? "datasheet-form__error"
-                  : "datasheet-form__submit"
-            }
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              width: "100%",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
           >
-            {isSubmitting || createLoading ? (
-              <Loader width="20px" height="20px" />
-            ) : isSuccess ? (
-              "Collab editada con éxito"
-            ) : error ? (
-              "Revisa los datos e intentalo de nuevo"
-            ) : (
-              "Editar collab"
-            )}
-          </button>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className={
+                isSuccess
+                  ? "datasheet-form__success"
+                  : error
+                    ? "datasheet-form__error"
+                    : "datasheet-form__submit"
+              }
+            >
+              {isSubmitting || createLoading ? (
+                <Loader width="20px" height="20px" />
+              ) : isSuccess ? (
+                "Collab editada con éxito"
+              ) : error ? (
+                "Revisa los datos e intentalo de nuevo"
+              ) : (
+                "Guardar cambios"
+              )}
+            </button>
+            <button
+              onClick={() => setIsOpen(false)}
+              className={"datasheet-form__error"}
+            >
+              Cancelar
+            </button>
+          </div>
         </ReusableFormStyled>
       )}
     </Formik>
