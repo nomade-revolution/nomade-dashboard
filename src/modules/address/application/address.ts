@@ -8,3 +8,10 @@ export const getAddressById = (
 ): Promise<HttpResponseInterface<FullAddress>> => {
   return addressRepo.getAddressById(address_id);
 };
+
+export const createAddress = (
+  addressRepo: AddressRepository<FullAddress>,
+  address: FullAddress,
+): Promise<HttpResponseInterface<FullAddress>> => {
+  return addressRepo.createAddress(address);
+};

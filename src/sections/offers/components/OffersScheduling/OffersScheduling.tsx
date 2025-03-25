@@ -24,7 +24,13 @@ import {
   TimeSlot,
   WeekDay,
 } from "modules/offers/domain/Offer";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { IoAddCircle } from "react-icons/io5";
+import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
+import AddressForm from "sections/shared/components/AddressForm/AddressForm";
+import { Addresses } from "../OffersForm/OffersForm";
+import { FullAddress } from "modules/address/domain/Address";
+import { useAddressContext } from "sections/address/AddressContext/useAddressContext";
 
 interface Props {
   type: OfferTypes | string;
@@ -47,7 +53,7 @@ interface Props {
   >;
   company: Company;
   address: string;
-  setAddress: (value: string) => void;
+  setAddress: (value: string, index: number | null) => void;
   handleScheduling: (
     field: string,
     value:
@@ -69,6 +75,8 @@ interface Props {
   setWeek: (value: WeekDay[]) => void;
   offer: FullOffer;
   selectedIndex: number | null;
+  addresses: Addresses[];
+  setAddresses: Dispatch<SetStateAction<Addresses[]>>;
 }
 
 const OffersScheduling = ({
@@ -76,7 +84,6 @@ const OffersScheduling = ({
   getFieldProps,
   touched,
   errors,
-  company,
   address,
   setAddress,
   handleScheduling,
@@ -87,8 +94,12 @@ const OffersScheduling = ({
   setWeek,
   offer,
   selectedIndex,
+  addresses,
+  setAddresses,
 }: Props): React.ReactElement => {
   const { setFieldValue, values } = useFormikContext();
+  const { createNewAddress } = useAddressContext();
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState<boolean>(false);
 
   const schedulingStateSelected =
     type === OfferTypes.restaurant
@@ -141,6 +152,27 @@ const OffersScheduling = ({
     }
   }, [schedulingStateSelected, setFieldValue]);
 
+  const handleCreateAddress = async (address: FullAddress) => {
+    if (!address) return;
+    try {
+      const newAddress = await createNewAddress(address);
+      // @ts-expect-error TODO: fix this
+      if (!newAddress || !newAddress.success) return;
+      // @ts-expect-error TODO: fix this
+      const newId = newAddress.data.id;
+      setAddresses([
+        ...addresses,
+        {
+          id: newId,
+          name: address.address,
+          value: newId,
+        },
+      ]);
+    } catch (error) {
+      // console.log("error", error);
+    }
+  };
+
   const handleOfferTimetables = () => {
     const updatedSchedulingState = { ...schedulingState };
 
@@ -156,7 +188,11 @@ const OffersScheduling = ({
           week: week || [],
         };
 
-        if (selectedIndex !== null && schedulingState.restaurant.length > 0) {
+        if (
+          selectedIndex !== null &&
+          schedulingState.restaurant.length > 0 &&
+          schedulingState.restaurant[selectedIndex]
+        ) {
           updatedSchedulingState[key] = schedulingState.restaurant.map(
             (item, idx) =>
               idx === selectedIndex ? newOfferableRestaurant : item,
@@ -187,7 +223,11 @@ const OffersScheduling = ({
           max_guests: +getFieldProps("max_guests").value || 0,
         };
 
-        if (selectedIndex !== null && schedulingState.lodging.length > 0) {
+        if (
+          selectedIndex !== null &&
+          schedulingState.lodging.length > 0 &&
+          schedulingState.lodging[selectedIndex]
+        ) {
           updatedSchedulingState.lodging = schedulingState.lodging.map(
             (item, idx) => (idx === selectedIndex ? newOfferableLodging : item),
           );
@@ -212,7 +252,11 @@ const OffersScheduling = ({
           week: week,
         };
 
-        if (selectedIndex !== null && schedulingState.activity.length > 0) {
+        if (
+          selectedIndex !== null &&
+          schedulingState.activity.length > 0 &&
+          schedulingState.activity[selectedIndex]
+        ) {
           updatedSchedulingState.activity = schedulingState.activity.map(
             (item, idx) =>
               idx === selectedIndex ? newOfferableActivity : item,
@@ -258,9 +302,14 @@ const OffersScheduling = ({
     });
     setWeek([]);
     setSelectedDays([]);
-    setAddress("");
+    setAddress("", null);
     setFieldValue("min_guests", 0);
     setFieldValue("max_guests", 0);
+  };
+
+  const getIndexAddress = (addressId: number) => {
+    const index = addresses.findIndex((address) => address.id === addressId);
+    return index !== -1 ? index : null;
   };
 
   return (
@@ -270,18 +319,26 @@ const OffersScheduling = ({
         type === OfferTypes.lodging) && (
         <div className="scheduling--restaurant">
           <h4>Configura los horarios</h4>
-          <ReusableSelect
-            label="Direcciones"
-            options={[
-              {
-                id: company.address?.id,
-                name: company.address?.address,
-                value: company.address?.id,
-              },
-            ]}
-            setValue={setAddress}
-            value={address}
-          />
+          <div
+            className="datasheet-form__address-section"
+            style={{ alignItems: "center" }}
+          >
+            <ReusableSelect
+              label="Direcciones"
+              options={addresses}
+              // @ts-expect-error TODO: fix this
+              setValue={(value) => setAddress(value, getIndexAddress(value))}
+              value={address}
+            />
+            <button
+              type="button"
+              className="datasheet-form__add-address"
+              onClick={() => setIsAddressModalOpen(true)}
+            >
+              <IoAddCircle className="datasheet-form__create--icon" />
+              Añadir dirección
+            </button>
+          </div>
           <section className="scheduling__section">
             <div className="form-subsection">
               <label htmlFor="min_guests" className="form-subsection__label">
@@ -423,6 +480,20 @@ const OffersScheduling = ({
           </button>
         ) : null}
       </div>
+
+      <ReusableModal
+        children={
+          <AddressForm
+            // @ts-expect-error TODO: fix this
+            address={{}}
+            // @ts-expect-error TODO: fix this
+            setAddress={handleCreateAddress}
+            setIsModalOpen={setIsAddressModalOpen}
+          />
+        }
+        openModal={isAddressModalOpen}
+        setIsModalOpen={setIsAddressModalOpen}
+      />
     </OfferSchedulingStyled>
   );
 };

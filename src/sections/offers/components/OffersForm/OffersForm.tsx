@@ -57,6 +57,12 @@ const OFFER_CATEGORIES_BY_TYPE = {
   Brand: 6,
 };
 
+export interface Addresses {
+  id: number;
+  name: string;
+  value: number;
+}
+
 const OffersForm = ({
   offer,
   onSubmit,
@@ -82,11 +88,11 @@ const OffersForm = ({
     // @ts-expect-error TODO: fix this
     {},
   );
+  const [addresses, setAddresses] = useState<Addresses[]>([]);
   const [countriesFormat, setCountriesFormat] = useState<OptionsStructure[]>(
     [],
   );
-  // TODO ver como usamos el selectedIndex
-  const [selectedIndex /*setSelectedIndex*/] = useState<number | null>(0);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(0);
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
   const [citiesFormat, setCitiesFormat] = useState<OptionsStructure[]>([]);
   const [file, setFile] = useState<File[] | []>([]);
@@ -432,6 +438,13 @@ const OffersForm = ({
                           onClick={() => {
                             handleCompanySelect(suggestion.company);
                             setCompany(suggestion);
+                            setAddresses([
+                              {
+                                id: suggestion.address?.id,
+                                name: suggestion.address?.address,
+                                value: suggestion.address?.id,
+                              },
+                            ]);
                           }}
                         >
                           {suggestion.company}
@@ -691,10 +704,13 @@ const OffersForm = ({
                       >
                     }
                     company={company}
+                    addresses={addresses}
+                    setAddresses={setAddresses}
                     address={formState.address}
-                    setAddress={(value) =>
-                      handleFormStateChange("address", value)
-                    }
+                    setAddress={(value, index) => {
+                      handleFormStateChange("address", value);
+                      setSelectedIndex(index);
+                    }}
                     handleScheduling={handleSchedulingStateChange}
                     schedulingState={schedulingState}
                     selectedDays={selectedDays}
@@ -704,6 +720,7 @@ const OffersForm = ({
                     week={week}
                     offer={offer!}
                     selectedIndex={selectedIndex}
+                    setSelectedIndex={setSelectedIndex}
                   />
                 </section>
               </section>

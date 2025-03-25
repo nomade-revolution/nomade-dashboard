@@ -18,4 +18,18 @@ export class AddressRepository {
       return Promise.reject(error);
     }
   }
+
+  public async createAddress(
+    address: FullAddress,
+  ): Promise<HttpResponseInterface<FullAddress>> {
+    try {
+      const resp = await this.http.post<FullAddress>(
+        `${ADDRESS_BASE}`,
+        address,
+      );
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 }

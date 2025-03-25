@@ -525,22 +525,22 @@ const CompanyForm = ({
               </div>
             </section>
             <div className="form-subsection">
-              <label htmlFor="description" className="form-subsection__label">
+              <label htmlFor="plan_comments" className="form-subsection__label">
                 Comentarios acerca del plan
               </label>
               <Field
                 type="text"
-                id="description"
+                id="plan_comments"
                 className="form-subsection__field-textarea--company"
                 aria-label="Nombre del laboratorio"
                 as={"textarea"}
-                {...getFieldProps("description")}
+                {...getFieldProps("plan_comments")}
               />
-              {errors.description && touched.description && (
+              {errors.plan_comments && touched.plan_comments && (
                 <ErrorMessage
                   className="form-subsection__error-message"
                   component="span"
-                  name="description"
+                  name="plan_comments"
                 />
               )}
             </div>
