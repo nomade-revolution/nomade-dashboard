@@ -188,6 +188,7 @@ const InfluencerDetailPage = (): React.ReactElement => {
           <EditInfluencerForm
             initialState={influencer}
             onSubmit={handleOnSubmit}
+            setIsOpen={setIsEditFormOpen}
           />
         }
         openModal={isEditFormOpen}

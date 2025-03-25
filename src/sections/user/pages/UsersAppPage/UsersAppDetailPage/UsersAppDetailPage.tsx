@@ -19,12 +19,18 @@ import { companyFromUsersTableHeaderSections } from "sections/company/utils/comp
 import { SectionTypes } from "sections/shared/interfaces/interfaces";
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 import DialogDeleteConfirm from "sections/shared/components/DialogDeleteConfirm/DialogDeleteConfirm";
+import AddCompanyForm from "./components/AddCompanyForm/AddCompanyForm";
+import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
 // import useActions from "sections/shared/hooks/useActions/useActions";
 
 const UsersAppDetailPage = (): React.ReactElement => {
   const { loading, getUser, userData } = useUserContext();
+  const { postBaseCompany } = useCompanyContext();
+
   // const { handleIsDialogOpen } = useActions();
 
+  const [isAddCompanyFormOpen, setIsAddCompanyFormOpen] =
+    useState<boolean>(false);
   const [isEditFormOpen, setIsEditFormOpen] = useState<boolean>(false);
   const [isDialogEditStateOpen, setIsDialogEditStateOpen] =
     useState<boolean>(false);
@@ -39,6 +45,16 @@ const UsersAppDetailPage = (): React.ReactElement => {
   const handleOnSubmit = () => {
     setIsEditFormOpen(false);
     getUser(+id!);
+  };
+
+  const handleCreateNewClient = async (data: FormData) => {
+    data.append("user_id", id!);
+    const res = await postBaseCompany(data);
+    // @ts-expect-error TODO fix this
+    if (res.success) {
+      setIsAddCompanyFormOpen(false);
+      getUser(+id!);
+    }
   };
 
   // const handleModifyStateButton = (event: SelectChangeEvent<string>) => {
@@ -79,6 +95,14 @@ const UsersAppDetailPage = (): React.ReactElement => {
                 ))}
               </Select>
             ) : null} */}
+            {user.type === "Nomade" && (
+              <ActionButton
+                onClick={() => setIsAddCompanyFormOpen(true)}
+                text="Añadir cliente"
+                icon={<FaEdit />}
+                color={theme.colors.darkBlue}
+              />
+            )}
             {user.type === "Nomade" && (
               <ActionButton
                 onClick={() => setIsEditFormOpen(true)}
@@ -162,6 +186,18 @@ const UsersAppDetailPage = (): React.ReactElement => {
           }
           openModal={isEditFormOpen}
           setIsModalOpen={setIsEditFormOpen}
+          type="client"
+        />
+
+        <ReusableModal
+          children={
+            <AddCompanyForm
+              onSubmit={handleCreateNewClient}
+              setIsOpen={setIsAddCompanyFormOpen}
+            />
+          }
+          openModal={isAddCompanyFormOpen}
+          setIsModalOpen={setIsAddCompanyFormOpen}
           type="client"
         />
       </UsersAppDetailPageStyled>

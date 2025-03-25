@@ -24,6 +24,13 @@ export const registerCompany = (
   return companyRepo.registerCompany(company);
 };
 
+export const registerBaseCompany = (
+  companyRepo: CompanyRepository<Company>,
+  company: FormData,
+): Promise<HttpResponseInterface<Company>> => {
+  return companyRepo.registerBaseCompany(company);
+};
+
 export const exportCompanies = (
   companyRepo: CompanyRepository<Company>,
   token: string,

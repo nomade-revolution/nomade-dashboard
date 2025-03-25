@@ -9,6 +9,7 @@ import {
   postNewCompany,
   editCompany,
   getCompaniesWithPagination,
+  registerBaseCompany,
 } from "@company/application/company";
 import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
 import { Company } from "modules/user/domain/User";
@@ -40,6 +41,7 @@ interface ContextState {
   deleteCompanyById: (company_id: number) => void;
   getCompany: (company_id: number) => void;
   postCompany: (company: FormData) => void;
+  postBaseCompany: (company: FormData) => void;
   getCompaniesStatusBadge: () => void;
   postCompanyCms: (company: FormData) => void;
   editCompanyCms: (company: FormData, id?: number) => void;
@@ -128,6 +130,21 @@ export const CompanyContextProvider = ({
   const postCompany = async (company: FormData) => {
     setLoading(true);
     const response = await registerCompany(repository, company);
+
+    if (isHttpSuccessResponse(response)) {
+      setCompany(response.data);
+      setLoading(false);
+    }
+
+    setLoading(false);
+    setIsSuccess(response.success);
+
+    return response;
+  };
+
+  const postBaseCompany = async (company: FormData) => {
+    setLoading(true);
+    const response = await registerBaseCompany(repository, company);
 
     if (isHttpSuccessResponse(response)) {
       setCompany(response.data);
@@ -245,6 +262,7 @@ export const CompanyContextProvider = ({
         getCompany,
         deleteCompanyById,
         postCompany,
+        postBaseCompany,
         getCompaniesStatusBadge,
         postCompanyCms,
         editCompanyCms,

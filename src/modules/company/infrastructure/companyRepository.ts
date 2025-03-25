@@ -52,6 +52,17 @@ export class CompanyRepository {
     }
   }
 
+  public async registerBaseCompany(
+    company: FormData,
+  ): Promise<HttpResponseInterface<Company>> {
+    try {
+      const resp = await this.http.post<Company>(`${COMPANY_BASE}`, company);
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
   public async getCompaniesBadge(): Promise<HttpResponseInterface<number>> {
     try {
       const resp = await this.http.get<number>(`${COMPANY_BASE}/status/badge`);
