@@ -19,6 +19,7 @@ import {
 } from "modules/collabs/domain/Collabs";
 import { FullOffer, OfferTypes } from "modules/offers/domain/Offer";
 import ReusableSelect from "sections/shared/components/ReusableSelect/ReusableSelect";
+import { TileArgs } from "react-calendar";
 
 interface Props {
   errors: FormikErrors<
@@ -59,12 +60,33 @@ const CollabableType = ({
     setSelectedTime(time);
   };
 
+  const disableDays = ({ date }: TileArgs) => {
+    const day = date.getDay();
+    const adjustedDay = day === 0 ? 7 : day;
+    return !disabledDays.includes(adjustedDay);
+  };
+
+  const getTileClassName = (props: TileArgs) => {
+    return disableDays(props) ? "disabled-day" : "";
+  };
+
+  const getDisabledDays = (data: TimeSlotOffer[][]) => {
+    const days = new Set();
+    for (const group of data) {
+      for (const item of group) {
+        days.add(item.day_of_week + 1);
+      }
+    }
+    return [...days]; // Convert Set back to an array
+  };
+
   const renderHours = () => {
     if (!currentCalendar) return null;
-
+    // @ts-expect-error TODO fix this
+    const currentDay = new Date(valueDate).getDay();
+    const adjustedDay = currentDay === 0 ? 6 : currentDay - 1;
     const currentDayHours = currentCalendar.week.find(
-      // @ts-expect-error TODO fix this
-      (day) => day[0]?.day_of_week === new Date(valueDate).getDay() - 1,
+      (day) => day[0]?.day_of_week === adjustedDay,
     );
 
     if (!currentDayHours) return <span>No hay horas disponibles</span>;
@@ -113,6 +135,7 @@ const CollabableType = ({
   const currentCalendar = calendars.length
     ? calendars?.find((calendar) => calendar.address_id === selectedAddress)
     : null;
+  const disabledDays = getDisabledDays(currentCalendar?.week || []);
 
   return (
     <DefaultCollabableSectionStyled className="default-section">
@@ -134,6 +157,7 @@ const CollabableType = ({
                 }))}
                 setValue={(value) => {
                   setSelectedAddress(parseInt(value));
+                  onChangeDate(null);
                   setSelectedTime("");
                 }}
                 value={String(currentCalendar?.address_id)}
@@ -173,6 +197,8 @@ const CollabableType = ({
           }}
           value={valueDate}
           selectRange={offerType === OfferTypes.lodging}
+          tileDisabled={disableDays}
+          tileClassName={getTileClassName}
         />
       </div>
       {currentCalendar && offerType !== OfferTypes.lodging && (

@@ -70,7 +70,12 @@ color: inherit;
           .mainColorDark}; /* Color of the scrollbar thumb on hover */
     }
   
-
+  .disabled-day {
+    background-color: #CECECE;
+    opacity: 0.6;
+    pointer-events: none;
+    cursor: not-allowed;
+  }
 `;
 
 export default GlobalStyles;
