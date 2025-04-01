@@ -113,44 +113,28 @@ const OffersScheduling = ({
             : schedulingState.brand;
 
   useEffect(() => {
-    if (
-      (
-        schedulingStateSelected as
-          | OfferableRestaurant[]
-          | OfferableActivity[]
-          | OfferableLodging[]
-      )[0]?.min_guests !== undefined
-    ) {
-      setFieldValue(
-        "min_guests",
-        (
-          schedulingStateSelected as
-            | OfferableRestaurant[]
-            | OfferableActivity[]
-            | OfferableLodging[]
-        )[0].min_guests || 0,
-      );
+    const parsedSchedulingState = schedulingStateSelected as
+      | OfferableRestaurant[]
+      | OfferableActivity[]
+      | OfferableLodging[];
+    if (parsedSchedulingState[0]?.min_guests !== undefined) {
+      setFieldValue("min_guests", parsedSchedulingState[0].min_guests || 0);
     }
 
-    if (
-      (
-        schedulingStateSelected as
-          | OfferableRestaurant[]
-          | OfferableActivity[]
-          | OfferableLodging[]
-      )[0]?.max_guests !== undefined
-    ) {
-      setFieldValue(
-        "max_guests",
-        (
-          schedulingStateSelected as
-            | OfferableRestaurant[]
-            | OfferableActivity[]
-            | OfferableLodging[]
-        )[0].max_guests || 0,
-      );
+    if (parsedSchedulingState[0]?.max_guests !== undefined) {
+      setFieldValue("max_guests", parsedSchedulingState[0].max_guests || 0);
     }
   }, [schedulingStateSelected, setFieldValue]);
+
+  useEffect(() => {
+    const allWeekDays = [0, 1, 2, 3, 4, 5, 6];
+    allWeekDays.forEach((day) => {
+      setFieldValue(`from_time_day_${day}_1`, "");
+      setFieldValue(`to_time_day_${day}_1`, "");
+      setFieldValue(`from_time_day_${day}_2`, "");
+      setFieldValue(`to_time_day_${day}_2`, "");
+    });
+  }, [selectedIndex, setFieldValue]);
 
   const handleCreateAddress = async (address: FullAddress) => {
     if (!address) return;
@@ -458,6 +442,7 @@ const OffersScheduling = ({
             )}
         </div>
       )}
+
       <OffersTimetable
         type={type}
         errors={errors as FormikErrors<TimeSlot>}
@@ -469,6 +454,7 @@ const OffersScheduling = ({
         setFieldValue={setFieldValue}
         offer={offer}
       />
+
       <div className="scheduling__btn-container">
         {type && type !== OfferTypes.brand ? (
           <button
@@ -476,7 +462,7 @@ const OffersScheduling = ({
             className="scheduling__save-btn"
             onClick={handleOfferTimetables}
           >
-            Guardar
+            Guardar horario
           </button>
         ) : null}
       </div>

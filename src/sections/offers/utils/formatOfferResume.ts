@@ -1,11 +1,34 @@
 import { FullOffer, OfferTypes } from "modules/offers/domain/Offer";
 import { Calendar } from "modules/offers/domain/OfferCalendar";
 
-const formatOfferResume = (offer: FullOffer) => {
+export const formatOfferResumeMultiple = (offer: FullOffer) => {
+  const calendars: Calendar[] = Array.isArray(offer?.calendar)
+    ? offer.calendar
+    : [offer?.calendar];
+
+  if (!calendars?.length) return [];
+
+  // @ts-expect-error TODO fix this
+  const result = [];
+  calendars.forEach((calendar) => {
+    const parsedCalendar = formatOfferCalendar(offer, calendar);
+    if (parsedCalendar.length) {
+      result.push(parsedCalendar[0]);
+    }
+  });
+  // @ts-expect-error TODO fix this
+  return result;
+};
+
+const formatOfferResume = (offer: FullOffer, selectedIndex?: number | null) => {
   const calendar: Calendar = Array.isArray(offer?.calendar)
-    ? offer.calendar[0]
+    ? offer.calendar[selectedIndex || 0]
     : offer?.calendar;
 
+  return formatOfferCalendar(offer, calendar);
+};
+
+const formatOfferCalendar = (offer: FullOffer, calendar: Calendar) => {
   const combinedWeek = calendar?.week.map((dayGroup) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const dayMap: { [dayOfWeek: number]: any } = {};

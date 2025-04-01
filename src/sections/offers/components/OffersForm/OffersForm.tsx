@@ -38,7 +38,9 @@ import { useOffersContext } from "sections/offers/OffersContext/useOffersContext
 // import { useNavigate } from "react-router-dom";
 import Loader from "sections/shared/components/Loader/Loader";
 import { Calendar } from "modules/offers/domain/OfferCalendar";
-import formatOfferResume from "sections/offers/utils/formatOfferResume";
+import formatOfferResume, {
+  formatOfferResumeMultiple,
+} from "sections/offers/utils/formatOfferResume";
 import formatOfferScheduling from "sections/offers/utils/formatOfferScheduling";
 import { OfferTypes } from "modules/offers/domain/Offer";
 import { Checkbox } from "@mui/material";
@@ -76,6 +78,7 @@ const OffersForm = ({
 
   // const navigate = useNavigate();
   const offerResumeFormat = formatOfferResume(offer!);
+  const mode = offer ? "edit" : "create";
 
   const [categoriesList, setCategoriesList] = useState<
     { id: number; name: string; data: OptionsStructure[] }[]
@@ -103,6 +106,13 @@ const OffersForm = ({
     | OfferableDelivery
     | object
   >(offer ? offerResumeFormat : []);
+  const [offerResumeEdit, setOfferResumeEdit] = useState<
+    | OfferableRestaurant[]
+    | OfferableLodging[]
+    | OfferableActivity[]
+    | OfferableDelivery
+    | object
+  >(offer ? formatOfferResumeMultiple(offer!) : []);
 
   const [formState, setFormState] = useState<{
     country: string;
@@ -131,7 +141,7 @@ const OffersForm = ({
 
   const offerType = offer?.type;
 
-  const parseSchedulingState = () => {
+  const parseSchedulingState = (selectedIndex?: number | null) => {
     const data: {
       restaurant: OfferableRestaurant[];
       delivery: OfferableDelivery;
@@ -148,8 +158,13 @@ const OffersForm = ({
     };
     if (offerType === OfferTypes.brand || !offerType) return data;
 
-    // @ts-expect-error TODO: fix this
-    data[offerType.toLowerCase()] = offerResumeFormat;
+    if (typeof selectedIndex === "number") {
+      // @ts-expect-error TODO: fix this
+      data[offerType.toLowerCase()] = [offerResumeEdit[selectedIndex]];
+    } else {
+      // @ts-expect-error TODO: fix this
+      data[offerType.toLowerCase()] = offerResumeFormat;
+    }
 
     return data;
   };
@@ -180,7 +195,33 @@ const OffersForm = ({
       : [],
   );
 
-  // TODO si pudieramos ver un caso con multiple address para ver que pasa si deja editar cada dirección con su horario y min_max guests
+  useEffect(() => {
+    if (!offer) return;
+
+    if (offer.calendar) {
+      if (Array.isArray(offer.calendar)) {
+        setAddresses(
+          offer.calendar.map((addr) => {
+            return {
+              id: addr.address_id,
+              name: addr.address,
+              value: addr.address_id,
+            };
+          }),
+        );
+      } else {
+        setAddresses([
+          {
+            id: offer.calendar.address_id,
+            name: offer.calendar.address,
+            value: offer.calendar.address_id,
+          },
+        ]);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleFormStateChange = (field: string, value: string) => {
     setFormState((prevState) => ({ ...prevState, [field]: value }));
   };
@@ -204,7 +245,44 @@ const OffersForm = ({
       | OfferableDelivery
       | OfferableLodging[],
   ) => {
-    setSchedulingState((prevState) => ({ ...prevState, [field]: value }));
+    if (mode === "edit") {
+      if (!value || !offer || offer.type === OfferTypes.brand) {
+        return;
+      }
+      if (offer.type === OfferTypes.delivery) {
+        setOfferResumeEdit(value);
+        return;
+      }
+      if (
+        // @ts-expect-error TODO: fix this
+        value.length === 0
+      ) {
+        return;
+      }
+      // @ts-expect-error TODO: fix this
+      let newValue = value[selectedIndex];
+      if (!newValue) {
+        // @ts-expect-error TODO: fix this
+        newValue = value.pop();
+      }
+      if (!newValue) {
+        return;
+      }
+
+      // @ts-expect-error TODO: fix this
+      const currentOfferResumeEdit = [...offerResumeEdit];
+      const index = currentOfferResumeEdit.findIndex(
+        (item) => item.address_id === newValue.address_id,
+      );
+      if (index !== -1) {
+        currentOfferResumeEdit[index] = newValue;
+      } else {
+        currentOfferResumeEdit.push(newValue);
+      }
+      setOfferResumeEdit(currentOfferResumeEdit);
+    } else {
+      setSchedulingState((prevState) => ({ ...prevState, [field]: value }));
+    }
   };
 
   const handleSubmitForm = async (
@@ -236,10 +314,11 @@ const OffersForm = ({
         week: offerResume[0].week,
       } as never;
     }
+    const offerableData = mode === "edit" ? offerResumeEdit : parsedOfferResume;
 
     const formData = handleOfferFormData(
       values,
-      parsedOfferResume as never,
+      offerableData as never,
       formState.offerable_type,
       formState.location,
       location_id,
@@ -298,7 +377,7 @@ const OffersForm = ({
         (filter) => filter.id === selectedCatId,
       );
 
-      if (!filtersByCategory?.children.length) return;
+      if (!filtersByCategory?.children?.length) return;
 
       setCategoriesList(filtersByCategory.children);
     })();
@@ -386,6 +465,25 @@ const OffersForm = ({
       setShowSuggestions(false);
     }
   }, [offer]);
+
+  useEffect(() => {
+    if (!offer) return;
+    if (typeof selectedIndex === "number") {
+      const newSchedulingState = parseSchedulingState(selectedIndex);
+      setSchedulingState(newSchedulingState);
+
+      const newSelectedDays = formatOfferScheduling(
+        // @ts-expect-error TODO: fix this
+        newSchedulingState[offer.type.toLowerCase()],
+        offer.type,
+      )[0];
+      setSelectedDays(
+        // @ts-expect-error TODO: fix this
+        newSelectedDays || [],
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedIndex]);
 
   const fetchCompanyData = async () => {
     if (offer?.company_id) {
