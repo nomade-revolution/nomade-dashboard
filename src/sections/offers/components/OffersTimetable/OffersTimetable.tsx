@@ -232,6 +232,7 @@ const OffersTimetable = ({
                           id={`to_time_day_${time.day_number}_1`}
                           className="form-subsection__field--small-time"
                           aria-label="Salida primer turno"
+                          step="1800"
                           {...getFieldProps(`to_time_day_${time.day_number}_1`)}
                         />
                         {errors.to_time && touched.to_time && (
@@ -262,6 +263,7 @@ const OffersTimetable = ({
                           id={`from_time_day_${time.day_number}_2`}
                           className="form-subsection__field--small-time"
                           aria-label="Entrada segundo turno"
+                          step="1800"
                           {...getFieldProps(
                             `from_time_day_${time.day_number}_2`,
                           )}
@@ -286,6 +288,7 @@ const OffersTimetable = ({
                           type="time"
                           id={`to_time_day_${time.day_number}_2`}
                           className="form-subsection__field--small-time"
+                          step="1800"
                           aria-label="Salida segundo turno"
                           {...getFieldProps(`to_time_day_${time.day_number}_2`)}
                         />
