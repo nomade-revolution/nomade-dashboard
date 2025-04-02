@@ -465,13 +465,13 @@ const AddCompanyForm = ({
             <CustomFileInput
               setFile={setFile}
               file={file!}
-              text="Imágen del cliente"
+              text="Imagen del cliente"
             />
             {registerAddress && (
               <section className="lead-form__address">
                 <span>{registerAddress.name}</span>
-                <span>{registerAddress.contact_name}</span>
-                <span>{registerAddress.contact_phone}</span>
+                {/* <span>{registerAddress.contact_name}</span>
+                <span>{registerAddress.contact_phone}</span> */}
                 <span>
                   {registerAddress.address} {registerAddress.address_2 || ""}
                 </span>

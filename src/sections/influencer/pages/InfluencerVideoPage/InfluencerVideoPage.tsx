@@ -41,7 +41,7 @@ const InfluencerVideoPage = (): React.ReactElement => {
               </h4>
 
               {socialMedia.video ? (
-                <video width="640" height="360" controls>
+                <video width="1280" height="720" controls>
                   <source src={socialMedia.video} type="video/mp4" />
                   Tu navegador no soporta el elemento de video.
                 </video>

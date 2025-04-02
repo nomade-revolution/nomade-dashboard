@@ -102,7 +102,7 @@ const SocialMediaCard = ({
         )}
       </section>
 
-      <section>
+      {/* <section>
         <h4 className="social-card__section-title">Vídeo</h4>
         {socialMedia.video ? (
           <video width="640" height="360" controls>
@@ -112,7 +112,7 @@ const SocialMediaCard = ({
         ) : (
           "No hay video"
         )}
-      </section>
+      </section> */}
 
       <div className="stats-container">
         <section className="statsSection">

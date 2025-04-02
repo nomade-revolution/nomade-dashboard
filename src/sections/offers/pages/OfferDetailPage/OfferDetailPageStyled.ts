@@ -10,6 +10,23 @@ const OfferDetailPageStyled = styled.div`
   height: 100%;
   padding: 50px;
 
+  .details-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 0.6px;
+    border-radius: 10px;
+    padding-top: 20px;
+
+    @media (min-width: 1000px) {
+      box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      padding-top: 30px;
+      align-items: unset;
+    }
+  }
+
   .images-container {
     display: flex;
     gap: 20px;
@@ -17,7 +34,7 @@ const OfferDetailPageStyled = styled.div`
     align-items: center;
     max-width: 100%;
     width: 100%;
-    overflow: scroll;
+    overflow: auto;
     flex-wrap: wrap;
     margin-top: 20px;
   }

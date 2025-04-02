@@ -138,7 +138,7 @@ const OffersTimetable = ({
       offerType === OfferTypes.activity ||
       offerType === OfferTypes.delivery
     ) {
-      selectedDays.forEach((day) => {
+      selectedDays?.forEach((day) => {
         if (day.shifts?.firstShift.from_time !== undefined) {
           setFieldValue(
             `from_time_day_${day.day_number}_1`,

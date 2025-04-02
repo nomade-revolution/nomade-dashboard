@@ -13,6 +13,6 @@ export interface FullAddress {
   province: string;
   country_id: number;
   zip_code: string;
-  contact_name: string;
-  contact_phone: string;
+  contact_name?: string;
+  contact_phone?: string;
 }

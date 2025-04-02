@@ -226,14 +226,13 @@ export const CompanyContextProvider = ({
 
     if (isHttpSuccessResponse(response)) {
       setCompany(response.data);
-      setLoading(false);
       setIsSuccess(true);
     } else {
       setIsError(Boolean(response.error));
+      setIsSuccess(false);
     }
 
     setLoading(false);
-    setIsSuccess(response.success);
     setTimeout(() => {
       setIsSuccess(false);
     }, 1500);

@@ -33,6 +33,7 @@ const EXCLUDED_FIELDS = [
   "socialMedia",
   "contacts",
   "start_date",
+  "image",
 ];
 
 interface SubmitValues extends PartialCompany {
@@ -81,9 +82,10 @@ const CompanyForm = ({
   const [isCheked, setIsChecked] = useState<boolean>(
     client ? Boolean(client.goCardless) : false,
   );
+  const [deleteImageMode, setDeleteImageMode] = useState<boolean>(false);
 
   const { contact_types, getAllContactTypes } = useContactContext();
-  const { isSuccess, isError, loading } = useCompanyContext();
+  const { isSuccess, isError, loading, editCompanyCms } = useCompanyContext();
 
   const handleFormStateChange = (field: string, value: string) => {
     setFormState((prevState) => ({ ...prevState, [field]: value }));
@@ -109,6 +111,21 @@ const CompanyForm = ({
     }
 
     setSubmitting(true);
+
+    try {
+      if (type === "edit" && deleteImageMode) {
+        await editCompanyCms(
+          {
+            // @ts-expect-error any
+            image: null,
+          },
+          initialValues.id,
+        );
+      }
+    } catch (error) {
+      //
+    }
+
     const formData = new FormData();
     const formattedDate = formatDateWithDash(values.plan?.start_date);
 
@@ -166,22 +183,20 @@ const CompanyForm = ({
     formData.append("name", values.company_name);
     formData.append("gocardless", JSON.stringify(isCheked));
 
-    if (file) {
+    if (!deleteImageMode && file && file[0]) {
       formData.append("image", file![0]);
-    } else {
-      formData.delete("image");
     }
+
     formData.delete("comments");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     formData.append("comments", (values as any)?.company_comments);
     formData.append("plan_id", formState.company_plan_id);
 
-    await onSubmit(formData, client && client?.id);
+    const response = await onSubmit(formData, client && client?.id);
 
-    if (isSuccess) {
-      setTimeout(() => {
-        setIsOpen(false);
-      }, 1500);
+    // @ts-expect-error TODO fix this
+    if (response?.success) {
+      setIsOpen(false);
     }
 
     setSubmitting(false);
@@ -195,6 +210,15 @@ const CompanyForm = ({
     if (!date) return "";
     const [day, month, year] = date.split("-");
     return `${year}-${month}-${day}`;
+  };
+
+  const handleDeleteAvatarMode = (status: false | undefined) => {
+    if (status === false) {
+      setDeleteImageMode(false);
+      return;
+    }
+    setDeleteImageMode(true);
+    setFile([]);
   };
 
   const initialValues = {
@@ -549,13 +573,19 @@ const CompanyForm = ({
             <CustomFileInput
               setFile={setFile}
               file={file!}
-              text="Imágen del cliente"
+              images={
+                !file?.length && !deleteImageMode && initialValues.image
+                  ? [initialValues.image + "?" + Date.now()]
+                  : []
+              }
+              text="Imagen del cliente"
+              onDeleteImage={handleDeleteAvatarMode}
             />
             {registerAddress && (
               <section className="lead-form__address">
                 <span>{registerAddress.name}</span>
-                <span>{registerAddress.contact_name}</span>
-                <span>{registerAddress.contact_phone}</span>
+                {/* <span>{registerAddress.contact_name}</span> */}
+                {/* <span>{registerAddress.contact_phone}</span> */}
                 <span>
                   {registerAddress.address} {registerAddress.address_2 || ""}
                 </span>

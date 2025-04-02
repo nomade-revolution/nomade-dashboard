@@ -21,8 +21,8 @@ const initialState: FullAddress = {
   address: "",
   address_2: "",
   city_id: "",
-  contact_name: "",
-  contact_phone: "",
+  // contact_name: "",
+  // contact_phone: "",
   country_id: 0,
   name: "",
   province: "",
@@ -255,7 +255,7 @@ const AddressForm = ({
                 />
               )}
             </div>
-            <div className="form-subsection">
+            {/* <div className="form-subsection">
               <label htmlFor="contact_name" className="form-subsection__label">
                 Persona de contacto
               </label>
@@ -293,7 +293,7 @@ const AddressForm = ({
                   name="contact_phone"
                 />
               )}
-            </div>
+            </div> */}
           </section>
           <button
             type="submit"

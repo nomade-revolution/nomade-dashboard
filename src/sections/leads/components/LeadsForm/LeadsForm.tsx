@@ -327,7 +327,7 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
               <div className="datasheet-form__addresses">
                 {/* <div className="form-subsection">
                   <label htmlFor="image" className="form-subsection__label">
-                    Imágen
+                    Imagen
                   </label>
                   <input
                     type="file"

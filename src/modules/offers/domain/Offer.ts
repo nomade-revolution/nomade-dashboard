@@ -38,6 +38,7 @@ export interface FullOffer extends Offer {
   offerable_type: string;
   location_type: string;
   location_id: number;
+  location_parent_id?: number;
 }
 
 export interface OffersApiResponse {

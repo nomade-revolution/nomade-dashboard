@@ -114,6 +114,15 @@ const OffersForm = ({
     | object
   >(offer ? formatOfferResumeMultiple(offer!) : []);
 
+  let countryValue = "";
+  if (offer) {
+    if (offer.location_type === "App\\Models\\Country") {
+      countryValue = String(offer.location_id);
+    } else if (offer.location_type === "App\\Models\\City") {
+      countryValue = String(offer.location_parent_id);
+    }
+  }
+
   const [formState, setFormState] = useState<{
     country: string;
     city: string;
@@ -123,11 +132,11 @@ const OffersForm = ({
     offerable_type: string;
     address: string;
   }>({
-    country:
-      offer && offer.location_type === "App\\Models\\Country"
+    country: countryValue,
+    city:
+      offer && offer.location_type === "App\\Models\\City"
         ? String(offer.location_id)
         : "",
-    city: "",
     location: offer ? offer.location_type : "",
     categories: offer ? offer?.offer_categories?.map((cat) => cat.id) : [],
     type: offer?.type || "",
@@ -305,14 +314,26 @@ const OffersForm = ({
         [OFFER_CATEGORIES_BY_TYPE[formState.type], ...formState.categories];
 
     let parsedOfferResume = offerResume as never;
-    // @ts-expect-error TODO: fix this
-    if (offerType === OfferTypes.delivery && offerResume?.length) {
-      parsedOfferResume = {
-        // @ts-expect-error TODO: fix this
-        advance_notice_time: offerResume[0].advance_notice_time,
-        // @ts-expect-error TODO: fix this
-        week: offerResume[0].week,
-      } as never;
+    if (
+      offerType === OfferTypes.delivery &&
+      // @ts-expect-error TODO: fix this
+      offerResume?.length &&
+      // @ts-expect-error TODO: fix this
+      offerResume[0]
+    ) {
+      // @ts-expect-error TODO: fix this
+      let deliveryData = offerResume[0];
+      if (!deliveryData) {
+        deliveryData = offerResumeEdit;
+      }
+      if (deliveryData) {
+        parsedOfferResume = {
+          // @ts-expect-error TODO: fix this
+          advance_notice_time: offerResume[0].advance_notice_time,
+          // @ts-expect-error TODO: fix this
+          week: offerResume[0].week,
+        } as never;
+      }
     }
     const offerableData = mode === "edit" ? offerResumeEdit : parsedOfferResume;
 
@@ -387,7 +408,6 @@ const OffersForm = ({
     const filters: FilterParams = {
       country_id: formState.country,
     };
-    setFormState((prev) => ({ ...prev, city: "" }));
     getAllCities(filters);
   }, [formState.country, getAllCities]);
 
@@ -747,9 +767,13 @@ const OffersForm = ({
                           <ReusableSelect
                             label=""
                             options={countriesFormat}
-                            setValue={(value) =>
-                              handleFormStateChange("country", value)
-                            }
+                            setValue={(value) => {
+                              setFormState((prev) => ({
+                                ...prev,
+                                country: value,
+                                city: "",
+                              }));
+                            }}
                             value={formState.country}
                           />
                         </div>

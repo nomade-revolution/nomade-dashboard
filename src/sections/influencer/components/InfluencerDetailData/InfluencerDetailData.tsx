@@ -45,25 +45,27 @@ const InfluencerDetailData = ({
           )}
           {user.type === "Nomade" && <span>{influencer.phone}</span>}
 
-          {influencer.gender && <span>Género: {influencer.gender}</span>}
+          {user.type === "Nomade" && influencer.gender && (
+            <span>Género: {influencer.gender}</span>
+          )}
 
           {user.type === "Nomade" && (
             <>
-              {influencer.from_country && (
+              {influencer.from_city && (
                 <div className="influencer-data__from-country">
-                  <span>País de origen:</span>
+                  <span>Ciudad de origen:</span>
                   <span className="influencer-data__country">
                     {" "}
-                    {influencer?.from_country.name}
+                    {influencer?.from_city.name}
                   </span>
                 </div>
               )}
-              {influencer.living_country && (
+              {influencer.living_city && (
                 <div className="influencer-data__living-country">
-                  <span>País de residencia:</span>
+                  <span>Ciudad de residencia:</span>
                   <span className="influencer-data__country">
                     {" "}
-                    {influencer?.living_country.name}
+                    {influencer?.living_city.name}
                   </span>
                 </div>
               )}

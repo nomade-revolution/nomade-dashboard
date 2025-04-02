@@ -10,11 +10,11 @@ export const errorMessages = {
 export const addressSchema = yup.object({
   address: yup.string().required(errorMessages.required),
   address_2: yup.string().nullable(),
-  contact_name: yup.string().required(errorMessages.required),
-  contact_phone: yup
-    .string()
-    .required(errorMessages.required)
-    .matches(/^\+?[0-9\s-]{7,15}$/, errorMessages.invalidPhone),
+  // contact_name: yup.string().required(errorMessages.required),
+  // contact_phone: yup
+  //   .string()
+  //   .required(errorMessages.required)
+  //   .matches(/^\+?[0-9\s-]{7,15}$/, errorMessages.invalidPhone),
   country_id: yup.number().required(errorMessages.required),
   city_id: yup.string().required(errorMessages.required),
   name: yup.string().required(errorMessages.required),

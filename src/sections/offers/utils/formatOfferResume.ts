@@ -29,7 +29,9 @@ const formatOfferResume = (offer: FullOffer, selectedIndex?: number | null) => {
 };
 
 const formatOfferCalendar = (offer: FullOffer, calendar: Calendar) => {
-  const combinedWeek = calendar?.week.map((dayGroup) => {
+  if (!calendar) return [];
+
+  const combinedWeek = calendar.week.map((dayGroup) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const dayMap: { [dayOfWeek: number]: any } = {};
 

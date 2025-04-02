@@ -16,6 +16,9 @@ import { UserTypes } from "modules/user/domain/User";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
 import { headerAddressOffers, headerOffers } from "./offersData";
 import { Calendar } from "modules/offers/domain/OfferCalendar";
+import { useCountryContext } from "sections/country/CountryContext/useCountryContext";
+import { useCitiesContext } from "sections/city/CityContext/useCitiesContext";
+import { FilterParams } from "sections/shared/interfaces/interfaces";
 
 export interface AddresTableData {
   address: string;
@@ -39,6 +42,20 @@ const OfferDetailsPage = () => {
   const { user } = useAuthContext();
   const { id } = useParams();
   const { offer, loading, getOffer, modifyOffer } = useOffersContext();
+  const { getAllCountries, countries } = useCountryContext();
+  const { cities, getAllCities } = useCitiesContext();
+
+  useEffect(() => {
+    getAllCountries();
+  }, [getAllCountries]);
+
+  useEffect(() => {
+    if (!offer || !offer.location_parent_id) return;
+    const filters: FilterParams = {
+      country_id: offer.location_parent_id,
+    };
+    getAllCities(filters);
+  }, [offer, offer.location_parent_id, getAllCities]);
 
   const handleIsModalOpen = () => {
     setIsModalOpen(true);
@@ -82,6 +99,16 @@ const OfferDetailsPage = () => {
     return a;
   };
 
+  const getCountryAndCity = () => {
+    const countryParam =
+      offer.location_type === "App\\Models\\Country"
+        ? offer.location_id
+        : offer.location_parent_id;
+    const country = countries.find((country) => country.id === countryParam);
+    const city = cities.find((city) => city.id === offer.location_id);
+    return { country: country?.name, city: city?.name };
+  };
+
   if (loading) {
     return <Loader width="20px" height="20px" />;
   }
@@ -100,6 +127,7 @@ const OfferDetailsPage = () => {
   }
 
   const parsedCalendar = parseCalendar(offer.calendar);
+  const { country, city } = getCountryAndCity();
 
   return (
     <OfferDetailPageStyled>
@@ -121,18 +149,29 @@ const OfferDetailsPage = () => {
           </button>
         )}
       </div>
-      <div className="images-container">
-        {offer.images?.length > 0 &&
-          offer.images.map((image) => (
-            <ImageCustom
-              key={image.url}
-              alt="Imágen de la oferta"
-              className="offer-detail__offer-img"
-              height={200}
-              width={250}
-              image={image.url}
-            />
-          ))}
+      <div className="details-container">
+        <span className="offer-detail__description">
+          <strong>País: </strong>
+          {country}
+        </span>
+        {city ? (
+          <span className="offer-detail__conditions">
+            <strong>Ciudad:</strong> {city}
+          </span>
+        ) : null}
+        <div className="images-container">
+          {offer.images?.length > 0 &&
+            offer.images.map((image) => (
+              <ImageCustom
+                key={image.url}
+                alt="Imagen de la oferta"
+                className="offer-detail__offer-img"
+                height={200}
+                width={250}
+                image={image.url}
+              />
+            ))}
+        </div>
       </div>
       <DashboardTable
         bodySections={[offer]}

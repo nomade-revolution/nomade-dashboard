@@ -20,7 +20,6 @@ import { BsSendCheckFill } from "react-icons/bs";
 import { BsFillXSquareFill } from "react-icons/bs";
 import * as collabStates from "../../../collabs/utils/collabsStates";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
-import { MdOutlineHistory } from "react-icons/md";
 import CustomDropdown from "../CustomDropdown/CustomDropdown";
 import theme from "assets/styles/theme";
 import LeadDialog from "../DialogDeleteConfirm/LeadDialog";
@@ -53,9 +52,9 @@ const Actions = ({
   const { user } = useAuthContext();
   const [isLeadOpen, setIsLeadOpen] = useState(false);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+  // const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  //   setAnchorEl(event.currentTarget);
+  // };
 
   let buttons: React.ReactNode;
 
@@ -128,7 +127,7 @@ const Actions = ({
             (section as FullCollab).state.id !==
               collabStates.COLAB_PUBLISHED_STATE && (
               <>
-                <Tooltip title={"Estados collab"}>
+                {/* <Tooltip title={"Estados collab"}>
                   <button aria-label="Estados" onClick={handleClick}>
                     <MdOutlineHistory
                       color="orange"
@@ -136,7 +135,7 @@ const Actions = ({
                       className="icon--states"
                     />
                   </button>
-                </Tooltip>
+                </Tooltip> */}
                 {
                   <CustomDropdown
                     anchorEl={anchorEl}
