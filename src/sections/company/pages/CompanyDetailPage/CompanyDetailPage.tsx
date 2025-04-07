@@ -37,6 +37,13 @@ const InfluencerDetailPage = (): React.ReactElement => {
     getCompany(+id!);
     getPlan(+id!);
   }, [getCompany, id, getPlan]);
+
+  const handleEditCompany = async (company: FormData, id?: number) => {
+    const res = await editCompanyCms(company, id);
+    getPlan(+id!);
+    return res;
+  };
+
   return (
     <>
       {loading ? (
@@ -132,7 +139,7 @@ const InfluencerDetailPage = (): React.ReactElement => {
           <ReusableModal
             children={
               <CompanyForm
-                onSubmit={editCompanyCms}
+                onSubmit={handleEditCompany}
                 client={company}
                 type="edit"
                 setIsOpen={setIsModalOpen}

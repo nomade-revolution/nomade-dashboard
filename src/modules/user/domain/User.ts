@@ -35,7 +35,7 @@ export interface Company extends User {
   plan: Pick<Plan, "billing" | "start_date"> & {
     plan_name: string;
     plan_id: number;
-    plan_coments: string;
+    comments: string;
   };
   goCardless: number;
   status: string;
