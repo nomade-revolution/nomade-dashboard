@@ -22,6 +22,8 @@ export interface ContextState {
   isSuccess: boolean;
   user: User;
   isLoading: boolean;
+  selectedCompany: number;
+  setSelectedCompany: (index: number) => void;
   loginUser: (user: AuthLoginInterface) => Promise<boolean>;
   logoutUser: () => void;
   getSessionToken: () => string;
@@ -53,6 +55,7 @@ export const AuthContextProvider = ({
   const [token, setToken] = useState<string>("");
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [selectedCompany, setSelectedCompany] = useState<number>(0);
 
   const login = async (user: AuthLoginInterface) => {
     const response = await authLogin(user, repository);
@@ -61,6 +64,13 @@ export const AuthContextProvider = ({
       cookies.set(environments.cookies!, response.data.access_token);
       const userLogged = await getLoggedUser(response.data.access_token);
       setUser(userLogged);
+      if (
+        userLogged &&
+        userLogged.companies &&
+        userLogged.companies.length > 0
+      ) {
+        setSelectedCompany(userLogged.companies[0].id);
+      }
       setIsSuccess(response.success);
 
       return true;
@@ -72,6 +82,7 @@ export const AuthContextProvider = ({
   function logout() {
     setToken("");
     setUser({} as User);
+    setSelectedCompany(0);
     cookies.remove(environments.cookies!);
   }
 
@@ -153,6 +164,8 @@ export const AuthContextProvider = ({
         token,
         isSuccess,
         isLoading,
+        selectedCompany,
+        setSelectedCompany,
         changePassword,
         recoverPassword,
         loginUser: login,

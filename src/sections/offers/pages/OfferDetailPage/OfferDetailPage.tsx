@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
 import Loader from "sections/shared/components/Loader/Loader";
 import OfferDetailPageStyled from "./OfferDetailPageStyled";
@@ -19,6 +19,7 @@ import { Calendar } from "modules/offers/domain/OfferCalendar";
 import { useCountryContext } from "sections/country/CountryContext/useCountryContext";
 import { useCitiesContext } from "sections/city/CityContext/useCitiesContext";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
+import CompanySelector from "sections/shared/components/CompanySelector";
 
 export interface AddresTableData {
   address: string;
@@ -41,13 +42,16 @@ const OfferDetailsPage = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { user } = useAuthContext();
   const { id } = useParams();
-  const { offer, loading, getOffer, modifyOffer } = useOffersContext();
+  const { offer, loading, getOffer, modifyOffer, offers } = useOffersContext();
   const { getAllCountries, countries } = useCountryContext();
   const { cities, getAllCities } = useCitiesContext();
+  const navigate = useNavigate();
 
   useEffect(() => {
     getAllCountries();
-  }, [getAllCountries]);
+    getOffer(+id!);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!offer || !offer.location_parent_id) return;
@@ -57,13 +61,24 @@ const OfferDetailsPage = () => {
     getAllCities(filters);
   }, [offer, offer.location_parent_id, getAllCities]);
 
+  // override url param id
+  useEffect(() => {
+    if (!offers[0]?.id) return;
+    if (id !== offers[0]?.id?.toString()) {
+      navigate(`/oferta/${offers[0]?.id}`);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [offers[0]?.id]);
+
+  useEffect(() => {
+    if (id === offer?.id?.toString() || !id) return;
+    getOffer(+id!);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
   const handleIsModalOpen = () => {
     setIsModalOpen(true);
   };
-
-  useEffect(() => {
-    getOffer(+id!);
-  }, [id, getOffer]);
 
   const handleModifyOffer = async (offer: FormData, offer_id?: number) => {
     const res = await modifyOffer(offer, offer_id);
@@ -139,6 +154,7 @@ const OfferDetailsPage = () => {
             ( {offer.type} )
           </span>
         </h3>
+        <CompanySelector />
         {user.type === UserTypes.nomade && (
           <button
             onClick={handleIsModalOpen}

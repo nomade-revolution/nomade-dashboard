@@ -7,7 +7,6 @@ import Header from "../Header/Header";
 import { useEffect, useState } from "react";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
-import { Company } from "modules/user/domain/User";
 import { useInfluencerContext } from "sections/influencer/InfluencerContext/useInfluencerContext";
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
 import { useMediaQuery } from "@mui/material";
@@ -18,8 +17,15 @@ const Layout = (): React.ReactElement => {
   const matches = useMediaQuery("(max-width: 1200px)");
   const [isMinimized, setIsMinimized] = useState<boolean>(matches);
 
-  const { setSessionToken, token, getLoggedUser, user, logoutUser } =
-    useAuthContext();
+  const {
+    setSessionToken,
+    token,
+    getLoggedUser,
+    user,
+    setSelectedCompany,
+    logoutUser,
+    selectedCompany,
+  } = useAuthContext();
 
   const { getAllOffers, offers } = useOffersContext();
   const { getInfluencersStatusBadge, badgeCount: badgeCountInfluencers } =
@@ -31,6 +37,13 @@ const Layout = (): React.ReactElement => {
     useLeadsContext();
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (selectedCompany) return;
+    if (user && user.companies && user.companies.length > 0) {
+      setSelectedCompany(user.companies[0].id);
+    }
+  }, [user, setSelectedCompany]);
 
   useEffect(() => {
     setSessionToken();
@@ -46,14 +59,14 @@ const Layout = (): React.ReactElement => {
 
   useEffect(() => {
     if (user.type === "Company") {
-      const userData = user as Company;
-      const companyId = userData.companies ? userData.companies[0].id : 0;
+      if (!selectedCompany) return;
+      const companyId = selectedCompany;
       const filters = {
         filters: { company_id: companyId },
       };
       getAllOffers(1, 1, filters);
     }
-  }, [getAllOffers, user]);
+  }, [getAllOffers, user, selectedCompany]);
 
   useEffect(() => {
     getInfluencersStatusBadge();

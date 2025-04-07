@@ -10,6 +10,7 @@ interface ReusableSelectProps {
   options: OptionsStructure[];
   label: string;
   disabled?: boolean;
+  hideNone?: boolean;
 }
 
 export default function ReusableSelect({
@@ -18,6 +19,7 @@ export default function ReusableSelect({
   options,
   label,
   disabled = false,
+  hideNone = false,
 }: ReusableSelectProps) {
   // const breakpoint = useMediaQuery("min-width: 1000px");
   const handleChange = (event: SelectChangeEvent) => {
@@ -41,9 +43,12 @@ export default function ReusableSelect({
         label={label}
         onChange={handleChange}
       >
-        <MenuItem value="">
-          <em>None</em>
-        </MenuItem>
+        {!hideNone ? (
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+        ) : null}
+
         {options.map((option) => (
           <MenuItem value={option.value} key={option.id}>
             {option.name}

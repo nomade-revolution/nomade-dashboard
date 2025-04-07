@@ -29,6 +29,7 @@ import ExportFilesButton from "sections/shared/components/ExportButton/ExportBut
 import ActionButton from "sections/shared/components/ActionButton/ActionButton";
 import theme from "assets/styles/theme";
 import { FaFilter } from "react-icons/fa6";
+import CompanySelector from "sections/shared/components/CompanySelector";
 
 const CollabsPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
@@ -48,7 +49,7 @@ const CollabsPage = (): React.ReactElement => {
     exportCollabsExcel,
   } = useCollabsContext();
 
-  const { user } = useAuthContext();
+  const { user, selectedCompany } = useAuthContext();
   const { page } = useParams();
   const [filterId, setFilterId] = useState<string>("");
   const { getInfluencersWithParams, influencers } = useInfluencerContext();
@@ -60,7 +61,7 @@ const CollabsPage = (): React.ReactElement => {
 
   const getCollabs = useCallback(
     (text?: string) => {
-      const companyId = user.companies ? user.companies[0].id : 0;
+      const companyId = selectedCompany;
 
       const filters: FilterParams =
         user.type === "Company"
@@ -102,10 +103,10 @@ const CollabsPage = (): React.ReactElement => {
       order.direction,
       order.sortTag,
       page,
-      user.id,
       user.type,
       influencerSelect,
       companySelect,
+      selectedCompany,
     ],
   );
   const getInfluencersSearch = async (text: string) => {
@@ -153,186 +154,183 @@ const CollabsPage = (): React.ReactElement => {
     getCollabs();
   }, [page, order, getCollabs, filterId, state]);
 
-  return (
-    <>
-      {loading ? (
-        <Loader width="20px" height="20px" />
-      ) : (
-        <ReusablePageStyled>
-          <div className="dashboard__filtersContainer">
-            {user.type === "Nomade" ? (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: "20px",
-                }}
-              >
-                <ActionButton
-                  onClick={() => setIsModalOpen(true)}
-                  color={theme.colors.darkBlue}
-                  text="Crear collab"
-                  icon={<IoAddCircle className="dashboard__create--icon" />}
-                />
+  if (loading) {
+    return <Loader width="20px" height="20px" />;
+  }
 
-                <ActionButton
-                  icon={<FaFilter />}
-                  color={theme.colors.darkBlue}
-                  text="Filtros"
-                  onClick={() => setIsOpenFilters(!isOpenFilters)}
-                />
-                <ExportFilesButton
-                  action={() => exportCollabsExcel()}
-                  text="Exportar collabs"
-                />
-              </div>
-            ) : (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: "20px",
-                }}
-              ></div>
-            )}
-            <SearchBar
-              pageName={SectionTypes.collabs}
-              pageTypes={SectionTypes.collabs}
-              searchText={searchText!}
-              setSearchText={setSearchText}
-              onReset={() => getCollabs()}
-              onSearchSubmit={() => handleSearch(searchText)}
+  return (
+    <ReusablePageStyled>
+      <div className="dashboard__filtersContainer">
+        {user.type === "Nomade" ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "20px",
+            }}
+          >
+            <ActionButton
+              onClick={() => setIsModalOpen(true)}
+              color={theme.colors.darkBlue}
+              text="Crear collab"
+              icon={<IoAddCircle className="dashboard__create--icon" />}
+            />
+
+            <ActionButton
+              icon={<FaFilter />}
+              color={theme.colors.darkBlue}
+              text="Filtros"
+              onClick={() => setIsOpenFilters(!isOpenFilters)}
+            />
+            <ExportFilesButton
+              action={() => exportCollabsExcel()}
+              text="Exportar collabs"
             />
           </div>
-          {isOpenFilters && (
-            <section className="dashboard__selectsContainer">
-              {user.type === "Nomade" && (
-                <TypeAhead
-                  options={companies?.map((company) => {
-                    return {
-                      id: company.id,
-                      name: company.company,
-                      value: company.id,
-                    };
-                  })}
-                  label="Filtrar por cliente"
-                  setValue={setCompanySelect}
-                  value={companySelect}
-                  searchText={""}
-                  getFunctions={getCompanySearch}
-                />
-              )}
-
-              <TypeAhead
-                label="Filtrar por influencer"
-                setValue={setInfluencerSelect}
-                value={influencerSelect}
-                options={influencers?.map((influencer) => {
-                  return {
-                    id: influencer.id,
-                    name: influencer.name,
-                    value: influencer.id,
-                  };
-                })}
-                searchText={""}
-                getFunctions={getInfluencersSearch}
-              />
-              <div className="dashboard__select">
-                <ReusableSelect
-                  label="Filtrar por estado"
-                  options={
-                    user.type === "Company"
-                      ? collabsFiltersCompany
-                      : collabsFiltersNomade
-                  }
-                  setValue={setFilterId}
-                  value={filterId}
-                />
-              </div>
-            </section>
+        ) : (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "20px",
+            }}
+          >
+            <CompanySelector />
+          </div>
+        )}
+        <SearchBar
+          pageName={SectionTypes.collabs}
+          pageTypes={SectionTypes.collabs}
+          searchText={searchText!}
+          setSearchText={setSearchText}
+          onReset={() => getCollabs()}
+          onSearchSubmit={() => handleSearch(searchText)}
+        />
+      </div>
+      {isOpenFilters && (
+        <section className="dashboard__selectsContainer">
+          {user.type === "Nomade" && (
+            <TypeAhead
+              options={companies?.map((company) => {
+                return {
+                  id: company.id,
+                  name: company.company,
+                  value: company.id,
+                };
+              })}
+              label="Filtrar por cliente"
+              setValue={setCompanySelect}
+              value={companySelect}
+              searchText={""}
+              getFunctions={getCompanySearch}
+            />
           )}
 
-          <div className="dashboard__filters filters">
-            {Object.entries(totalFilters.filters || {})
-              .filter(
-                ([key]) =>
-                  ["influencer_id", "company_id", "search", "states"].includes(
-                    key,
-                  ) && !(key === "company_id" && user.type === "Company"),
-              )
-              .map(([key, value]) => (
-                <div key={key} className="filters__filter">
-                  <LuFilter />
-                  <span>
-                    {key === "states"
-                      ? "Estado:"
-                      : key === "influencer_id"
-                        ? "Influencer"
-                        : key === "company_id"
-                          ? "Empresa"
-                          : "Búsqueda:"}
-                  </span>
-                  <span>
-                    {key === "states"
-                      ? collabsFiltersNomade.find(
-                          (state) => +state.id === +value,
-                        )?.name
-                      : key === "influencer_id"
-                        ? influencers.find((inf) => inf.id === value)?.name
-                        : key === "company_id"
-                          ? companies.find((comp) => comp.id === value)?.company
-                          : value}
-                  </span>
-                  <button onClick={() => handleRemoveFilter(key)}>
-                    <IoMdClose size={20} color="#fff" />
-                  </button>
-                </div>
-              ))}
-          </div>
-
-          <div className="dashboard__table">
-            <DashboardTable
-              bodySections={collabs}
-              headerSections={
-                user.type !== "Nomade"
-                  ? collabsHeaderSections.filter(
-                      (item) => item.name !== "Cliente",
-                    )
-                  : collabsHeaderSections
+          <TypeAhead
+            label="Filtrar por influencer"
+            setValue={setInfluencerSelect}
+            value={influencerSelect}
+            options={influencers?.map((influencer) => {
+              return {
+                id: influencer.id,
+                name: influencer.name,
+                value: influencer.id,
+              };
+            })}
+            searchText={""}
+            getFunctions={getInfluencersSearch}
+          />
+          <div className="dashboard__select">
+            <ReusableSelect
+              label="Filtrar por estado"
+              options={
+                user.type === "Company"
+                  ? collabsFiltersCompany
+                  : collabsFiltersNomade
               }
-              pageName={SectionTypes.collabs}
-              type={collabStateActionType!}
-              setCollabStateActionType={setCollabStateActionType}
+              setValue={setFilterId}
+              value={filterId}
             />
           </div>
-          <div className="dashboard__mobile">
-            <h3 className="dashboard__title">Collabs</h3>
-
-            <DashboardCardListMobile
-              bodySections={collabs}
-              headerSections={collabsHeaderSections}
-              pageName={SectionTypes.collabs}
-              type={collabStateActionType!}
-              setCollabStateActionType={setCollabStateActionType}
-            />
-          </div>
-          <PaginationComponent
-            current_page={pagination.current_page}
-            last_page={pagination.last_page}
-            per_page={pagination.per_page}
-            pageName={SectionTypes.collabs}
-            filterParams=""
-          />
-          <ReusableModal
-            children={<CollabsForm />}
-            openModal={isModalOpen}
-            setIsModalOpen={setIsModalOpen}
-          />
-        </ReusablePageStyled>
+        </section>
       )}
-    </>
+
+      <div className="dashboard__filters filters">
+        {Object.entries(totalFilters.filters || {})
+          .filter(
+            ([key]) =>
+              ["influencer_id", "company_id", "search", "states"].includes(
+                key,
+              ) && !(key === "company_id" && user.type === "Company"),
+          )
+          .map(([key, value]) => (
+            <div key={key} className="filters__filter">
+              <LuFilter />
+              <span>
+                {key === "states"
+                  ? "Estado:"
+                  : key === "influencer_id"
+                    ? "Influencer"
+                    : key === "company_id"
+                      ? "Empresa"
+                      : "Búsqueda:"}
+              </span>
+              <span>
+                {key === "states"
+                  ? collabsFiltersNomade.find((state) => +state.id === +value)
+                      ?.name
+                  : key === "influencer_id"
+                    ? influencers.find((inf) => inf.id === value)?.name
+                    : key === "company_id"
+                      ? companies.find((comp) => comp.id === value)?.company
+                      : value}
+              </span>
+              <button onClick={() => handleRemoveFilter(key)}>
+                <IoMdClose size={20} color="#fff" />
+              </button>
+            </div>
+          ))}
+      </div>
+
+      <div className="dashboard__table">
+        <DashboardTable
+          bodySections={collabs}
+          headerSections={
+            user.type !== "Nomade"
+              ? collabsHeaderSections.filter((item) => item.name !== "Cliente")
+              : collabsHeaderSections
+          }
+          pageName={SectionTypes.collabs}
+          type={collabStateActionType!}
+          setCollabStateActionType={setCollabStateActionType}
+        />
+      </div>
+      <div className="dashboard__mobile">
+        <h3 className="dashboard__title">Collabs</h3>
+
+        <DashboardCardListMobile
+          bodySections={collabs}
+          headerSections={collabsHeaderSections}
+          pageName={SectionTypes.collabs}
+          type={collabStateActionType!}
+          setCollabStateActionType={setCollabStateActionType}
+        />
+      </div>
+      <PaginationComponent
+        current_page={pagination.current_page}
+        last_page={pagination.last_page}
+        per_page={pagination.per_page}
+        pageName={SectionTypes.collabs}
+        filterParams=""
+      />
+      <ReusableModal
+        children={<CollabsForm />}
+        openModal={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+      />
+    </ReusablePageStyled>
   );
 };
 

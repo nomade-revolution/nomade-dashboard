@@ -8,6 +8,7 @@ import {
   planTableSections,
   userTableSections,
 } from "sections/plans/utils/plansTableSections";
+import CompanySelector from "sections/shared/components/CompanySelector";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
 import Loader from "sections/shared/components/Loader/Loader";
 import { SectionTypes } from "sections/shared/interfaces/interfaces";
@@ -15,7 +16,7 @@ import { SectionTypes } from "sections/shared/interfaces/interfaces";
 const PlanPage = (): React.ReactElement => {
   const { getPlan, plan, loading } = usePlansContext();
 
-  const { user } = useAuthContext();
+  const { user, selectedCompany } = useAuthContext();
 
   const getPlansData = useCallback(() => {
     getPlan(user.id);
@@ -25,16 +26,23 @@ const PlanPage = (): React.ReactElement => {
     getPlansData();
   }, [getPlansData]);
 
+  const companyData =
+    user?.companies?.find((company) => company.id === selectedCompany) ||
+    ({} as Company);
+
   return (
     <ReusablePageStyled className="plans-page">
       <>
+        <CompanySelector />
+
         <section className="plans-page__mensual">
           <DashboardTable
-            bodySections={[user]}
+            bodySections={[companyData]}
             headerSections={userTableSections}
             pageName={""}
           />
         </section>
+
         {loading ? (
           <Loader width="20px" height="20px" />
         ) : (
@@ -51,7 +59,7 @@ const PlanPage = (): React.ReactElement => {
         <section className="plans-page__mensual">
           <h3>Contactos</h3>
           <DashboardTable
-            bodySections={(user as Company)?.contacts}
+            bodySections={companyData.contacts}
             headerSections={contactsHeader}
             pageName={SectionTypes.plans}
           />
