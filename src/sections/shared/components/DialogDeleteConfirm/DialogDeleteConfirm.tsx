@@ -60,6 +60,7 @@ export default function DialogDeleteConfirm({
     if (onAccept) {
       onAccept(sectionId, reason, reasonText);
       setReason(undefined);
+      setReasonText("");
       return;
     }
     getFunctionForDialog(
@@ -75,6 +76,7 @@ export default function DialogDeleteConfirm({
   const handleOnClose = () => {
     handleClose();
     setReason(undefined);
+    setReasonText("");
   };
 
   return (
