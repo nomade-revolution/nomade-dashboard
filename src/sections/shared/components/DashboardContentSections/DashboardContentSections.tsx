@@ -380,7 +380,8 @@ const DashboardContentSections = ({
     case "company_name":
       return (
         <>
-          {pageName !== SectionTypes.leads ? (
+          {pageName !== SectionTypes.leads &&
+          pageName !== SectionTypes.plans ? (
             <Tooltip title="Ver perfil">
               <Link
                 to={`/cliente/${(section as Company).id}`}

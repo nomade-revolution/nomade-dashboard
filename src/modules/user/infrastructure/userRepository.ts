@@ -1,14 +1,10 @@
 import { Http } from "@core/application";
 import { HttpResponseInterface } from "@core/domain";
 import { User, UserApiResponse, UserRol } from "../domain/User";
-import {
-  GET_CONDITIONS,
-  GET_USER_ROLES,
-  GET_USERS,
-} from "../application/routes";
+import { GET_USER_ROLES, GET_USERS } from "../application/routes";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
 import { AuthRegisterNomadeInterface } from "@auth";
-import { INFLUENCER_EXPORT } from "@company/application/routes";
+import { COMPANY_BASE, INFLUENCER_EXPORT } from "@company/application/routes";
 
 export class UsersRepository {
   private readonly http: Http = Http.getInstance();
@@ -112,10 +108,12 @@ export class UsersRepository {
       return Promise.reject(error);
     }
   };
-  public async getConditions(): Promise<HttpResponseInterface<string>> {
+  public async getConditions(
+    companyId: number,
+  ): Promise<HttpResponseInterface<string>> {
     try {
       const resp = await this.http.get(
-        GET_CONDITIONS + "?filters%5Btype%5D=company&filters%5Blast%5D=true",
+        `${COMPANY_BASE}/${companyId}/status/terms-conditions`,
       );
       return resp;
     } catch (error) {

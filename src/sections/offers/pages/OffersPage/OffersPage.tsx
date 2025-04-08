@@ -15,10 +15,18 @@ import SearchBar from "sections/shared/components/SearchBar/SearchBar";
 import OffersButton from "sections/offers/components/OffersButton/OffersButton";
 import OffersForm from "sections/offers/components/OffersForm/OffersForm";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
+import ExportFilesButton from "sections/shared/components/ExportButton/ExportButton";
 
 const OffersPage = (): React.ReactElement => {
-  const { getAllOffers, offers, pagination, loading, order, createNewOffer } =
-    useOffersContext();
+  const {
+    getAllOffers,
+    offers,
+    pagination,
+    loading,
+    order,
+    createNewOffer,
+    exportOffersExcel,
+  } = useOffersContext();
   const { page } = useParams();
   const [searchText, setSearchText] = useState<string>("");
   const { state } = useLocation();
@@ -76,11 +84,24 @@ const OffersPage = (): React.ReactElement => {
       ) : (
         <OffersPageStyled>
           <div className="dashboard__searchContainer">
-            <OffersButton
-              onClick={handleIsModalOpen}
-              text="Crear oferta"
-              type="create"
-            />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "20px",
+              }}
+            >
+              <OffersButton
+                onClick={handleIsModalOpen}
+                text="Crear oferta"
+                type="create"
+              />
+              <ExportFilesButton
+                action={() => exportOffersExcel()}
+                text="Exportar offers"
+              />
+            </div>
             <SearchBar
               onReset={() => {
                 getOffers();

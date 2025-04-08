@@ -10,6 +10,7 @@ export interface OffersRepository<I> {
   deleteOffer(offer_id: number): Promise<HttpResponseInterface<I>>;
   getOfferById(offer_id: number): Promise<HttpResponseInterface<I>>;
   getOfferCategoriesList(): Promise<HttpResponseInterface<I>>;
+  exportOffers(token: string): Promise<Blob>;
   createOffer(offer: FormData): Promise<HttpResponseInterface<I>>;
   editOffer(
     offer: FormData,

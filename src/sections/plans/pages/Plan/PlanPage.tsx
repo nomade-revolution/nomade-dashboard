@@ -39,7 +39,7 @@ const PlanPage = (): React.ReactElement => {
           <DashboardTable
             bodySections={[companyData]}
             headerSections={userTableSections}
-            pageName={""}
+            pageName={SectionTypes.plans}
           />
         </section>
 
@@ -61,7 +61,7 @@ const PlanPage = (): React.ReactElement => {
           <DashboardTable
             bodySections={companyData.contacts}
             headerSections={contactsHeader}
-            pageName={SectionTypes.plans}
+            pageName={SectionTypes.users}
           />
         </section>
       </>

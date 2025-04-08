@@ -1,11 +1,14 @@
 import { Category } from "modules/user/domain/User";
 import InfluencerCategoriesStyled from "./InfluencerCategoriesStyled";
+import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 
 interface Props {
   categories: Category[];
 }
 
 const InfluencerCategories = ({ categories }: Props): React.ReactElement => {
+  const { user } = useAuthContext();
+
   const parentCategory = categories.find(
     (category) => category.parent_id === null,
   );
@@ -21,7 +24,7 @@ const InfluencerCategories = ({ categories }: Props): React.ReactElement => {
           <li key={parentCategory.name}>{parentCategory.name}</li>
         ) : null}
       </ul>
-      {childCategories.length ? (
+      {user.type === "Nomade" && childCategories.length ? (
         <>
           <span className="categories__title">Subcategoría</span>
           <ul className="categories__list">

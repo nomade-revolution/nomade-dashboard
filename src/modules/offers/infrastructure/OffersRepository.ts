@@ -58,6 +58,23 @@ export class OffersRepository {
     }
   }
 
+  public async exportOffers(token: string): Promise<Blob> {
+    try {
+      const response = await fetch(`${OFFERS_BASE}/export`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.blob();
+
+      return data;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
   public async createOffer(
     offer: FormData,
   ): Promise<

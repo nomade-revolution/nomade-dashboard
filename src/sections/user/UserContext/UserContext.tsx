@@ -56,7 +56,7 @@ interface ContextState {
   users_influencerCompany: User[];
   exportInfluencers: () => void;
   conditions: string;
-  getConditions: () => void;
+  getConditions: (companyId: number) => void;
   getRolesList: () => void;
   rolesList: UserRol[];
   getUser: (user_id: number) => void;
@@ -192,18 +192,21 @@ export const UserContextProvider = ({
     return response;
   }, [repository, token]);
 
-  const getConditions = useCallback(async () => {
-    setLoading(true);
-    const response = await getConditionsData(repository);
+  const getConditions = useCallback(
+    async (companyId: number) => {
+      setLoading(true);
+      const response = await getConditionsData(repository, companyId);
 
-    if (isHttpSuccessResponse(response)) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      setConditions(((response as any)?.data[0]?.content as string) ?? "");
-    }
+      if (isHttpSuccessResponse(response)) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        setConditions(((response as any)?.data[0]?.contents as string) ?? "");
+      }
 
-    setLoading(false);
-    return response;
-  }, [repository]);
+      setLoading(false);
+      return response;
+    },
+    [repository],
+  );
 
   const getRolesList = useCallback(async () => {
     setLoading(true);

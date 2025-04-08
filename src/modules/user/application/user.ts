@@ -46,8 +46,8 @@ export const exportInfluencersData = (
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const getConditions = (usersRepo: any) => {
-  return usersRepo.getConditions();
+export const getConditions = (usersRepo: any, companyId: number) => {
+  return usersRepo.getConditions(companyId);
 };
 
 export const getRolesListData = (

@@ -26,6 +26,13 @@ export const getOfferById = (
   return offersRepo.getOfferById(offer_id);
 };
 
+export const exportOffers = (
+  offersRepo: OffersRepository<FullOffer>,
+  token: string,
+): Promise<Blob> => {
+  return offersRepo.exportOffers(token);
+};
+
 export const getOfferCategoriesList = (
   offersRepo: OffersRepository<FullOffer>,
 ) => {

@@ -4,6 +4,7 @@ import {
   createOffer,
   deleteOffer,
   editOffer,
+  exportOffers,
   getOfferById,
   getOfferCategoriesList,
   offersGetAll,
@@ -16,6 +17,7 @@ import {
 } from "sections/shared/interfaces/interfaces";
 import { OrderItem } from "sections/user/UserContext/UserContext";
 import { HttpResponseInterface } from "@core";
+import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 
 interface ContextState {
   offers: FullOffer[];
@@ -38,6 +40,7 @@ interface ContextState {
   order: OrderItem;
   setOrder: (order: OrderItem) => void;
   getOfferCategories: () => Promise<HttpResponseInterface<FullOffer>>;
+  exportOffersExcel: () => void;
 }
 
 export const OffersContext = createContext<ContextState>({} as ContextState);
@@ -55,6 +58,7 @@ export const OffersContextProvider = ({
     {} as PaginationStucture,
   );
 
+  const { token } = useAuthContext();
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
   const getAllOffers = useCallback(
@@ -91,6 +95,23 @@ export const OffersContextProvider = ({
     },
     [repository],
   );
+
+  const exportOffersExcel = async () => {
+    const response = await exportOffers(repository, token);
+
+    if (response && response instanceof Blob) {
+      const href = await URL.createObjectURL(response);
+      const link = document.createElement("a");
+      link.href = href;
+      link.download = `collabs`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      URL.revokeObjectURL(href);
+    }
+    return response;
+  };
 
   const getOfferCategories = useCallback(async () => {
     const response = await getOfferCategoriesList(repository);
@@ -160,6 +181,7 @@ export const OffersContextProvider = ({
         modifyOffer,
         order,
         setOrder,
+        exportOffersExcel,
       }}
     >
       {children}

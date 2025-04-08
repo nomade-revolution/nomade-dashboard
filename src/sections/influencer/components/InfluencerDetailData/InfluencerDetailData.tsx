@@ -89,7 +89,7 @@ const InfluencerDetailData = ({
         </div>
       </div>
 
-      {influencer.categories && user.type === "Nomade" && (
+      {influencer.categories && (
         <InfluencerCategories categories={influencer.categories} />
       )}
 
