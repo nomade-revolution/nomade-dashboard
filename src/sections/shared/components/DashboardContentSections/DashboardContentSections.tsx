@@ -41,6 +41,9 @@ import {
 import { Fragment } from "react";
 import useActions from "sections/shared/hooks/useActions/useActions";
 import { useInfluencerContext } from "sections/influencer/InfluencerContext/useInfluencerContext";
+import Chip from "../Chip";
+import { Category } from "modules/categories/domain";
+import { useCategoriesContext } from "sections/categories/CategoriesContext/useCategoriesContext";
 
 interface Props {
   headerSection: HeaderSection;
@@ -76,6 +79,7 @@ const DashboardContentSections = ({
   const { influencer } = useInfluencerContext();
   const { modifyOffer } = useOffersContext();
   const { setSocialMediaSelected, setIsSocialMediaModalOpen } = useActions();
+  const { setCategoryToDelete } = useCategoriesContext();
 
   const getBusinessUserCompanies = (section: User) => {
     const { companies } = section;
@@ -222,6 +226,16 @@ const DashboardContentSections = ({
               {(section as SocialMedia).name}
             </span>
           </button>
+        );
+      }
+
+      if (pageName === SectionTypes.categories) {
+        return (
+          <Chip
+            name={(section as Category).name}
+            backgroundColor={theme.colors.mainColor}
+            onClick={() => setCategoryToDelete(section as Category)}
+          />
         );
       }
 
@@ -1003,6 +1017,23 @@ const DashboardContentSections = ({
         </section>
       );
     }
+
+    case "children":
+      return (
+        <div style={{ flexDirection: "row", display: "flex", gap: 10 }}>
+          {(section[headerSection.property as never] as Category[])?.map(
+            (child) => {
+              return (
+                <Chip
+                  name={child.name}
+                  backgroundColor="#7F7F91"
+                  onClick={() => setCategoryToDelete(child as Category)}
+                />
+              );
+            },
+          )}
+        </div>
+      );
 
     default:
       return (

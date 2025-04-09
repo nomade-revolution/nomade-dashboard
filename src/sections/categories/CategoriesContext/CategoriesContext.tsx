@@ -9,6 +9,8 @@ interface ContextState {
   loading: boolean;
   error: string | null;
   getAllCategories: () => void;
+  categoryToDelete: Category | null;
+  setCategoryToDelete: (category: Category | null) => void;
 }
 
 export const CategoriesContext = createContext<ContextState>(
@@ -22,6 +24,9 @@ export const CategoriesContextProvider = ({
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(
+    null,
+  );
 
   const getAllCategories = useCallback(async () => {
     setLoading(true);
@@ -41,6 +46,8 @@ export const CategoriesContextProvider = ({
         categories,
         loading,
         error,
+        categoryToDelete,
+        setCategoryToDelete,
       }}
     >
       {children}

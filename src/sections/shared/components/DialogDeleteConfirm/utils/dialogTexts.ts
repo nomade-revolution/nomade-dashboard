@@ -19,6 +19,8 @@ const dialogTexts = {
             cancelarás la collab.`,
   modifyCollabState: `¿Estás seguro/a de modificar el estado de esta collab? Haciendo click en aceptar,
             modificarás el estado de la collab.`,
+  deleteCategory: `¿Estás seguro/a de borrar esta categoría? Haciendo click en aceptar,
+            borrarás la categoría permanentemente de la base de datos.`,
 };
 
 export default dialogTexts;

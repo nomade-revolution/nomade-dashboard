@@ -4,6 +4,8 @@ import { CollabActionTypes } from "modules/collabs/domain/Collabs";
 
 const getDialogText = (pageName: string, type?: string) => {
   switch (pageName) {
+    case SectionTypes.categories:
+      return dialogTexts.deleteCategory;
     case SectionTypes.collabs:
       if (type === "modifyState") {
         return dialogTexts.modifyCollabState;
