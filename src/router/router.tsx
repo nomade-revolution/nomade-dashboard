@@ -30,6 +30,7 @@ import InfluencerVideoPage from "sections/influencer/pages/InfluencerVideoPage/I
 import UsersDetailPage from "sections/user/pages/UsersPage/UsersDetailPage/UsersDetailPage";
 import UsersAppDetailPage from "sections/user/pages/UsersAppPage/UsersAppDetailPage/UsersAppDetailPage";
 import DocumentationPage from "sections/documentation/pages/DocumentationPage";
+import ContactNomadePage from "sections/contactForm/pages/ContactNomadeForm";
 
 const routes: RouteObject[] = [
   {
@@ -144,6 +145,10 @@ const routes: RouteObject[] = [
       {
         path: appPaths.plan,
         element: <PlanPage />,
+      },
+      {
+        path: appPaths.contact,
+        element: <ContactNomadePage />,
       },
     ],
   },
