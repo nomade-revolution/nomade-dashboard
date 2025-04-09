@@ -29,6 +29,7 @@ import TermConditionsPage from "sections/shared/pages/TermsConditions/TermsCondi
 import InfluencerVideoPage from "sections/influencer/pages/InfluencerVideoPage/InfluencerVideoPage";
 import UsersDetailPage from "sections/user/pages/UsersPage/UsersDetailPage/UsersDetailPage";
 import UsersAppDetailPage from "sections/user/pages/UsersAppPage/UsersAppDetailPage/UsersAppDetailPage";
+import DocumentationPage from "sections/documentation/pages/DocumentationPage";
 
 const routes: RouteObject[] = [
   {
@@ -111,6 +112,10 @@ const routes: RouteObject[] = [
       {
         path: appPaths.categories,
         element: <CategoriesPage />,
+      },
+      {
+        path: appPaths.documentation,
+        element: <DocumentationPage />,
       },
       {
         path: appPaths.collabsReservations,

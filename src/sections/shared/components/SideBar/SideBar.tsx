@@ -8,7 +8,7 @@ import ImageCustom from "../ImageCustom/ImageCustom";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { Company, User } from "modules/user/domain/User";
 import { FullOffer } from "modules/offers/domain/Offer";
-import { FaChevronLeft, FaChevronRight /*FaFileLines*/ } from "react-icons/fa6";
+import { FaChevronLeft, FaChevronRight, FaFileLines } from "react-icons/fa6";
 import { Tooltip } from "@mui/material";
 import { IoInformation } from "react-icons/io5";
 import { BiSolidCategoryAlt } from "react-icons/bi";
@@ -81,6 +81,14 @@ const SideBar = ({
             pathname: "categories",
             quantity: 0,
             path: `/categories`,
+          },
+          {
+            id: 16,
+            icon: <FaFileLines />,
+            name: "Documentación",
+            pathname: "documentation",
+            quantity: 0,
+            path: `/documentation`,
           },
         ];
 
