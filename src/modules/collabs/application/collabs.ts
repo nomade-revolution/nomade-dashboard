@@ -72,3 +72,7 @@ export const editCollabById = (
 ): Promise<HttpResponseInterface<FullCollab>> => {
   return collabsRepo.editCollabById(id, colab);
 };
+
+export const getCollabsBadge = (companyRepo: CollabsRepository<number>) => {
+  return companyRepo.getCollabsBadge();
+};

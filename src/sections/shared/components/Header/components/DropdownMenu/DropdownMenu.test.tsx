@@ -20,6 +20,7 @@ describe("Given a DropdownMenu component", () => {
           badgeCountInfluencers={1}
           badgeCountUsers={1}
           badgeCountsLeads={1}
+          badgeCountsCollabs={1}
           offer={mockOffers[0]}
           user={mockUsers[1]}
         />,

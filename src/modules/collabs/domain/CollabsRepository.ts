@@ -23,4 +23,5 @@ export interface CollabsRepository<I> {
     id: number,
     collab: Partial<FullCollab>,
   ): Promise<HttpResponseInterface<FullCollab>>;
+  getCollabsBadge(): Promise<HttpResponseInterface<I>>;
 }

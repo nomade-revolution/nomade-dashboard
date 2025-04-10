@@ -11,6 +11,9 @@ import { useInfluencerContext } from "sections/influencer/InfluencerContext/useI
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
 import { useMediaQuery } from "@mui/material";
 import { useLeadsContext } from "sections/leads/LeadsContext/useLeadsContext";
+import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
+import { UserTypes } from "modules/user/domain/User";
+import useLogout from "@auth/hook/useLogout";
 
 const Layout = (): React.ReactElement => {
   const location = useLocation();
@@ -23,9 +26,9 @@ const Layout = (): React.ReactElement => {
     getLoggedUser,
     user,
     setSelectedCompany,
-    logoutUser,
     selectedCompany,
   } = useAuthContext();
+  const { handleLogout: logoutUser } = useLogout();
 
   const { getAllOffers, offers } = useOffersContext();
   const { getInfluencersStatusBadge, badgeCount: badgeCountInfluencers } =
@@ -35,6 +38,11 @@ const Layout = (): React.ReactElement => {
 
   const { getLeadsStatusBadge, badgeCount: badgeCountLeads } =
     useLeadsContext();
+  const {
+    getCollabsStatusBadge,
+    badgeCount: badgeCountCollabs,
+    getCollabsCompaniesStatusBadge,
+  } = useCollabsContext();
 
   const navigate = useNavigate();
 
@@ -75,6 +83,16 @@ const Layout = (): React.ReactElement => {
   useEffect(() => {
     getCompaniesStatusBadge();
   }, [getCompaniesStatusBadge]);
+
+  useEffect(() => {
+    if (user.type === UserTypes.company) {
+      if (!selectedCompany) return;
+      getCollabsCompaniesStatusBadge(selectedCompany);
+    } else {
+      getCollabsStatusBadge();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCompany]);
 
   useEffect(() => {
     getLeadsStatusBadge();
@@ -124,6 +142,7 @@ const Layout = (): React.ReactElement => {
                 badgeInfluencers={badgeCountInfluencers}
                 badgeCompanies={badgeCountCompanies}
                 badgeLeads={badgeCountLeads}
+                badgeCollabs={badgeCountCollabs}
                 user={user}
                 offer={offers[0]}
                 isMinimized={isMinimized}
@@ -137,6 +156,7 @@ const Layout = (): React.ReactElement => {
             badgeCountInfluencers={badgeCountInfluencers}
             badgeCountCompanies={badgeCountCompanies}
             badgeCountsLeads={badgeCountLeads}
+            badgeCountsCollabs={badgeCountCollabs}
             offer={offers[0]}
             user={user}
           />

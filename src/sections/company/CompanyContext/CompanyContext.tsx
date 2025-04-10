@@ -47,6 +47,7 @@ interface ContextState {
   editCompanyCms: (company: FormData, id?: number) => void;
   exportCompaniesExcel: () => void;
   exportCompanyBillingExcel: (params?: FilterParams) => void;
+  setBadgeCount: (count: number) => void;
 }
 
 export const CompanyContext = createContext<ContextState>({} as ContextState);
@@ -267,6 +268,7 @@ export const CompanyContextProvider = ({
         editCompanyCms,
         exportCompaniesExcel,
         exportCompanyBillingExcel,
+        setBadgeCount,
       }}
     >
       {children}

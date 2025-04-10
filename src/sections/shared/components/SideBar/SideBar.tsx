@@ -5,7 +5,6 @@ import { CiLogout } from "react-icons/ci";
 import SideBarStyled from "./SideBarStyled";
 import { appPaths } from "../../utils/appPaths/appPaths";
 import ImageCustom from "../ImageCustom/ImageCustom";
-import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { Company, User } from "modules/user/domain/User";
 import { FullOffer } from "modules/offers/domain/Offer";
 import {
@@ -17,12 +16,14 @@ import {
 import { Tooltip } from "@mui/material";
 import { IoInformation } from "react-icons/io5";
 import { BiSolidCategoryAlt } from "react-icons/bi";
+import useLogout from "@auth/hook/useLogout";
 
 interface SideBarProps {
   badgeUsers: number;
   badgeInfluencers: number;
   badgeCompanies: number;
   badgeLeads: number;
+  badgeCollabs: number;
   user: Company | User;
   offer: FullOffer;
   isMinimized: boolean;
@@ -34,14 +35,15 @@ const SideBar = ({
   badgeInfluencers,
   badgeCompanies,
   badgeLeads,
+  badgeCollabs,
   user,
   offer,
   isMinimized,
   setIsMinimized,
 }: SideBarProps): React.ReactElement => {
   const { pathname } = useLocation();
+  const { handleLogout } = useLogout();
 
-  const { logoutUser } = useAuthContext();
   const sideBarUpperSections =
     user.type === "Company"
       ? [
@@ -58,6 +60,7 @@ const SideBar = ({
             badgeInfluencers,
             badgeCompanies,
             badgeLeads,
+            badgeCollabs,
             offer?.id,
           ).filter(
             (section) =>
@@ -86,6 +89,7 @@ const SideBar = ({
             badgeInfluencers,
             badgeCompanies,
             badgeLeads,
+            badgeCollabs,
           ).filter((section) => section.pathname !== "oferta"),
           {
             id: 15,
@@ -104,10 +108,6 @@ const SideBar = ({
             path: `/documentation`,
           },
         ];
-
-  const handleLogout = () => {
-    logoutUser();
-  };
 
   return (
     <SideBarStyled className="side-bar" $isMinimized={isMinimized}>

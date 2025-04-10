@@ -111,6 +111,16 @@ export class CollabsRepository {
       return Promise.reject(error);
     }
   }
+  public async getCollabsBadge(): Promise<HttpResponseInterface<number>> {
+    try {
+      const resp = await this.http.get<number>(
+        `${COLLABS_BASE}/status/nomade/badge`,
+      );
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
   public async createCollab(
     collab: FormData,
   ): Promise<HttpResponseInterface<FullCollab>> {

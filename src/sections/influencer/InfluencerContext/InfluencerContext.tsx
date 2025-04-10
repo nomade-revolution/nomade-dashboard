@@ -49,6 +49,7 @@ interface ContextState {
   isSocialMediaModalOpen: boolean;
   setIsSocialMediaModalOpen: (value: boolean) => void;
   modifyInfluencer: (influencer_id: number, data: Partial<Influencer>) => void;
+  setBadgeCount: (count: number) => void;
 }
 
 export const InfluencerContext = createContext<ContextState>(
@@ -218,6 +219,7 @@ export const InfluencerContextProvider = ({
         modifyInfluencer,
         isSocialMediaModalOpen,
         setIsSocialMediaModalOpen,
+        setBadgeCount,
       }}
     >
       {children}

@@ -11,6 +11,7 @@ import {
   updateCollabHistoryState,
   exportCollabs,
   editCollabById,
+  getCollabsBadge,
 } from "modules/collabs/application/collabs";
 import { FullCollab, RejectedCollab } from "modules/collabs/domain/Collabs";
 import {
@@ -19,6 +20,8 @@ import {
 } from "sections/shared/interfaces/interfaces";
 import { OrderItem } from "sections/user/UserContext/UserContext";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
+import { Http } from "@core";
+import { COLLABS_BASE } from "modules/collabs/application/routes";
 
 interface ContextState {
   collabs: FullCollab[];
@@ -44,6 +47,10 @@ interface ContextState {
   addNewCollab: (collab: FormData) => void;
   exportCollabsExcel: () => void;
   editCollab: (id: number, collab: Partial<FullCollab>) => Promise<boolean>;
+  badgeCount: number;
+  setBadgeCount: (count: number) => void;
+  getCollabsStatusBadge: () => void;
+  getCollabsCompaniesStatusBadge: (companyId: number) => void;
 }
 
 export const CollabsContext = createContext<ContextState>({} as ContextState);
@@ -66,6 +73,7 @@ export const CollabsContextProvider = ({
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [order, setOrder] = useState<OrderItem>({} as OrderItem);
   const [createLoading, setCreateLoading] = useState<boolean>(false);
+  const [badgeCount, setBadgeCount] = useState<number>(0);
 
   const getAllCollabs = useCallback(
     async (page: number, per_page: number, params: FilterParams) => {
@@ -178,13 +186,37 @@ export const CollabsContextProvider = ({
         setCollab(response.data);
         return true;
       }
-      return false;
+      setTimeout(() => setIsSuccess(false), 2000);
       setLoading(false);
+      return false;
     },
     [repository],
   );
 
-  setTimeout(() => setIsSuccess(false), 2000);
+  const getCollabsStatusBadge = useCallback(async () => {
+    const response = await getCollabsBadge(repository);
+
+    if (isHttpSuccessResponse(response)) {
+      setBadgeCount(response.data);
+    }
+
+    return response;
+  }, [repository]);
+
+  const getCollabsCompaniesStatusBadge = useCallback(
+    async (companyId: number) => {
+      const response = await Http.getInstance().get<number>(
+        `${COLLABS_BASE}/status/company/${companyId}/badge`,
+      );
+
+      if (isHttpSuccessResponse(response)) {
+        setBadgeCount(response.data);
+      }
+
+      return response;
+    },
+    [repository],
+  );
 
   return (
     <CollabsContext.Provider
@@ -207,6 +239,10 @@ export const CollabsContextProvider = ({
         addNewCollab,
         exportCollabsExcel,
         editCollab,
+        badgeCount,
+        getCollabsStatusBadge,
+        getCollabsCompaniesStatusBadge,
+        setBadgeCount,
       }}
     >
       {children}

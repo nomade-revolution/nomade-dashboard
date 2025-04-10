@@ -11,6 +11,7 @@ export const getSideBarUpperSections = (
   influencersQuantity: number,
   companiesQuantity: number,
   leadsQuantity: number,
+  collabsQuantity: number,
   offer_id?: number,
 ) => {
   const sideBarUpperSections = [
@@ -65,7 +66,7 @@ export const getSideBarUpperSections = (
       icon: <FaPeopleArrows />,
       name: "Collabs",
       pathname: "collabs",
-      quantity: 0,
+      quantity: collabsQuantity,
       path: "/collabs/page/1",
       subSection: "collab",
     },

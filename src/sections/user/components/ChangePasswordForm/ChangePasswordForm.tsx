@@ -5,6 +5,7 @@ import Loader from "sections/shared/components/Loader/Loader";
 import changePasswordScheme from "./validations/changePasswordScheme";
 import useChangePasswordForm from "sections/auth/hooks/useChangePasswordForm";
 import ChangePasswordFormStyled from "./ChangePasswordFormStyled";
+import useLogout from "@auth/hook/useLogout";
 
 const initialState = {
   password: "",
@@ -15,7 +16,9 @@ const initialState = {
 const ChangePasswordForm = () => {
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const { sendForm } = useChangePasswordForm();
-  const { isSuccess, logoutUser } = useAuthContext();
+  const { isSuccess } = useAuthContext();
+  const { handleLogout: logoutUser } = useLogout();
+
   const handleSubmitForm = async (
     values: {
       password: string;

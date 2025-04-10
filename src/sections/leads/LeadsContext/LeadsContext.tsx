@@ -33,6 +33,7 @@ interface ContextState {
   getLeadFromHash: (hash: string) => void;
   badgeCount: number;
   getLeadsStatusBadge: () => void;
+  setBadgeCount: (count: number) => void;
 }
 
 export const LeadsContext = createContext<ContextState>({} as ContextState);
@@ -124,6 +125,7 @@ export const LeadsContextProvider = ({
         getLeadFromHash,
         order,
         setOrder,
+        setBadgeCount,
       }}
     >
       {children}

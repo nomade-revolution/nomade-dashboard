@@ -62,6 +62,7 @@ interface ContextState {
   getUser: (user_id: number) => void;
   userData: User | null;
   modifyUserById: (user_id: number, data: FormData) => void;
+  setBadgeCount: (count: number) => void;
 }
 
 export const UserContext = createContext<ContextState>({} as ContextState);
@@ -247,6 +248,7 @@ export const UserContextProvider = ({
         getUser,
         userData,
         modifyUserById,
+        setBadgeCount,
       }}
     >
       {children}

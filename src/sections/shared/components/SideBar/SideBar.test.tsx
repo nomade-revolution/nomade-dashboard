@@ -13,6 +13,7 @@ describe("Given a SideBar component", () => {
           badgeInfluencers={1}
           badgeCompanies={1}
           badgeLeads={1}
+          badgeCollabs={1}
           offer={mockOffers[0]}
           user={mockUsers[1]}
           isMinimized={false}

@@ -9,12 +9,14 @@ import { appPaths } from "sections/shared/utils/appPaths/appPaths";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { User } from "modules/user/domain/User";
 import { FullOffer } from "modules/offers/domain/Offer";
+import useLogout from "@auth/hook/useLogout";
 
 interface HeaderProps {
   badgeCountUsers: number;
   badgeCountInfluencers: number;
   badgeCountCompanies: number;
   badgeCountsLeads: number;
+  badgeCountsCollabs: number;
   user: User;
   offer: FullOffer;
 }
@@ -24,11 +26,13 @@ const Header = ({
   badgeCountInfluencers,
   badgeCountCompanies,
   badgeCountsLeads,
+  badgeCountsCollabs,
   user,
   offer,
 }: HeaderProps): React.ReactElement => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const { logoutUser, token } = useAuthContext();
+  const { token } = useAuthContext();
+  const { handleLogout: logoutUser } = useLogout();
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
@@ -74,6 +78,7 @@ const Header = ({
           badgeCountInfluencers={badgeCountInfluencers}
           badgeCountCompanies={badgeCountCompanies}
           badgeCountsLeads={badgeCountsLeads}
+          badgeCountsCollabs={badgeCountsCollabs}
           offer={offer}
           user={user}
         />
