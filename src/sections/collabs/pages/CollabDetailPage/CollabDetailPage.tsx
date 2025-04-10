@@ -9,7 +9,7 @@ import GoBackButton from "sections/shared/components/GoBackButton/GoBackButton";
 import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
 import { useAddressContext } from "sections/address/AddressContext/useAddressContext";
 import ReusableStepper from "sections/shared/components/ReusableStepper/ReusableStepper";
-import { CollabActionTypes } from "modules/collabs/domain/Collabs";
+import { CollabActionTypes, CollabTypes } from "modules/collabs/domain/Collabs";
 import ActionButton from "sections/shared/components/ActionButton/ActionButton";
 import useActions from "sections/shared/hooks/useActions/useActions";
 import DialogDeleteConfirm from "sections/shared/components/DialogDeleteConfirm/DialogDeleteConfirm";
@@ -108,6 +108,7 @@ const CollabDetailPage = (): React.ReactElement => {
 
   const renderSendPackageButton = () => {
     if (user.type !== UserTypes.company) return null;
+    if (collab.type !== CollabTypes.brand) return null;
     if (!collab.state) return null;
     if (
       collab.state.id === collabStates.COLAB_INCIDENT_STATE ||
