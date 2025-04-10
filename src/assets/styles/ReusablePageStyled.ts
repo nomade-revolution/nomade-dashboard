@@ -432,7 +432,7 @@ const ReusablePageStyled = styled.main`
       }
 
       &--inactive {
-        color: #c00000;
+        color: #3f3f3f;
         font-size: ${(props) => props.theme.fontsSize.__SM};
       }
 
@@ -443,6 +443,11 @@ const ReusablePageStyled = styled.main`
 
       &--standby {
         color: #ba7e83;
+        font-size: ${(props) => props.theme.fontsSize.__SM};
+      }
+
+      &--banned {
+        color: #e02020;
         font-size: ${(props) => props.theme.fontsSize.__SM};
       }
     }

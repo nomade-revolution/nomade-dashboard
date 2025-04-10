@@ -543,7 +543,19 @@ const DashboardContentSections = ({
     case "state":
       if (pageName === "influencers") {
         return (
-          <span className="dashboard__country">
+          <span
+            className={`dashboard__status${
+              (section as Influencer).state?.name === "Activo"
+                ? "--active"
+                : (section as Influencer).state?.name === "Inactivo"
+                  ? "--inactive"
+                  : (section as Influencer).state?.name === "Pendiente"
+                    ? "--pending"
+                    : (section as Influencer).state?.name === "Pausa"
+                      ? "--standby"
+                      : "--banned"
+            }`}
+          >
             {(section as Influencer).state?.name || ""}
           </span>
         );
