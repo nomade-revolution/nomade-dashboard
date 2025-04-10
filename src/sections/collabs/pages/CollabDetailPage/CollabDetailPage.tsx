@@ -27,6 +27,7 @@ import {
 import * as collabStates from "../../utils/collabsStates";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
 import EditCollabForm from "sections/collabs/components/CollabsForm/EditCollabsForm/EditCollabsForm";
+import { UserTypes } from "modules/user/domain/User";
 
 const HIDE_CANCEL_BUTTON_STATES = [
   collabStates.COLAB_REJECTED_STATE,
@@ -66,6 +67,11 @@ const CollabDetailPage = (): React.ReactElement => {
     setIsAcceptOrRefuse(CollabActionTypes.accept);
   };
 
+  const handleOpenDialogSendPackage = () => {
+    handleIsDialogOpen(setIsDialogOpen);
+    setIsAcceptOrRefuse(CollabActionTypes.sendPackage);
+  };
+
   const handleOpenDialogCancel = () => {
     handleIsDialogOpen(setIsDialogOpen);
     setIsAcceptOrRefuse(CollabActionTypes.cancel);
@@ -100,7 +106,25 @@ const CollabDetailPage = (): React.ReactElement => {
     return true;
   };
 
-  //Añadir botones para modificar estado en usuario company
+  const renderSendPackageButton = () => {
+    if (user.type !== UserTypes.company) return null;
+    if (!collab.state) return null;
+    if (
+      collab.state.id === collabStates.COLAB_INCIDENT_STATE ||
+      collab.state.id === collabStates.COLAB_ACCEPTED_STATE
+    ) {
+      return (
+        <ActionButton
+          icon={<FaCheckCircle />}
+          onClick={handleOpenDialogSendPackage}
+          text="Paquete enviado"
+          color={theme.colors.softGreen}
+        />
+      );
+    }
+    return null;
+  };
+
   return (
     <>
       {loading || loadingInfluencer || loadingOffer ? (
@@ -154,6 +178,7 @@ const CollabDetailPage = (): React.ReactElement => {
                     )}
                   </>
                 )}
+              {renderSendPackageButton()}
             </section>
           </header>
           <div className="detail-collab__data">

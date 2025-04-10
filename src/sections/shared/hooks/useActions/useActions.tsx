@@ -52,6 +52,11 @@ const useActions = () => {
     setTimeout(() => navigate(0), 1500);
   };
 
+  const sendPackageCollab = async (collabId: number) => {
+    await updateCollabState(collabId, collabStates.COLAB_SENT_STATE);
+    setTimeout(() => navigate(0), 1500);
+  };
+
   const handleCollabStateUpdate = async (
     state_id: number,
     setIsDialogOpen: (value: boolean) => void,
@@ -79,6 +84,7 @@ const useActions = () => {
     cancelCollab,
     setSocialMediaSelected,
     setIsSocialMediaModalOpen,
+    sendPackageCollab,
   };
 };
 

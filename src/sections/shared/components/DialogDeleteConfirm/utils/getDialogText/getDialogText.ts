@@ -19,6 +19,9 @@ const getDialogText = (pageName: string, type?: string) => {
       if (type === CollabActionTypes.cancel) {
         return dialogTexts.cancelCollab;
       }
+      if (type === CollabActionTypes.sendPackage) {
+        return dialogTexts.sendPackageCollab;
+      }
       return dialogTexts.deleteCollab;
     case SectionTypes.offers:
       return dialogTexts.deleteOffer;

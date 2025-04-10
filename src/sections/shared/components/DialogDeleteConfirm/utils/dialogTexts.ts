@@ -21,6 +21,8 @@ const dialogTexts = {
             modificarás el estado de la collab.`,
   deleteCategory: `¿Estás seguro/a de borrar esta categoría? Haciendo click en aceptar,
             borrarás la categoría permanentemente de la base de datos.`,
+  sendPackageCollab: `¿Estás seguro/a de enviar el paquete? Haciendo click en aceptar,
+            marcarás como enviado el paquete.`,
 };
 
 export default dialogTexts;
