@@ -66,7 +66,7 @@ const DropdownMenuStyled = styled.div`
 
   .user-actions {
     padding-top: 40px;
-    padding-bottom: 150px;
+    padding-bottom: 100px;
     border-top: 1px solid ${(props) => props.theme.borders.lightGrey};
     display: flex;
     flex-direction: column;

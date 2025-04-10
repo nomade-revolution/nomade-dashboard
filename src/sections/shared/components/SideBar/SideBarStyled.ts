@@ -34,7 +34,7 @@ const SideBarStyled = styled.div<Props>`
     display: flex;
     flex-direction: column;
     gap: 20px;
-    padding-bottom: 150px;
+    padding-bottom: 100px;
     position: relative;
     padding-top: ${(props) => (props.$isMinimized ? "30px" : 0)};
 
