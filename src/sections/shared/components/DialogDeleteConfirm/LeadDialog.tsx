@@ -71,7 +71,7 @@ export default function LeadDialog({
             sx={{ color: "#000", fontWeight: 700 }}
             disabled={false}
           >
-            {isSuccess ? <SuccessFeedback text="Cancelado" /> : "Enviado"}
+            {isSuccess ? <SuccessFeedback text="Cancelado" /> : "Enviar"}
           </Button>
 
           <Button onClick={handleClose} sx={{ color: "#000", fontWeight: 700 }}>

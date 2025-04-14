@@ -63,6 +63,7 @@ const OfferDetailsPage = () => {
 
   // override url param id
   useEffect(() => {
+    if (user.type !== UserTypes.company) return;
     if (!offers[0]?.id) return;
     if (id !== offers[0]?.id?.toString()) {
       navigate(`/oferta/${offers[0]?.id}`);
@@ -151,7 +152,7 @@ const OfferDetailsPage = () => {
         <h3 className="offer-detail__title">
           {offer.company}{" "}
           <span className={getTypesClassNames(offer, "offer-detail")}>
-            ( {offer.type} )
+            ({offer.type})
           </span>
         </h3>
         <CompanySelector />
