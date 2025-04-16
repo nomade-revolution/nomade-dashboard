@@ -31,6 +31,7 @@ import UsersDetailPage from "sections/user/pages/UsersPage/UsersDetailPage/Users
 import UsersAppDetailPage from "sections/user/pages/UsersAppPage/UsersAppDetailPage/UsersAppDetailPage";
 import DocumentationPage from "sections/documentation/pages/DocumentationPage";
 import ContactNomadePage from "sections/contactForm/pages/ContactNomadeForm";
+import TermsConditionsOfflinePage from "sections/shared/pages/TermsConditionsOffline/TermsConditionsOffline";
 
 const routes: RouteObject[] = [
   {
@@ -133,6 +134,10 @@ const routes: RouteObject[] = [
       {
         path: appPaths.termsConditions,
         element: <TermConditionsPage />,
+      },
+      {
+        path: appPaths.termsConditionsOffline,
+        element: <TermsConditionsOfflinePage />,
       },
       {
         path: appPaths.createUser,

@@ -39,6 +39,7 @@ const ProtectedRoute = ({ element }: ProtectedRouteProps): JSX.Element => {
     if (
       location.pathname !== appPaths.login &&
       location.pathname !== appPaths.register &&
+      location.pathname !== appPaths.termsConditionsOffline &&
       location.pathname !== appPaths.recovery_password &&
       location.pathname !== appPaths.reset_password &&
       location.pathname !== appPaths.leadsSubmit &&

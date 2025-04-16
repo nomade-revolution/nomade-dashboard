@@ -16,6 +16,8 @@ import { Link } from "react-router-dom";
 import CustomCheckbox from "sections/shared/components/CustomCheckbox/CustomCheckbox";
 
 import { useContactContext } from "sections/contact/ContactContext/useContactContext";
+import { appPaths } from "sections/shared/utils/appPaths/appPaths";
+import theme from "assets/styles/theme";
 
 interface Props {
   lead: CompanyRegisterStructure;
@@ -439,6 +441,22 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                 value={hash}
               />
             </section>
+
+            <div className="lead-form__checkbox-container">
+              <CustomCheckbox onChange={handleIsChecked} checked={isCheked} />
+              <span>
+                He leído y acepto los{" "}
+                <Link
+                  to={appPaths.termsConditionsOffline}
+                  target="_blank"
+                  style={{
+                    color: theme.fontsColors.corporativeColor,
+                  }}
+                >
+                  Términos y Condiciones
+                </Link>
+              </span>
+            </div>
 
             <section className="datasheet-form__footer">
               <button

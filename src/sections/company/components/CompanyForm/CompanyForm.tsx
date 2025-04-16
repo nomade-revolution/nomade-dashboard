@@ -26,6 +26,8 @@ import { formatDateWithDash } from "sections/shared/utils/formatDate/formatDate"
 import { Company } from "modules/user/domain/User";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { Checkbox } from "@mui/material";
+import { appPaths } from "sections/shared/utils/appPaths/appPaths";
+import theme from "assets/styles/theme";
 
 const EXCLUDED_FIELDS = [
   "id",
@@ -734,7 +736,18 @@ const CompanyForm = ({
                 value={checkedTerms}
                 checked={checkedTerms}
               />
-              <span>He leído y acepto las condiciones y términos de uso</span>
+              <span>
+                He leído y acepto los{" "}
+                <Link
+                  to={appPaths.termsConditionsOffline}
+                  target="_blank"
+                  style={{
+                    color: theme.fontsColors.corporativeColor,
+                  }}
+                >
+                  Términos y Condiciones
+                </Link>
+              </span>
             </div>
           ) : null}
           <ReusableModal

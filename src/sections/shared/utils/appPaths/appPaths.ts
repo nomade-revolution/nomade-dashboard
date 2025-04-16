@@ -29,6 +29,7 @@ export const appPaths = {
   usersApp: "/users-app/page/:page",
   userApp: "/user-app/:id",
   termsConditions: "/terms-conditions",
+  termsConditionsOffline: "/terms-and-conditions",
   documentation: "/documentation",
   contact: "/contact",
 };

@@ -77,14 +77,14 @@ const Layout = (): React.ReactElement => {
   }, [getAllOffers, user, selectedCompany]);
 
   useEffect(() => {
+    if (!user?.type) return;
     getInfluencersStatusBadge();
-  }, [getInfluencersStatusBadge]);
-
-  useEffect(() => {
     getCompaniesStatusBadge();
-  }, [getCompaniesStatusBadge]);
+    getLeadsStatusBadge();
+  }, []);
 
   useEffect(() => {
+    if (!user?.type) return;
     if (user.type === UserTypes.company) {
       if (!selectedCompany) return;
       getCollabsCompaniesStatusBadge(selectedCompany);
@@ -93,10 +93,6 @@ const Layout = (): React.ReactElement => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCompany]);
-
-  useEffect(() => {
-    getLeadsStatusBadge();
-  }, [getLeadsStatusBadge]);
 
   useEffect(() => {
     if (!user) {
@@ -114,6 +110,7 @@ const Layout = (): React.ReactElement => {
         className={
           location.pathname !== appPaths.login &&
           location.pathname !== appPaths.register &&
+          location.pathname !== appPaths.termsConditionsOffline &&
           location.pathname !== appPaths.recovery_password &&
           location.pathname !== appPaths.reset_password &&
           location.pathname !== appPaths.leadsSubmit
@@ -125,6 +122,7 @@ const Layout = (): React.ReactElement => {
           className={
             location.pathname === appPaths.login ||
             location.pathname === appPaths.register ||
+            location.pathname === appPaths.termsConditionsOffline ||
             location.pathname === appPaths.recovery_password ||
             location.pathname === appPaths.reset_password ||
             location.pathname === appPaths.leadsSubmit
@@ -134,6 +132,7 @@ const Layout = (): React.ReactElement => {
         >
           {location.pathname !== appPaths.login &&
             location.pathname !== appPaths.register &&
+            location.pathname !== appPaths.termsConditionsOffline &&
             location.pathname !== appPaths.recovery_password &&
             location.pathname !== appPaths.reset_password &&
             location.pathname !== appPaths.leadsSubmit && (
@@ -166,6 +165,7 @@ const Layout = (): React.ReactElement => {
           className={
             location.pathname == appPaths.login ||
             location.pathname === appPaths.register ||
+            location.pathname === appPaths.termsConditionsOffline ||
             location.pathname === appPaths.recovery_password ||
             location.pathname === appPaths.reset_password ||
             location.pathname === appPaths.leadsSubmit

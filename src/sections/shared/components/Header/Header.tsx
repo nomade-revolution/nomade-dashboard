@@ -57,6 +57,7 @@ const Header = ({
       />
       {pathname !== appPaths.login &&
         pathname !== appPaths.register &&
+        pathname !== appPaths.termsConditionsOffline &&
         pathname !== appPaths.recovery_password &&
         pathname !== appPaths.reset_password &&
         pathname !== appPaths.leadsSubmit &&
