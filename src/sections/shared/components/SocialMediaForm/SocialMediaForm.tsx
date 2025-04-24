@@ -292,7 +292,7 @@ const SocialMediaForm = ({
             </section>
 
             <section className="stats__section">
-              <h5 className="stats__title">Visualizaciones</h5>
+              <h5 className="stats__title">Visualizaciones (k)</h5>
               <Field
                 type="number"
                 className="form-subsection__field"

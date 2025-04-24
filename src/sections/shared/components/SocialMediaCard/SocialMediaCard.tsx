@@ -13,10 +13,7 @@ import { FaUserFriends } from "react-icons/fa";
 import { IoStatsChart } from "react-icons/io5";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { FaPlay } from "react-icons/fa6";
-import {
-  parseFollowers,
-  toK,
-} from "sections/influencer/utils/influencersSections";
+import { parseFollowers } from "sections/influencer/utils/influencersSections";
 import theme from "assets/styles/theme";
 
 interface Props {
@@ -96,7 +93,7 @@ const SocialMediaCard = ({
           <span className="social-card__text-icon">
             <FaPlay size={20} />{" "}
             {socialMedia?.stories_view
-              ? `${toK(socialMedia?.stories_view)} visualizaciones`
+              ? `${parseFollowers(socialMedia?.stories_view)} visualizaciones`
               : "-"}
           </span>
         )}

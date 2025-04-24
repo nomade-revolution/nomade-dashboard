@@ -34,10 +34,7 @@ import { formatSliceString } from "sections/shared/utils/getDateIntoHourFormat/g
 import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
 import { AddresTableData } from "sections/offers/pages/OfferDetailPage/OfferDetailPage";
 import getSocialMediaIcons from "sections/shared/utils/getSocialMediaIcons/getSocialMediaIcons";
-import {
-  parseFollowers,
-  toK,
-} from "sections/influencer/utils/influencersSections";
+import { parseFollowers } from "sections/influencer/utils/influencersSections";
 import { Fragment } from "react";
 import useActions from "sections/shared/hooks/useActions/useActions";
 import { useInfluencerContext } from "sections/influencer/InfluencerContext/useInfluencerContext";
@@ -168,7 +165,7 @@ const DashboardContentSections = ({
               fontWeight: "bold",
             }}
           >
-            {toK((section as SocialMedia).stories_view || 0)}
+            {parseFollowers((section as SocialMedia).stories_view || 0)}
           </span>
         );
       }
