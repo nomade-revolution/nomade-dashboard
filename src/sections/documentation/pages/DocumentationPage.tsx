@@ -1,8 +1,13 @@
-// import { Http } from "@core";
+import { Http } from "@core";
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
-// import { DOCUMENTATION } from "modules/documentation/application/routes";
+import { DOCUMENTATION } from "modules/documentation/application/routes";
 import { useEffect, useState } from "react";
 import Loader from "sections/shared/components/Loader/Loader";
+
+interface DocumentationData {
+  content: string;
+  // otras propiedades si existen
+}
 
 const DocumentationPage = () => {
   const [loading, setLoading] = useState(false);
@@ -10,10 +15,15 @@ const DocumentationPage = () => {
 
   const fetchDocumentation = async () => {
     try {
-      // const res = await Http.getInstance().get(DOCUMENTATION);
-      // console.log("res", res?.data);
-      // setDocumentation(res.data);
-      setDocumentation("<h1>Documentación</h1>");
+      const res =
+        await Http.getInstance().get<DocumentationData>(DOCUMENTATION);
+
+      // Verificar que res tiene la propiedad data
+      if (res && "data" in res) {
+        setDocumentation(res.data.content);
+      }
+
+      //setDocumentation("<h1>Documentación</h1>");
       setLoading(false);
     } catch (error) {
       setLoading(false);
