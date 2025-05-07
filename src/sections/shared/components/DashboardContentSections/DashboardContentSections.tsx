@@ -950,6 +950,21 @@ const DashboardContentSections = ({
       );
     }
     case "address": {
+      if (pageName === SectionTypes.collabs) {
+        return (
+          <section
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <span className="dashboard__name">
+              {(section as FullCollab).address}
+            </span>
+          </section>
+        );
+      }
       return (
         <section
           style={{
