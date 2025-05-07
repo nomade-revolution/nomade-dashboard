@@ -46,6 +46,7 @@ const PlansPage = (): React.ReactElement => {
   const handleSearchByText = async (text: string) => {
     await getPlansData(text);
   };
+
   const handleCalendarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedMonth = event.target.value;
 
@@ -57,6 +58,7 @@ const PlansPage = (): React.ReactElement => {
       handleSearch(formattedDate);
     }
   };
+
   const getPlansData = useCallback(
     (text?: string) => {
       const filters: FilterParams = {
@@ -122,7 +124,10 @@ const PlansPage = (): React.ReactElement => {
                       <div className="plans-page__filter-active">
                         <span> {date}</span>
                         <button
-                          onClick={() => setDate("")}
+                          onClick={() => {
+                            setDate("");
+                            handleSearch();
+                          }}
                           className="plans-page__filter-close"
                         >
                           <IoClose color="#fff" />
@@ -186,7 +191,10 @@ const PlansPage = (): React.ReactElement => {
                       <div className="plans-page__filter-active">
                         <span> {date}</span>
                         <button
-                          onClick={() => setDate("")}
+                          onClick={() => {
+                            setDate("");
+                            handleSearch();
+                          }}
                           className="plans-page__filter-close"
                         >
                           <IoClose color="#fff" />
