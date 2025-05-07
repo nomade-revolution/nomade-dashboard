@@ -17,7 +17,7 @@ export const addressSchema = yup.object({
   //   .matches(/^\+?[0-9\s-]{7,15}$/, errorMessages.invalidPhone),
   country_id: yup.number().required(errorMessages.required),
   city_id: yup.string().required(errorMessages.required),
-  name: yup.string().required(errorMessages.required),
+  name: yup.string().optional(),
   province: yup.string().required(errorMessages.required),
   zip_code: yup
     .string()
