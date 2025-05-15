@@ -25,6 +25,7 @@ import theme from "assets/styles/theme";
 import LeadDialog from "../DialogDeleteConfirm/LeadDialog";
 import { useState } from "react";
 import { SocialMedia } from "@influencer/domain/InfluencerSocialMedia";
+import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
 
 interface ActionsProps {
   pageName: string;
@@ -50,6 +51,7 @@ const Actions = ({
     setIsSocialMediaModalOpen,
   } = useActions();
   const { user } = useAuthContext();
+  const { getAllRejectedCollabReasons } = useCollabsContext();
   const [isLeadOpen, setIsLeadOpen] = useState(false);
 
   // const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -106,8 +108,9 @@ const Actions = ({
                 <button
                   aria-label="Rechazar"
                   onClick={() => {
-                    handleIsDialogOpen(setIsDialogOpen),
-                      setCollabStateActionType!(CollabActionTypes.refuse);
+                    handleIsDialogOpen(setIsDialogOpen);
+                    setCollabStateActionType!(CollabActionTypes.refuse);
+                    getAllRejectedCollabReasons();
                   }}
                 >
                   <BsFillXSquareFill className="icon" color="#C64B56" />

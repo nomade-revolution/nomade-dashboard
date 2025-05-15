@@ -14,7 +14,7 @@ import SuccessFeedback from "../Feedbacks/components/SuccessFeedback/SuccessFeed
 import { CollabActionTypes } from "modules/collabs/domain/Collabs";
 import CollabsRejectedReasons from "sections/collabs/components/CollabsRejectedReasons/CollabsRejectedReasons";
 import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -49,12 +49,7 @@ export default function DialogDeleteConfirm({
   const [reason, setReason] = useState<number | undefined>(undefined);
   const [reasonText, setReasonText] = useState<string>("");
   const { getFunctionForDialog, isSuccess } = useDialog();
-  const { collabRejectedReasons, getAllRejectedCollabReasons } =
-    useCollabsContext();
-
-  useEffect(() => {
-    type === CollabActionTypes.refuse && getAllRejectedCollabReasons();
-  }, [getAllRejectedCollabReasons, type]);
+  const { collabRejectedReasons } = useCollabsContext();
 
   const handleOnAccept = () => {
     if (onAccept) {
