@@ -26,6 +26,7 @@ export enum SectionTypes {
   collabsReservations = "collabs-reservations",
   plans = "planes",
   socialMedia = "social-media",
+  collabDetail = "collabDetail",
 }
 
 export interface OptionsStructure {

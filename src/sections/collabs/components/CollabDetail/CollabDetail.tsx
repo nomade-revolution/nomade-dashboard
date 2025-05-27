@@ -7,6 +7,7 @@ import DashboardTable from "sections/shared/components/DashboardTable/DashboardT
 import { SocialMedia } from "@influencer/domain/InfluencerSocialMedia";
 import { collabDataTableData, collabDetailTableData } from "./collabTableData";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
+import { SectionTypes } from "sections/shared/interfaces/interfaces";
 
 interface Props {
   collab: FullCollab;
@@ -31,7 +32,7 @@ const CollabDetail = ({
           { ...collab, socialMedia: influencer.socialMedia ?? [] },
         ]}
         headerSections={collabDetailTableData}
-        pageName="collabDetail"
+        pageName={SectionTypes.collabDetail}
       />
       {collab.type !== "Brand" && (
         <>

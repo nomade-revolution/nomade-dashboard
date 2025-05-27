@@ -365,9 +365,11 @@ const DashboardContentSections = ({
                     ? (section as Company).id
                     : pageName === SectionTypes.offers
                       ? (section as Offer).company_id
-                      : pageName === SectionTypes.collabs
+                      : pageName === SectionTypes.collabDetail
                         ? (section as FullCollab).company_id
-                        : (section as Offer).user_id
+                        : pageName === SectionTypes.collabs
+                          ? (section as FullCollab).company_id
+                          : (section as Offer).user_id
                 }`}
                 style={{
                   textDecoration: "underline",
