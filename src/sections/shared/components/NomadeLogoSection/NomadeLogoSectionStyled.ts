@@ -13,9 +13,18 @@ const NomadeLogoSectionStyled = styled.section`
     height: 100%;
   }
 
+  .side-bar__image {
+    width: 45%;
+    height: auto;
+  }
+
   .nomade-section {
     &__slogan {
-      color: ${(props) => props.theme.colors.mainColor};
+      color: white;
+      height: 30vh;
+      width: 45%;
+      text-align: left;
+      font-size: 20px;
     }
 
     &__circles-container {

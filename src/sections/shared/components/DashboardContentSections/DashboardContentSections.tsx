@@ -403,7 +403,7 @@ const DashboardContentSections = ({
           className={`dashboard__plan${
             (section as Company).plan.plan_name === "Básico"
               ? "--basic"
-              : (section as Company).plan.plan_name === "Estandar"
+              : (section as Company).plan.plan_name === "Estándar"
                 ? "--standard"
                 : (section as Company).plan.plan_name === "Premium"
                   ? "--premium"
@@ -490,23 +490,22 @@ const DashboardContentSections = ({
           <ul className="dashboard__time-list">
             {calendar.map((time) => (
               <li key={time.address_id}>
-                {time.week?.map(
-                  (day) =>
-                    day?.map((slot: TimeSlotOffer) => {
-                      const dayInitial = slot.day_name.charAt(0);
-                      if (!daysSet.has(dayInitial)) {
-                        daysSet.add(dayInitial);
-                        return (
-                          <span
-                            key={`${slot.day_of_week}-${slot.day_name}`}
-                            className="dashboard__time-listItem"
-                          >
-                            {dayInitial}
-                          </span>
-                        );
-                      }
-                      return null;
-                    }),
+                {time.week?.map((day) =>
+                  day?.map((slot: TimeSlotOffer) => {
+                    const dayInitial = slot.day_name.charAt(0);
+                    if (!daysSet.has(dayInitial)) {
+                      daysSet.add(dayInitial);
+                      return (
+                        <span
+                          key={`${slot.day_of_week}-${slot.day_name}`}
+                          className="dashboard__time-listItem"
+                        >
+                          {dayInitial}
+                        </span>
+                      );
+                    }
+                    return null;
+                  }),
                 )}
               </li>
             ))}
@@ -628,7 +627,7 @@ const DashboardContentSections = ({
         <span className="dashboard__type">
           {(section as FullCollab).day
             ? (section as FullCollab).day
-            : (section as FullCollab).from_day ?? "-"}
+            : ((section as FullCollab).from_day ?? "-")}
         </span>
       );
 
@@ -722,7 +721,7 @@ const DashboardContentSections = ({
           className={`dashboard__plan${
             (section as Plan).plan === "Básico"
               ? "--basic"
-              : (section as Plan).plan === "Estandar"
+              : (section as Plan).plan === "Estándar"
                 ? "--standard"
                 : (section as Plan).plan === "Premium"
                   ? "--premium"

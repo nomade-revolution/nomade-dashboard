@@ -140,11 +140,11 @@ const DashBoardHeaderCell = ({ section }: Props) => {
       >
         {section.name}
         {isSort === null && section.sortTag !== "" ? (
-          <BsFilterLeft color={theme.colors.mainColor} size={15} />
+          <BsFilterLeft color={theme.colors.mineralGreen} size={15} />
         ) : isSort === "ASC" ? (
-          <BiSolidUpArrow color={theme.colors.mainColor} size={10} />
+          <BiSolidUpArrow color={theme.colors.mineralGreen} size={10} />
         ) : isSort === "DESC" ? (
-          <BiSolidDownArrow color={theme.colors.mainColor} size={10} />
+          <BiSolidDownArrow color={theme.colors.mineralGreen} size={10} />
         ) : null}
       </button>
     </StyledTableCell>

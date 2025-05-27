@@ -27,12 +27,13 @@ const RecoverPasswordStyled = styled.form`
 
   .login-form {
     &__submit {
-      background: ${(props) => props.theme.colors.mainColor};
+      background: ${(props) => props.theme.colors.outerSpace};
       color: ${(props) => props.theme.fontsColors.light};
       font-weight: ${(props) => props.theme.fontWeights.mediumBold};
       height: ${(props) => props.theme.heights.inputs};
       border-radius: ${(props) => props.theme.borderRadius.submitButton};
       width: 100%;
+      text-transform: uppercase;
     }
 
     &__label {

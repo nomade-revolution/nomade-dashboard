@@ -85,7 +85,7 @@ const SideBar = ({
           className="side-bar__image"
           height={50}
           width={200}
-          image="/main_logo.png"
+          image="/Nomade_Logo_Color.svg"
         />
       )}
       <div className="side-bar__actions actions">

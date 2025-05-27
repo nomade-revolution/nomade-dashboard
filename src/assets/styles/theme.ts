@@ -1,6 +1,6 @@
 export const theme = {
   colors: {
-    mainColor: "#8C9B6E",
+    mainColor: "#335d53",
     secondaryColor: "#ECEDE6",
     tertiaryColor: "#FEDA94",
     inputsBorderColors: "#E7E6E6",
@@ -17,6 +17,12 @@ export const theme = {
     darkRed: "#AD6975",
     purple: "#7D26CD",
     softMainColor: "#d1d6c5",
+    outerSpace: "#243c34",
+    mineralGreen: "#335d53",
+    seaMist: "#C8DCCD",
+    antiqueWhite: "#F6EDD8",
+    paleLime: "#CCF663",
+    chineseWhite: "#E6E3DA",
   },
   fonts: {
     primaryFont: "Roboto",
@@ -30,6 +36,12 @@ export const theme = {
     darkBlue: "#125AA9",
     dashBoard: "#273241",
     success: "#30D59B",
+    outerSpace: "#243c34",
+    mineralGreen: "#335d53",
+    seaMist: "#C8DCCD",
+    antiqueWhite: "#F6EDD8",
+    paleLime: "#CCF663",
+    chineseWhite: "#E6E3DA",
   },
   borders: {
     lightGrey: "#E2E1E1",
