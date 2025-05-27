@@ -59,7 +59,7 @@ const DashboardStyled = styled.table`
   }
 
   .orders {
-    background: ${(props) => props.theme.colors.mainColor};
+    background: ${(props) => props.theme.colors.mineralGreen};
     color: ${(props) => props.theme.fontsColors.light};
     font-weight: 700;
     padding: 3px 15px;

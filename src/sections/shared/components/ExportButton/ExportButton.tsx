@@ -1,4 +1,4 @@
-import { SiMicrosoftexcel } from "react-icons/si";
+import { PiMicrosoftExcelLogo } from "react-icons/pi";
 import ExportFileButtonStyled from "./ExportFileButtonStyled";
 
 interface ExportFileButtonProps {
@@ -12,7 +12,7 @@ const ExportFilesButton = ({ action, text }: ExportFileButtonProps) => {
       className={"export__button--backorder"}
       onClick={() => action()}
     >
-      {`${text}`} <SiMicrosoftexcel className={"export__button--icon"} />
+      {`${text}`} <PiMicrosoftExcelLogo className={"export__button--icon"} />
     </ExportFileButtonStyled>
   );
 };

@@ -13,12 +13,12 @@ export const billingOptions: OptionsStructure[] = [
   },
   {
     id: 3,
-    name: "Estandar Mensual",
+    name: "Estándar Mensual",
     value: 3,
   },
   {
     id: 4,
-    name: "Estandar Trimestral",
+    name: "Estándar Trimestral",
     value: 4,
   },
   {

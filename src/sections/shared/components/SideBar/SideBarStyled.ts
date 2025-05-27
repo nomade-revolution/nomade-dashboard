@@ -54,7 +54,7 @@ const SideBarStyled = styled.div<Props>`
       background: ${(props) => props.theme.colors.backgroundPages};
       border-radius: ${(props) => props.theme.borderRadius.badges};
       font-weight: 700;
-      color: ${(props) => props.theme.fontsColors.corporativeColor};
+      color: ${(props) => props.theme.fontsColors.mineralGreen};
     }
 
     &__subsection {
@@ -83,7 +83,7 @@ const SideBarStyled = styled.div<Props>`
     }
 
     &__icon--selected {
-      color: ${(props) => props.theme.fontsColors.corporativeColor};
+      color: ${(props) => props.theme.fontsColors.mineralGreen};
     }
 
     &__name {

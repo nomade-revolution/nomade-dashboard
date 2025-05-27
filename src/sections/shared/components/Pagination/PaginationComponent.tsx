@@ -58,7 +58,7 @@ const PaginationComponent = ({
       color="primary"
       sx={{
         "Button.MuiPaginationItem-rounded.Mui-selected": {
-          bgcolor: "#8C9B6E",
+          bgcolor: "#335d53",
           color: "white",
         },
         "Button.MuiPaginationItem-rounded": {
