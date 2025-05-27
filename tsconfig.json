@@ -46,7 +46,9 @@
       "@company/*": ["modules/company/*"],
 
       "@environments": ["sections/shared/utils/environments/environments"]
-    }
+    },
+
+    "types": ["jest"]
   },
   "include": ["src", "setupTests.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
