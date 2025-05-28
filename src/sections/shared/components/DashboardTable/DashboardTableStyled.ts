@@ -7,7 +7,7 @@ const DashboardStyled = styled.table`
   }
   .table {
     &__sort-button {
-      color: ${(props) => props.theme.fontsColors.corporativeColor};
+      color: ${(props) => props.theme.fontsColors.mineralGreen};
       font-weight: 700;
       font-size: ${(props) => props.theme.fontsSize.__SMM};
       display: flex;
@@ -19,7 +19,7 @@ const DashboardStyled = styled.table`
       width: 100%;
     }
     &__sort-button-center {
-      color: ${(props) => props.theme.fontsColors.corporativeColor};
+      color: ${(props) => props.theme.fontsColors.mineralGreen};
       font-weight: 700;
       font-size: ${(props) => props.theme.fontsSize.__SMM};
       display: flex;

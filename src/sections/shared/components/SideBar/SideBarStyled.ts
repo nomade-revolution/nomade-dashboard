@@ -64,7 +64,7 @@ const SideBarStyled = styled.div<Props>`
 
     &__quantity {
       padding: 2px;
-      background: ${(props) => props.theme.colors.mainColor};
+      background: ${(props) => props.theme.colors.paleLime};
       width: ${(props) => (props.$isMinimized ? "15px" : "40px")};
       text-align: center;
       color: ${(props) => props.theme.fontsColors.light};
@@ -75,6 +75,7 @@ const SideBarStyled = styled.div<Props>`
           : props.theme.fontsSize.__SM};
       border-radius: ${(props) =>
         props.$isMinimized ? "50%" : props.theme.borderRadius.badges};
+      color: ${(props) => props.theme.colors.mainColor};
     }
 
     &__icon,
