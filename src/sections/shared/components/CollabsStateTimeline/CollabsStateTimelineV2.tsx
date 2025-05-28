@@ -203,10 +203,10 @@ const collabsStateTimeLineStyles: { [key: string]: React.CSSProperties } = {
   circleError: {
     width: 10,
     height: 10,
-    backgroundColor: "#7B3C47",
+    backgroundColor: "#CCF663",
   },
   circleCompleted: {
-    backgroundColor: "#9AAC79",
+    backgroundColor: "#243c34",
     width: 20,
     height: 20,
   },
