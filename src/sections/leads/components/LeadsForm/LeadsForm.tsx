@@ -47,12 +47,18 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
   const [registerContacts, setRegisterContacts] = useState<Contact[]>([]);
   const [isAddressModalOpen, setIsAddressModalOpen] = useState<boolean>(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState<boolean>(false);
-  const [isCheked, setIsChecked] = useState<boolean>(false);
+  const [isGocardlessChecked, setIsGocardlessChecked] = useState(false);
+  const [isTermsChecked, setIsTermsChecked] = useState(false);
+
   const { postCompany, isSuccess } = useCompanyContext();
   const { contact_types, getAllContactTypes } = useContactContext();
 
-  const handleIsChecked = () => {
-    setIsChecked(!isCheked);
+  const handleIsGocardlessChecked = () => {
+    setIsGocardlessChecked(!isGocardlessChecked);
+  };
+
+  const handleIsTermsChecked = () => {
+    setIsTermsChecked(!isTermsChecked);
   };
 
   const handleSubmitForm = async (
@@ -75,6 +81,8 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
 
     formData.append("name", values.company_name);
     formData.append("checked", JSON.stringify(isCheked));
+    formData.append("gocardless_checked", JSON.stringify(isGocardlessChecked));
+    formData.append("terms_checked", JSON.stringify(isTermsChecked));
 
     await postCompany(formData);
     setSubmitting(false);
@@ -207,7 +215,10 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                 </Link>
               </div>
               <div className="lead-form__checkbox-container">
-                <CustomCheckbox onChange={handleIsChecked} checked={isCheked} />
+                <CustomCheckbox
+                  onChange={handleIsGocardlessChecked}
+                  checked={isGocardlessChecked}
+                />
                 <span>He rellenado la información en Gocardless.com</span>
               </div>
               <span className="lead-form__footer-mssg">
@@ -443,7 +454,10 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
             </section>
 
             <div className="lead-form__checkbox-container">
-              <CustomCheckbox onChange={handleIsChecked} checked={isCheked} />
+              <CustomCheckbox
+                onChange={handleIsTermsChecked}
+                checked={isTermsChecked}
+              />
               <span>
                 He leído y acepto los{" "}
                 <Link
@@ -462,7 +476,9 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
               <button
                 type="submit"
                 className="datasheet-form__submit"
-                disabled={isSubmitting || !isCheked}
+                disabled={
+                  isSubmitting || !isTermsChecked || !isGocardlessChecked
+                }
               >
                 Enviar
               </button>
