@@ -80,7 +80,6 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
     }
 
     formData.append("name", values.company_name);
-    formData.append("checked", JSON.stringify(isCheked));
     formData.append("gocardless_checked", JSON.stringify(isGocardlessChecked));
     formData.append("terms_checked", JSON.stringify(isTermsChecked));
 
