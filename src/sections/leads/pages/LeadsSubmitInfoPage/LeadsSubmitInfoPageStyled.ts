@@ -22,7 +22,7 @@ const LeadsSubmitInfoPageStyled = styled.main`
         align-items: center;
         justify-content: center;
         gap: 40px;
-        background: ${(props) => props.theme.colors.secondaryColor};
+        background: ${(props) => props.theme.colors.outerSpace};
         height: 100vh;
         width: 50%;
       }

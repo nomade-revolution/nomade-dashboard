@@ -308,7 +308,7 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
             <section className="lead-form__section">
               <div className="form-subsection">
                 <label htmlFor="description" className="form-subsection__label">
-                  Descripción
+                  Descripción de la empresa (texto que se visualiza en la App):
                 </label>
                 <Field
                   as="textarea"
