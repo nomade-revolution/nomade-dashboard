@@ -221,7 +221,7 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                 <span>He rellenado la información en Gocardless.com</span>
               </div>
               <span className="lead-form__footer-mssg">
-                **No se realizará ningún cargo si no se ha efectuado ninguna
+                *No se realizará ningún cargo si no se ha efectuado ninguna
                 colaboración, y solo se cobrará el plan acorde al número de
                 colaboraciones realizadas durante el periodo. Queremos ser
                 flexibles y transparentes.{" "}
