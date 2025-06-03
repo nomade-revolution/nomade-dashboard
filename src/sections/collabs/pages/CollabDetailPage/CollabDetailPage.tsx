@@ -37,7 +37,8 @@ const HIDE_CANCEL_BUTTON_STATES = [
 ];
 
 const CollabDetailPage = (): React.ReactElement => {
-  const { getCollabById, collab, loading } = useCollabsContext();
+  const { getCollabById, collab, loading, getAllRejectedCollabReasons } =
+    useCollabsContext();
   const {
     getInfluencer,
     influencer,
@@ -82,7 +83,8 @@ const CollabDetailPage = (): React.ReactElement => {
 
   useEffect(() => {
     getCollabById(+id!);
-  }, [getCollabById, id]);
+    getAllRejectedCollabReasons();
+  }, [getCollabById, getAllRejectedCollabReasons, id]);
 
   useEffect(() => {
     getInfluencer(collab.influencer_id);
