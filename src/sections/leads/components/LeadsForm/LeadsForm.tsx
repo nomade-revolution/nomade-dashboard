@@ -333,7 +333,7 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                   id="description"
                   className="lead-form__field-textarea"
                   aria-label="Comentarios"
-                  maxlength="1000"
+                  maxLength="1000"
                   {...getFieldProps("description")}
                 />
                 {errors.description && touched.description && (

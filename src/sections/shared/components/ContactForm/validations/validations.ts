@@ -17,5 +17,9 @@ export const contactSchema = yup.object({
     .string()
     .required(errorMessages.required)
     .matches(/^\+?[0-9\s-]{7,15}$/, errorMessages.invalidPhone),
-  type_id: yup.number().required(errorMessages.required),
+  type_id: yup
+    .number()
+    .typeError(errorMessages.required)
+    .min(1, "Debe seleccionar un tipo de contacto")
+    .required(errorMessages.required),
 });

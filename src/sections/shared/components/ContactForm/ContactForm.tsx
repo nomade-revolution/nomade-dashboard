@@ -48,15 +48,49 @@ const ContactForm = ({
     setTypesId([...types_id, "0"]);
   };
 
-  const handleSaveContacts = () => {
-    const updatedContacts = formRefs.current.map((formik) => formik.values);
+  const handleRemoveContactForm = (indexToRemove: number) => {
+    setContactForms((prev) => prev.filter((_, i) => i !== indexToRemove));
+    setTypesId((prev) => prev.filter((_, i) => i !== indexToRemove));
+    formRefs.current.splice(indexToRemove, 1);
+  };
 
-    const contacts = updatedContacts.map((contact, index) => ({
-      ...contact,
+  const handleSaveContacts = async () => {
+    let isValid = true;
+
+    // Filtramos formularios válidos (no nulos)
+    const activeRefs = formRefs.current.filter(
+      (ref): ref is FormikProps<Contact> => ref !== null,
+    );
+
+    // Validamos todos los formularios
+    for (const formik of activeRefs) {
+      const errors = await formik.validateForm();
+
+      formik.setTouched(
+        {
+          name: true,
+          surname: true,
+          email: true,
+          phone: true,
+          type_id: true,
+        },
+        true,
+      );
+
+      if (Object.keys(errors).length > 0) {
+        isValid = false;
+      }
+    }
+
+    if (!isValid) return;
+
+    // Extraemos los valores solo de los formularios válidos
+    const updatedContacts = activeRefs.map((formik, index) => ({
+      ...formik.values,
       type_id: +types_id[index],
     }));
 
-    setContacts(contacts);
+    setContacts(updatedContacts);
     setIsModalOpen(false);
   };
 
@@ -102,7 +136,7 @@ const ContactForm = ({
           onSubmit={() => {}}
         >
           {({ getFieldProps, errors, touched }) => (
-            <form className="datasheet-form__contact">
+            <div className="datasheet-form__contact">
               <div className="form-subsection">
                 <label
                   htmlFor={`name-${index}`}
@@ -116,7 +150,13 @@ const ContactForm = ({
                   className="form-subsection__field-large"
                   {...getFieldProps("name")}
                 />
-                {errors.name && touched.name && <ErrorMessage name="name" />}
+                {errors.name && touched.name && (
+                  <ErrorMessage
+                    name="name"
+                    component="span"
+                    className="form-subsection__error-message"
+                  />
+                )}
               </div>
               <div className="form-subsection">
                 <label
@@ -132,7 +172,11 @@ const ContactForm = ({
                   {...getFieldProps("surname")}
                 />
                 {errors.surname && touched.surname && (
-                  <ErrorMessage name="surname" />
+                  <ErrorMessage
+                    name="surname"
+                    component="span"
+                    className="form-subsection__error-message"
+                  />
                 )}
               </div>
               <div className="form-subsection">
@@ -148,7 +192,13 @@ const ContactForm = ({
                   className="form-subsection__field-large"
                   {...getFieldProps("email")}
                 />
-                {errors.email && touched.email && <ErrorMessage name="email" />}
+                {errors.email && touched.email && (
+                  <ErrorMessage
+                    name="email"
+                    component="span"
+                    className="form-subsection__error-message"
+                  />
+                )}
               </div>
               <div className="form-subsection">
                 <label
@@ -163,7 +213,13 @@ const ContactForm = ({
                   className="form-subsection__field-large"
                   {...getFieldProps("phone")}
                 />
-                {errors.phone && touched.phone && <ErrorMessage name="phone" />}
+                {errors.phone && touched.phone && (
+                  <ErrorMessage
+                    name="phone"
+                    component="span"
+                    className="form-subsection__error-message"
+                  />
+                )}
               </div>
               <div className="form-subsection">
                 <label
@@ -180,21 +236,51 @@ const ContactForm = ({
                     value: type.id,
                   }))}
                   value={types_id[index]}
-                  setValue={(value) => handleSelectChange(index, value)}
+                  setValue={(value) => {
+                    handleSelectChange(index, value);
+                    formRefs.current[index].setFieldValue("type_id", value);
+                  }}
                 />
+                {errors.type_id && touched.type_id && (
+                  <ErrorMessage
+                    name="type_id"
+                    component="span"
+                    className="form-subsection__error-message"
+                  />
+                )}
               </div>
-            </form>
+              {contactForms.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => handleRemoveContactForm(index)}
+                  className="datasheet-form__remove-contact"
+                  style={{
+                    marginTop: "1rem",
+                    backgroundColor: "#e74c3c",
+                    color: "white",
+                    padding: "6px 12px",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Eliminar contacto
+                </button>
+              )}
+            </div>
           )}
         </Formik>
       ))}
       <section className="datasheet-form__btns">
         <button
+          type="button"
           onClick={handleAddContactForm}
           className="datasheet-form__add-contact"
         >
           Añadir contacto
         </button>
         <button
+          type="button"
           onClick={handleSaveContacts}
           className="datasheet-form__save-contact"
         >
