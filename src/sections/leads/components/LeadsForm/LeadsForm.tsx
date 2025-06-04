@@ -63,7 +63,7 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
 
   const handleSubmitForm = async (
     values: CompanyRegisterStructure,
-    { setSubmitting }: FormikHelpers<CompanyRegisterStructure>,
+    { setSubmitting, setErrors }: FormikHelpers<CompanyRegisterStructure>,
   ) => {
     setSubmitting(true);
     const formData = new FormData();
@@ -72,16 +72,18 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
       key !== "id" && formData.append(key, (values as never)[key as never]);
     });
 
-    registerAddress &&
-      formData.append("address", JSON.stringify(registerAddress));
-
     if (registerContacts.length > 0) {
       formData.append("contacts", JSON.stringify(registerContacts));
+    } else {
+      setErrors({ contacts: "Debe añadir al menos un contacto" });
+      setSubmitting(false);
+      return;
     }
-
+    registerAddress &&
+      formData.append("address", JSON.stringify(registerAddress));
     formData.append("name", values.company_name);
-    formData.append("gocardless_checked", JSON.stringify(isGocardlessChecked));
-    formData.append("terms_checked", JSON.stringify(isTermsChecked));
+    formData.append("gocardless", JSON.stringify(isGocardlessChecked));
+    formData.append("accept_conditions", JSON.stringify(isTermsChecked));
 
     await postCompany(formData);
     setSubmitting(false);
@@ -101,14 +103,13 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
 
   const initialValues = {
     ...initialState,
-    ...lead,
+    ...(typeof lead !== "string" ? lead : ""),
     hash,
   };
 
   useEffect(() => {
     getAllContactTypes();
   }, [getAllContactTypes]);
-
   return (
     <Formik
       initialValues={initialValues}
@@ -192,6 +193,13 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                         <FaCheckCircle />
                         Dirección añadida
                       </span>
+                    )}
+                    {errors.address && (
+                      <ErrorMessage
+                        className="form-subsection__error-message"
+                        component="span"
+                        name="address"
+                      />
                     )}
                   </div>
                 </div>
@@ -395,6 +403,13 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                       <FaCheckCircle />
                       Contacto añadido
                     </span>
+                  )}
+                  {errors.contacts && (
+                    <ErrorMessage
+                      className="form-subsection__error-message"
+                      component="span"
+                      name="contacts"
+                    />
                   )}
                 </div>
               </div>

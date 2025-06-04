@@ -131,7 +131,6 @@ export const CompanyContextProvider = ({
   const postCompany = async (company: FormData) => {
     setLoading(true);
     const response = await registerCompany(repository, company);
-
     if (isHttpSuccessResponse(response)) {
       setCompany(response.data);
       setLoading(false);
