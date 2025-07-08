@@ -4,7 +4,7 @@ import { ErrorMessage, Field, Formik } from "formik";
 import Loader from "sections/shared/components/Loader/Loader";
 import CreateInfluencerFormStyled from "sections/user/pages/CreateInfluencerPage/CreateInfluencerFormStyled";
 import { User } from "modules/user/domain/User";
-import { editInfluencerScheme } from "./utils/validations/validations";
+import { editUserAppScheme } from "./utils/validations/validations";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
 
 interface Props {
@@ -15,7 +15,7 @@ interface Props {
 interface EditUserAppFormState {
   name: string;
   email: string;
-  password: string;
+  // password: string;
 }
 
 const EditUserAppForm = ({ initialState, onSubmit }: Props) => {
@@ -34,7 +34,7 @@ const EditUserAppForm = ({ initialState, onSubmit }: Props) => {
     const parsedInitialState: EditUserAppFormState = {
       name: initialState.name,
       email: initialState.email,
-      password: "",
+      // password: "",
     };
     setFormState(parsedInitialState);
   };
@@ -45,7 +45,8 @@ const EditUserAppForm = ({ initialState, onSubmit }: Props) => {
 
     const formData = new FormData();
     formData.append("name", values.name);
-    formData.append(`password`, values.password);
+    // formData.append(`password`, values.password);
+    formData.append("email", values.email);
 
     try {
       const resp: any = await modifyUserById(initialState.id, formData as any);
@@ -71,7 +72,7 @@ const EditUserAppForm = ({ initialState, onSubmit }: Props) => {
   return (
     <Formik
       initialValues={formState}
-      validationSchema={editInfluencerScheme}
+      validationSchema={editUserAppScheme}
       onSubmit={handleSubmitForm}
     >
       {({ errors, handleSubmit, touched, getFieldProps }) => (
@@ -80,11 +81,11 @@ const EditUserAppForm = ({ initialState, onSubmit }: Props) => {
           className="login-form"
           style={{ width: "80%" }}
         >
-          <h3 style={{ width: "100%", textAlign: "left" }}>Datos</h3>
+          <h3 style={{ width: "100%", textAlign: "left" }}>Editar Usuario</h3>
           <div className="dobleContainer">
             <div className="form-section">
               <label htmlFor="name" className="login-form__label">
-                Nombre
+                Nombre de usuario
               </label>
               <Field
                 type="text"
@@ -101,30 +102,11 @@ const EditUserAppForm = ({ initialState, onSubmit }: Props) => {
                 />
               )}
             </div>
-            <div className="form-section">
-              <label htmlFor="password" className="login-form__label">
-                Contraseña
-              </label>
-              <Field
-                type="text"
-                id="password"
-                className="form-section__field"
-                aria-label="password"
-                {...getFieldProps("password")}
-              />
-              {errors.password && touched.password && (
-                <ErrorMessage
-                  className="login-form__error-message"
-                  component="span"
-                  name="password"
-                />
-              )}
-            </div>
           </div>
 
-          {/* <div className="form-section">
+          <div className="form-section">
             <label htmlFor="email" className="login-form__label">
-              Email
+              Email / Login
             </label>
             <Field
               type="text"
@@ -140,7 +122,7 @@ const EditUserAppForm = ({ initialState, onSubmit }: Props) => {
                 name="email"
               />
             )}
-          </div> */}
+          </div>
 
           <button
             type="submit"
