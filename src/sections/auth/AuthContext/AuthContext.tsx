@@ -49,7 +49,7 @@ export const AuthContextProvider = ({
   children,
   repository,
 }: React.PropsWithChildren<{
-  repository: AuthRepository<
+  repository: IAuthRepository<
     | AuthLoginInterface
     | AuthRegisterNomadeInterface
     | AuthRecoverPasswordInterface,
