@@ -284,7 +284,7 @@ const ContactForm = ({
           onClick={handleSaveContacts}
           className="datasheet-form__save-contact"
         >
-          Guardar contactos
+          Guardar cambios
         </button>
       </section>
     </ReusableFormStyled>

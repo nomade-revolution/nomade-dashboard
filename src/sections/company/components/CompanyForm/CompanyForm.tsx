@@ -281,7 +281,7 @@ const CompanyForm = ({
                 {...getFieldProps("company_name")}
               />
 
-              {errors.company && touched.company && (
+              {errors.company_name && touched.company_name && (
                 <ErrorMessage
                   className="form-subsection__error-message"
                   component="span"
@@ -617,7 +617,7 @@ const CompanyForm = ({
                 <section className="lead-form__address">
                   <div>
                     <span>{contact.name}</span>
-                    <span>{contact.surname}</span>
+                    <span> {contact.surname}</span>
                   </div>
                   <span>{contact.email}</span>
                   <span>{contact.phone}</span>
