@@ -6,7 +6,7 @@ import {
   SignInInterface,
   SignOutInterface,
   SignUpInterface,
-  AuthRepository as AuthRepositoryInterface,
+  IAuthRepository,
   AuthRecoverPasswordInterface,
 } from "@auth/domain";
 import { HttpResponseInterface } from "@core/domain";
@@ -46,7 +46,7 @@ export class AuthRepository
     SignInInterface<AuthLoginInterface, SessionInterface>,
     SignOutInterface<null, MessageInterface>,
     SignUpInterface<AuthRegisterNomadeInterface, unknown>,
-    AuthRepositoryInterface<AuthRecoverPasswordInterface, boolean>
+    IAuthRepository<AuthRecoverPasswordInterface, boolean>
 {
   private readonly http: Http = Http.getInstance();
 

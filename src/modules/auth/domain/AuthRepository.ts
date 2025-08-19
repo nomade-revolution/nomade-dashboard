@@ -1,7 +1,7 @@
 import { HttpErrorResponseInterface, HttpResponseInterface } from "@core";
 import { User } from "modules/user/domain/User";
 
-export interface AuthRepository<T, I> {
+export interface IAuthRepository<T, I> {
   signIn(data: T): Promise<HttpResponseInterface<I>>;
   signOut(data: T): Promise<I | HttpErrorResponseInterface>;
   signUp(data: T): Promise<I | HttpErrorResponseInterface>;

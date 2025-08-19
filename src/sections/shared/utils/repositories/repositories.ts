@@ -1,4 +1,4 @@
-import { AuthRepository } from "@auth";
+import { AuthRepository } from "@auth/infrastructure/AuthRepository";
 import { CityRepository } from "@city/infrastructure/cityRepository";
 import { CompanyRepository } from "@company/infrastructure/companyRepository";
 import { CountryRepository } from "@country/infrastructure/countryRepository";

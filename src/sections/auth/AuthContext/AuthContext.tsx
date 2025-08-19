@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useEffect, useState } from "react";
-import { AuthRepository } from "@auth/domain/AuthRepository";
+import { IAuthRepository } from "@auth/domain/AuthRepository";
 import {
   AuthLoginInterface,
   AuthRecoverPasswordInterface,
@@ -113,7 +113,7 @@ export const AuthContextProvider = ({
   const recoverPassword = async (email: string) => {
     const response = await authRecoverPassword(
       email,
-      repository as unknown as AuthRepository<
+      repository as unknown as IAuthRepository<
         AuthRecoverPasswordInterface,
         boolean
       >,
