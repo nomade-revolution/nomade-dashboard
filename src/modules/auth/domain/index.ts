@@ -5,3 +5,4 @@ export * from "./AuthRegisterInterface.ts";
 export * from "./SignInInterface.ts";
 export * from "./SignOutInterface.ts";
 export * from "./SignUpInterface.ts";
+export * from "./AuthRepository.ts";
