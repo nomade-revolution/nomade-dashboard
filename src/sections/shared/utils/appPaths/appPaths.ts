@@ -10,6 +10,7 @@ export const appPaths = {
   account: "/mi-cuenta",
   place_order: "/realizar-pedido",
   recovery_password: "/recovery-password",
+  new_password: "/new-password",
   reset_password: "/reset-password",
   collabs: "/collabs/page/:page",
   collab: "/collab/:id",

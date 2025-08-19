@@ -1,10 +1,11 @@
 import { ErrorMessage, Field, Formik, FormikHelpers } from "formik";
 import { recoverPasswordScheme } from "../validations/validations";
 import { useState } from "react";
-import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import Loader from "sections/shared/components/Loader/Loader";
 import RecoverPasswordStyled from "./RecoverPasswordStyles";
 import useRecoverForm from "sections/auth/hooks/useRecoverForm";
+import { useNavigate } from "react-router-dom";
+import { appPaths } from "sections/shared/utils/appPaths/appPaths";
 
 const initialState = {
   email: "",
@@ -12,25 +13,36 @@ const initialState = {
 
 const RecoverPasswordForm = (): React.ReactElement => {
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const { sendForm } = useRecoverForm();
-  const { isSuccess } = useAuthContext();
+  const navigate = useNavigate();
 
   const handleSubmitForm = async (
     values: { email: string },
     { setSubmitting }: FormikHelpers<{ email: string }>,
   ) => {
-    await sendForm(values);
+    const response = await sendForm(values);
     setSubmitting(false);
-    setIsFormSubmitted(true);
 
-    setTimeout(() => {
-      setIsFormSubmitted(false);
-    }, 5000);
+    if (response) {
+      setIsSuccess(true);
+      setIsFormSubmitted(true);
+      // Navigate to new password page with email
+      setTimeout(() => {
+        navigate(appPaths.new_password, { state: { email: values.email } });
+      }, 2000);
+    } else {
+      setIsSuccess(false);
+      setIsFormSubmitted(true);
+      setTimeout(() => {
+        setIsFormSubmitted(false);
+      }, 5000);
+    }
   };
   return (
     <Formik
       initialValues={initialState}
-      validateScheme={recoverPasswordScheme}
+      validationSchema={recoverPasswordScheme}
       onSubmit={handleSubmitForm}
     >
       {({ errors, touched, handleSubmit, isSubmitting, getFieldProps }) => (

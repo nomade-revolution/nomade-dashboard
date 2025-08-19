@@ -30,6 +30,12 @@ export interface ContextState {
   setSessionToken: () => void;
   getLoggedUser: (token: string) => Promise<User>;
   recoverPassword: (email: string) => Promise<boolean>;
+  resetPassword: (
+    email: string,
+    code: string,
+    password: string,
+    passwordConfirmation: string,
+  ) => Promise<boolean>;
   changePassword: (
     password: string,
     newPassword: string,
@@ -120,6 +126,26 @@ export const AuthContextProvider = ({
     return response;
   };
 
+  const resetPassword = async (
+    email: string,
+    code: string,
+    password: string,
+    passwordConfirmation: string,
+  ) => {
+    const response = await repository.resetPassword(
+      email,
+      code,
+      password,
+      passwordConfirmation,
+    );
+    if (response) {
+      setIsSuccess(response);
+      return response;
+    }
+    setIsSuccess(false);
+    return response;
+  };
+
   const setSessionToken = useCallback(async () => {
     const token = getSessionToken();
     setToken(token);
@@ -168,6 +194,7 @@ export const AuthContextProvider = ({
         setSelectedCompany,
         changePassword,
         recoverPassword,
+        resetPassword,
         loginUser: login,
         logoutUser: logout,
         getSessionToken,

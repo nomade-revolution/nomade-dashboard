@@ -6,6 +6,8 @@ import {
   SignInInterface,
   SignOutInterface,
   SignUpInterface,
+  AuthRepository as AuthRepositoryInterface,
+  AuthRecoverPasswordInterface,
 } from "@auth/domain";
 import { HttpResponseInterface } from "@core/domain";
 import {
@@ -14,6 +16,7 @@ import {
   REGISTER_ROUTE,
   USER_ROUTE,
   RECOVER_PASSWORD_ROUTE,
+  RESET_PASSWORD_ROUTE,
   CHANGE_PASSWORD_ROUTE,
 } from "@auth/application";
 import { User } from "modules/user/domain/User";
@@ -42,7 +45,8 @@ export class AuthRepository
   implements
     SignInInterface<AuthLoginInterface, SessionInterface>,
     SignOutInterface<null, MessageInterface>,
-    SignUpInterface<AuthRegisterNomadeInterface, unknown>
+    SignUpInterface<AuthRegisterNomadeInterface, unknown>,
+    AuthRepositoryInterface<AuthRecoverPasswordInterface, boolean>
 {
   private readonly http: Http = Http.getInstance();
 
@@ -90,9 +94,7 @@ export class AuthRepository
       return false;
     }
   }
-  public async getLoggedUser(): Promise<
-    HttpResponseInterface<UserResponseInterface>
-  > {
+  public async getLoggedUser(): Promise<HttpResponseInterface<User>> {
     try {
       const resp = await this.http.get<UserResponseInterface>(USER_ROUTE);
       return resp;
@@ -117,6 +119,23 @@ export class AuthRepository
       return resp.success;
     } catch (error) {
       return Promise.reject(error);
+    }
+  }
+
+  public async resetPassword(
+    email: string,
+    code: string,
+    password: string,
+    passwordConfirmation: string,
+  ): Promise<boolean> {
+    try {
+      const resp = await this.http.post<MessageInterface>(
+        RESET_PASSWORD_ROUTE,
+        { email, code, password, password_confirmation: passwordConfirmation },
+      );
+      return resp.success;
+    } catch (error) {
+      return false;
     }
   }
 }

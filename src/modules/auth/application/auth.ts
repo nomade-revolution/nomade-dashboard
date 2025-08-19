@@ -24,6 +24,16 @@ export const authGetLoggedUser = (
 export const authRecoverPassword = (
   email: string,
   authRepo: AuthRepository<AuthRecoverPasswordInterface, boolean>,
-) => {
+): Promise<boolean> => {
   return authRepo.recoverPassword(email);
+};
+
+export const authResetPassword = (
+  email: string,
+  code: string,
+  password: string,
+  passwordConfirmation: string,
+  authRepo: AuthRepository<AuthRecoverPasswordInterface, boolean>,
+) => {
+  return authRepo.resetPassword(email, code, password, passwordConfirmation);
 };

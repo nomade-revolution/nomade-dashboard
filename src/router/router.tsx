@@ -16,6 +16,7 @@ import LeadsSubmitInfoPage from "sections/leads/pages/LeadsSubmitInfoPage/LeadsS
 import CollabsPage from "sections/collabs/pages/CollabsPage/CollabsPage";
 import CollabDetailPage from "sections/collabs/pages/CollabDetailPage/CollabDetailPage";
 import RecoverPasswordPage from "sections/auth/pages/RecoverPasswordPage/RecoverPasswordPage";
+import NewPasswordPage from "sections/auth/pages/NewPasswordPage/NewPasswordPage";
 import CategoriesPage from "sections/categories/pages/CategoriesPage";
 import CollabsReservationsPage from "sections/collabs/pages/CollabsReservations/CollabsReservationsPage";
 import OfferDetailsPage from "sections/offers/pages/OfferDetailPage/OfferDetailPage";
@@ -50,6 +51,10 @@ const routes: RouteObject[] = [
       {
         path: appPaths.recovery_password,
         element: <RecoverPasswordPage />,
+      },
+      {
+        path: appPaths.new_password,
+        element: <NewPasswordPage />,
       },
       {
         path: appPaths.users,

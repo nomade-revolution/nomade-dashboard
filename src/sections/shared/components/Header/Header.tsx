@@ -59,6 +59,7 @@ const Header = ({
         pathname !== appPaths.register &&
         pathname !== appPaths.termsConditionsOffline &&
         pathname !== appPaths.recovery_password &&
+        pathname !== appPaths.new_password &&
         pathname !== appPaths.reset_password &&
         pathname !== appPaths.leadsSubmit &&
         token && (

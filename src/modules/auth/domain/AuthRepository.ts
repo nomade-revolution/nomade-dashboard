@@ -7,6 +7,12 @@ export interface AuthRepository<T, I> {
   signUp(data: T): Promise<I | HttpErrorResponseInterface>;
   getLoggedUser(token: string): Promise<HttpResponseInterface<User>>;
   recoverPassword(email: string): Promise<boolean>;
+  resetPassword(
+    email: string,
+    code: string,
+    password: string,
+    passwordConfirmation: string,
+  ): Promise<boolean>;
   changePassword(
     password: string,
     newPassword: string,

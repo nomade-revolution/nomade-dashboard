@@ -112,6 +112,7 @@ const Layout = (): React.ReactElement => {
           location.pathname !== appPaths.register &&
           location.pathname !== appPaths.termsConditionsOffline &&
           location.pathname !== appPaths.recovery_password &&
+          location.pathname !== appPaths.new_password &&
           location.pathname !== appPaths.reset_password &&
           location.pathname !== appPaths.leadsSubmit
             ? "layout"
@@ -124,6 +125,7 @@ const Layout = (): React.ReactElement => {
             location.pathname === appPaths.register ||
             location.pathname === appPaths.termsConditionsOffline ||
             location.pathname === appPaths.recovery_password ||
+            location.pathname === appPaths.new_password ||
             location.pathname === appPaths.reset_password ||
             location.pathname === appPaths.leadsSubmit
               ? "layout__sidebar-hidden"
@@ -134,6 +136,7 @@ const Layout = (): React.ReactElement => {
             location.pathname !== appPaths.register &&
             location.pathname !== appPaths.termsConditionsOffline &&
             location.pathname !== appPaths.recovery_password &&
+            location.pathname !== appPaths.new_password &&
             location.pathname !== appPaths.reset_password &&
             location.pathname !== appPaths.leadsSubmit && (
               <SideBar
@@ -167,6 +170,7 @@ const Layout = (): React.ReactElement => {
             location.pathname === appPaths.register ||
             location.pathname === appPaths.termsConditionsOffline ||
             location.pathname === appPaths.recovery_password ||
+            location.pathname === appPaths.new_password ||
             location.pathname === appPaths.reset_password ||
             location.pathname === appPaths.leadsSubmit
               ? "layout__sidebar-hidden"

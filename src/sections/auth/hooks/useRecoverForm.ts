@@ -3,8 +3,12 @@ import { useAuthContext } from "../AuthContext/useAuthContext";
 const useRecoverForm = () => {
   const { recoverPassword } = useAuthContext();
   const sendForm = async ({ email }: { email: string }) => {
-    const response = await recoverPassword(email);
-    return response;
+    try {
+      const response = await recoverPassword(email);
+      return response;
+    } catch (error) {
+      return false;
+    }
   };
 
   return { sendForm };
