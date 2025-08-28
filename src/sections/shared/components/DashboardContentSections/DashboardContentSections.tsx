@@ -16,6 +16,7 @@ import { FullOffer, Offer } from "../../../../modules/offers/domain/Offer";
 import { Switch, Tooltip } from "@mui/material";
 import { Calendar, TimeSlotOffer } from "modules/offers/domain/OfferCalendar";
 import { Company, User } from "modules/user/domain/User";
+import { Contact } from "modules/contact/domain/Contact";
 import { CollabActionTypes, FullCollab } from "modules/collabs/domain/Collabs";
 import { getCollabStateClassname } from "./utils/getClassNames/getClassNames";
 import Actions from "../Actions/Actions";
@@ -262,11 +263,11 @@ const DashboardContentSections = ({
       // Handle surname field for contacts
       if (pageName === SectionTypes.users) {
         // For contacts, render surname with fallback to empty string
-        const surname = (section as User).surname;
+        const surname = (section as Contact).surname;
         return <span>{surname || "—"}</span>;
       }
       // For other page types, return default
-      return <span>{(section as User).surname || "—"}</span>;
+      return <span>{(section as Contact).surname || "—"}</span>;
 
     case "name_compa":
       // if (pageName === SectionTypes.usersApp) {
