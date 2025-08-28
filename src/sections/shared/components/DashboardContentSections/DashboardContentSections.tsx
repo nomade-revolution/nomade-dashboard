@@ -256,6 +256,17 @@ const DashboardContentSections = ({
       }
 
       return <span>{(section as User).name}</span>;
+      break;
+
+    case "surname":
+      // Handle surname field for contacts
+      if (pageName === SectionTypes.users) {
+        // For contacts, render surname with fallback to empty string
+        const surname = (section as User).surname;
+        return <span>{surname || "—"}</span>;
+      }
+      // For other page types, return default
+      return <span>{(section as User).surname || "—"}</span>;
 
     case "name_compa":
       // if (pageName === SectionTypes.usersApp) {
@@ -504,22 +515,23 @@ const DashboardContentSections = ({
           <ul className="dashboard__time-list">
             {calendar.map((time) => (
               <li key={time.address_id}>
-                {time.week?.map((day) =>
-                  day?.map((slot: TimeSlotOffer) => {
-                    const dayInitial = slot.day_name.charAt(0);
-                    if (!daysSet.has(dayInitial)) {
-                      daysSet.add(dayInitial);
-                      return (
-                        <span
-                          key={`${slot.day_of_week}-${slot.day_name}`}
-                          className="dashboard__time-listItem"
-                        >
-                          {dayInitial}
-                        </span>
-                      );
-                    }
-                    return null;
-                  }),
+                {time.week?.map(
+                  (day) =>
+                    day?.map((slot: TimeSlotOffer) => {
+                      const dayInitial = slot.day_name.charAt(0);
+                      if (!daysSet.has(dayInitial)) {
+                        daysSet.add(dayInitial);
+                        return (
+                          <span
+                            key={`${slot.day_of_week}-${slot.day_name}`}
+                            className="dashboard__time-listItem"
+                          >
+                            {dayInitial}
+                          </span>
+                        );
+                      }
+                      return null;
+                    }),
                 )}
               </li>
             ))}
@@ -653,7 +665,7 @@ const DashboardContentSections = ({
         <span className="dashboard__type">
           {(section as FullCollab).day
             ? (section as FullCollab).day
-            : ((section as FullCollab).from_day ?? "-")}
+            : (section as FullCollab).from_day ?? "-"}
         </span>
       );
 

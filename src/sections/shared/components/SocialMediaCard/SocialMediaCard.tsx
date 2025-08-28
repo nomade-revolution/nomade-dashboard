@@ -29,7 +29,6 @@ const SocialMediaCard = ({
 }: Props): React.ReactElement => {
   const { user } = useAuthContext();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const sortByFollowers = (array: any[]) => {
     const a = array.sort(
       (a, b) => b.followers_percentage - a.followers_percentage,
@@ -37,7 +36,6 @@ const SocialMediaCard = ({
     return a;
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const sortById = (array: any[]) => {
     const a = array.sort((a, b) => a.id - b.id);
 

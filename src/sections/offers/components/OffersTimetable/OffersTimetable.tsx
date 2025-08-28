@@ -128,7 +128,6 @@ const OffersTimetable = ({
     }, []);
 
     setWeek(updatedWeek);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getFieldProps, selectedDays, setWeek]);
 
   const offerType = offer?.type;

@@ -9,6 +9,5 @@ export interface HttpInterface {
   put(url: string, body?: unknown, responseType?: string): Promise<any>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   delete(url: string, body?: unknown, responseType?: string): Promise<any>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setHeader(headerKey: string, headerValue: string): void;
 }
