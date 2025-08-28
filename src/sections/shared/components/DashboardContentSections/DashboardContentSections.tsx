@@ -262,11 +262,11 @@ const DashboardContentSections = ({
       // Handle surname field for contacts
       if (pageName === SectionTypes.users) {
         // For contacts, render surname with fallback to empty string
-        const surname = (section as User).surname;
+        const surname = (section as { surname?: string }).surname;
         return <span>{surname || "—"}</span>;
       }
       // For other page types, return default
-      return <span>{(section as User).surname || "—"}</span>;
+      return <span>{(section as { surname?: string }).surname || "—"}</span>;
 
     case "name_compa":
       // if (pageName === SectionTypes.usersApp) {
