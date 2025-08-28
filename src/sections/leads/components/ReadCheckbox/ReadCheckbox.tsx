@@ -55,7 +55,9 @@ const ReadCheckbox = ({ row }: ReadCheckboxProps): React.ReactElement => {
   };
 
   const accessibilityLabel = `Marcar como leído: ${
-    row.company_name ?? row.email ?? row.id
+    (row.company_name && row.company_name.trim()) ||
+    (row.email && row.email.trim()) ||
+    row.id
   }`;
 
   return (
