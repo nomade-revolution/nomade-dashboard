@@ -61,6 +61,13 @@ export const leadsHeaderSection: HeaderSection[] = [
     pageName: SectionTypes.leads,
   },
   {
+    id: 19,
+    name: "Leído",
+    property: "is_read",
+    sortTag: "",
+    pageName: SectionTypes.leads,
+  },
+  {
     id: 9,
     name: "Acciones",
     property: "actions",

@@ -1,5 +1,6 @@
 import { HttpResponseInterface } from "@core";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
+import { Lead } from "./Leads";
 
 export interface LeadsRepository<I> {
   getLeads(
@@ -10,4 +11,8 @@ export interface LeadsRepository<I> {
   sendLeadLink(lead_id: number): Promise<HttpResponseInterface<I>>;
   getLeadsForm(hash: string): Promise<HttpResponseInterface<I>>;
   getLeadsBadge(): Promise<HttpResponseInterface<I>>;
+  markLeadRead(
+    id: number | string,
+    read: boolean,
+  ): Promise<HttpResponseInterface<Lead | { success: boolean }>>;
 }

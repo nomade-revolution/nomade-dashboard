@@ -34,6 +34,7 @@ interface ContextState {
   badgeCount: number;
   getLeadsStatusBadge: () => void;
   setBadgeCount: (count: number) => void;
+  markLeadRead: (id: number | string, read: boolean) => Promise<unknown>;
 }
 
 export const LeadsContext = createContext<ContextState>({} as ContextState);
@@ -107,6 +108,31 @@ export const LeadsContextProvider = ({
     [repository],
   );
 
+  const markLeadRead = useCallback(
+    async (id: number | string, read: boolean) => {
+      const response = await repository.markLeadRead(id, read);
+
+      // Update the local state if the API returns the updated lead
+      if (
+        isHttpSuccessResponse(response) &&
+        response.data &&
+        typeof response.data === "object" &&
+        response.data !== null &&
+        "id" in response.data
+      ) {
+        const updatedLead = response.data as Lead;
+        setLeads((prevLeads) =>
+          prevLeads.map((lead) =>
+            lead.id === updatedLead.id ? updatedLead : lead,
+          ),
+        );
+      }
+
+      return response;
+    },
+    [repository],
+  );
+
   setTimeout(() => setIsSuccess(false), 2000);
 
   return (
@@ -126,6 +152,7 @@ export const LeadsContextProvider = ({
         order,
         setOrder,
         setBadgeCount,
+        markLeadRead,
       }}
     >
       {children}
