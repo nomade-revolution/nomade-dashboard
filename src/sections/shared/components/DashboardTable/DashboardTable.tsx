@@ -33,21 +33,21 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-const StyledTableRow = styled(TableRow)<{ $isRead?: boolean }>(
-  ({ theme, $isRead }) => ({
-    "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.action.hover,
-    },
-    "&:last-child td, &:last-child th": {
-      border: 0,
-    },
-    // Muted styling for read leads
-    ...($isRead && {
-      opacity: 0.7,
-      backgroundColor: theme.palette.action.disabledBackground || "#f5f5f5",
-    }),
+const StyledTableRow = styled(TableRow, {
+  shouldForwardProp: (prop) => prop !== "$isRead",
+})<{ $isRead?: boolean }>(({ theme, $isRead }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+  // Muted styling for read leads
+  ...($isRead && {
+    opacity: 0.7,
+    backgroundColor: theme.palette.action.disabledBackground || "#f5f5f5",
   }),
-);
+}));
 
 interface DashboardTableProps<Type extends object> {
   bodySections: Type[];
