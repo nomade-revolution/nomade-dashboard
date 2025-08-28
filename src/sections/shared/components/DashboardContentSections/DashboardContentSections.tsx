@@ -22,6 +22,7 @@ import Actions from "../Actions/Actions";
 import { Influencer } from "@influencer";
 import { Lead } from "modules/leads/domain/Leads";
 import { Plan } from "modules/plans/domain/Plan";
+import ReadCheckbox from "sections/leads/components/ReadCheckbox/ReadCheckbox";
 import LinearBuffer from "../LinearBuffer/LinearBuffer";
 import { COLAB_PUBLISHED_STATE } from "sections/collabs/utils/collabsStates";
 import {
@@ -675,6 +676,12 @@ const DashboardContentSections = ({
           {(section as FullCollab).time ? (section as FullCollab).time : "-"}
         </span>
       );
+
+    case "is_read":
+      if (pageName === SectionTypes.leads) {
+        return <ReadCheckbox row={section as Lead} />;
+      }
+      return null;
 
     case "actions":
       return (

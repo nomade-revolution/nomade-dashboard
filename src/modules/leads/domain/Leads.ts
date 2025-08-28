@@ -10,6 +10,8 @@ export interface Lead {
   created_at: string;
   sent_at: string;
   link_sent: boolean;
+  is_read?: boolean;
+  read_at?: string;
 }
 
 export interface LeadsApiResponse {

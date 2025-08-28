@@ -6,7 +6,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import DashboardStyled from "./DashboardTableStyled";
-import { HeaderSection } from "../../interfaces/interfaces";
+import { HeaderSection, SectionTypes } from "../../interfaces/interfaces";
 import { Offer } from "../../../../modules/offers/domain/Offer";
 import { Company, User } from "modules/user/domain/User";
 import DashboardTableCellContent from "../DashboardTableCellContent/DashboardTableCellContent";
@@ -33,16 +33,23 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
-  },
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
-}));
+const StyledTableRow = styled(TableRow)<{ $isRead?: boolean }>(
+  ({ theme, $isRead }) => ({
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+    "&:last-child td, &:last-child th": {
+      border: 0,
+    },
+    // Muted styling for read leads
+    ...($isRead && {
+      opacity: 0.7,
+      backgroundColor: theme.palette.action.disabledBackground || "#f5f5f5",
+    }),
+  }),
+);
 
-interface DashboardTableProps<Type> {
+interface DashboardTableProps<Type extends object> {
   bodySections: Type[];
   headerSections: HeaderSection[];
   pageName: string;
@@ -50,7 +57,7 @@ interface DashboardTableProps<Type> {
   setCollabStateActionType?: (value: CollabActionTypes) => void;
 }
 
-const DashboardTable = <Type,>({
+const DashboardTable = <Type extends object>({
   bodySections,
   headerSections,
   pageName,
@@ -87,37 +94,48 @@ const DashboardTable = <Type,>({
             </TableRow>
           </TableHead>
           <TableBody sx={{ borderCollapse: "collapse" }}>
-            {bodySections?.map((section: Type, index) => (
-              <StyledTableRow key={index}>
-                {headerSections?.map((headerSection) => (
-                  <StyledTableCell
-                    align="left"
-                    key={headerSection.id}
-                    style={{ minWidth: "100%" }}
-                  >
-                    <DashboardTableCellContent
-                      headerSection={headerSection}
-                      section={
-                        section as
-                          | Offer
-                          | User
-                          | Influencer
-                          | Company
-                          | Collab
-                          | Plan
-                          | ExtendedCollab
-                          | Calendar
-                      }
-                      pageName={pageName}
-                      type={type}
-                      setCollabStateActionType={setCollabStateActionType}
-                      anchorEl={anchorEl}
-                      setAnchorEl={setAnchorEl}
-                    />
-                  </StyledTableCell>
-                ))}
-              </StyledTableRow>
-            ))}
+            {bodySections?.map((section: Type, index) => {
+              // Check if this is a lead and if it's read
+              const isRead =
+                pageName === SectionTypes.leads &&
+                "is_read" in section &&
+                Boolean(
+                  (section as Record<string, unknown>).is_read ??
+                    (section as Record<string, unknown>).read_at,
+                );
+
+              return (
+                <StyledTableRow key={index} $isRead={isRead}>
+                  {headerSections?.map((headerSection) => (
+                    <StyledTableCell
+                      align="left"
+                      key={headerSection.id}
+                      style={{ minWidth: "100%" }}
+                    >
+                      <DashboardTableCellContent
+                        headerSection={headerSection}
+                        section={
+                          section as
+                            | Offer
+                            | User
+                            | Influencer
+                            | Company
+                            | Collab
+                            | Plan
+                            | ExtendedCollab
+                            | Calendar
+                        }
+                        pageName={pageName}
+                        type={type}
+                        setCollabStateActionType={setCollabStateActionType}
+                        anchorEl={anchorEl}
+                        setAnchorEl={setAnchorEl}
+                      />
+                    </StyledTableCell>
+                  ))}
+                </StyledTableRow>
+              );
+            })}
           </TableBody>
         </DashboardStyled>
       </TableContainer>
