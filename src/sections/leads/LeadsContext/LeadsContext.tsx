@@ -126,11 +126,14 @@ export const LeadsContextProvider = ({
             lead.id === updatedLead.id ? updatedLead : lead,
           ),
         );
+
+        // Refresh badge count after successful update
+        await getLeadsStatusBadge();
       }
 
       return response;
     },
-    [repository],
+    [repository, getLeadsStatusBadge],
   );
 
   setTimeout(() => setIsSuccess(false), 2000);
