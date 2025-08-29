@@ -118,7 +118,7 @@ describe("ReadCheckbox", () => {
     fireEvent.click(checkbox);
 
     await waitFor(() => {
-      expect(mockMarkLeadRead).toHaveBeenCalledWith(1, true);
+      expect(mockMarkLeadRead).toHaveBeenCalledWith(1);
     });
   });
 

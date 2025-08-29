@@ -13,6 +13,5 @@ export interface LeadsRepository<I> {
   getLeadsBadge(): Promise<HttpResponseInterface<I>>;
   markLeadRead(
     id: number | string,
-    read: boolean,
   ): Promise<HttpResponseInterface<Lead | { success: boolean }>>;
 }

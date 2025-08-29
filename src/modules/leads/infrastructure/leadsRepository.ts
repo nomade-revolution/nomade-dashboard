@@ -60,60 +60,20 @@ export class LeadsRepository implements ILeadsRepository<LeadsApiResponse> {
   }
 
   /**
-   * Mark a lead as read/unread with dual strategy fallback
+   * Mark a lead as read/unread using the dedicated endpoint
    * @param id - Lead ID
-   * @param read - Whether to mark as read
    * @returns Updated lead or success response
    */
   public async markLeadRead(
     id: number | string,
-    read: boolean,
   ): Promise<HttpResponseInterface<Lead | { success: boolean }>> {
     try {
-      // Strategy 1: Try the dedicated mark-as-read endpoint
-      try {
-        const resp = await this.http.post<Lead | { success: boolean }>(
-          endpoints.markLeadRead(id),
-          { is_read: read },
-        );
-        return resp;
-      } catch (error: unknown) {
-        // If 404/405, fallback to PATCH on the lead endpoint
-        if (
-          error &&
-          typeof error === "object" &&
-          "response" in error &&
-          error.response &&
-          typeof error.response === "object" &&
-          "status" in error.response &&
-          (error.response.status === 404 || error.response.status === 405)
-        ) {
-          const payload = this.buildReadPayload(read);
-          const resp = await this.http.patch<Lead | { success: boolean }>(
-            endpoints.lead(id),
-            payload,
-          );
-          return resp;
-        }
-        throw error;
-      }
+      const resp = await this.http.post<Lead | { success: boolean }>(
+        endpoints.markLeadRead(id),
+      );
+      return resp;
     } catch (error) {
       return Promise.reject(error);
     }
-  }
-
-  /**
-   * Build the payload for marking lead as read/unread
-   * @param read - Whether to mark as read
-   * @returns Payload object
-   */
-  private buildReadPayload(read: boolean): {
-    is_read?: boolean;
-    read_at?: string | null;
-  } {
-    // Try is_read first, fallback to read_at if needed
-    return read
-      ? { is_read: true, read_at: new Date().toISOString() }
-      : { is_read: false, read_at: null };
   }
 }

@@ -40,7 +40,7 @@ const ReadCheckbox = ({ row }: ReadCheckboxProps): React.ReactElement => {
     setIsUpdating(true);
 
     try {
-      await markLeadRead(row.id, newValue);
+      await markLeadRead(row.id);
 
       // Success - no need to rollback since the API call succeeded
     } catch (error) {

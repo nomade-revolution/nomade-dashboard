@@ -34,7 +34,7 @@ interface ContextState {
   badgeCount: number;
   getLeadsStatusBadge: () => void;
   setBadgeCount: (count: number) => void;
-  markLeadRead: (id: number | string, read: boolean) => Promise<unknown>;
+  markLeadRead: (id: number | string) => Promise<unknown>;
 }
 
 export const LeadsContext = createContext<ContextState>({} as ContextState);
@@ -109,8 +109,8 @@ export const LeadsContextProvider = ({
   );
 
   const markLeadRead = useCallback(
-    async (id: number | string, read: boolean) => {
-      const response = await repository.markLeadRead(id, read);
+    async (id: number | string) => {
+      const response = await repository.markLeadRead(id);
 
       // Update the local state if the API returns the updated lead
       if (
