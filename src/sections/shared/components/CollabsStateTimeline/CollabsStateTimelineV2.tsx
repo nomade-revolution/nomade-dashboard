@@ -79,34 +79,45 @@ const getLeftContent = (
   //   if (isNextStep) {
   //     return <p style={styles.errorText}>Pendiente</p>;
   //     }
+
+  const contentParts = [];
+
+  // Add timestamp first if user has permission and step is completed
+  if (step?.created_at && step.id <= currentStateId) {
+    if (!(isCompany && index === 0)) {
+      contentParts.push(
+        <span key="timestamp" style={styles.date}>
+          {" "}
+          - {step.created_at}
+        </span>,
+      );
+    }
+  }
+
+  // Add reason on new line if it exists
   if (step?.reason) {
-    return (
-      <span style={styles.errorText}>
-        {" - "}
-        {step.reason}{" "}
-        {step.rejected_colab_reason_text ? (
-          <>
-            <br />
-            <span style={styles.errorReasonText}>
-              {`${step.rejected_colab_reason_text}`}
-            </span>
-          </>
-        ) : (
-          ""
-        )}
-      </span>
+    contentParts.push(
+      <>
+        <br />
+        <span key="reason" style={{ ...styles.errorText, marginTop: 5 }}>
+          {step.rejected_colab_reason_text ? (
+            <>
+              {step.reason}
+              <br />
+              <span style={styles.errorReasonText}>
+                {`${step.rejected_colab_reason_text}`}
+              </span>
+            </>
+          ) : (
+            step.reason
+          )}
+        </span>
+      </>,
     );
   }
 
-  // FIX: Only show timestamps for completed steps, not all steps with timestamps
-  // Previous: if (step?.created_at) - showed timestamp for any step with created_at
-  // Current: if (step?.created_at && step.id <= currentStateId) - only show for completed steps
-  if (step?.created_at && step.id <= currentStateId) {
-    if (isCompany && index === 0) return null;
-    return <span style={styles.date}> - {step.created_at}</span>;
-  }
-
-  return null;
+  // Return combined content or null if nothing to show
+  return contentParts.length > 0 ? <>{contentParts}</> : null;
 };
 
 const CollabsStateTimelineV2 = ({ collab, isCompany }: Props) => {
@@ -299,6 +310,7 @@ const collabsStateTimeLineStyles: { [key: string]: React.CSSProperties } = {
     // textAlign: "left",
     fontSize: "small",
     fontWeight: "bold",
+    paddingTop: 10,
   },
   errorReasonText: {
     color: "#7B3C47",
