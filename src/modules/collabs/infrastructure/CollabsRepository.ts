@@ -5,7 +5,11 @@ import {
   FullCollab,
   RejectedCollab,
 } from "../domain/Collabs";
-import { COLLABS_BASE, COLLABS_REJECTED_REASONS } from "../application/routes";
+import {
+  COLLABS_BASE,
+  COLLABS_REJECTED_REASONS,
+  endpoints,
+} from "../application/routes";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
 
 export class CollabsRepository {
@@ -140,6 +144,36 @@ export class CollabsRepository {
       const resp = await this.http.put<FullCollab>(
         `${COLLABS_BASE}/${id}`,
         collab,
+      );
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  public async pushHistoryState(
+    colabId: string | number,
+    state: number,
+  ): Promise<HttpResponseInterface<FullCollab>> {
+    try {
+      const resp = await this.http.put<FullCollab>(
+        endpoints.pushHistory(colabId, state),
+        {},
+      );
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  public async updateCollabNotes(
+    colabId: string | number,
+    company_notes: string,
+  ): Promise<HttpResponseInterface<FullCollab>> {
+    try {
+      const resp = await this.http.put<FullCollab>(
+        endpoints.colab(colabId),
+        { comapny_notes: company_notes }, // Using API field name (with typo)
       );
       return resp;
     } catch (error) {

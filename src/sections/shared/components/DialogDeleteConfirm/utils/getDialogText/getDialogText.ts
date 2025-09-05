@@ -10,6 +10,9 @@ const getDialogText = (pageName: string, type?: string) => {
       if (type === "modifyState") {
         return dialogTexts.modifyCollabState;
       }
+      if (type === "modifyStateWithNotes") {
+        return dialogTexts.modifyCollabStateWithNotes;
+      }
       if (type === CollabActionTypes.accept) {
         return dialogTexts.acceptCollab;
       }

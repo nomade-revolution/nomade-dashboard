@@ -37,7 +37,7 @@ export default function ReusableStepper({
   >(null);
 
   const { user } = useAuthContext();
-  const { updateCollabState } = useCollabsContext();
+  const { updateCollabState, handleAcceptWithNotes } = useCollabsContext();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     event.stopPropagation();
@@ -45,10 +45,14 @@ export default function ReusableStepper({
   };
 
   const handleActionSelected = (state_id: number) => {
-    setIsDialogOpen(true);
     setAnchorEl(null);
     setSelectedStateToModify(state_id);
-    if (collabStates.COLAB_REJECTED_STATE === state_id) {
+    setIsDialogOpen(true);
+
+    // Special handling for state 2 (Pendiente aceptación empresa)
+    if (state_id === collabStates.COLAB_PENDING_COMPANY_STATE) {
+      setCollabStateActionType(CollabActionTypes.modifyStateWithNotes);
+    } else if (collabStates.COLAB_REJECTED_STATE === state_id) {
       setCollabStateActionType(CollabActionTypes.refuse);
     } else {
       setCollabStateActionType(CollabActionTypes.modifyState);
@@ -60,10 +64,29 @@ export default function ReusableStepper({
     id: number,
     reason?: number,
     reasonText?: string,
+    notes?: string,
   ) => {
     if (!selectedStateToModify) return;
-    await updateCollabState(id, selectedStateToModify, reason, reasonText);
-    setIsDialogOpen(false);
+
+    // Special handling for state 2 with notes
+    if (
+      selectedStateToModify === collabStates.COLAB_PENDING_COMPANY_STATE &&
+      notes !== undefined
+    ) {
+      const result = await handleAcceptWithNotes(id, notes);
+
+      if (result.success) {
+        setIsDialogOpen(false);
+      } else if (result.partialSuccess) {
+        // Keep modal open for retry
+      } else {
+        // Keep modal open for retry
+      }
+    } else {
+      // Regular state update
+      await updateCollabState(id, selectedStateToModify, reason, reasonText);
+      setIsDialogOpen(false);
+    }
   };
 
   const allStatesOptions = collabStates.allCollabStatesOptions.filter(

@@ -30,6 +30,8 @@ export interface FullCollab extends Collab {
   addresses_id: number;
   conditions: string;
   note: string | null;
+  company_notes?: string;
+  comapny_notes?: string; // API typo - keeping both for compatibility
 }
 
 export interface State {
@@ -85,6 +87,7 @@ export enum CollabActionTypes {
   refuse = "refuse",
   cancel = "cancel",
   modifyState = "modifyState",
+  modifyStateWithNotes = "modifyStateWithNotes",
   sendPackage = "sendPackage",
 }
 
@@ -111,4 +114,8 @@ export interface CollabCollabableCreateLodging {
 export interface CollabCollabableCreateDelivery {
   day: string;
   time: string;
+}
+
+export interface UpdateCollabNotesPayload {
+  comapny_notes: string; // Using API field name (with typo)
 }

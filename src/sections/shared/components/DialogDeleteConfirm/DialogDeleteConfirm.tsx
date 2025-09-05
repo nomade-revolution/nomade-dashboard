@@ -15,6 +15,7 @@ import { CollabActionTypes } from "modules/collabs/domain/Collabs";
 import CollabsRejectedReasons from "sections/collabs/components/CollabsRejectedReasons/CollabsRejectedReasons";
 import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
 import { useState } from "react";
+import { TextField, Box } from "@mui/material";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -33,7 +34,12 @@ interface DialogDeleteConfirmProps {
   accept_state_id?: number;
   type?: string;
   successText?: string;
-  onAccept?: (sectionId: number, reason?: number, reasonText?: string) => void;
+  onAccept?: (
+    sectionId: number,
+    reason?: number,
+    reasonText?: string,
+    notes?: string,
+  ) => void;
 }
 
 export default function DialogDeleteConfirm({
@@ -48,14 +54,16 @@ export default function DialogDeleteConfirm({
 }: DialogDeleteConfirmProps) {
   const [reason, setReason] = useState<number | undefined>(undefined);
   const [reasonText, setReasonText] = useState<string>("");
+  const [companyNotes, setCompanyNotes] = useState<string>("");
   const { getFunctionForDialog, isSuccess } = useDialog();
   const { collabRejectedReasons } = useCollabsContext();
 
   const handleOnAccept = () => {
     if (onAccept) {
-      onAccept(sectionId, reason, reasonText);
+      onAccept(sectionId, reason, reasonText, companyNotes);
       setReason(undefined);
       setReasonText("");
+      setCompanyNotes("");
       return;
     }
     getFunctionForDialog(
@@ -72,6 +80,7 @@ export default function DialogDeleteConfirm({
     handleClose();
     setReason(undefined);
     setReasonText("");
+    setCompanyNotes("");
   };
 
   return (
@@ -95,6 +104,23 @@ export default function DialogDeleteConfirm({
         </DialogTitle>
         <DialogContent>
           <DialogContentText>{getDialogText(pageName, type)}</DialogContentText>
+          {type === "modifyStateWithNotes" && (
+            <Box sx={{ mt: 2 }}>
+              <TextField
+                id="company-notes-textarea"
+                label="Comentario"
+                multiline
+                rows={4}
+                value={companyNotes}
+                onChange={(e) => setCompanyNotes(e.target.value)}
+                placeholder="Escribe un comentario para el cliente (opcional)"
+                variant="outlined"
+                fullWidth
+                helperText={`${companyNotes.length}/1000 caracteres`}
+                error={companyNotes.length > 1000}
+              />
+            </Box>
+          )}
         </DialogContent>
         <DialogActions>
           {type === CollabActionTypes.refuse && (
@@ -109,7 +135,9 @@ export default function DialogDeleteConfirm({
           <Button
             onClick={handleOnAccept}
             sx={{ color: "#000", fontWeight: 700 }}
-            disabled={false}
+            disabled={
+              type === "modifyStateWithNotes" && companyNotes.length > 1000
+            }
           >
             {isSuccess ? (
               <SuccessFeedback text={successText || "Borrado"} />

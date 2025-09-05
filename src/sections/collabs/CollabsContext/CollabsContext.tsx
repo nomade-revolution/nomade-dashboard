@@ -12,6 +12,8 @@ import {
   exportCollabs,
   editCollabById,
   getCollabsBadge,
+  pushHistoryState,
+  updateCollabNotes,
 } from "modules/collabs/application/collabs";
 import { FullCollab, RejectedCollab } from "modules/collabs/domain/Collabs";
 import {
@@ -40,6 +42,10 @@ interface ContextState {
     reject_collab_reason_id?: number,
     reject_collab_reason_text?: string,
   ) => void;
+  handleAcceptWithNotes: (
+    colabId: number,
+    notes: string,
+  ) => Promise<{ success: boolean; error?: string; partialSuccess?: boolean }>;
   getAllRejectedCollabReasons: () => void;
   setOrder: (order: OrderItem) => void;
   order: OrderItem;
@@ -215,6 +221,49 @@ export const CollabsContextProvider = ({
 
       return response;
     },
+    [],
+  );
+
+  const handleAcceptWithNotes = useCallback(
+    async (colabId: number, notes: string) => {
+      try {
+        // Step 1: Push history to state 2
+        const pushResponse = await pushHistoryState(repository, colabId, 2);
+
+        if (!isHttpSuccessResponse(pushResponse)) {
+          return {
+            success: false,
+            error: "No se pudo actualizar el estado de la collab",
+          };
+        }
+
+        // Step 2: Update collab with notes
+        const updateResponse = await updateCollabNotes(
+          repository,
+          colabId,
+          notes,
+        );
+
+        if (isHttpSuccessResponse(updateResponse)) {
+          // Update context with the latest collab data
+          setCollab(updateResponse.data);
+          return { success: true };
+        } else {
+          // Partial success: state updated but notes failed
+          setCollab(pushResponse.data);
+          return {
+            success: false,
+            error: "Estado actualizado pero el comentario no se pudo guardar",
+            partialSuccess: true,
+          };
+        }
+      } catch (error) {
+        return {
+          success: false,
+          error: error instanceof Error ? error.message : "Error desconocido",
+        };
+      }
+    },
     [repository],
   );
 
@@ -232,6 +281,7 @@ export const CollabsContextProvider = ({
         getAllCollabs,
         deleteCollabById,
         updateCollabState,
+        handleAcceptWithNotes,
         getAllRejectedCollabReasons,
         order,
         setOrder,

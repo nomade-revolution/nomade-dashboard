@@ -73,6 +73,22 @@ export const editCollabById = (
   return collabsRepo.editCollabById(id, colab);
 };
 
+export const pushHistoryState = (
+  collabsRepo: CollabsRepository<FullCollab>,
+  colabId: string | number,
+  state: number,
+): Promise<HttpResponseInterface<FullCollab>> => {
+  return collabsRepo.pushHistoryState(colabId, state);
+};
+
+export const updateCollabNotes = (
+  collabsRepo: CollabsRepository<FullCollab>,
+  colabId: string | number,
+  company_notes: string,
+): Promise<HttpResponseInterface<FullCollab>> => {
+  return collabsRepo.updateCollabNotes(colabId, company_notes);
+};
+
 export const getCollabsBadge = (companyRepo: CollabsRepository<number>) => {
   return companyRepo.getCollabsBadge();
 };

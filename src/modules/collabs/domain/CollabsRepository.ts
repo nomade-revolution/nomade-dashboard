@@ -23,5 +23,13 @@ export interface CollabsRepository<I> {
     id: number,
     collab: Partial<FullCollab>,
   ): Promise<HttpResponseInterface<FullCollab>>;
+  pushHistoryState(
+    colabId: string | number,
+    state: number,
+  ): Promise<HttpResponseInterface<FullCollab>>;
+  updateCollabNotes(
+    colabId: string | number,
+    company_notes: string,
+  ): Promise<HttpResponseInterface<FullCollab>>;
   getCollabsBadge(): Promise<HttpResponseInterface<I>>;
 }
