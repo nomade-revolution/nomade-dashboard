@@ -414,7 +414,9 @@ const CompanyForm = ({
 
             {type !== "edit" ? (
               <section className="lead-form__section">
-                <h4 className="lead-form__title">Cuenta</h4>
+                <h4 className="lead-form__title">
+                  Datos de acceso del usuario
+                </h4>
                 <div className="form-subsection">
                   <label htmlFor="email" className="form-subsection__label">
                     Email
