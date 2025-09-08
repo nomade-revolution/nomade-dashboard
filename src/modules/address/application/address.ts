@@ -15,3 +15,11 @@ export const createAddress = (
 ): Promise<HttpResponseInterface<FullAddress>> => {
   return addressRepo.createAddress(address);
 };
+
+export const updateAddress = (
+  addressRepo: AddressRepository<FullAddress>,
+  address_id: number,
+  address: Partial<FullAddress>,
+): Promise<HttpResponseInterface<FullAddress>> => {
+  return addressRepo.updateAddress(address_id, address);
+};

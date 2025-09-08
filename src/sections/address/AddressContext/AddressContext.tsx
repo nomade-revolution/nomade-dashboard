@@ -2,9 +2,11 @@ import React, { createContext, useCallback, useState } from "react";
 import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
 import { AddressRepository } from "modules/address/domain/AddressRepository";
 import { FullAddress } from "modules/address/domain/Address";
+import { HttpResponseInterface } from "@core/domain";
 import {
   getAddressById,
   createAddress,
+  updateAddress,
 } from "modules/address/application/address";
 
 interface ContextState {
@@ -12,6 +14,10 @@ interface ContextState {
   address: FullAddress;
   getAddress: (influencer_id: number) => void;
   createNewAddress: (address: FullAddress) => void;
+  updateAddress: (
+    address_id: number,
+    address: Partial<FullAddress>,
+  ) => Promise<HttpResponseInterface<FullAddress>>;
 }
 
 export const AddressContext = createContext<ContextState>({} as ContextState);
@@ -57,6 +63,22 @@ export const AddressContextProvider = ({
     [repository],
   );
 
+  const updateAddressMethod = useCallback(
+    async (address_id: number, address: Partial<FullAddress>) => {
+      setLoading(true);
+      const response = await updateAddress(repository, address_id, address);
+
+      if (isHttpSuccessResponse(response)) {
+        setAddress(response.data);
+        setLoading(false);
+      }
+      setLoading(false);
+
+      return response;
+    },
+    [repository],
+  );
+
   return (
     <AddressContext.Provider
       value={{
@@ -64,6 +86,7 @@ export const AddressContextProvider = ({
         address,
         getAddress,
         createNewAddress,
+        updateAddress: updateAddressMethod,
       }}
     >
       {children}

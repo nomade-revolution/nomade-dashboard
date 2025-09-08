@@ -32,4 +32,19 @@ export class AddressRepository {
       return Promise.reject(error);
     }
   }
+
+  public async updateAddress(
+    address_id: number,
+    address: Partial<FullAddress>,
+  ): Promise<HttpResponseInterface<FullAddress>> {
+    try {
+      const resp = await this.http.put<FullAddress>(
+        `${ADDRESS_BASE}/${address_id}`,
+        address,
+      );
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 }

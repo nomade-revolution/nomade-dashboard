@@ -168,12 +168,17 @@ const OfferResume = ({
                   <>
                     <span className="offer-resume__text-icon">
                       <FaLocationDot color={"#AD6975"} />
-                      {(
-                        schedule as
+                      {(() => {
+                        const scheduleData = schedule as
                           | OfferableRestaurant
                           | OfferableActivity
-                          | OfferableLodging
-                      ).address || ""}
+                          | OfferableLodging;
+                        const addressId = scheduleData.address_id;
+                        const address = offer?.addresses?.find(
+                          (addr) => addr.address_id === addressId,
+                        );
+                        return address?.address || "";
+                      })()}
                     </span>
 
                     <div className="offer-resume__section-row">

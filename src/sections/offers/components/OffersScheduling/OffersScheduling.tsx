@@ -26,11 +26,13 @@ import {
 } from "modules/offers/domain/Offer";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IoAddCircle } from "react-icons/io5";
+import { FaEdit } from "react-icons/fa";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
 import AddressForm from "sections/shared/components/AddressForm/AddressForm";
 import { Addresses } from "../OffersForm/OffersForm";
 import { FullAddress } from "modules/address/domain/Address";
 import { useAddressContext } from "sections/address/AddressContext/useAddressContext";
+import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
 
 interface Props {
   type: OfferTypes | string;
@@ -98,8 +100,15 @@ const OffersScheduling = ({
   setAddresses,
 }: Props): React.ReactElement => {
   const { setFieldValue, values } = useFormikContext();
-  const { createNewAddress } = useAddressContext();
+  const {
+    createNewAddress,
+    updateAddress,
+    getAddress,
+    address: contextAddress,
+  } = useAddressContext();
   const [isAddressModalOpen, setIsAddressModalOpen] = useState<boolean>(false);
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
+  const [editingAddressId, setEditingAddressId] = useState<number | null>(null);
 
   const schedulingStateSelected =
     type === OfferTypes.restaurant
@@ -155,6 +164,105 @@ const OffersScheduling = ({
     } catch (error) {
       // console.log("error", error);
     }
+  };
+
+  const handleUpdateAddress = async (updatedAddress: FullAddress) => {
+    if (!editingAddressId || !updatedAddress) return;
+    try {
+      const response = await updateAddress(editingAddressId, updatedAddress);
+      if (isHttpSuccessResponse(response)) {
+        // Update addresses list
+        setAddresses(
+          addresses.map((addr) =>
+            addr.id === editingAddressId
+              ? { ...addr, name: updatedAddress.address }
+              : addr,
+          ),
+        );
+
+        // Clean any existing offerable data from stale address strings
+        cleanStaleAddressData();
+
+        setIsAddressModalOpen(false);
+        setIsEditMode(false);
+        setEditingAddressId(null);
+      }
+    } catch (error) {
+      // console.log("error", error);
+    }
+  };
+
+  const cleanStaleAddressData = () => {
+    // Clean restaurant data
+    if (schedulingState.restaurant.length > 0) {
+      const cleanedRestaurant = schedulingState.restaurant.map((item) => ({
+        ...item,
+        // Remove any stale address string if it exists
+        address: undefined,
+      }));
+      handleScheduling("restaurant", cleanedRestaurant);
+    }
+
+    // Clean lodging data
+    if (schedulingState.lodging.length > 0) {
+      const cleanedLodging = schedulingState.lodging.map((item) => ({
+        ...item,
+        // Remove any stale address string if it exists
+        address: undefined,
+      }));
+      handleScheduling("lodging", cleanedLodging);
+    }
+
+    // Clean activity data
+    if (schedulingState.activity.length > 0) {
+      const cleanedActivity = schedulingState.activity.map((item) => ({
+        ...item,
+        // Remove any stale address string if it exists
+        address: undefined,
+      }));
+      handleScheduling("activity", cleanedActivity);
+    }
+  };
+
+  const handleEditAddress = async () => {
+    // Convert address string to number for comparison
+    const addressId = parseInt(address, 10);
+
+    // Check if addressId is valid
+    if (isNaN(addressId) || addressId <= 0) {
+      return;
+    }
+
+    // Find the currently selected address ID
+    const selectedAddress = addresses.find(
+      (addr) => addr.id === addressId || addr.value === addressId,
+    );
+
+    if (selectedAddress) {
+      try {
+        // Fetch the full address data from the API using context
+        await getAddress(selectedAddress.id);
+        // The context will update the address state, so we can use it
+        setEditingAddressId(selectedAddress.id);
+        setIsEditMode(true);
+        setIsAddressModalOpen(true);
+      } catch (error) {
+        // Error fetching address data
+      }
+    }
+  };
+
+  const handleModalClose = () => {
+    setIsAddressModalOpen(false);
+    setIsEditMode(false);
+    setEditingAddressId(null);
+  };
+
+  const getAddressDataForEdit = (): FullAddress => {
+    if (!isEditMode || !contextAddress || !contextAddress.id)
+      return {} as FullAddress;
+
+    return contextAddress;
   };
 
   const handleOfferTimetables = () => {
@@ -322,6 +430,15 @@ const OffersScheduling = ({
               <IoAddCircle className="datasheet-form__create--icon" />
               Añadir dirección
             </button>
+            <button
+              type="button"
+              className="datasheet-form__edit-address"
+              onClick={handleEditAddress}
+              disabled={!address || addresses.length === 0}
+            >
+              <FaEdit className="datasheet-form__create--icon" />
+              Editar dirección
+            </button>
           </div>
           <section className="scheduling__section">
             <div className="form-subsection">
@@ -471,14 +588,14 @@ const OffersScheduling = ({
         children={
           <AddressForm
             // @ts-expect-error TODO: fix this
-            address={{}}
+            address={isEditMode ? getAddressDataForEdit() : {}}
             // @ts-expect-error TODO: fix this
-            setAddress={handleCreateAddress}
-            setIsModalOpen={setIsAddressModalOpen}
+            setAddress={isEditMode ? handleUpdateAddress : handleCreateAddress}
+            setIsModalOpen={handleModalClose}
           />
         }
         openModal={isAddressModalOpen}
-        setIsModalOpen={setIsAddressModalOpen}
+        setIsModalOpen={handleModalClose}
       />
     </OfferSchedulingStyled>
   );

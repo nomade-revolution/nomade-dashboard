@@ -81,7 +81,6 @@ export interface WeekDay {
 export interface OfferableRestaurant {
   type?: string;
   address_id: number;
-  address?: string;
   min_guests: number;
   max_guests: number;
   week: WeekDay[][];
@@ -90,7 +89,6 @@ export interface OfferableRestaurant {
 export interface OfferableLodging {
   type?: string;
   address_id: number;
-  address?: string;
   min_guests: number;
   max_guests: number;
 }
@@ -98,7 +96,6 @@ export interface OfferableLodging {
 export interface OfferableActivity {
   type?: string;
   address_id: number;
-  address?: string;
   min_guests: number;
   max_guests: number;
   week: WeekDay[][];
