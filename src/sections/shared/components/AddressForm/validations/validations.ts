@@ -9,7 +9,7 @@ export const errorMessages = {
 
 export const addressSchema = yup.object({
   address: yup.string().required(errorMessages.required),
-  address_2: yup.string().nullable(),
+  address_2: yup.string().optional(),
   // contact_name: yup.string().required(errorMessages.required),
   // contact_phone: yup
   //   .string()

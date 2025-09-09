@@ -38,10 +38,10 @@ export class AddressRepository {
     address: Partial<FullAddress>,
   ): Promise<HttpResponseInterface<FullAddress>> {
     try {
-      const resp = await this.http.put<FullAddress>(
-        `${ADDRESS_BASE}/${address_id}`,
-        address,
-      );
+      const url = `${ADDRESS_BASE}/${address_id}`;
+
+      const resp = await this.http.put<FullAddress>(url, address);
+
       return resp;
     } catch (error) {
       return Promise.reject(error);

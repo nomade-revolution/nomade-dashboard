@@ -166,19 +166,22 @@ const OffersScheduling = ({
     }
   };
 
-  const handleUpdateAddress = async (updatedAddress: FullAddress) => {
-    if (!editingAddressId || !updatedAddress) return;
+  const handleUpdateAddress = async (
+    addressId: number,
+    updatedAddress: Partial<FullAddress>,
+  ) => {
+    if (!addressId || !updatedAddress) return;
     try {
-      const response = await updateAddress(editingAddressId, updatedAddress);
+      const response = await updateAddress(addressId, updatedAddress);
       if (isHttpSuccessResponse(response)) {
-        // Update addresses list
-        setAddresses(
-          addresses.map((addr) =>
-            addr.id === editingAddressId
-              ? { ...addr, name: updatedAddress.address }
-              : addr,
-          ),
+        // Update addresses list with the response data from the API
+        const updatedAddresses = addresses.map((addr) =>
+          addr.id === addressId
+            ? { ...addr, name: response.data.address }
+            : addr,
         );
+
+        setAddresses(updatedAddresses);
 
         // Clean any existing offerable data from stale address strings
         cleanStaleAddressData();
@@ -188,7 +191,7 @@ const OffersScheduling = ({
         setEditingAddressId(null);
       }
     } catch (error) {
-      // console.log("error", error);
+      // Address update failed
     }
   };
 
@@ -592,6 +595,9 @@ const OffersScheduling = ({
             // @ts-expect-error TODO: fix this
             setAddress={isEditMode ? handleUpdateAddress : handleCreateAddress}
             setIsModalOpen={handleModalClose}
+            isEditMode={isEditMode}
+            editingAddressId={editingAddressId}
+            updateAddress={handleUpdateAddress}
           />
         }
         openModal={isAddressModalOpen}

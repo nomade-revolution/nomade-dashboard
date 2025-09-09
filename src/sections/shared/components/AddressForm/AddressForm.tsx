@@ -15,6 +15,12 @@ interface Props {
   setAddress: Dispatch<SetStateAction<FullAddress | null>>;
   address: FullAddress;
   setIsModalOpen: (value: boolean) => void;
+  isEditMode?: boolean;
+  editingAddressId?: number | null;
+  updateAddress?: (
+    id: number,
+    address: Partial<FullAddress>,
+  ) => Promise<unknown>;
 }
 
 const initialState: FullAddress = {
@@ -33,6 +39,9 @@ const AddressForm = ({
   setAddress,
   address,
   setIsModalOpen,
+  isEditMode = false,
+  editingAddressId = null,
+  updateAddress,
 }: Props): React.ReactElement => {
   const { getAllCountries, countries } = useCountryContext();
   const { cities, getAllCities } = useCitiesContext();
@@ -52,9 +61,48 @@ const AddressForm = ({
     { setSubmitting }: FormikHelpers<FullAddress>,
   ) => {
     setSubmitting(true);
-    setAddress({ ...values, city_id: city, country_id: +country });
+
+    // Ensure all required string fields are properly set
+    const cleanedValues: Record<string, unknown> = {
+      city_id: city,
+      country_id: +country,
+      province: String(values.province || ""),
+      zip_code: String(values.zip_code || ""),
+      name: String(values.name || ""),
+      address: String(values.address || ""),
+    };
+
+    // Only include address_2 if it has a value, otherwise omit it completely
+    if (values.address_2 && values.address_2.trim() !== "") {
+      cleanedValues.address_2 = String(values.address_2);
+    }
+
+    // Include other fields that might be needed
+    if (values.id) cleanedValues.id = values.id;
+    if (values.city) cleanedValues.city = values.city;
+    if (values.country) cleanedValues.country = values.country;
+    if (values.contact_name) cleanedValues.contact_name = values.contact_name;
+    if (values.contact_phone)
+      cleanedValues.contact_phone = values.contact_phone;
+    if (values.latitude) cleanedValues.latitude = values.latitude;
+    if (values.longitude) cleanedValues.longitude = values.longitude;
+
+    if (isEditMode && editingAddressId && updateAddress) {
+      // Edit mode - call API through the updateAddress prop
+      try {
+        // Call the updateAddress function passed as prop (this will handle the API call and UI update)
+        await updateAddress(editingAddressId, cleanedValues);
+        setIsModalOpen(false);
+      } catch (error) {
+        // Address update failed
+      }
+    } else {
+      // Create mode - existing behavior
+      setAddress(cleanedValues);
+      setIsModalOpen(false);
+    }
+
     setSubmitting(false);
-    setIsModalOpen(false);
   };
 
   useEffect(() => {
@@ -91,6 +139,12 @@ const AddressForm = ({
   const initialValues = {
     ...initialState,
     ...address,
+    // Ensure all required string fields are strings, not undefined/null
+    address_2: address.address_2 ? String(address.address_2) : "",
+    province: String(address.province || ""),
+    zip_code: String(address.zip_code || ""),
+    name: String(address.name || ""),
+    address: String(address.address || ""),
   };
 
   return (
