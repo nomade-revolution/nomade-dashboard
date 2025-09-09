@@ -171,10 +171,9 @@ export class CollabsRepository {
     company_notes: string,
   ): Promise<HttpResponseInterface<FullCollab>> {
     try {
-      const resp = await this.http.put<FullCollab>(
-        endpoints.colab(colabId),
-        { comapny_notes: company_notes }, // Using API field name (with typo)
-      );
+      const resp = await this.http.put<FullCollab>(endpoints.colab(colabId), {
+        company_notes: company_notes,
+      });
       return resp;
     } catch (error) {
       return Promise.reject(error);
