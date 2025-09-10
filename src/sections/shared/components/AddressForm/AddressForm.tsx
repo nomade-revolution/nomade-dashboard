@@ -1,5 +1,5 @@
 import { Formik, Field, ErrorMessage, FormikHelpers } from "formik";
-import { FullAddress } from "modules/offers/domain/OfferrAddress";
+import { FullAddress } from "modules/address/domain/Address";
 import { addressSchema } from "./validations/validations";
 import ReusableSelect from "../ReusableSelect/ReusableSelect";
 import ReusableFormStyled from "assets/styles/ReusableFormStyled";

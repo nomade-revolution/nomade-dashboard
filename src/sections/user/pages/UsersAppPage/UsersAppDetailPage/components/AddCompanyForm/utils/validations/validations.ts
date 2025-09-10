@@ -50,6 +50,7 @@ export const initialData: PartialCompany = {
   instagram: "",
   web: "",
   start_date: "",
+  name: "",
   email: "",
   password: "",
   password_confirmation: "",

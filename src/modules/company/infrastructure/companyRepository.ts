@@ -176,7 +176,10 @@ export class CompanyRepository {
     } catch (error) {
       // DEV-only error logging
       const isDev = import.meta.env.MODE !== "production";
-      if (isDev && error?.response?.config?.url?.includes("/companies/")) {
+      if (
+        isDev &&
+        (error as any)?.response?.config?.url?.includes("/companies/")
+      ) {
         // Debug logging removed for production
       }
       return Promise.reject(error);
