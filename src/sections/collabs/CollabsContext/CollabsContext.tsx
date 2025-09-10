@@ -12,7 +12,6 @@ import {
   exportCollabs,
   editCollabById,
   getCollabsBadge,
-  pushHistoryState,
   updateCollabNotes,
 } from "modules/collabs/application/collabs";
 import { FullCollab, RejectedCollab } from "modules/collabs/domain/Collabs";
@@ -227,8 +226,12 @@ export const CollabsContextProvider = ({
   const handleAcceptWithNotes = useCallback(
     async (colabId: number, notes: string) => {
       try {
-        // Step 1: Push history to state 2
-        const pushResponse = await pushHistoryState(repository, colabId, 2);
+        // Step 1: Push history to state 2 using the existing working method
+        const pushResponse = await updateCollabHistoryState(
+          repository,
+          colabId,
+          2, // COLAB_PENDING_COMPANY_STATE
+        );
 
         if (!isHttpSuccessResponse(pushResponse)) {
           return {

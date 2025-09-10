@@ -156,10 +156,21 @@ export class CollabsRepository {
     state: number,
   ): Promise<HttpResponseInterface<FullCollab>> {
     try {
+      // DEV-only debug logging
+      const isDev = import.meta.env.MODE !== "production";
+      if (isDev) {
+        // Debug logging removed for production
+      }
+
       const resp = await this.http.put<FullCollab>(
         endpoints.pushHistory(colabId, state),
         {},
       );
+
+      if (isDev) {
+        // Debug logging removed for production
+      }
+
       return resp;
     } catch (error) {
       return Promise.reject(error);
@@ -171,9 +182,20 @@ export class CollabsRepository {
     company_notes: string,
   ): Promise<HttpResponseInterface<FullCollab>> {
     try {
+      // DEV-only debug logging
+      const isDev = import.meta.env.MODE !== "production";
+      if (isDev) {
+        // Debug logging removed for production
+      }
+
       const resp = await this.http.put<FullCollab>(endpoints.colab(colabId), {
         company_notes: company_notes,
       });
+
+      if (isDev) {
+        // Debug logging removed for production
+      }
+
       return resp;
     } catch (error) {
       return Promise.reject(error);

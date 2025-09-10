@@ -37,8 +37,13 @@ const HIDE_CANCEL_BUTTON_STATES = [
 ];
 
 const CollabDetailPage = (): React.ReactElement => {
-  const { getCollabById, collab, loading, getAllRejectedCollabReasons } =
-    useCollabsContext();
+  const {
+    getCollabById,
+    collab,
+    loading,
+    getAllRejectedCollabReasons,
+    handleAcceptWithNotes,
+  } = useCollabsContext();
   const {
     getInfluencer,
     influencer,
@@ -65,7 +70,7 @@ const CollabDetailPage = (): React.ReactElement => {
 
   const handleOpenDialogAccept = () => {
     handleIsDialogOpen(setIsDialogOpen);
-    setIsAcceptOrRefuse(CollabActionTypes.accept);
+    setIsAcceptOrRefuse(CollabActionTypes.modifyStateWithNotes);
   };
 
   const handleOpenDialogSendPackage = () => {
@@ -80,6 +85,37 @@ const CollabDetailPage = (): React.ReactElement => {
 
   const [collabStateActionType, setCollabStateActionType] =
     useState<CollabActionTypes | null>(null);
+
+  const handleOnAcceptWithNotes = async (
+    id: number,
+    _reason?: number,
+    _reasonText?: string,
+    notes?: string,
+  ) => {
+    if (isAcceptOrRefuse !== CollabActionTypes.modifyStateWithNotes) return;
+
+    // DEV-only debug logging
+    const isDev = import.meta.env.MODE !== "production";
+    if (isDev) {
+      // Debug logging removed for production
+    }
+
+    try {
+      const result = await handleAcceptWithNotes(id, notes ?? "");
+      if (result.success) {
+        setIsDialogOpen(false);
+        // Success - modal closes and timeline updates automatically via context
+      } else if (result.partialSuccess) {
+        // Partial success: state updated but notes failed - keep modal open for retry
+        // Error logging removed for production
+      } else {
+        // Error - keep modal open for retry
+        // Error logging removed for production
+      }
+    } catch (error) {
+      // Error logging removed for production
+    }
+  };
 
   useEffect(() => {
     getCollabById(+id!);
@@ -147,8 +183,7 @@ const CollabDetailPage = (): React.ReactElement => {
                 />
               )}
               {collab.state &&
-                (collab.state.id === COLAB_PENDING_COMPANY_STATE ||
-                  collab.state.id === COLAB_PENDING_NOMADE_STATE) && (
+                collab.state.id === COLAB_PENDING_NOMADE_STATE && (
                   <>
                     <ActionButton
                       icon={<FaCheckCircle />}
@@ -215,14 +250,17 @@ const CollabDetailPage = (): React.ReactElement => {
             <DialogDeleteConfirm
               handleClose={() => setIsDialogOpen(false)}
               open={isDialogOpen}
+              onAccept={handleOnAcceptWithNotes}
               sectionId={collab.id!}
               pageName={SectionTypes.collabs}
               type={isAcceptOrRefuse}
               accept_state_id={
-                collab.state &&
-                collab.state.id === collabStates.COLAB_PENDING_NOMADE_STATE
-                  ? collabStates.COLAB_PENDING_COMPANY_STATE
-                  : collabStates.COLAB_ACCEPTED_STATE
+                isAcceptOrRefuse === CollabActionTypes.modifyStateWithNotes
+                  ? COLAB_PENDING_COMPANY_STATE
+                  : collab.state &&
+                      collab.state.id === COLAB_PENDING_NOMADE_STATE
+                    ? COLAB_PENDING_COMPANY_STATE
+                    : collabStates.COLAB_ACCEPTED_STATE
               }
             />
           </>
