@@ -95,7 +95,7 @@ const AddressForm = ({
       }
     } else {
       // Create mode - existing behavior
-      setAddress(cleanedValues as FullAddress);
+      setAddress(cleanedValues as unknown as FullAddress);
       setIsModalOpen(false);
     }
 
