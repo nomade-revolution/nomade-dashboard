@@ -7,4 +7,9 @@ const environments = {
   cookies: process.env.VITE_COOKIES_USER_TOKEN,
 };
 
+// DEV-only debug logging
+if (import.meta.env.MODE !== "production") {
+  // Debug logging removed for production
+}
+
 export default environments;

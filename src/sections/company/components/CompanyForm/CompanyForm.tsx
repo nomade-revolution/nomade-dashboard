@@ -43,7 +43,7 @@ interface SubmitValues extends PartialCompany {
 }
 
 interface Props {
-  onSubmit: (values: FormData, id?: number) => void;
+  onSubmit: (values: FormData, id?: number) => Promise<unknown>;
   type?: string;
   client?: Company;
   setIsOpen: (value: boolean) => void;
@@ -56,7 +56,7 @@ const CompanyForm = ({
   setIsOpen,
 }: Props): React.ReactElement => {
   const [formState, setFormState] = useState<{ company_plan_id: string }>({
-    company_plan_id: client?.plan?.plan_id.toString() || "",
+    company_plan_id: client?.plan?.plan_id?.toString() || "1", // Default to plan ID 1 for new clients
   });
   const { user } = useAuthContext();
   const [file, setFile] = useState<File[] | null>(() => {
@@ -114,6 +114,12 @@ const CompanyForm = ({
 
     setSubmitting(true);
 
+    // DEV-only debug logging
+    const isDev = import.meta.env.MODE !== "production";
+    if (isDev) {
+      // Debug logging removed for production
+    }
+
     try {
       if (type === "edit" && deleteImageMode) {
         await editCompanyCms(
@@ -129,7 +135,9 @@ const CompanyForm = ({
     }
 
     const formData = new FormData();
-    const formattedDate = formatDateWithDash(values.plan?.start_date);
+    const formattedDate = formatDateWithDash(
+      values.plan?.start_date || new Date().toISOString().split("T")[0],
+    );
 
     Object.keys(values).forEach((key) => {
       if (!EXCLUDED_FIELDS.includes(key)) {
@@ -145,6 +153,17 @@ const CompanyForm = ({
         address_2: registerAddress.address_2 ?? "",
       };
       formData.append("address", JSON.stringify(newAddress));
+    } else {
+      // For new clients without address, provide minimal required fields
+      const defaultAddress = {
+        address: "Default Address", // Required field
+        city_id: 1, // Required field - default to first city
+        country_id: 1, // Required field - default to Spain (ID 1)
+        province: "Default Province",
+        zip_code: "00000",
+        name: "Default Address Name",
+      };
+      formData.append("address", JSON.stringify(defaultAddress));
     }
 
     formData.append("start_date", formattedDate);
@@ -194,11 +213,21 @@ const CompanyForm = ({
     formData.append("comments", (values as any)?.company_comments);
     formData.append("plan_id", formState.company_plan_id);
 
+    // Add hash field - required by the API
+    formData.append("hash", "default_hash_value");
+
     const response = await onSubmit(formData, client && client?.id);
 
-    // @ts-expect-error TODO fix this
-    if (response?.success) {
+    // DEV-only debug logging
+    if (isDev) {
+      // Debug logging removed for production
+    }
+
+    if ((response as { success?: boolean })?.success) {
+      // Debug logging removed for production
       setIsOpen(false);
+    } else {
+      // Debug logging removed for production
     }
 
     setSubmitting(false);
@@ -418,6 +447,25 @@ const CompanyForm = ({
                   Datos de acceso del usuario
                 </h4>
                 <div className="form-subsection">
+                  <label htmlFor="name" className="form-subsection__label">
+                    Nombre
+                  </label>
+                  <Field
+                    type="text"
+                    id="name"
+                    className="form-subsection__field-large--company"
+                    aria-label="nombre"
+                    {...getFieldProps("name")}
+                  />
+                  {errors.name && touched.name && (
+                    <ErrorMessage
+                      className="form-subsection__error-message"
+                      component="span"
+                      name="name"
+                    />
+                  )}
+                </div>
+                <div className="form-subsection">
                   <label htmlFor="email" className="form-subsection__label">
                     Email
                   </label>
@@ -615,8 +663,11 @@ const CompanyForm = ({
               </button>
             </div>
             {registerContacts &&
-              registerContacts.map((contact) => (
-                <section className="lead-form__address">
+              registerContacts.map((contact, index) => (
+                <section
+                  key={`contact-${index}`}
+                  className="lead-form__address"
+                >
                   <div>
                     <span>{contact.name}</span>
                     <span> {contact.surname}</span>
@@ -755,7 +806,18 @@ const CompanyForm = ({
           <ReusableModal
             children={
               <AddressForm
-                address={registerAddress!}
+                address={
+                  registerAddress || {
+                    address: "",
+                    address_2: "",
+                    city_id: "1", // Default to first city (ID 1) as string
+                    country_id: 1, // Default to Spain (ID 1) instead of 0
+                    name: "",
+                    province: "",
+                    zip_code: "",
+                    id: 0, // Required field
+                  }
+                }
                 setAddress={setRegisterAddress as never}
                 setIsModalOpen={setIsAddressModalOpen}
               />

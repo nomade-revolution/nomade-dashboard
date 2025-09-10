@@ -20,6 +20,7 @@ export const clientSchema = yup.object().shape({
     .typeError("La fecha debe tener un formato válido")
     .nullable(),
 
+  name: yup.string(),
   email: yup.string().required("El email es un campo requerido").email(),
   password: yup
     .string()
@@ -65,6 +66,7 @@ export const initialData: PartialCompany = {
   instagram: "",
   web: "",
   start_date: "",
+  name: "",
   email: "",
   password: "",
   password_confirmation: "",

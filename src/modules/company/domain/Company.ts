@@ -20,6 +20,7 @@ export type PartialCompany = Pick<
   "company" | "company_name" | "description" | "nif" | "web" | "phone"
 > & {
   start_date: string;
+  name: string;
   email: string;
   password: string;
   password_confirmation: string;

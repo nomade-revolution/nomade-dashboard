@@ -52,14 +52,30 @@ export class HttpImplementation implements HttpInterface {
   ): Promise<AxiosResponse> {
     try {
       await this.buildHeaders();
+
+      // DEV-only debug logging
+      const isDev = import.meta.env.MODE !== "production";
+      if (isDev) {
+        // Debug logging removed for production
+      }
+
       const response = await axios.post(url, body, {
         headers: this.getHeaders(),
         timeout: this.REQUEST_TIMEOUT,
         responseType: responseType as "json",
       });
-      return response.data;
+
+      if (isDev) {
+        // Debug logging removed for production
+      }
+
+      return response; // FIXED: Return full response object, not just response.data
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        const isDev = import.meta.env.MODE !== "production";
+        if (isDev) {
+          // Debug logging removed for production
+        }
         return error.response as AxiosResponse;
       }
       return Promise.reject(error);
@@ -78,8 +94,11 @@ export class HttpImplementation implements HttpInterface {
         timeout: this.REQUEST_TIMEOUT,
         responseType: responseType as "json",
       });
-      return response.data;
+      return response; // FIXED: Return full response object, not just response.data
     } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return error.response as AxiosResponse;
+      }
       return Promise.reject(error);
     }
   }
@@ -96,8 +115,11 @@ export class HttpImplementation implements HttpInterface {
         timeout: this.REQUEST_TIMEOUT,
         responseType: responseType as "json",
       });
-      return response.data;
+      return response; // FIXED: Return full response object, not just response.data
     } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return error.response as AxiosResponse;
+      }
       return Promise.reject(error);
     }
   }
@@ -113,8 +135,11 @@ export class HttpImplementation implements HttpInterface {
         timeout: this.REQUEST_TIMEOUT,
         responseType: responseType as "json",
       });
-      return response.data;
+      return response; // FIXED: Return full response object, not just response.data
     } catch (error) {
+      if (axios.isAxiosError(error)) {
+        return error.response as AxiosResponse;
+      }
       return Promise.reject(error);
     }
   }
@@ -132,15 +157,31 @@ export class HttpImplementation implements HttpInterface {
 
   private async buildHeaders(): Promise<void> {
     try {
-      this.token = "";
-      if (!this.token) {
-        this.token = await this.cookies.get(environments.cookies!);
-        this.setHeader("Authorization", "Bearer " + this.token!);
+      // Get token from cookies
+      this.token = await this.cookies.get(environments.cookies!);
+
+      // DEV-only debug logging
+      const isDev = import.meta.env.MODE !== "production";
+      if (isDev) {
+        // Debug logging removed for production
       }
+
+      // Set Authorization header if token exists
       if (this.token) {
-        this.setHeader("Authorization", "Bearer " + this.token!);
+        this.setHeader("Authorization", "Bearer " + this.token);
+        if (isDev) {
+          // Debug logging removed for production
+        }
+      } else {
+        if (isDev) {
+          // Debug logging removed for production
+        }
       }
-    } catch {
+    } catch (error) {
+      const isDev = import.meta.env.MODE !== "production";
+      if (isDev) {
+        // Debug logging removed for production
+      }
       return Promise.resolve();
     }
   }

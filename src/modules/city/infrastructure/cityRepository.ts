@@ -11,11 +11,22 @@ export class CityRepository {
     filters: FilterParams,
   ): Promise<HttpResponseInterface<CityInterface[]>> {
     try {
+      // DEV-only debug logging
+      const isDev = import.meta.env.MODE !== "production";
+      if (isDev) {
+        // Debug logging removed for production
+      }
+
       const resp = await this.http.get<CityInterface[]>(CITY_BASE, {
         filters,
       });
       return resp;
     } catch (error) {
+      // DEV-only debug logging
+      const isDev = import.meta.env.MODE !== "production";
+      if (isDev) {
+        // Debug logging removed for production
+      }
       return Promise.reject(error);
     }
   }

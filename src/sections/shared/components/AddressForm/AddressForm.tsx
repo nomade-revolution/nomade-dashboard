@@ -26,13 +26,14 @@ interface Props {
 const initialState: FullAddress = {
   address: "",
   address_2: "",
-  city_id: "",
+  city_id: "1", // Default to first city (ID 1) as string
   // contact_name: "",
   // contact_phone: "",
-  country_id: 0,
+  country_id: 1, // Default to Spain (ID 1) instead of 0
   name: "",
   province: "",
   zip_code: "",
+  id: 0, // Required field
 };
 
 const AddressForm = ({
@@ -51,10 +52,10 @@ const AddressForm = ({
 
   const [citiesFormat, setCitiesFormat] = useState<OptionsStructure[]>([]);
   const [country, setCountry] = useState<string>(
-    { ...initialState, ...address }.country_id.toString(),
+    { ...initialState, ...address }.country_id?.toString() || "1",
   );
   const [city, setCity] = useState<string>(
-    { ...initialState, ...address }.city_id,
+    { ...initialState, ...address }.city_id?.toString() || "1",
   );
   const handleSubmitForm = async (
     values: FullAddress,
@@ -298,7 +299,7 @@ const AddressForm = ({
                 id="name"
                 className="form-subsection__field"
                 aria-label="Comentarios"
-                maxlength="1000"
+                maxLength={1000}
                 {...getFieldProps("name")}
               />
               {errors.name && touched.name && (

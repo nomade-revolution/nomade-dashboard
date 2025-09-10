@@ -43,7 +43,7 @@ interface ContextState {
   postCompany: (company: FormData) => void;
   postBaseCompany: (company: FormData) => void;
   getCompaniesStatusBadge: () => void;
-  postCompanyCms: (company: FormData) => void;
+  postCompanyCms: (company: FormData) => Promise<unknown>;
   editCompanyCms: (company: FormData, id?: number) => void;
   exportCompaniesExcel: () => void;
   exportCompanyBillingExcel: (params?: FilterParams) => void;
@@ -204,13 +204,26 @@ export const CompanyContextProvider = ({
 
   const postCompanyCms = async (company: FormData) => {
     setLoading(true);
+
+    // DEV-only debug logging
+    const isDev = import.meta.env.MODE !== "production";
+    if (isDev) {
+      // Debug logging removed for production
+    }
+
     const response = await postNewCompany(repository, company);
 
+    if (isDev) {
+      // Debug logging removed for production
+    }
+
     if (isHttpSuccessResponse(response)) {
+      // Debug logging removed for production
       setCompany(response.data);
       setLoading(false);
       setIsSuccess(true);
     } else {
+      // Debug logging removed for production
       setIsError(Boolean(response.error));
     }
 

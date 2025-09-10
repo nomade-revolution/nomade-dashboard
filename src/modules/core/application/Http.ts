@@ -87,6 +87,12 @@ export class Http implements HttpInterface {
       responseType,
     );
 
+    // DEV-only debug logging
+    const isDev = import.meta.env.MODE !== "production";
+    if (isDev && url.includes("/companies/")) {
+      // Debug logging removed for production
+    }
+
     if ("success" in response && response.success) {
       return response as HttpResponseInterface<T>;
     } else {
