@@ -80,13 +80,9 @@ const AddressForm = ({
 
     // Include other fields that might be needed
     if (values.id) cleanedValues.id = values.id;
-    if (values.city) cleanedValues.city = values.city;
-    if (values.country) cleanedValues.country = values.country;
     if (values.contact_name) cleanedValues.contact_name = values.contact_name;
     if (values.contact_phone)
       cleanedValues.contact_phone = values.contact_phone;
-    if (values.latitude) cleanedValues.latitude = values.latitude;
-    if (values.longitude) cleanedValues.longitude = values.longitude;
 
     if (isEditMode && editingAddressId && updateAddress) {
       // Edit mode - call API through the updateAddress prop
@@ -99,7 +95,7 @@ const AddressForm = ({
       }
     } else {
       // Create mode - existing behavior
-      setAddress(cleanedValues);
+      setAddress(cleanedValues as FullAddress);
       setIsModalOpen(false);
     }
 
