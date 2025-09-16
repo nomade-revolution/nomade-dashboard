@@ -156,32 +156,12 @@ export class CompanyRepository {
     company: FormData,
   ): Promise<HttpResponseInterface<Company>> {
     try {
-      // DEV-only debug logging
-      const isDev = import.meta.env.MODE !== "production";
-      if (isDev) {
-        // Debug logging removed for production
-      }
-
       const resp = await this.http.post<Company>(
         `${COMPANY_CMS_REGISTER}`,
         company,
       );
-
-      // DEV-only response logging
-      if (isDev) {
-        // Debug logging removed for production
-      }
-
       return resp;
     } catch (error) {
-      // DEV-only error logging
-      const isDev = import.meta.env.MODE !== "production";
-      if (
-        isDev &&
-        (error as any)?.response?.config?.url?.includes("/companies/")
-      ) {
-        // Debug logging removed for production
-      }
       return Promise.reject(error);
     }
   }

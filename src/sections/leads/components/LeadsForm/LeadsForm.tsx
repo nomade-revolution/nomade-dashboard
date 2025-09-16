@@ -18,6 +18,7 @@ import CustomCheckbox from "sections/shared/components/CustomCheckbox/CustomChec
 import { useContactContext } from "sections/contact/ContactContext/useContactContext";
 import { appPaths } from "sections/shared/utils/appPaths/appPaths";
 import theme from "assets/styles/theme";
+import { appendContactsToFormData } from "sections/shared/utils/appendContactsToFormData";
 
 interface Props {
   lead: CompanyRegisterStructure;
@@ -73,7 +74,8 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
     });
 
     if (registerContacts.length > 0) {
-      formData.append("contacts", JSON.stringify(registerContacts));
+      // Use bracket notation format to match admin cms-register flow
+      appendContactsToFormData(formData, registerContacts);
     } else {
       setErrors({ contacts: "Debe añadir al menos un contacto" });
       setSubmitting(false);
@@ -504,7 +506,7 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
             <ReusableModal
               children={
                 <AddressForm
-                  address={registerAddress!}
+                  address={registerAddress || ({} as FullAddress)}
                   setAddress={setRegisterAddress as never}
                   setIsModalOpen={setIsAddressModalOpen}
                 />

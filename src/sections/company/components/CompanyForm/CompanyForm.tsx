@@ -145,6 +145,11 @@ const CompanyForm = ({
         formData.append(key, value || "");
       }
     });
+
+    // Add password_confirmation (mirror the password value)
+    if (values.password) {
+      formData.append("password_confirmation", values.password);
+    }
     if (registerAddress) {
       formData.delete("address");
 
@@ -176,32 +181,10 @@ const CompanyForm = ({
       formData.append("contacts", JSON.stringify(registerContacts));
     }
 
-    if (values.instagram) {
-      // caso "ya hay socialMedia" -> buscar y actualizar instagram
-      if (client?.socialMedia?.length) {
-        const newSocialMedias = client.socialMedia.map((socialMedia) => {
-          if (socialMedia.name === "Instagram") {
-            return {
-              social_media_id: socialMedia.id,
-              account_name: values.instagram,
-            };
-          }
-          return socialMedia;
-        });
-        formData.append("socialMedia", JSON.stringify(newSocialMedias));
-      } else {
-        // caso "no hay socialMedia" -> crear uno nuevo con instagram
-        const newSocialMedias = [
-          {
-            social_media_id: 1, // hardcoded id for instagram
-            account_name: values.instagram,
-          },
-        ];
-        formData.append("socialMedia", JSON.stringify(newSocialMedias));
-      }
-    }
+    // socialMedia field removed - not needed for cms-register endpoint
 
-    formData.append("name", values.company_name);
+    // name field is already added above from values.name (user name)
+    // company name is handled via company_name field
     formData.append("gocardless", JSON.stringify(isCheked));
 
     if (!deleteImageMode && file && file[0]) {
@@ -213,8 +196,9 @@ const CompanyForm = ({
     formData.append("comments", (values as any)?.company_comments);
     formData.append("plan_id", formState.company_plan_id);
 
-    // Add hash field - required by the API
-    formData.append("hash", "default_hash_value");
+    // hash field removed - not needed for cms-register endpoint
+
+    // DEV-only debug logging removed for production
 
     const response = await onSubmit(formData, client && client?.id);
 

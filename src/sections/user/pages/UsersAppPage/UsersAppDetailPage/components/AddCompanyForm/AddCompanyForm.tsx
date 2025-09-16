@@ -561,7 +561,7 @@ const AddCompanyForm = ({
           <ReusableModal
             children={
               <AddressForm
-                address={registerAddress!}
+                address={registerAddress || ({} as FullAddress)}
                 setAddress={setRegisterAddress as never}
                 setIsModalOpen={setIsAddressModalOpen}
               />
