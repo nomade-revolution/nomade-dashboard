@@ -130,6 +130,7 @@ export interface OfferFormStructure {
   location_id: number;
   location_type: "App\\Models\\Country" | "App\\Models\\City" | string;
   images: string[];
+  advance_notice_time?: number;
   offerable:
     | OfferableRestaurant
     | OfferableLodging

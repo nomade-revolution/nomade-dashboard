@@ -141,6 +141,8 @@ export const OffersContextProvider = ({
     setLoading(true);
     const response = await editOffer(repository, offer, offer_id!);
 
+    // Backend response received
+
     if (isHttpSuccessResponse(response)) {
       setIsSuccess(true);
       const newOffers = offers.map((prevOffer) => {

@@ -76,6 +76,7 @@ export const initialData: OfferFormStructure = {
   active: false,
   location_id: 0,
   location_type: "",
+  advance_notice_time: 0,
   offerable: {},
   offerable_type: "",
 };

@@ -298,6 +298,7 @@ const OffersForm = ({
     values: OfferFormStructure,
     { setSubmitting }: FormikHelpers<OfferFormStructure>,
   ) => {
+    // Form submission
     setSubmitting(true);
     const location_id =
       formState.location === "App\\Models\\Country"

@@ -38,6 +38,7 @@ const useOffers = () => {
       "company_id",
       "categories",
       "images",
+      "advance_notice_time",
     ];
 
     Object.entries(values).forEach(([key, value]) => {
@@ -46,7 +47,26 @@ const useOffers = () => {
       }
     });
 
-    formData.append("offerable", JSON.stringify(offerable));
+    // Add advance_notice_time to offerable based on offer type
+    let finalOfferable = offerable;
+    if (values.advance_notice_time !== undefined) {
+      if (offerable_type === "App\\Models\\OfferableBrand") {
+        // For Brand offers: { "advance_notice_time": 150 }
+        finalOfferable = {
+          advance_notice_time: values.advance_notice_time,
+        };
+      } else if (offerable_type === "App\\Models\\OfferableDelivery") {
+        // Extract the actual offerable data from the "0" index if it exists
+        const actualOfferableData = offerable[0] || offerable;
+        // For Delivery offers: { "address_id": 1, "week": [...], "advance_notice_time": 150 }
+        finalOfferable = {
+          ...actualOfferableData,
+          advance_notice_time: values.advance_notice_time,
+        };
+      }
+    }
+
+    formData.append("offerable", JSON.stringify(finalOfferable));
     formData.append("offerable_type", offerable_type);
     formData.append("location_type", location_type);
     formData.append("location_id", JSON.stringify(location_id));
@@ -57,6 +77,8 @@ const useOffers = () => {
     });
 
     images.forEach((image) => formData.append("images[]", image));
+
+    // FormData ready for submission
 
     return formData;
   };
