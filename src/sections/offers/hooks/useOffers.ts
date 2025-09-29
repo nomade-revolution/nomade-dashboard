@@ -57,7 +57,8 @@ const useOffers = () => {
         };
       } else if (offerable_type === "App\\Models\\OfferableDelivery") {
         // Extract the actual offerable data from the "0" index if it exists
-        const actualOfferableData = offerable[0] || offerable;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const actualOfferableData = (offerable as any)[0] || offerable;
         // For Delivery offers: { "address_id": 1, "week": [...], "advance_notice_time": 150 }
         finalOfferable = {
           ...actualOfferableData,
