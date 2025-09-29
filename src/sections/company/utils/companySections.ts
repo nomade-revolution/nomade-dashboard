@@ -64,7 +64,7 @@ export const companyTableHeaderSections: HeaderSection[] = [
     id: 12,
     name: "Fecha de alta",
     property: "created_at",
-    sortTag: "",
+    sortTag: "created_at",
     pageName: SectionTypes.customers,
   },
   {
