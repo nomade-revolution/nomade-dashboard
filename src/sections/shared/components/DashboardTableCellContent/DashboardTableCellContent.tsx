@@ -19,6 +19,9 @@ import {
 } from "sections/collabs/utils/collabsStates";
 import { Plan } from "modules/plans/domain/Plan";
 import { Calendar } from "modules/offers/domain/OfferCalendar";
+import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
+import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
+import { SectionTypes } from "sections/shared/interfaces/interfaces";
 
 interface ReusableTableBodyCellProps {
   section:
@@ -48,6 +51,36 @@ const DashboardTableCellContent = ({
   setAnchorEl,
 }: ReusableTableBodyCellProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const { handleAcceptWithNotes } = useCollabsContext();
+  const { user } = useAuthContext();
+
+  // Handler for notes modal when accepting with notes
+  const handleOnAcceptWithNotes = async (
+    id: number,
+    _reason?: number,
+    _reasonText?: string,
+    notes?: string,
+  ) => {
+    if (type !== CollabActionTypes.modifyStateWithNotes) return;
+
+    try {
+      const result = await handleAcceptWithNotes(id, notes ?? "");
+      if (result.success) {
+        setIsDialogOpen(false);
+        // Success - modal closes and list updates automatically via context
+      } else if (result.partialSuccess) {
+        // Partial success: state updated but notes failed - keep modal open for retry
+        // Modal stays open for user to retry
+      } else {
+        // Error - keep modal open for retry
+        // Modal stays open for user to retry
+      }
+    } catch (error) {
+      // Error - keep modal open for retry
+      // Modal stays open for user to retry
+    }
+  };
+
   return (
     <>
       <DashboardContentSections
@@ -71,6 +104,13 @@ const DashboardTableCellContent = ({
             (section as FullCollab).state?.id === COLAB_PENDING_NOMADE_STATE
               ? COLAB_PENDING_COMPANY_STATE
               : COLAB_ACCEPTED_STATE
+          }
+          onAccept={
+            pageName === SectionTypes.collabs &&
+            type === CollabActionTypes.modifyStateWithNotes &&
+            user.type === "Nomade"
+              ? handleOnAcceptWithNotes
+              : undefined
           }
         />
       )}

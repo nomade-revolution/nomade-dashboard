@@ -96,9 +96,19 @@ const Actions = ({
               <Tooltip title="Aceptar">
                 <button
                   aria-label="Aceptar"
-                  onClick={() => {
-                    handleIsDialogOpen(setIsDialogOpen),
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent row navigation
+                    if (user.type === "Nomade") {
+                      // Open notes modal for Nomade users
+                      handleIsDialogOpen(setIsDialogOpen);
+                      setCollabStateActionType!(
+                        CollabActionTypes.modifyStateWithNotes,
+                      );
+                    } else {
+                      // Keep current behavior for other users
+                      handleIsDialogOpen(setIsDialogOpen);
                       setCollabStateActionType!(CollabActionTypes.accept);
+                    }
                   }}
                 >
                   <FaCheckCircle color="green" className="icon" />

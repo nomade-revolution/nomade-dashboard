@@ -250,10 +250,30 @@ export const CollabsContextProvider = ({
         if (isHttpSuccessResponse(updateResponse)) {
           // Update context with the latest collab data
           setCollab(updateResponse.data);
+
+          // Update the specific collab in the list
+          setCollabs((prevCollabs) =>
+            prevCollabs.map((collab) =>
+              collab.id === colabId
+                ? { ...collab, ...updateResponse.data }
+                : collab,
+            ),
+          );
+
           return { success: true };
         } else {
           // Partial success: state updated but notes failed
           setCollab(pushResponse.data);
+
+          // Update the specific collab in the list with state change only
+          setCollabs((prevCollabs) =>
+            prevCollabs.map((collab) =>
+              collab.id === colabId
+                ? { ...collab, ...pushResponse.data }
+                : collab,
+            ),
+          );
+
           return {
             success: false,
             error: "Estado actualizado pero el comentario no se pudo guardar",
