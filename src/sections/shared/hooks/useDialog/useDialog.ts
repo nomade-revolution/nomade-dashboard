@@ -13,7 +13,8 @@ const useDialog = () => {
   const navigate = useNavigate();
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const { deleteUserById } = useUserContext();
-  const { deleteInfluencerById, modifyInfluencer } = useInfluencerContext();
+  const { deleteInfluencerById, modifyInfluencer, getInfluencersStatusBadge } =
+    useInfluencerContext();
   const { deleteCompanyById } = useCompanyContext();
   const { deleteOfferById } = useOffersContext();
   const { deleteCollabById } = useCollabsContext();
@@ -58,6 +59,12 @@ const useDialog = () => {
       influencer_state_id: newState,
     });
     setIsSuccess(response!);
+
+    // Refresh badge count after successful status change
+    if (response) {
+      await getInfluencersStatusBadge();
+    }
+
     setTimeout(() => navigate(-1), 1500);
   };
 

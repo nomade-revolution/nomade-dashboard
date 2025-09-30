@@ -18,6 +18,7 @@ import {
   SocialMedia,
 } from "@influencer/domain/InfluencerSocialMedia";
 import { RegisterInfluencerInterface } from "@auth";
+import { HttpResponseInterface } from "@core";
 
 interface InfluencerCategory {
   id: number;
@@ -34,7 +35,7 @@ interface ContextState {
   influencers: Influencer[];
   deleteInfluencerById: (influencer_id: number) => void;
   getInfluencer: (influencer_id: number) => void;
-  getInfluencersStatusBadge: () => void;
+  getInfluencersStatusBadge: () => Promise<HttpResponseInterface<number>>;
   getInfluencersWithParams: (params: FilterParams) => void;
   modifyInfluencerStats: (
     influencer_id: number,
@@ -48,7 +49,10 @@ interface ContextState {
   setSocialMediaSelected: (value: SocialMedia) => void;
   isSocialMediaModalOpen: boolean;
   setIsSocialMediaModalOpen: (value: boolean) => void;
-  modifyInfluencer: (influencer_id: number, data: Partial<Influencer>) => void;
+  modifyInfluencer: (
+    influencer_id: number,
+    data: Partial<Influencer>,
+  ) => Promise<HttpResponseInterface<Influencer>>;
   setBadgeCount: (count: number) => void;
 }
 
