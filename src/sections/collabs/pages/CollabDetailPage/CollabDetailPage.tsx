@@ -43,6 +43,7 @@ const CollabDetailPage = (): React.ReactElement => {
     loading,
     getAllRejectedCollabReasons,
     handleAcceptWithNotes,
+    updateCollabState,
   } = useCollabsContext();
   const {
     getInfluencer,
@@ -114,6 +115,28 @@ const CollabDetailPage = (): React.ReactElement => {
       }
     } catch (error) {
       // Error logging removed for production
+    }
+  };
+
+  const handleOnRejectWithReason = async (
+    id: number,
+    reasonId?: number,
+    reasonText?: string,
+  ) => {
+    if (isAcceptOrRefuse !== CollabActionTypes.refuse) return;
+
+    try {
+      await updateCollabState(
+        id,
+        collabStates.COLAB_REJECTED_STATE,
+        reasonId,
+        reasonText,
+      );
+
+      setIsDialogOpen(false);
+      // Success - timeline updates automatically via context
+    } catch (error) {
+      // Keep modal open for retry
     }
   };
 
@@ -250,17 +273,25 @@ const CollabDetailPage = (): React.ReactElement => {
             <DialogDeleteConfirm
               handleClose={() => setIsDialogOpen(false)}
               open={isDialogOpen}
-              onAccept={handleOnAcceptWithNotes}
+              onAccept={
+                isAcceptOrRefuse === CollabActionTypes.modifyStateWithNotes
+                  ? handleOnAcceptWithNotes
+                  : isAcceptOrRefuse === CollabActionTypes.refuse
+                    ? handleOnRejectWithReason
+                    : undefined
+              }
               sectionId={collab.id!}
               pageName={SectionTypes.collabs}
               type={isAcceptOrRefuse}
               accept_state_id={
                 isAcceptOrRefuse === CollabActionTypes.modifyStateWithNotes
                   ? COLAB_PENDING_COMPANY_STATE
-                  : collab.state &&
-                      collab.state.id === COLAB_PENDING_NOMADE_STATE
-                    ? COLAB_PENDING_COMPANY_STATE
-                    : collabStates.COLAB_ACCEPTED_STATE
+                  : isAcceptOrRefuse === CollabActionTypes.refuse
+                    ? collabStates.COLAB_REJECTED_STATE
+                    : collab.state &&
+                        collab.state.id === COLAB_PENDING_NOMADE_STATE
+                      ? COLAB_PENDING_COMPANY_STATE
+                      : collabStates.COLAB_ACCEPTED_STATE
               }
             />
           </>

@@ -58,10 +58,10 @@ const useDialog = () => {
     const response = await modifyInfluencer(sectionId!, {
       influencer_state_id: newState,
     });
-    setIsSuccess(response!);
+    setIsSuccess(response.success);
 
     // Refresh badge count after successful status change
-    if (response) {
+    if (response.success) {
       await getInfluencersStatusBadge();
     }
 
