@@ -84,6 +84,17 @@ const CollabDetailPage = (): React.ReactElement => {
     setIsAcceptOrRefuse(CollabActionTypes.cancel);
   };
 
+  // Client-specific handlers for state 3 (reuse list quick action flow)
+  const handleOpenDialogAcceptClient = () => {
+    handleIsDialogOpen(setIsDialogOpen);
+    setIsAcceptOrRefuse(CollabActionTypes.accept);
+  };
+
+  const handleOpenDialogRefuseClient = () => {
+    handleIsDialogOpen(setIsDialogOpen);
+    setIsAcceptOrRefuse(CollabActionTypes.refuse);
+  };
+
   const [collabStateActionType, setCollabStateActionType] =
     useState<CollabActionTypes | null>(null);
 
@@ -205,8 +216,10 @@ const CollabDetailPage = (): React.ReactElement => {
                   color={theme.colors.black}
                 />
               )}
+              {/* Nomade users in state 1 */}
               {collab.state &&
-                collab.state.id === COLAB_PENDING_NOMADE_STATE && (
+                collab.state.id === COLAB_PENDING_NOMADE_STATE &&
+                user.type === "Nomade" && (
                   <>
                     <ActionButton
                       icon={<FaCheckCircle />}
@@ -220,23 +233,38 @@ const CollabDetailPage = (): React.ReactElement => {
                       text="Rechazar"
                       color={theme.colors.darkRed}
                     />
+                    <ActionButton
+                      onClick={() => setIsOpenEdit(true)}
+                      text="Editar"
+                      icon={<FaEdit />}
+                      color={theme.colors.darkBlue}
+                    />
+                    <ActionButton
+                      onClick={handleOpenDialogDelete}
+                      text="Borrar"
+                      icon={<FaRegTrashCan />}
+                      color={theme.colors.red}
+                    />
+                  </>
+                )}
 
-                    {user.type === "Nomade" && (
-                      <>
-                        <ActionButton
-                          onClick={() => setIsOpenEdit(true)}
-                          text="Editar"
-                          icon={<FaEdit />}
-                          color={theme.colors.darkBlue}
-                        />
-                        <ActionButton
-                          onClick={handleOpenDialogDelete}
-                          text="Borrar"
-                          icon={<FaRegTrashCan />}
-                          color={theme.colors.red}
-                        />
-                      </>
-                    )}
+              {/* Client users in state 2 */}
+              {collab.state &&
+                collab.state.id === COLAB_PENDING_COMPANY_STATE &&
+                user.type === "Company" && (
+                  <>
+                    <ActionButton
+                      icon={<FaCheckCircle />}
+                      onClick={handleOpenDialogAcceptClient}
+                      text="Aceptar"
+                      color={theme.colors.softGreen}
+                    />
+                    <ActionButton
+                      icon={<MdDoNotDisturbOn />}
+                      onClick={handleOpenDialogRefuseClient}
+                      text="Rechazar"
+                      color={theme.colors.darkRed}
+                    />
                   </>
                 )}
               {renderSendPackageButton()}
@@ -288,10 +316,12 @@ const CollabDetailPage = (): React.ReactElement => {
                   ? COLAB_PENDING_COMPANY_STATE
                   : isAcceptOrRefuse === CollabActionTypes.refuse
                     ? collabStates.COLAB_REJECTED_STATE
-                    : collab.state &&
-                        collab.state.id === COLAB_PENDING_NOMADE_STATE
-                      ? COLAB_PENDING_COMPANY_STATE
-                      : collabStates.COLAB_ACCEPTED_STATE
+                    : isAcceptOrRefuse === CollabActionTypes.accept
+                      ? collabStates.COLAB_ACCEPTED_STATE
+                      : collab.state &&
+                          collab.state.id === COLAB_PENDING_NOMADE_STATE
+                        ? COLAB_PENDING_COMPANY_STATE
+                        : collabStates.COLAB_ACCEPTED_STATE
               }
             />
           </>
