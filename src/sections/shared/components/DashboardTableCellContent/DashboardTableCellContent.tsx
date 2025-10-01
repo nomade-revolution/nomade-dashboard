@@ -20,7 +20,6 @@ import {
 import { Plan } from "modules/plans/domain/Plan";
 import { Calendar } from "modules/offers/domain/OfferCalendar";
 import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
-import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { SectionTypes } from "sections/shared/interfaces/interfaces";
 
 interface ReusableTableBodyCellProps {
@@ -52,7 +51,6 @@ const DashboardTableCellContent = ({
 }: ReusableTableBodyCellProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const { handleAcceptWithNotes } = useCollabsContext();
-  const { user } = useAuthContext();
 
   // Handler for notes modal when accepting with notes
   const handleOnAcceptWithNotes = async (
@@ -107,8 +105,7 @@ const DashboardTableCellContent = ({
           }
           onAccept={
             pageName === SectionTypes.collabs &&
-            type === CollabActionTypes.modifyStateWithNotes &&
-            user.type === "Nomade"
+            type === CollabActionTypes.modifyStateWithNotes
               ? handleOnAcceptWithNotes
               : undefined
           }
