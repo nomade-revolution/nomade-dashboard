@@ -30,7 +30,6 @@ export interface FullCollab extends Collab {
   addresses_id: number;
   conditions: string;
   note: string | null;
-  company_notes?: string;
   company_notes?: string; // API typo - keeping both for compatibility
 }
 

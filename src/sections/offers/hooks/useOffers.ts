@@ -68,7 +68,7 @@ const useOffers = () => {
         offerable_type === "App\\Models\\OfferableRestaurant" ||
         offerable_type === "App\\Models\\OfferableActivity"
       ) {
-        // For Restaurant and Activity offers: backend expects object with arrays for each field
+        // For Restaurant and Activity offers: backend expects array of objects
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const offerableArray = offerable as any[];
 
@@ -83,7 +83,7 @@ const useOffers = () => {
               values.advance_notice_time !== undefined
                 ? values.advance_notice_time
                 : 0,
-          }));
+          })) as OfferableRestaurant[] | OfferableActivity[];
         } else {
           // Handle case where offerable is not an array or empty
           finalOfferable = [
@@ -97,7 +97,7 @@ const useOffers = () => {
                   ? values.advance_notice_time
                   : 0,
             },
-          ];
+          ] as OfferableRestaurant[] | OfferableActivity[];
         }
       }
     }
