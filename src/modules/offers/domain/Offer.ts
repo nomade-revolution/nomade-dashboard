@@ -84,6 +84,7 @@ export interface OfferableRestaurant {
   min_guests: number;
   max_guests: number;
   week: WeekDay[][];
+  advance_notice_time?: number;
 }
 
 export interface OfferableLodging {
@@ -99,6 +100,7 @@ export interface OfferableActivity {
   min_guests: number;
   max_guests: number;
   week: WeekDay[][];
+  advance_notice_time?: number;
 }
 
 export interface OfferableDelivery {

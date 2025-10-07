@@ -58,7 +58,7 @@ const CollabDetail = ({
   const { user } = useAuthContext();
 
   // Normalize company_notes data - check both correct field and API typo
-  const companyNotesValue = collab?.company_notes || collab?.comapny_notes;
+  const companyNotesValue = collab?.company_notes || collab?.company_notes;
   const nomadeComments = normalizeCompanyNotes(companyNotesValue);
 
   return (

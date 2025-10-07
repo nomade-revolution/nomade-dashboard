@@ -133,6 +133,17 @@ const OffersScheduling = ({
     if (parsedSchedulingState[0]?.max_guests !== undefined) {
       setFieldValue("max_guests", parsedSchedulingState[0].max_guests || 0);
     }
+
+    if (
+      (parsedSchedulingState[0] as OfferableRestaurant | OfferableActivity)
+        ?.advance_notice_time !== undefined
+    ) {
+      setFieldValue(
+        "advance_notice_time",
+        (parsedSchedulingState[0] as OfferableRestaurant | OfferableActivity)
+          .advance_notice_time || 0,
+      );
+    }
   }, [schedulingStateSelected, setFieldValue]);
 
   useEffect(() => {
@@ -281,6 +292,7 @@ const OffersScheduling = ({
           min_guests: +getFieldProps("min_guests").value,
           max_guests: +getFieldProps("max_guests").value || 0,
           week: week || [],
+          advance_notice_time: +getFieldProps("advance_notice_time").value || 0,
         };
 
         if (
@@ -345,6 +357,7 @@ const OffersScheduling = ({
           min_guests: +getFieldProps("min_guests").value || 0,
           max_guests: +getFieldProps("max_guests").value || 0,
           week: week,
+          advance_notice_time: +getFieldProps("advance_notice_time").value || 0,
         };
 
         if (
@@ -400,6 +413,7 @@ const OffersScheduling = ({
     setAddress("", null);
     setFieldValue("min_guests", 0);
     setFieldValue("max_guests", 0);
+    setFieldValue("advance_notice_time", 0);
   };
 
   const getIndexAddress = (addressId: number) => {
@@ -535,6 +549,33 @@ const OffersScheduling = ({
                 )}
             </div>
           </section>
+        </div>
+      )}
+      {(type === OfferTypes.restaurant || type === OfferTypes.activity) && (
+        <div className="form-subsection">
+          <label
+            htmlFor="advance_notice_time"
+            className="form-subsection__label"
+          >
+            Tiempo previo de aviso
+          </label>
+          <Field
+            type="number"
+            id="advance_notice_time"
+            className="form-subsection__field--small"
+            aria-label="Tiempo previo de aviso"
+            {...getFieldProps("advance_notice_time")}
+          />
+          {(errors as OfferableRestaurant | OfferableActivity)
+            .advance_notice_time &&
+            (touched as OfferableRestaurant | OfferableActivity)
+              .advance_notice_time && (
+              <ErrorMessage
+                className="form-subsection__error-message"
+                component="span"
+                name="advance_notice_time"
+              />
+            )}
         </div>
       )}
       {type === OfferTypes.delivery && (

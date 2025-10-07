@@ -64,6 +64,41 @@ const useOffers = () => {
           ...actualOfferableData,
           advance_notice_time: values.advance_notice_time,
         };
+      } else if (
+        offerable_type === "App\\Models\\OfferableRestaurant" ||
+        offerable_type === "App\\Models\\OfferableActivity"
+      ) {
+        // For Restaurant and Activity offers: backend expects object with arrays for each field
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const offerableArray = offerable as any[];
+
+        if (Array.isArray(offerableArray) && offerableArray.length > 0) {
+          // Backend expects array of objects, each with advance_notice_time
+          finalOfferable = offerableArray.map((item) => ({
+            address_id: item.address_id,
+            min_guests: item.min_guests,
+            max_guests: item.max_guests,
+            week: item.week,
+            advance_notice_time:
+              values.advance_notice_time !== undefined
+                ? values.advance_notice_time
+                : 0,
+          }));
+        } else {
+          // Handle case where offerable is not an array or empty
+          finalOfferable = [
+            {
+              address_id: 0,
+              min_guests: 0,
+              max_guests: 0,
+              week: [],
+              advance_notice_time:
+                values.advance_notice_time !== undefined
+                  ? values.advance_notice_time
+                  : 0,
+            },
+          ];
+        }
       }
     }
 
@@ -78,8 +113,6 @@ const useOffers = () => {
     });
 
     images.forEach((image) => formData.append("images[]", image));
-
-    // FormData ready for submission
 
     return formData;
   };

@@ -31,7 +31,7 @@ export interface FullCollab extends Collab {
   conditions: string;
   note: string | null;
   company_notes?: string;
-  comapny_notes?: string; // API typo - keeping both for compatibility
+  company_notes?: string; // API typo - keeping both for compatibility
 }
 
 export interface State {
@@ -117,5 +117,5 @@ export interface CollabCollabableCreateDelivery {
 }
 
 export interface UpdateCollabNotesPayload {
-  comapny_notes: string; // Using API field name (with typo)
+  company_notes: string; // Using API field name (with typo)
 }

@@ -335,6 +335,17 @@ const OffersForm = ({
           week: offerResume[0].week,
         } as never;
       }
+    } else if (
+      (offerType === OfferTypes.restaurant ||
+        offerType === OfferTypes.activity) &&
+      // @ts-expect-error TODO: fix this
+      offerResume?.length &&
+      // @ts-expect-error TODO: fix this
+      offerResume[0]
+    ) {
+      // For Restaurant and Activity offers, use the existing offerResume data
+      // @ts-expect-error TODO: fix this
+      parsedOfferResume = offerResume;
     }
     const offerableData = mode === "edit" ? offerResumeEdit : parsedOfferResume;
 
