@@ -91,8 +91,12 @@ const Layout = (): React.ReactElement => {
     } else {
       getCollabsStatusBadge();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCompany]);
+  }, [
+    selectedCompany,
+    getCollabsStatusBadge,
+    getCollabsCompaniesStatusBadge,
+    user?.type,
+  ]);
 
   useEffect(() => {
     if (!user) {

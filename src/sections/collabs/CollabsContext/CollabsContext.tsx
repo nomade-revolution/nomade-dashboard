@@ -21,6 +21,7 @@ import {
 } from "sections/shared/interfaces/interfaces";
 import { OrderItem } from "sections/user/UserContext/UserContext";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
+import { UserTypes } from "modules/user/domain/User";
 import { Http } from "@core";
 import { COLLABS_BASE } from "modules/collabs/application/routes";
 
@@ -74,7 +75,7 @@ export const CollabsContextProvider = ({
   const [pagination, setPagination] = useState<PaginationStucture>(
     {} as PaginationStucture,
   );
-  const { token } = useAuthContext();
+  const { token, user, selectedCompany } = useAuthContext();
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [order, setOrder] = useState<OrderItem>({} as OrderItem);
   const [createLoading, setCreateLoading] = useState<boolean>(false);
@@ -117,6 +118,13 @@ export const CollabsContextProvider = ({
     );
     if (isHttpSuccessResponse(response)) {
       setCollab(response.data);
+
+      // Refresh badge after state change
+      if (user?.type === UserTypes.company && selectedCompany) {
+        getCollabsCompaniesStatusBadge(selectedCompany);
+      } else {
+        getCollabsStatusBadge();
+      }
     }
 
     return response;
@@ -206,7 +214,7 @@ export const CollabsContextProvider = ({
     }
 
     return response;
-  }, [repository]);
+  }, [repository, user?.type]);
 
   const getCollabsCompaniesStatusBadge = useCallback(
     async (companyId: number) => {
@@ -220,7 +228,7 @@ export const CollabsContextProvider = ({
 
       return response;
     },
-    [],
+    [user?.type],
   );
 
   const handleAcceptWithNotes = useCallback(
@@ -260,6 +268,13 @@ export const CollabsContextProvider = ({
             ),
           );
 
+          // Refresh badge after successful state change
+          if (user?.type === UserTypes.company && selectedCompany) {
+            getCollabsCompaniesStatusBadge(selectedCompany);
+          } else {
+            getCollabsStatusBadge();
+          }
+
           return { success: true };
         } else {
           // Partial success: state updated but notes failed
@@ -274,6 +289,13 @@ export const CollabsContextProvider = ({
             ),
           );
 
+          // Refresh badge after state change (even if notes failed)
+          if (user?.type === UserTypes.company && selectedCompany) {
+            getCollabsCompaniesStatusBadge(selectedCompany);
+          } else {
+            getCollabsStatusBadge();
+          }
+
           return {
             success: false,
             error: "Estado actualizado pero el comentario no se pudo guardar",
@@ -287,7 +309,13 @@ export const CollabsContextProvider = ({
         };
       }
     },
-    [repository],
+    [
+      repository,
+      user?.type,
+      selectedCompany,
+      getCollabsStatusBadge,
+      getCollabsCompaniesStatusBadge,
+    ],
   );
 
   return (
