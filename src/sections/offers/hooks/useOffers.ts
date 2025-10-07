@@ -70,10 +70,11 @@ const useOffers = () => {
       ) {
         // For Restaurant and Activity offers: backend expects array of objects
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const offerableArray = offerable as any[];
+        const offerableArray = offerable as unknown as any[];
 
         if (Array.isArray(offerableArray) && offerableArray.length > 0) {
           // Backend expects array of objects, each with advance_notice_time
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           finalOfferable = offerableArray.map((item) => ({
             address_id: item.address_id,
             min_guests: item.min_guests,
@@ -83,7 +84,8 @@ const useOffers = () => {
               values.advance_notice_time !== undefined
                 ? values.advance_notice_time
                 : 0,
-          })) as OfferableRestaurant[] | OfferableActivity[];
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          })) as any;
         } else {
           // Handle case where offerable is not an array or empty
           finalOfferable = [
@@ -97,7 +99,8 @@ const useOffers = () => {
                   ? values.advance_notice_time
                   : 0,
             },
-          ] as OfferableRestaurant[] | OfferableActivity[];
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          ] as any;
         }
       }
     }
