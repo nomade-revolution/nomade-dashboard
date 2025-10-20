@@ -39,11 +39,7 @@ import { FaCheck } from "react-icons/fa";
  * - Current step should be highlighted appropriately
  */
 
-const getCircleStyle = (
-  step: State,
-  isNextStepEmptyId: number,
-  currentStateId: number,
-) => {
+const getCircleStyle = (step: State, currentStateId: number) => {
   // Si el estado es de error y es el último estado, se pone en rojo
   // Si el estado es futuro al último estado, se pone en gris
   // Si el estado es menor al último estado, se pone en verde
@@ -125,7 +121,8 @@ const CollabsStateTimelineV2 = ({ collab, isCompany }: Props) => {
 
   if (!collab || !collab.history) return null;
 
-  const nextStep = collab?.history.find((step) => !step.created_at);
+  // Determine the next step if needed in future (currently unused after logic fix)
+  // const nextStep = collab?.history.find((step) => !step.created_at);
 
   return (
     <div>
@@ -156,11 +153,7 @@ const CollabsStateTimelineV2 = ({ collab, isCompany }: Props) => {
                     >
                       <div
                         style={{
-                          ...getCircleStyle(
-                            step,
-                            nextStep?.id || 0,
-                            collab.state?.id || 0,
-                          ),
+                          ...getCircleStyle(step, collab.state?.id || 0),
                         }}
                       >
                         <>
