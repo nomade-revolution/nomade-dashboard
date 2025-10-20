@@ -1,4 +1,5 @@
 import { Fragment } from "react";
+import theme from "assets/styles/theme";
 // import {collab} from "./mock";
 import { Props, State } from "./interfaces";
 import { ERROR_STATES } from "./constants";
@@ -50,19 +51,18 @@ const getCircleStyle = (
 
   const isError = ERROR_STATES.includes(step.id);
 
-  if (isError || step.id === isNextStepEmptyId) {
-    return { ...styles.circle, ...styles.circleError };
-  }
-
-  // FIX: Change completion logic from timestamp-based to state-based
-  // Previous: const isCompleted = step.created_at; (❌ Any timestamp = completed)
-  // Current: const isCompleted = step.id <= currentStateId; (✅ Only steps <= current state)
+  // Completed states should always render with completed style, even if they are also "nextStepEmpty"
   const isCompleted = step.id <= currentStateId;
-
   if (isCompleted) {
     return { ...styles.circle, ...styles.circleCompleted };
   }
 
+  // Non-completed error states use error style
+  if (isError) {
+    return { ...styles.circle, ...styles.circleError };
+  }
+
+  // For the next empty step or any other future step, use pending style
   return { ...styles.circle, ...styles.circlePending };
 };
 
@@ -255,7 +255,7 @@ const collabsStateTimeLineStyles: { [key: string]: React.CSSProperties } = {
   circle: {
     width: 10,
     height: 10,
-    borderRadius: 15,
+    borderRadius: "50%",
     backgroundColor: "#C8C7CC",
     display: "flex",
     alignItems: "center",
@@ -273,7 +273,7 @@ const collabsStateTimeLineStyles: { [key: string]: React.CSSProperties } = {
     backgroundColor: "#CCF663",
   },
   circleCompleted: {
-    backgroundColor: "#243c34",
+    backgroundColor: theme.colors.outerSpace,
     width: 20,
     height: 20,
   },
