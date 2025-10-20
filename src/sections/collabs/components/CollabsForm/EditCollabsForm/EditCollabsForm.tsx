@@ -206,40 +206,6 @@ const EditCollabForm = ({
           </div>
 
           <div className="form-subsection">
-            <label htmlFor="company_notes" className="form-subsection__label">
-              Comentarios Nomade (visibles para el cliente)
-            </label>
-            <Field
-              as={"textarea"}
-              id="company_notes"
-              className="form-subsection__field-textarea--company"
-              aria-label="Comentarios Nomade"
-              {...getFieldProps("company_notes")}
-            />
-            <div
-              className="form-subsection__helper"
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                width: "100%",
-              }}
-            >
-              {errors.company_notes && touched.company_notes ? (
-                <ErrorMessage
-                  className="form-subsection__error-message"
-                  component="span"
-                  name="company_notes"
-                />
-              ) : (
-                <span></span>
-              )}
-              <span style={{ fontSize: "12px", color: "#666" }}>{`${
-                (values.company_notes || "").length
-              }/1000`}</span>
-            </div>
-          </div>
-
-          <div className="form-subsection">
             <label htmlFor="influencer_id" className="form-subsection__label">
               Influencer
             </label>
@@ -289,6 +255,40 @@ const EditCollabForm = ({
                 name="comment"
               />
             )}
+          </div>
+
+          <div className="form-subsection">
+            <label htmlFor="company_notes" className="form-subsection__label">
+              Comentarios Nomade (visibles para el cliente)
+            </label>
+            <Field
+              as={"textarea"}
+              id="company_notes"
+              className="form-subsection__field-textarea--company"
+              aria-label="Comentarios Nomade"
+              {...getFieldProps("company_notes")}
+            />
+            <div
+              className="form-subsection__helper"
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "100%",
+              }}
+            >
+              {errors.company_notes && touched.company_notes ? (
+                <ErrorMessage
+                  className="form-subsection__error-message"
+                  component="span"
+                  name="company_notes"
+                />
+              ) : (
+                <span></span>
+              )}
+              <span style={{ fontSize: "12px", color: "#666" }}>{`${
+                (values.company_notes || "").length
+              }/1000`}</span>
+            </div>
           </div>
 
           <div className="form-subsection">
