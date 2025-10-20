@@ -44,6 +44,38 @@ const InfluencerDetailPage = (): React.ReactElement => {
     return res;
   };
 
+  // Helper function to get plan table headers based on billing periodicity
+  const getPlanTableHeaders = (planBilling: string) => {
+    const baseHeaders = companyPlanTableSections;
+
+    if (planBilling === "Mensual") {
+      return baseHeaders.map((header) => {
+        if (header.name === "Fecha inicio trimestre") {
+          return { ...header, name: "Fecha inicio mes" };
+        }
+        if (header.name === "Fecha fin trimestre") {
+          return { ...header, name: "Fecha fin mes" };
+        }
+        return header;
+      });
+    }
+
+    if (planBilling === "Trimestral") {
+      return baseHeaders; // Keep "trimestre" labels
+    }
+
+    // Fallback for "Pendiente" or unknown values
+    return baseHeaders.map((header) => {
+      if (header.name === "Fecha inicio trimestre") {
+        return { ...header, name: "Fecha inicio" };
+      }
+      if (header.name === "Fecha fin trimestre") {
+        return { ...header, name: "Fecha fin" };
+      }
+      return header;
+    });
+  };
+
   return (
     <>
       {loading ? (
@@ -120,7 +152,7 @@ const InfluencerDetailPage = (): React.ReactElement => {
           <h2 style={{ marginBottom: "5px", alignSelf: "flex-start" }}>Plan</h2>
           <DashboardTable
             bodySections={[plan]}
-            headerSections={companyPlanTableSections}
+            headerSections={getPlanTableHeaders(company.plan?.billing || "")}
             pageName={""}
           />
           {/* <h2 style={{ marginBottom: "5px", alignSelf: "flex-start" }}>Histórico Plan</h2> */}
