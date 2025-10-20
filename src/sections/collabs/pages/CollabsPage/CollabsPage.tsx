@@ -50,6 +50,20 @@ const CollabsPage = (): React.ReactElement => {
   } = useCollabsContext();
 
   const { user, selectedCompany } = useAuthContext();
+
+  // Helper function to get collabs columns based on user type
+  const getCollabsColumnsForUser = (userType: string) => {
+    if (userType === "Company") {
+      return collabsHeaderSections.filter(
+        (item) =>
+          !["Cliente", "Tipo", "Última modificación"].includes(item.name),
+      );
+    }
+    if (userType !== "Nomade") {
+      return collabsHeaderSections.filter((item) => item.name !== "Cliente");
+    }
+    return collabsHeaderSections;
+  };
   const { page } = useParams();
   const [filterId, setFilterId] = useState<string>("");
   const { getInfluencersWithParams, influencers } = useInfluencerContext();
@@ -297,11 +311,7 @@ const CollabsPage = (): React.ReactElement => {
       <div className="dashboard__table">
         <DashboardTable
           bodySections={collabs}
-          headerSections={
-            user.type !== "Nomade"
-              ? collabsHeaderSections.filter((item) => item.name !== "Cliente")
-              : collabsHeaderSections
-          }
+          headerSections={getCollabsColumnsForUser(user.type)}
           pageName={SectionTypes.collabs}
           type={collabStateActionType!}
           setCollabStateActionType={setCollabStateActionType}
@@ -312,7 +322,7 @@ const CollabsPage = (): React.ReactElement => {
 
         <DashboardCardListMobile
           bodySections={collabs}
-          headerSections={collabsHeaderSections}
+          headerSections={getCollabsColumnsForUser(user.type)}
           pageName={SectionTypes.collabs}
           type={collabStateActionType!}
           setCollabStateActionType={setCollabStateActionType}
