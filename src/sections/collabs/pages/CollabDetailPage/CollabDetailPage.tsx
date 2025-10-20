@@ -216,6 +216,15 @@ const CollabDetailPage = (): React.ReactElement => {
                   color={theme.colors.black}
                 />
               )}
+              {/* Always show Edit for Nomade users, regardless of state */}
+              {user.type === "Nomade" && (
+                <ActionButton
+                  onClick={() => setIsOpenEdit(true)}
+                  text="Editar"
+                  icon={<FaEdit />}
+                  color={theme.colors.darkBlue}
+                />
+              )}
               {/* Nomade users in state 1 */}
               {collab.state &&
                 collab.state.id === COLAB_PENDING_NOMADE_STATE &&
@@ -232,12 +241,6 @@ const CollabDetailPage = (): React.ReactElement => {
                       onClick={handleOpenDialogRefuse}
                       text="Rechazar"
                       color={theme.colors.darkRed}
-                    />
-                    <ActionButton
-                      onClick={() => setIsOpenEdit(true)}
-                      text="Editar"
-                      icon={<FaEdit />}
-                      color={theme.colors.darkBlue}
                     />
                     <ActionButton
                       onClick={handleOpenDialogDelete}
