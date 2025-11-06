@@ -92,7 +92,7 @@ export const allCollabStatesOptions = [
   // { name: "Incidencia", id: COLAB_INCIDENT_STATE },
   { name: "Marcar como publicada", id: COLAB_PUBLISHED_STATE },
   // {name: "Hecha", id: COLAB_DONE_STATE},
-  { name: "Finalizar", id: COLAB_FINISHED_STATE },
+  // { name: "Finalizar", id: COLAB_FINISHED_STATE }, // Not used
   { name: "Cancelar", id: COLAB_CANCELLED_STATE },
   { name: "Rechazar", id: COLAB_REJECTED_STATE },
 ];
