@@ -30,6 +30,16 @@ const PlanPage = (): React.ReactElement => {
     user?.companies?.find((company) => company.id === selectedCompany) ||
     ({} as Company);
 
+  // Filter out "Fecha de inicio de pago" and "Tiempo restante" columns for company users
+  const getFilteredPlanTableSections = () => {
+    if (user?.type === "Company") {
+      return planTableSections.filter(
+        (section) => section.id !== 9 && section.id !== 10,
+      );
+    }
+    return planTableSections;
+  };
+
   return (
     <ReusablePageStyled className="plans-page">
       <>
@@ -50,7 +60,7 @@ const PlanPage = (): React.ReactElement => {
             <h3>Plan</h3>
             <DashboardTable
               bodySections={[plan]}
-              headerSections={planTableSections}
+              headerSections={getFilteredPlanTableSections()}
               pageName={SectionTypes.plans}
             />
           </section>
