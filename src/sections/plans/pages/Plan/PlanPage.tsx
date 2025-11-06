@@ -19,12 +19,14 @@ const PlanPage = (): React.ReactElement => {
   const { user, selectedCompany } = useAuthContext();
 
   const getPlansData = useCallback(() => {
-    getPlan(user.id);
-  }, [getPlan, user.id]);
+    if (selectedCompany) {
+      getPlan(selectedCompany);
+    }
+  }, [getPlan, selectedCompany]);
 
   useEffect(() => {
     getPlansData();
-  }, [getPlansData]);
+  }, [getPlansData, selectedCompany]);
 
   const companyData =
     user?.companies?.find((company) => company.id === selectedCompany) ||
