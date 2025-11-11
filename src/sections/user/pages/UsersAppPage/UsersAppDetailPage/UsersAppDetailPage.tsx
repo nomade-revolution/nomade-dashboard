@@ -179,6 +179,7 @@ const UsersAppDetailPage = (): React.ReactElement => {
               <EditUserAppForm
                 initialState={userData}
                 onSubmit={handleOnSubmit}
+                setIsOpen={setIsEditFormOpen}
               />
             ) : (
               <></>

@@ -29,13 +29,21 @@ const ReusableModal = ({
     }
   };
 
+  const getHeight = () => {
+    if (type === "plan" || type === "client") {
+      return "fit-content";
+    }
+    return "80%";
+  };
+
   const style = {
     position: "absolute",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: getWidth(),
-    height: type === "plan" ? "fit-content" : "80%",
+    height: getHeight(),
+    maxHeight: "90vh",
     bgcolor: "background.paper",
     boxShadow: 24,
     padding: "20px",
@@ -43,7 +51,7 @@ const ReusableModal = ({
     display: "flex",
     flexDirection: "column",
     gap: "20px",
-    overflowY: "scroll",
+    overflowY: "auto",
   };
 
   return (

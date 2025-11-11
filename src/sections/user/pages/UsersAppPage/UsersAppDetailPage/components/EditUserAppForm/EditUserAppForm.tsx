@@ -10,6 +10,7 @@ import { useUserContext } from "sections/user/UserContext/useUserContext";
 interface Props {
   initialState: User;
   onSubmit: () => void;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
 interface EditUserAppFormState {
@@ -18,7 +19,7 @@ interface EditUserAppFormState {
   // password: string;
 }
 
-const EditUserAppForm = ({ initialState, onSubmit }: Props) => {
+const EditUserAppForm = ({ initialState, onSubmit, setIsOpen }: Props) => {
   const [formState, setFormState] = useState<EditUserAppFormState | null>(null);
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
@@ -104,7 +105,7 @@ const EditUserAppForm = ({ initialState, onSubmit }: Props) => {
             </div>
           </div>
 
-          <div className="form-section">
+          <div className="form-section" style={{ marginBottom: "20px" }}>
             <label htmlFor="email" className="login-form__label">
               Email / Login
             </label>
@@ -124,25 +125,42 @@ const EditUserAppForm = ({ initialState, onSubmit }: Props) => {
             )}
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="login-form__submit"
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              width: "100%",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
           >
-            {loading ? (
-              <Loader width="20px" height="20px" />
-            ) : !isSuccess && isFormSubmitted ? (
-              <span className="login-form__error-message">
-                Datos no validos
-              </span>
-            ) : isFormSubmitted && isSuccess ? (
-              <Loader width="20px" height="20px" />
-            ) : isSuccess && isFormSubmitted ? (
-              "Usuario editado"
-            ) : (
-              "Editar usuario"
-            )}
-          </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="login-form__submit"
+            >
+              {loading ? (
+                <Loader width="20px" height="20px" />
+              ) : !isSuccess && isFormSubmitted ? (
+                <span className="login-form__error-message">
+                  Datos no validos
+                </span>
+              ) : isFormSubmitted && isSuccess ? (
+                <Loader width="20px" height="20px" />
+              ) : isSuccess && isFormSubmitted ? (
+                "Usuario editado"
+              ) : (
+                "Guardar cambios"
+              )}
+            </button>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="login-form__error"
+              type="button"
+            >
+              Cancelar
+            </button>
+          </div>
         </CreateInfluencerFormStyled>
       )}
     </Formik>
