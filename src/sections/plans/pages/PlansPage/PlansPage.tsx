@@ -33,14 +33,20 @@ const PlansPage = (): React.ReactElement => {
   const { exportCompanyBillingExcel } = useCompanyContext();
   const { page } = useParams();
 
-  const handleSearch = (date?: string) => {
-    const filters: FilterParams = { date: date, billing_id: billing_id };
-    if (textToSearch) {
-      filters.search = textToSearch;
+  const handleSearch = () => {
+    const filters: FilterParams = {
+      filters: { billing_id },
+    };
+    if (date) {
+      const formattedDate = `${date}-01`;
+      // @ts-expect-error any
+      filters.filters.date = formattedDate;
     }
-    getPlans(+page!, 10, {
-      filters,
-    });
+    if (textToSearch) {
+      // @ts-expect-error any
+      filters.filters.search = textToSearch;
+    }
+    getPlans(+page!, 10, filters);
   };
 
   const handleSearchByText = async (text: string) => {
@@ -51,11 +57,20 @@ const PlansPage = (): React.ReactElement => {
     const selectedMonth = event.target.value;
 
     if (selectedMonth) {
-      const formattedDate = `${selectedMonth}-01`;
-
       setDate(selectedMonth);
-
-      handleSearch(formattedDate);
+      // handleSearch will be called after state update via useEffect or we call it directly
+      // We need to format the date for the API call
+      const formattedDate = `${selectedMonth}-01`;
+      const filters: FilterParams = {
+        filters: { billing_id },
+      };
+      // @ts-expect-error any
+      filters.filters.date = formattedDate;
+      if (textToSearch) {
+        // @ts-expect-error any
+        filters.filters.search = textToSearch;
+      }
+      getPlans(+page!, 10, filters);
     }
   };
 
@@ -68,13 +83,25 @@ const PlansPage = (): React.ReactElement => {
       if (orderPlans?.sortTag) {
         filters.order = [{ by: orderPlans.sortTag, dir: orderPlans.direction }];
       }
+      if (date) {
+        const formattedDate = `${date}-01`;
+        // @ts-expect-error any
+        filters.filters.date = formattedDate;
+      }
       if (text) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (filters as any).filters.search = text;
+        // @ts-expect-error any
+        filters.filters.search = text;
       }
       getPlans(+page!, 10, filters);
     },
-    [billing_id, getPlans, orderPlans.direction, orderPlans.sortTag, page],
+    [
+      billing_id,
+      date,
+      getPlans,
+      orderPlans.direction,
+      orderPlans.sortTag,
+      page,
+    ],
   );
 
   useEffect(() => {

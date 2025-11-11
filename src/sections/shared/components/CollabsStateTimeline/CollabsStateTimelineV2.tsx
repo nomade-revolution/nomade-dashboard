@@ -4,6 +4,7 @@ import theme from "assets/styles/theme";
 import { Props, State } from "./interfaces";
 import { ERROR_STATES } from "./constants";
 import { FaCheck } from "react-icons/fa";
+import { COLAB_PENDING_COMPANY_STATE } from "sections/collabs/utils/collabsStates";
 
 /**
  * INVESTIGATION REPORT: "Estados" Timeline Shows All Steps as Completed
@@ -173,7 +174,11 @@ const CollabsStateTimelineV2 = ({ collab, isCompany }: Props) => {
                   </div>
                 </div>
                 <div style={styles.rightSection}>
-                  <p style={styles.label}>{step?.name}</p>
+                  <p style={styles.label}>
+                    {step?.id === COLAB_PENDING_COMPANY_STATE && renderCheck
+                      ? "Solicitud revisada"
+                      : step?.name}
+                  </p>
                   <p style={styles.subLabel}>
                     {step?.type}
                     {getLeftContent(
