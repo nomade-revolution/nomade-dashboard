@@ -3,7 +3,7 @@ import {
   SectionTypes,
 } from "sections/shared/interfaces/interfaces";
 import { StyledTableCell } from "../DashboardTable/DashboardTable";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
 import { OrderItem } from "sections/user/UserContext/UserContext";
 import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
@@ -78,6 +78,25 @@ const DashBoardHeaderCell = ({ section }: Props) => {
   const [isSort, setIsSort] = useState<"ASC" | "DESC" | null>(
     getOrder(section),
   );
+
+  useEffect(() => {
+    setIsSort(getOrder(section));
+  }, [
+    section.pageName,
+    section.sortTag,
+    orderCollabs.sortTag,
+    orderCollabs.direction,
+    orderLeads.sortTag,
+    orderLeads.direction,
+    orderOffers.sortTag,
+    orderOffers.direction,
+    orderPlans.sortTag,
+    orderPlans.direction,
+    orderCompanies.sortTag,
+    orderCompanies.direction,
+    order?.sortTag,
+    order?.direction,
+  ]);
 
   const handlePressSort = () => {
     const sortActions: Record<

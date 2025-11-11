@@ -663,11 +663,13 @@ const DashboardContentSections = ({
           </span>
         );
       }
+      // For Lodging types, day is null, so show from_day instead
+      // For other types, show day
       return (
         <span className="dashboard__type">
-          {(section as FullCollab).day
-            ? (section as FullCollab).day
-            : (section as FullCollab).from_day ?? "-"}
+          {(section as FullCollab).day ||
+            (section as FullCollab).from_day ||
+            "-"}
         </span>
       );
 
@@ -711,7 +713,8 @@ const DashboardContentSections = ({
     case "history_update":
       return (
         <span className="dashboard__date">
-          {(section as FullCollab).state.created_at}
+          {(section as FullCollab).updated_at ||
+            (section as FullCollab).state.created_at}
         </span>
       );
 

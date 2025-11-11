@@ -82,7 +82,7 @@ const CollabsPage = (): React.ReactElement => {
           ? { filters: { company_id: companyId } }
           : { filters: {} };
 
-      if (order?.sortTag) {
+      if (order?.sortTag && order.direction) {
         filters.order = [{ by: order.sortTag, dir: order.direction }];
       }
       if (text) {

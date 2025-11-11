@@ -20,7 +20,7 @@ const CompanyCollabs = ({ company_id }: Props): React.ReactElement => {
   const getAllCollabsWithFilters = useCallback(() => {
     const filters: FilterParams = { filters: { company_id } };
 
-    if (order?.sortTag) {
+    if (order?.sortTag && order.direction) {
       filters.order = [{ by: order.sortTag, dir: order.direction }];
     }
 

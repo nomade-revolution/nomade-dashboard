@@ -31,6 +31,7 @@ export interface FullCollab extends Collab {
   conditions: string;
   note: string | null;
   company_notes?: string; // API typo - keeping both for compatibility
+  updated_at?: string; // Last modification date for sorting
 }
 
 export interface State {
