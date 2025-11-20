@@ -7,6 +7,7 @@ import {
   OfferFormStructure,
   OfferTypes,
 } from "modules/offers/domain/Offer";
+import { normalizeWeekData } from "sections/offers/utils/normalizeTimeFormat";
 
 const useOffers = () => {
   const handleOfferFormData = (
@@ -49,7 +50,28 @@ const useOffers = () => {
 
     // Add advance_notice_time to offerable based on offer type
     let finalOfferable = offerable;
-    if (values.advance_notice_time !== undefined) {
+
+    // Handle Lodging offers (can have advance_notice_time and week is optional)
+    if (offerable_type === "App\\Models\\OfferableLodging") {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const lodgingArray = offerable as unknown as any[];
+      if (Array.isArray(lodgingArray) && lodgingArray.length > 0) {
+        // Backend expects array for Lodging
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        finalOfferable = lodgingArray.map((item) => ({
+          address_id: item.address_id,
+          min_guests: item.min_guests || 0,
+          max_guests: item.max_guests || 0,
+          advance_notice_time:
+            values.advance_notice_time !== undefined
+              ? values.advance_notice_time
+              : item.advance_notice_time || 0,
+          // Week is optional for Lodging (backend auto-adds full week if not provided)
+          ...(item.week && { week: normalizeWeekData(item.week) }),
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        })) as any;
+      }
+    } else if (values.advance_notice_time !== undefined) {
       if (offerable_type === "App\\Models\\OfferableBrand") {
         // For Brand offers: { "advance_notice_time": 150 }
         finalOfferable = {
@@ -59,10 +81,16 @@ const useOffers = () => {
         // Extract the actual offerable data from the "0" index if it exists
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const actualOfferableData = (offerable as any)[0] || offerable;
-        // For Delivery offers: { "address_id": 1, "week": [...], "advance_notice_time": 150 }
+        // For Delivery offers: Backend expects a single object (not array)
+        // { "week": [...], "advance_notice_time": 150 }
         finalOfferable = {
-          ...actualOfferableData,
-          advance_notice_time: values.advance_notice_time,
+          week: actualOfferableData.week
+            ? normalizeWeekData(actualOfferableData.week)
+            : [],
+          advance_notice_time:
+            values.advance_notice_time !== undefined
+              ? values.advance_notice_time
+              : actualOfferableData.advance_notice_time || 0,
         };
       } else if (
         offerable_type === "App\\Models\\OfferableRestaurant" ||
@@ -74,16 +102,17 @@ const useOffers = () => {
 
         if (Array.isArray(offerableArray) && offerableArray.length > 0) {
           // Backend expects array of objects, each with advance_notice_time
+          // Normalize week data to ensure proper time format (HH:mm:ss)
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           finalOfferable = offerableArray.map((item) => ({
             address_id: item.address_id,
-            min_guests: item.min_guests,
-            max_guests: item.max_guests,
-            week: item.week,
+            min_guests: item.min_guests || 0,
+            max_guests: item.max_guests || 0,
+            week: item.week ? normalizeWeekData(item.week) : [],
             advance_notice_time:
               values.advance_notice_time !== undefined
                 ? values.advance_notice_time
-                : 0,
+                : item.advance_notice_time || 0,
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
           })) as any;
         } else {
@@ -106,6 +135,9 @@ const useOffers = () => {
     }
 
     formData.append("offerable", JSON.stringify(finalOfferable));
+    // IMPORTANT: Always send offerable_type to work around backend bug
+    // Backend bug: If offerable_type is not provided, it fails when accessing $data['offerable_type']
+    // This ensures the backend can process the update correctly
     formData.append("offerable_type", offerable_type);
     formData.append("location_type", location_type);
     formData.append("location_id", JSON.stringify(location_id));

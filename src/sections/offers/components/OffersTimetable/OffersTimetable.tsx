@@ -76,44 +76,44 @@ const OffersTimetable = ({
 
   useEffect(() => {
     const updatedWeek = selectedDays?.reduce((acc: WeekDay[], day) => {
-      const timeSlot = [
-        {
-          from_time:
-            `${getFieldProps(`from_time_day_${day.day_number}_1`).value}${
-              String(
-                getFieldProps(`from_time_day_${day.day_number}_1`).value,
-              ).split(":").length < 3
-                ? ":00"
-                : ""
-            }` || "",
-          to_time:
-            `${getFieldProps(`to_time_day_${day.day_number}_1`).value}${
-              String(
-                getFieldProps(`to_time_day_${day.day_number}_1`).value,
-              ).split(":").length < 3
-                ? ":00"
-                : ""
-            }` || "",
-        },
-        {
-          from_time:
-            `${getFieldProps(`from_time_day_${day.day_number}_2`).value}${
-              String(
-                getFieldProps(`from_time_day_${day.day_number}_2`).value,
-              ).split(":").length < 3
-                ? ":00"
-                : ""
-            }` || "",
-          to_time:
-            `${getFieldProps(`to_time_day_${day.day_number}_2`).value}${
-              String(
-                getFieldProps(`to_time_day_${day.day_number}_2`).value,
-              ).split(":").length < 3
-                ? ":00"
-                : ""
-            }` || "",
-        },
-      ];
+      // Normalize time format to HH:mm:ss as required by backend
+      const normalizeTime = (time: string): string => {
+        if (!time || time.trim() === "") return "";
+        const cleaned = time.trim();
+        const parts = cleaned.split(":");
+        if (parts.length === 3) return cleaned;
+        if (parts.length === 2) return `${cleaned}:00`;
+        if (parts.length === 1 && parts[0]) return `${cleaned}:00:00`;
+        return "";
+      };
+
+      const firstShiftFrom = normalizeTime(
+        getFieldProps(`from_time_day_${day.day_number}_1`).value || "",
+      );
+      const firstShiftTo = normalizeTime(
+        getFieldProps(`to_time_day_${day.day_number}_1`).value || "",
+      );
+      const secondShiftFrom = normalizeTime(
+        getFieldProps(`from_time_day_${day.day_number}_2`).value || "",
+      );
+      const secondShiftTo = normalizeTime(
+        getFieldProps(`to_time_day_${day.day_number}_2`).value || "",
+      );
+
+      // Build time_slot array - only include non-empty slots
+      const timeSlot = [];
+      if (firstShiftFrom && firstShiftTo) {
+        timeSlot.push({
+          from_time: firstShiftFrom,
+          to_time: firstShiftTo,
+        });
+      }
+      if (secondShiftFrom && secondShiftTo) {
+        timeSlot.push({
+          from_time: secondShiftFrom,
+          to_time: secondShiftTo,
+        });
+      }
 
       if (!acc.some((entry: WeekDay) => entry.day_of_week === day.day_number)) {
         acc.push({

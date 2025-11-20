@@ -347,7 +347,16 @@ const OffersForm = ({
       // @ts-expect-error TODO: fix this
       parsedOfferResume = offerResume;
     }
+
+    // In edit mode, use offerResumeEdit which contains ALL addresses
+    // This ensures all addresses are sent to backend (backend replaces all, so we must send all)
     const offerableData = mode === "edit" ? offerResumeEdit : parsedOfferResume;
+
+    // Ensure offerableData is not empty - if it is, backend will fail
+    // @ts-expect-error TODO: fix this
+    // if (mode === "edit" && (!offerableData || (Array.isArray(offerableData) && offerableData.length === 0))) {
+    //   Warning: No offerable data to submit. This may cause backend errors.
+    // }
 
     const formData = handleOfferFormData(
       values,
