@@ -79,7 +79,9 @@ const ReusableFormStyled = styled.form<Props>`
 
     &__add-address,
     &__add-contact,
-    &__save-contact {
+    &__save-contact,
+    &__edit-address,
+    &__delete-address {
       display: flex;
       align-items: center;
       gap: 8px;
@@ -89,14 +91,37 @@ const ReusableFormStyled = styled.form<Props>`
       color: ${(props) => props.theme.fontsColors.light};
       border-radius: ${(props) => props.theme.borderRadius.badges};
       width: fit-content;
+      border: none;
+      cursor: pointer;
 
       &--icon {
         font-size: large;
+      }
+
+      &:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
+
+      &:hover:not(:disabled) {
+        opacity: 0.9;
       }
     }
 
     &__save-contact {
       background: ${(props) => props.theme.colors.mainColor};
+    }
+
+    &__edit-address {
+      background: ${(props) => props.theme.colors.darkBlue};
+    }
+
+    &__delete-address {
+      background: ${(props) => props.theme.colors.red || "#dc3545"};
+
+      .datasheet-form__create--icon {
+        color: ${(props) => props.theme.fontsColors.light};
+      }
     }
 
     &__address-mssg,

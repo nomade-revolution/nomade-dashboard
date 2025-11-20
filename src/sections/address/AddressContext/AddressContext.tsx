@@ -7,6 +7,7 @@ import {
   getAddressById,
   createAddress,
   updateAddress,
+  deleteAddress,
 } from "modules/address/application/address";
 
 interface ContextState {
@@ -18,6 +19,9 @@ interface ContextState {
     address_id: number,
     address: Partial<FullAddress>,
   ) => Promise<HttpResponseInterface<FullAddress>>;
+  deleteAddress: (
+    address_id: number,
+  ) => Promise<HttpResponseInterface<{ success: boolean }>>;
 }
 
 export const AddressContext = createContext<ContextState>({} as ContextState);
@@ -79,6 +83,21 @@ export const AddressContextProvider = ({
     [repository],
   );
 
+  const deleteAddressMethod = useCallback(
+    async (address_id: number) => {
+      setLoading(true);
+      const response = await deleteAddress(repository, address_id);
+
+      if (isHttpSuccessResponse(response)) {
+        setLoading(false);
+      }
+      setLoading(false);
+
+      return response;
+    },
+    [repository],
+  );
+
   return (
     <AddressContext.Provider
       value={{
@@ -87,6 +106,7 @@ export const AddressContextProvider = ({
         getAddress,
         createNewAddress,
         updateAddress: updateAddressMethod,
+        deleteAddress: deleteAddressMethod,
       }}
     >
       {children}

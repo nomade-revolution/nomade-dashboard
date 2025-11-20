@@ -23,3 +23,10 @@ export const updateAddress = (
 ): Promise<HttpResponseInterface<FullAddress>> => {
   return addressRepo.updateAddress(address_id, address);
 };
+
+export const deleteAddress = (
+  addressRepo: AddressRepository<FullAddress>,
+  address_id: number,
+): Promise<HttpResponseInterface<{ success: boolean }>> => {
+  return addressRepo.deleteAddress(address_id);
+};

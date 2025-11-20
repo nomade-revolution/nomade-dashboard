@@ -7,4 +7,7 @@ export interface AddressRepository<I> {
     address_id: number,
     address: Partial<I>,
   ): Promise<HttpResponseInterface<I>>;
+  deleteAddress(
+    address_id: number,
+  ): Promise<HttpResponseInterface<{ success: boolean }>>;
 }

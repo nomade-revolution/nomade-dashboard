@@ -27,6 +27,7 @@ import {
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { IoAddCircle } from "react-icons/io5";
 import { FaEdit } from "react-icons/fa";
+import { FaTrashAlt } from "react-icons/fa";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
 import AddressForm from "sections/shared/components/AddressForm/AddressForm";
 import { Addresses } from "../OffersForm/OffersForm";
@@ -104,6 +105,7 @@ const OffersScheduling = ({
     createNewAddress,
     updateAddress,
     getAddress,
+    deleteAddress,
     address: contextAddress,
   } = useAddressContext();
   const [isAddressModalOpen, setIsAddressModalOpen] = useState<boolean>(false);
@@ -263,6 +265,56 @@ const OffersScheduling = ({
       } catch (error) {
         // Error fetching address data
       }
+    }
+  };
+
+  const handleDeleteAddress = async () => {
+    // Convert address string to number for comparison
+    const addressId = parseInt(address, 10);
+
+    // Check if addressId is valid
+    if (isNaN(addressId) || addressId <= 0) {
+      return;
+    }
+
+    // Don't allow deletion if there's only one address
+    if (addresses.length <= 1) {
+      return;
+    }
+
+    // Find the address to delete
+    const addressToDelete = addresses.find(
+      (addr) => addr.id === addressId || addr.value === addressId,
+    );
+
+    if (!addressToDelete) {
+      return;
+    }
+
+    try {
+      const response = await deleteAddress(addressToDelete.id);
+
+      if (isHttpSuccessResponse(response)) {
+        // Remove the address from the addresses array
+        const updatedAddresses = addresses.filter(
+          (addr) => addr.id !== addressToDelete.id,
+        );
+        setAddresses(updatedAddresses);
+
+        // If the deleted address was selected, reset or select the first remaining address
+        if (address === addressId.toString()) {
+          if (updatedAddresses.length > 0) {
+            setAddress(updatedAddresses[0].id.toString(), 0);
+          } else {
+            setAddress("", null);
+          }
+        }
+
+        // Clean any scheduling data tied to the deleted address
+        cleanStaleAddressData();
+      }
+    } catch (error) {
+      // Error deleting address - could show error message here
     }
   };
 
@@ -456,6 +508,17 @@ const OffersScheduling = ({
               <FaEdit className="datasheet-form__create--icon" />
               Editar dirección
             </button>
+            {addresses.length > 1 && (
+              <button
+                type="button"
+                className="datasheet-form__delete-address"
+                onClick={handleDeleteAddress}
+                disabled={!address || addresses.length === 0}
+              >
+                <FaTrashAlt className="datasheet-form__create--icon" />
+                Eliminar dirección
+              </button>
+            )}
           </div>
           <section className="scheduling__section">
             <div className="form-subsection">

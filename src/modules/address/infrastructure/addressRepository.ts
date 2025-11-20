@@ -47,4 +47,17 @@ export class AddressRepository {
       return Promise.reject(error);
     }
   }
+
+  public async deleteAddress(
+    address_id: number,
+  ): Promise<HttpResponseInterface<{ success: boolean }>> {
+    try {
+      const resp = await this.http.delete<{ success: boolean }>(
+        `${ADDRESS_BASE}/${address_id}`,
+      );
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 }
