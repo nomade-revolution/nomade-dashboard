@@ -97,19 +97,50 @@ const OfferDetailsPage = () => {
 
   const getOfferWithDayTime = (calendars: Calendar[]): AddresTableData[] => {
     const a = calendars.map((calendar) => {
+      // Flatten all time entries from all days and all time slots
+      const timeEntries: {
+        day: string;
+        start_time: string;
+        end_time: string;
+      }[] = [];
+
+      calendar.week.forEach((dayGroup) => {
+        // dayGroup is an array of TimeSlotOffer objects for a specific day
+        // Typically there's one TimeSlotOffer per day, but we'll handle multiple
+        dayGroup.forEach((timeSlotOffer) => {
+          const dayName = timeSlotOffer.day_name;
+
+          // time_slot is an array of TimeSlot objects (can have multiple shifts)
+          if (Array.isArray(timeSlotOffer.time_slot)) {
+            timeSlotOffer.time_slot.forEach((slot) => {
+              if (slot.from_time && slot.to_time) {
+                timeEntries.push({
+                  day: dayName,
+                  start_time: parseScheduleHours(slot.from_time),
+                  end_time: parseScheduleHours(slot.to_time),
+                });
+              }
+            });
+          } else if (timeSlotOffer.time_slot) {
+            // Handle case where time_slot might be a single object (legacy format)
+            // @ts-expect-error - handling legacy format
+            const slot = timeSlotOffer.time_slot;
+            if (slot.from_time && slot.to_time) {
+              timeEntries.push({
+                day: dayName,
+                start_time: parseScheduleHours(slot.from_time),
+                end_time: parseScheduleHours(slot.to_time),
+              });
+            }
+          }
+        });
+      });
+
       return {
         address: calendar.address,
         max_guests: calendar.max_guests,
         min_guests: calendar.min_guests,
-        time: calendar.week.map((week) => {
-          return {
-            day: week[0].day_name,
-            //@ts-expect-error
-            start_time: parseScheduleHours(week[0].time_slot.from_time),
-            //@ts-expect-error
-            end_time: parseScheduleHours(week[0].time_slot.to_time),
-          };
-        }),
+        time: timeEntries,
       };
     });
     return a;
