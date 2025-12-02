@@ -28,6 +28,7 @@ import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { Checkbox } from "@mui/material";
 import { appPaths } from "sections/shared/utils/appPaths/appPaths";
 import theme from "assets/styles/theme";
+import { appendContactsToFormData } from "sections/shared/utils/appendContactsToFormData";
 
 const EXCLUDED_FIELDS = [
   "id",
@@ -173,19 +174,20 @@ const CompanyForm = ({
 
     formData.append("start_date", formattedDate);
 
-    if (checkedTerms) {
-      formData.append("accept_conditions", JSON.stringify(checkedTerms));
-    }
+    // Always send accept_conditions (required by backend, even when false)
+    formData.append("accept_conditions", checkedTerms);
 
+    // Use bracket notation for contacts (more standard for multipart/form-data)
     if (registerContacts.length > 0) {
-      formData.append("contacts", JSON.stringify(registerContacts));
+      appendContactsToFormData(formData, registerContacts);
     }
 
     // socialMedia field removed - not needed for cms-register endpoint
 
     // name field is already added above from values.name (user name)
     // company name is handled via company_name field
-    formData.append("gocardless", JSON.stringify(isCheked));
+    // Send boolean directly (FormData will convert to "true"/"false" string)
+    formData.append("gocardless", isCheked);
 
     if (!deleteImageMode && file && file[0]) {
       formData.append("image", file![0]);

@@ -20,7 +20,7 @@ export const clientSchema = yup.object().shape({
     .typeError("La fecha debe tener un formato válido")
     .nullable(),
 
-  name: yup.string(),
+  name: yup.string().required("El nombre es un campo requerido"),
   email: yup.string().required("El email es un campo requerido").email(),
   password: yup
     .string()
