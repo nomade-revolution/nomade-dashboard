@@ -890,7 +890,7 @@ const DashboardContentSections = ({
               }}
             >
               <FaInstagram
-                color="#8C9B6E"
+                color="#335d53"
                 size={13}
                 style={{ marginBottom: "-2px" }}
               />
@@ -931,7 +931,7 @@ const DashboardContentSections = ({
       return (
         <div className={`dashboard__social-media`}>
           {main_social?.name === SocialMediaTypes.instagram ? (
-            <FaInstagram color="#8C9B6E" size={13} />
+            <FaInstagram color="#335d53" size={13} />
           ) : main_social?.name === SocialMediaTypes.tiktok ? (
             <FaTiktok size={13} />
           ) : main_social?.name === SocialMediaTypes.twitch ? (

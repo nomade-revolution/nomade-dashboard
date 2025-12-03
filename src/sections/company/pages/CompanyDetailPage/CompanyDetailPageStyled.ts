@@ -87,7 +87,7 @@ const CompanyDetailPageStyled = styled.main`
       font-size: ${(props) => props.theme.fontsSize.__SM};
 
       &--accepted {
-        color: #8c9b6e;
+        color: #335d53;
         font-size: ${(props) => props.theme.fontsSize.__SM};
       }
 

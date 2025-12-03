@@ -3,13 +3,13 @@ import { styled } from "styled-components";
 
 const CustomCheckbox = styled(Checkbox)(() => ({
   "&.MuiCheckbox-root": {
-    border: "2px solid #8C9B6E",
+    border: "2px solid #335d53",
     borderRadius: 4,
     width: 20,
     height: 20,
   },
   "&.Mui-checked": {
-    color: "#8C9B6E",
+    color: "#335d53",
     "& .MuiSvgIcon-root": {
       display: "none",
     },
@@ -18,7 +18,7 @@ const CustomCheckbox = styled(Checkbox)(() => ({
       position: "absolute",
       width: "100%",
       height: "100%",
-      backgroundColor: "#8C9B6E",
+      backgroundColor: "#335d53",
     },
   },
 }));

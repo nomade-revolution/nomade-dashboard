@@ -215,7 +215,7 @@ const OfferResume = ({
                 {type === OfferTypes.delivery && (
                   <div className="offer-resume__section-row">
                     <div className="offer-resume__text-icon">
-                      <FaClock color={"#8C9B6E"} />
+                      <FaClock color={"#335d53"} />
                       <span>Tiempo previo de aviso - </span>
                     </div>
                     <span>

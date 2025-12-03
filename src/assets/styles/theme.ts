@@ -31,7 +31,7 @@ export const theme = {
     light: "#fff",
     dark: "#000",
     lightGrey: "#ABABB4",
-    corporativeColor: "#8C9B6E",
+    corporativeColor: "#335d53",
     error: "#E02020",
     darkBlue: "#125AA9",
     dashBoard: "#273241",
