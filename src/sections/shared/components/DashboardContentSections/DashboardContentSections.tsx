@@ -82,7 +82,13 @@ const DashboardContentSections = ({
 
   const getBusinessUserCompanies = (section: User) => {
     const { companies } = section;
-    if (!companies) return null;
+    if (!companies || companies.length === 0) {
+      return (
+        <span className="dashboard__name" style={{ color: "#999" }}>
+          -
+        </span>
+      );
+    }
     if (user.type !== "Company") {
       return companies.map((company: Company) => {
         return (
@@ -106,7 +112,7 @@ const DashboardContentSections = ({
 
     return companies.map((company) => {
       return (
-        <Fragment>
+        <Fragment key={company.id}>
           <span className="dashboard__name">{company.company}</span>
         </Fragment>
       );
