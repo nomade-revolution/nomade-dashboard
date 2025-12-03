@@ -8,7 +8,7 @@ export interface User {
   id: number;
   name: string;
   email: string;
-  type: "Company" | "Influencer" | "Nomade";
+  type: "Company" | "Influencer" | "Nomade" | "users_app";
   roles: number[];
   user_id?: number;
   companies?: Company[];

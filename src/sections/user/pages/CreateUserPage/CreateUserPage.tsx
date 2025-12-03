@@ -25,11 +25,24 @@ const CreateUserPage = () => {
   const navigate = useNavigate();
   const [loading, setIsLoading] = useState<boolean>(false);
   const [role, setRole] = useState<string>("");
+  const [isCompanyTypeUser, setIsCompanyTypeUser] = useState<boolean>(false);
 
   const handleSubmitForm = async (values: AuthRegisterNomadeInterface) => {
     setIsLoading(true);
     setIsFormSubmitted(true);
-    const resp = await registerUser({ ...values, roles: [+role] });
+
+    const payload: AuthRegisterNomadeInterface = {
+      ...values,
+      roles: isCompanyTypeUser ? [] : [+role],
+      is_nomade_staff: isCompanyTypeUser ? false : undefined,
+    };
+
+    // If creating company-type user without company
+    if (isCompanyTypeUser) {
+      // payload already set above
+    }
+
+    const resp = await registerUser(payload);
     setIsSuccess(Boolean(resp.success));
     setIsLoading(false);
     if (isSuccess) {
@@ -141,7 +154,33 @@ const CreateUserPage = () => {
                 value: role.id,
               }))}
               label={"Rol"}
+              disabled={isCompanyTypeUser}
             />
+            <div className="form-section">
+              <label
+                htmlFor="isCompanyTypeUser"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  cursor: "pointer",
+                }}
+              >
+                <input
+                  type="checkbox"
+                  id="isCompanyTypeUser"
+                  checked={isCompanyTypeUser}
+                  onChange={(e) => {
+                    setIsCompanyTypeUser(e.target.checked);
+                    if (e.target.checked) {
+                      setRole(""); // Clear role when checked
+                    }
+                  }}
+                  style={{ cursor: "pointer" }}
+                />
+                <span>Usuario de empresa (sin asignar empresa aún)</span>
+              </label>
+            </div>
             <button
               type="submit"
               disabled={loading}

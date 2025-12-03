@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Loader from "../../../shared/components/Loader/Loader";
 import DashboardTable from "../../../shared/components/DashboardTable/DashboardTable";
 import DashboardCardListMobile from "../../../shared/components/DashboardCardListMobile/DashboardCardListMobile";
@@ -13,10 +13,13 @@ import { usersAppTableHeaderSections } from "../../utils/userTableSections";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
 import { UserTypes } from "modules/user/domain/User";
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
+import { IoAddCircle } from "react-icons/io5";
+import { appPaths } from "sections/shared/utils/appPaths/appPaths";
 
 const UsersAppPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
   const { page } = useParams();
+  const navigate = useNavigate();
   const { getUsers, users_influencerCompany, pagination, loading, order } =
     useUserContext();
   const handleSearch = (searchText: string) => {
@@ -26,7 +29,7 @@ const UsersAppPage = (): React.ReactElement => {
     (text?: string) => {
       const filters: FilterParams = {
         filters: {
-          types: ["Company"],
+          types: ["users_app"],
         },
       };
       if (order?.sortTag) {
@@ -41,9 +44,9 @@ const UsersAppPage = (): React.ReactElement => {
     [getUsers, order.direction, order.sortTag, page],
   );
 
-  // const handleCreateUser = () => {
-  //   navigate(appPaths.createUser);
-  // };
+  const handleCreateUser = () => {
+    navigate(appPaths.createUser);
+  };
 
   useEffect(() => {
     getUsersData();
@@ -54,12 +57,10 @@ const UsersAppPage = (): React.ReactElement => {
   return (
     <ReusablePageStyled className="dashboard">
       <div className="dashboard__search-user">
-        {/* <button className="dashboard__create" onClick={handleCreateUser}>
-              <IoAddCircle className="dashboard__create--icon" />
-              Crear usuario
-              
-            </button> */}
-        <div></div>
+        <button className="dashboard__create" onClick={handleCreateUser}>
+          <IoAddCircle className="dashboard__create--icon" />
+          Crear usuario
+        </button>
         <SearchBar
           onReset={() => getUsersData()}
           pageName={SectionTypes.usersApp}

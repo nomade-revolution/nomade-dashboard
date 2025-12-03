@@ -13,6 +13,7 @@ export interface AuthRegisterNomadeInterface {
   password: string;
   repeatPassword: string;
   roles: number[];
+  is_nomade_staff?: boolean;
 }
 
 export interface RegisterInfluencerInterface {

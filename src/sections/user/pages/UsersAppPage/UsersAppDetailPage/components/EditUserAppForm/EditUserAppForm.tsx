@@ -125,6 +125,43 @@ const EditUserAppForm = ({ initialState, onSubmit, setIsOpen }: Props) => {
             )}
           </div>
 
+          {/* Show user type information (read-only) */}
+          {initialState.type && (
+            <div className="form-section" style={{ marginBottom: "20px" }}>
+              <label className="login-form__label">Tipo de usuario</label>
+              <div
+                style={{
+                  padding: "10px",
+                  backgroundColor: "#f5f5f5",
+                  borderRadius: "4px",
+                  color: "#666",
+                }}
+              >
+                {initialState.type === "Nomade" && "Personal de Nomade"}
+                {initialState.type === "users_app" &&
+                  "Usuario pendiente (sin empresa asignada)"}
+                {initialState.type === "Company" && "Usuario de empresa"}
+                {initialState.type === "Influencer" && "Influencer"}
+                {(initialState.type === "Company" ||
+                  initialState.type === "Influencer") &&
+                  initialState.companies &&
+                  initialState.companies.length > 0 && (
+                    <span
+                      style={{
+                        display: "block",
+                        fontSize: "0.9em",
+                        marginTop: "5px",
+                        color: "#999",
+                      }}
+                    >
+                      (No se puede cambiar el tipo de usuario con relaciones
+                      activas)
+                    </span>
+                  )}
+              </div>
+            </div>
+          )}
+
           <div
             style={{
               display: "flex",

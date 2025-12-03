@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import UsersAppDetailPageStyled from "./UsersAppDetailPageStyled";
 import Loader from "sections/shared/components/Loader/Loader";
 import GoBackButton from "sections/shared/components/GoBackButton/GoBackButton";
@@ -8,9 +8,11 @@ import theme from "assets/styles/theme";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { FaEdit } from "react-icons/fa";
+import { FaRegTrashCan } from "react-icons/fa6";
 import EditUserAppForm from "./components/EditUserAppForm/EditUserAppForm";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
 import UserDetailData from "./components/UserAppDetailData/UserAppDetailData";
+import { appPaths } from "sections/shared/utils/appPaths/appPaths";
 // import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
 // import { STATES_OPTIONS } from "sections/influencer/pages/InfluencerDetailPage/InfluencerDetailPage";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
@@ -24,8 +26,9 @@ import { useCompanyContext } from "sections/company/CompanyContext/useCompanyCon
 // import useActions from "sections/shared/hooks/useActions/useActions";
 
 const UsersAppDetailPage = (): React.ReactElement => {
-  const { loading, getUser, userData } = useUserContext();
+  const { loading, getUser, userData, deleteUserById } = useUserContext();
   const { postBaseCompany } = useCompanyContext();
+  const navigate = useNavigate();
 
   // const { handleIsDialogOpen } = useActions();
 
@@ -37,6 +40,31 @@ const UsersAppDetailPage = (): React.ReactElement => {
   const [userState /*setUserState*/] = useState<number>(0);
   const { id } = useParams();
   const { user } = useAuthContext();
+
+  const handleDeleteUser = async () => {
+    if (!userData || !id) return;
+
+    // Check if user has companies - cannot delete if they do
+    if (userData.companies && userData.companies.length > 0) {
+      alert(
+        "No se puede eliminar un usuario con empresas asignadas. Elimine las relaciones primero.",
+      );
+      return;
+    }
+
+    if (window.confirm("¿Estás seguro de que quieres eliminar este usuario?")) {
+      try {
+        const response = await deleteUserById(+id);
+        if (response.success) {
+          navigate(appPaths.usersApp.replace(":page", "1"));
+        } else {
+          alert("Error al eliminar el usuario. " + (response.message || ""));
+        }
+      } catch (error) {
+        alert("Error al eliminar el usuario.");
+      }
+    }
+  };
 
   useEffect(() => {
     getUser(+id!);
@@ -111,14 +139,16 @@ const UsersAppDetailPage = (): React.ReactElement => {
                 color={theme.colors.darkBlue}
               />
             )}
-            {/* {user.type === "Nomade" && (
-                    <ActionButton
-                      onClick={handleDeleteButton}
-                      text="Borrar"
-                      icon={<FaRegTrashCan />}
-                      color={theme.colors.red}
-                    />
-                  )} */}
+            {user.type === "Nomade" &&
+              userData &&
+              (!userData.companies || userData.companies.length === 0) && (
+                <ActionButton
+                  onClick={handleDeleteUser}
+                  text="Borrar"
+                  icon={<FaRegTrashCan />}
+                  color={theme.colors.red}
+                />
+              )}
           </div>
         </section>
 
