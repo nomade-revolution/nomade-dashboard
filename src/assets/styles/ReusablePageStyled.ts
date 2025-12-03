@@ -222,7 +222,7 @@ const ReusablePageStyled = styled.main`
       font-size: ${(props) => props.theme.fontsSize.__SM};
 
       &--accepted {
-        color: #335d53;
+        color: #243c34;
         font-size: ${(props) => props.theme.fontsSize.__SM};
       }
 
