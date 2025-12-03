@@ -80,12 +80,28 @@ export class UsersRepository {
     data: AuthRegisterNomadeInterface,
   ): Promise<HttpResponseInterface<User>> {
     try {
-      const response = await this.http.post<UserApiResponse>(`${GET_USERS}`, {
+      const requestBody: {
+        name: string;
+        email: string;
+        password: string;
+        roles: number[];
+        is_nomade_staff?: boolean;
+      } = {
         name: data.name,
         email: data.email,
         password: data.password,
         roles: data.roles,
-      });
+      };
+
+      // Include is_nomade_staff if it's explicitly set
+      if (data.is_nomade_staff !== undefined) {
+        requestBody.is_nomade_staff = data.is_nomade_staff;
+      }
+
+      const response = await this.http.post<UserApiResponse>(
+        `${GET_USERS}`,
+        requestBody,
+      );
 
       return response;
     } catch (error) {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AuthRegisterNomadeInterface } from "@auth";
 import { ErrorMessage, Field, Formik } from "formik";
 import CreateInfluencerFormStyled from "sections/user/pages/CreateInfluencerPage/CreateInfluencerFormStyled";
@@ -30,21 +30,42 @@ const CreateUserForm = ({
 }: CreateUserFormProps) => {
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
-  const { registerUser, rolesList } = useUserContext();
+  const { registerUser, rolesList, getRolesList } = useUserContext();
   const [loading, setIsLoading] = useState<boolean>(false);
   const [role, setRole] = useState<string>("");
   // When from users-app, always set to true and disable
   const [isCompanyTypeUser, setIsCompanyTypeUser] =
     useState<boolean>(isFromUsersApp);
 
+  // Load roles list when component mounts
+  useEffect(() => {
+    if (rolesList.length === 0) {
+      getRolesList();
+    }
+  }, [rolesList.length, getRolesList]);
+
   const handleSubmitForm = async (values: AuthRegisterNomadeInterface) => {
     setIsLoading(true);
     setIsFormSubmitted(true);
 
+    // Determine is_nomade_staff value
+    // If from users-app or company type user: false
+    // If from usuarios (CMS) with a role: true (will be auto-set by backend based on role, but we can be explicit)
+    // If from usuarios without role: undefined (backend will handle)
+    let isNomadeStaff: boolean | undefined;
+    if (isCompanyTypeUser || isFromUsersApp) {
+      isNomadeStaff = false;
+    } else if (role && +role) {
+      // If creating from usuarios with a role selected, it's a Nomade staff user
+      isNomadeStaff = true;
+    } else {
+      isNomadeStaff = undefined;
+    }
+
     const payload: AuthRegisterNomadeInterface = {
       ...values,
       roles: isCompanyTypeUser ? [] : [+role],
-      is_nomade_staff: isCompanyTypeUser ? false : undefined,
+      is_nomade_staff: isNomadeStaff,
     };
 
     const resp = await registerUser(payload);
@@ -154,19 +175,17 @@ const CreateUserForm = ({
                 />
               )}
             </div>
-            {!isFromUsersApp && (
-              <ReusableSelect
-                value={role}
-                setValue={setRole}
-                options={rolesList.map((role) => ({
-                  id: role.id,
-                  name: role.name,
-                  value: role.id,
-                }))}
-                label={"Rol"}
-                disabled={isCompanyTypeUser}
-              />
-            )}
+            <ReusableSelect
+              value={role}
+              setValue={setRole}
+              options={rolesList.map((role) => ({
+                id: role.id,
+                name: role.name,
+                value: role.id,
+              }))}
+              label={"Rol"}
+              disabled={isCompanyTypeUser || isFromUsersApp}
+            />
             {!hideCompanyCheckbox && (
               <div className="form-section">
                 <label
