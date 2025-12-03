@@ -40,6 +40,19 @@ import { COLAB_PENDING_COMPANY_STATE } from "sections/collabs/utils/collabsState
  * - Current step should be highlighted appropriately
  */
 
+/**
+ * Formats a date string to remove the time portion (hh:mm)
+ * Input format: "dd-mm-yyyy hh:mm"
+ * Output format: "dd-mm-yyyy"
+ */
+const formatDateWithoutTime = (
+  dateString: string | undefined | null,
+): string => {
+  if (!dateString) return "";
+  // Split by space and take only the date part (before the time)
+  return dateString.split(" ")[0] || dateString;
+};
+
 const getCircleStyle = (step: State, currentStateId: number) => {
   // Si el estado es de error y es el último estado, se pone en rojo
   // Si el estado es futuro al último estado, se pone en gris
@@ -190,7 +203,7 @@ const CollabsStateTimelineV2 = ({ collab, isCompany }: Props) => {
                     )}
                     {step.limit_date ? (
                       <p style={styles.errorText}>
-                        Fecha límite: {step.limit_date}
+                        Fecha límite: {formatDateWithoutTime(step.limit_date)}
                       </p>
                     ) : null}
                   </p>
