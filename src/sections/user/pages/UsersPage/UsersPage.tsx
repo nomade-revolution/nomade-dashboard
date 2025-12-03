@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Loader from "../../../shared/components/Loader/Loader";
 import DashboardTable from "../../../shared/components/DashboardTable/DashboardTable";
 import DashboardCardListMobile from "../../../shared/components/DashboardCardListMobile/DashboardCardListMobile";
@@ -14,14 +14,15 @@ import { usersTableHeaderSections } from "../../utils/userTableSections";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
 import { UserTypes } from "modules/user/domain/User";
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
-import { appPaths } from "sections/shared/utils/appPaths/appPaths";
+import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
+import CreateUserForm from "../UsersAppPage/components/CreateUserForm/CreateUserForm";
 
 const UsersPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
   const { page } = useParams();
   const { getUsers, users_nomade, pagination, loading, order } =
     useUserContext();
-  const navigate = useNavigate();
   const handleSearch = (searchText: string) => {
     getUsersData(searchText);
   };
@@ -46,7 +47,14 @@ const UsersPage = (): React.ReactElement => {
   );
 
   const handleCreateUser = () => {
-    navigate(appPaths.createUser);
+    setIsCreateModalOpen(true);
+  };
+
+  const handleUserCreated = (success: boolean) => {
+    if (success) {
+      // Refresh the users list
+      getUsersData();
+    }
   };
 
   useEffect(() => {
@@ -96,6 +104,19 @@ const UsersPage = (): React.ReactElement => {
             per_page={pagination.per_page}
             pageName={SectionTypes.users}
             filterParams={""}
+          />
+          <ReusableModal
+            children={
+              <CreateUserForm
+                onSubmit={handleUserCreated}
+                setIsOpen={setIsCreateModalOpen}
+                isFromUsersApp={false}
+                hideCompanyCheckbox={true}
+              />
+            }
+            openModal={isCreateModalOpen}
+            setIsModalOpen={setIsCreateModalOpen}
+            type="client"
           />
         </ReusablePageStyled>
       )}
