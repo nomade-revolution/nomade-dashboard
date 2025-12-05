@@ -101,7 +101,7 @@ const useOffers = () => {
             )
           : [];
         finalOfferable = {
-          week: weekData as WeekDay[][],
+          week: weekData as unknown as WeekDay[][],
           advance_notice_time:
             values.advance_notice_time !== undefined
               ? values.advance_notice_time

@@ -23,19 +23,27 @@ const useDialog = () => {
 
   const handleDeleteUsers = async (sectionId: number) => {
     const response = await deleteUserById(sectionId!);
-    setIsSuccess(response!);
+    if (response && typeof response === "object" && "success" in response) {
+      setIsSuccess(response.success);
+    }
     setTimeout(() => navigate(0), 1500);
   };
 
   const handleDeleteInfluencer = async (sectionId: number) => {
-    const response = await deleteInfluencerById(sectionId!);
-    setIsSuccess(response!);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const response = (await deleteInfluencerById(sectionId!)) as any;
+    if (response?.success !== undefined) {
+      setIsSuccess(response.success);
+    }
     setTimeout(() => navigate(-1), 1500);
   };
 
   const handleDeleteCompany = async (sectionId: number) => {
-    const response = await deleteCompanyById(sectionId!);
-    setIsSuccess(response!);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const response = (await deleteCompanyById(sectionId!)) as any;
+    if (response?.success !== undefined) {
+      setIsSuccess(response.success);
+    }
     setTimeout(() => navigate(-1), 1500);
   };
 
@@ -69,14 +77,20 @@ const useDialog = () => {
   };
 
   const handleDeleteOffer = async (sectionId: number) => {
-    const response = await deleteOfferById(sectionId!);
-    setIsSuccess(response!);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const response = (await deleteOfferById(sectionId!)) as any;
+    if (response?.success !== undefined) {
+      setIsSuccess(response.success);
+    }
     setTimeout(() => navigate(0), 1500);
   };
 
   const handleDeleteCollab = async (sectionId: number) => {
-    const response = await deleteCollabById(sectionId!);
-    setIsSuccess(response!);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const response = (await deleteCollabById(sectionId!)) as any;
+    if (response?.success !== undefined) {
+      setIsSuccess(response.success);
+    }
     setTimeout(() => navigate(-1), 1500);
   };
 

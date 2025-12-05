@@ -88,20 +88,20 @@ const OffersTimetable = ({
       };
 
       const firstShiftFrom = normalizeTime(
-        (getFieldProps(`from_time_day_${day.day_number}_1`).value as string) ||
-          "",
+        (getFieldProps(`from_time_day_${day.day_number}_1`)
+          .value as unknown as string) || "",
       );
       const firstShiftTo = normalizeTime(
-        (getFieldProps(`to_time_day_${day.day_number}_1`).value as string) ||
-          "",
+        (getFieldProps(`to_time_day_${day.day_number}_1`)
+          .value as unknown as string) || "",
       );
       const secondShiftFrom = normalizeTime(
-        (getFieldProps(`from_time_day_${day.day_number}_2`).value as string) ||
-          "",
+        (getFieldProps(`from_time_day_${day.day_number}_2`)
+          .value as unknown as string) || "",
       );
       const secondShiftTo = normalizeTime(
-        (getFieldProps(`to_time_day_${day.day_number}_2`).value as string) ||
-          "",
+        (getFieldProps(`to_time_day_${day.day_number}_2`)
+          .value as unknown as string) || "",
       );
 
       // Build time_slot array - only include non-empty slots

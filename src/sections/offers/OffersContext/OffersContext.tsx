@@ -36,7 +36,12 @@ interface ContextState {
       error: string;
     }>
   >;
-  modifyOffer: (offer: FormData, offer_id?: number) => void;
+  modifyOffer: (
+    offer: FormData,
+    offer_id?: number,
+  ) => Promise<
+    HttpResponseInterface<{ data: FullOffer; success: boolean; error: string }>
+  >;
   order: OrderItem;
   setOrder: (order: OrderItem) => void;
   getOfferCategories: () => Promise<HttpResponseInterface<FullOffer>>;
