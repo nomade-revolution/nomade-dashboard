@@ -175,7 +175,7 @@ const CompanyForm = ({
     formData.append("start_date", formattedDate);
 
     // Always send accept_conditions (required by backend, even when false)
-    formData.append("accept_conditions", checkedTerms);
+    formData.append("accept_conditions", checkedTerms ? "true" : "false");
 
     // Use bracket notation for contacts (more standard for multipart/form-data)
     if (registerContacts.length > 0) {
@@ -186,8 +186,8 @@ const CompanyForm = ({
 
     // name field is already added above from values.name (user name)
     // company name is handled via company_name field
-    // Send boolean directly (FormData will convert to "true"/"false" string)
-    formData.append("gocardless", isCheked);
+    // Convert boolean to string for FormData
+    formData.append("gocardless", isCheked ? "true" : "false");
 
     if (!deleteImageMode && file && file[0]) {
       formData.append("image", file![0]);

@@ -47,7 +47,9 @@ interface ContextState {
     filterParams: FilterParams,
     type: string,
   ) => void;
-  deleteUserById: (user_id: number) => void;
+  deleteUserById: (
+    user_id: number,
+  ) => Promise<HttpResponseInterface<{ success: boolean }>>;
   setOrder: (order: OrderItem) => void;
   getUsersStatusBadge: () => void;
   registerUser: (

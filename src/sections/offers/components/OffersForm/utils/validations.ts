@@ -5,7 +5,14 @@ export const offerSchema = yup.object().shape({
   description: yup.string().required("Description is required"),
   conditions: yup.string().required("Conditions are required"),
   in_exchange: yup.string().required("In exchange is required"),
-  advance_notice_time: yup.number().min(0).optional(),
+  advance_notice_time: yup
+    .number()
+    .nullable()
+    .transform((value, originalValue) => {
+      // Transform null, undefined, or empty string to 0
+      return originalValue == null || originalValue === "" ? 0 : value;
+    })
+    .min(0),
 });
 
 export const initialData: OfferFormStructure = {

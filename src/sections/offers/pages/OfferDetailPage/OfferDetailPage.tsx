@@ -20,6 +20,7 @@ import { useCountryContext } from "sections/country/CountryContext/useCountryCon
 import { useCitiesContext } from "sections/city/CityContext/useCitiesContext";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
 import CompanySelector from "sections/shared/components/CompanySelector";
+import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
 
 export interface AddresTableData {
   address: string;
@@ -83,8 +84,7 @@ const OfferDetailsPage = () => {
 
   const handleModifyOffer = async (offer: FormData, offer_id?: number) => {
     const res = await modifyOffer(offer, offer_id);
-    // @ts-expect-error
-    if (res.success) {
+    if (isHttpSuccessResponse(res)) {
       setIsModalOpen(false);
       getOffer(+id!);
     }
@@ -123,8 +123,8 @@ const OfferDetailsPage = () => {
             });
           } else if (timeSlotOffer.time_slot) {
             // Handle case where time_slot might be a single object (legacy format)
-            // @ts-expect-error - handling legacy format
-            const slot = timeSlotOffer.time_slot;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const slot = timeSlotOffer.time_slot as any;
             if (slot.from_time && slot.to_time) {
               timeEntries.push({
                 day: dayName,

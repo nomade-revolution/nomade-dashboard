@@ -346,14 +346,27 @@ const OffersForm = ({
       // For Restaurant and Activity offers, use the existing offerResume data
       // @ts-expect-error TODO: fix this
       parsedOfferResume = offerResume;
+    } else if (offerType === OfferTypes.brand) {
+      // For Brand offers in edit mode, create offerable object with advance_notice_time from offer
+      // In create mode, this will be handled by handleOfferFormData
+      if (mode === "edit" && offer) {
+        parsedOfferResume = {
+          advance_notice_time: offer.advance_notice_time ?? 0,
+        } as never;
+      }
     }
 
     // In edit mode, use offerResumeEdit which contains ALL addresses
     // This ensures all addresses are sent to backend (backend replaces all, so we must send all)
-    const offerableData = mode === "edit" ? offerResumeEdit : parsedOfferResume;
+    // For brand offers, use parsedOfferResume which has the advance_notice_time
+    const offerableData =
+      mode === "edit" && offerType === OfferTypes.brand
+        ? parsedOfferResume
+        : mode === "edit"
+          ? offerResumeEdit
+          : parsedOfferResume;
 
     // Ensure offerableData is not empty - if it is, backend will fail
-    // @ts-expect-error TODO: fix this
     // if (mode === "edit" && (!offerableData || (Array.isArray(offerableData) && offerableData.length === 0))) {
     //   Warning: No offerable data to submit. This may cause backend errors.
     // }
@@ -884,7 +897,12 @@ const OffersForm = ({
               type="submit"
               disabled={
                 isSubmitting ||
-                (!offerResume && offerType !== OfferTypes.lodging)
+                // Only Restaurant and Activity offers require offerResume
+                // Brand, Lodging, and Delivery don't need it
+                ((offerType === OfferTypes.restaurant ||
+                  offerType === OfferTypes.activity) &&
+                  (!offerResume ||
+                    (Array.isArray(offerResume) && offerResume.length === 0)))
                 // (!formState.address &&
                 //   categoryId !== DELIVERY_OFFER_ID)
               }

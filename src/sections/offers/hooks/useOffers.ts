@@ -6,6 +6,7 @@ import {
   OfferableRestaurant,
   OfferFormStructure,
   OfferTypes,
+  WeekDay,
 } from "modules/offers/domain/Offer";
 import { normalizeWeekData } from "sections/offers/utils/normalizeTimeFormat";
 
@@ -71,22 +72,36 @@ const useOffers = () => {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         })) as any;
       }
+    } else if (offerable_type === "App\\Models\\OfferableBrand") {
+      // For Brand offers: Always create the offerable object with advance_notice_time
+      // Use form value if available, otherwise try to get from existing offerable, default to 0
+      const existingBrandData =
+        offerable &&
+        typeof offerable === "object" &&
+        "advance_notice_time" in offerable
+          ? (offerable as OfferableBrand)
+          : null;
+      finalOfferable = {
+        advance_notice_time:
+          values.advance_notice_time !== undefined
+            ? values.advance_notice_time
+            : existingBrandData?.advance_notice_time ?? 0,
+      };
     } else if (values.advance_notice_time !== undefined) {
-      if (offerable_type === "App\\Models\\OfferableBrand") {
-        // For Brand offers: { "advance_notice_time": 150 }
-        finalOfferable = {
-          advance_notice_time: values.advance_notice_time,
-        };
-      } else if (offerable_type === "App\\Models\\OfferableDelivery") {
+      if (offerable_type === "App\\Models\\OfferableDelivery") {
         // Extract the actual offerable data from the "0" index if it exists
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const actualOfferableData = (offerable as any)[0] || offerable;
         // For Delivery offers: Backend expects a single object (not array)
         // { "week": [...], "advance_notice_time": 150 }
+        // week is WeekDay[][] - normalize each inner array
+        const weekData = actualOfferableData.week
+          ? (actualOfferableData.week as WeekDay[][]).map((weekArray) =>
+              normalizeWeekData(weekArray),
+            )
+          : [];
         finalOfferable = {
-          week: actualOfferableData.week
-            ? normalizeWeekData(actualOfferableData.week)
-            : [],
+          week: weekData as WeekDay[][],
           advance_notice_time:
             values.advance_notice_time !== undefined
               ? values.advance_notice_time
