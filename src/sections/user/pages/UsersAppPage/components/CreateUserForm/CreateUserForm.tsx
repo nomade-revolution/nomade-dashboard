@@ -94,7 +94,9 @@ const CreateUserForm = ({
       ...values,
       roles: isCompanyTypeUser ? [] : [+role],
       is_nomade_staff: isNomadeStaff,
-      company_id: isCompanyTypeUser ? selectedCompanyId : undefined,
+      company_id: isCompanyTypeUser
+        ? selectedCompanyId ?? undefined
+        : undefined,
     };
 
     const resp = await registerUser(payload);

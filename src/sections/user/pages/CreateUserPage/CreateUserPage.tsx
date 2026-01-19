@@ -63,7 +63,9 @@ const CreateUserPage = () => {
       ...values,
       roles: isCompanyTypeUser ? [] : [+role],
       is_nomade_staff: isCompanyTypeUser ? false : undefined,
-      company_id: isCompanyTypeUser ? selectedCompanyId : undefined,
+      company_id: isCompanyTypeUser
+        ? selectedCompanyId ?? undefined
+        : undefined,
     };
 
     const resp = await registerUser(payload);
