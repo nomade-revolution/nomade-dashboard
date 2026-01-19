@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { AuthRegisterNomadeInterface } from "@auth";
 import { ErrorMessage, Field, Formik } from "formik";
 import CreateInfluencerFormStyled from "sections/user/pages/CreateInfluencerPage/CreateInfluencerFormStyled";
@@ -6,6 +6,9 @@ import { registerScheme } from "sections/auth/components/validations/validations
 import Loader from "sections/shared/components/Loader/Loader";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
 import ReusableSelect from "sections/shared/components/ReusableSelect/ReusableSelect";
+import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
+import TypeAhead from "sections/shared/components/TypeAhead/TypeAhead";
+import { OptionsStructure } from "sections/shared/interfaces/interfaces";
 
 const initialState: AuthRegisterNomadeInterface = {
   name: "",
@@ -31,11 +34,28 @@ const CreateUserForm = ({
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const { registerUser, rolesList, getRolesList } = useUserContext();
+  const { getCompaniesWithParams, companies: companyOptions } =
+    useCompanyContext();
   const [loading, setIsLoading] = useState<boolean>(false);
   const [role, setRole] = useState<string>("");
   // When from users-app, always set to true and disable
   const [isCompanyTypeUser, setIsCompanyTypeUser] =
     useState<boolean>(isFromUsersApp);
+  const [selectedCompanyId, setSelectedCompanyId] = useState<number | null>(
+    null,
+  );
+  const [companySearchText, setCompanySearchText] = useState<string>("");
+  const [companyValidationError, setCompanyValidationError] =
+    useState<boolean>(false);
+
+  const searchCompanies = useCallback(
+    (text: string) => {
+      if (text.length > 2) {
+        getCompaniesWithParams({ filters: { search: text } });
+      }
+    },
+    [getCompaniesWithParams],
+  );
 
   // Load roles list when component mounts
   useEffect(() => {
@@ -45,6 +65,14 @@ const CreateUserForm = ({
   }, [rolesList.length, getRolesList]);
 
   const handleSubmitForm = async (values: AuthRegisterNomadeInterface) => {
+    // Validate company selection for company users
+    if (isCompanyTypeUser && !selectedCompanyId) {
+      setIsFormSubmitted(true);
+      setCompanyValidationError(true);
+      return;
+    }
+
+    setCompanyValidationError(false);
     setIsLoading(true);
     setIsFormSubmitted(true);
 
@@ -66,6 +94,7 @@ const CreateUserForm = ({
       ...values,
       roles: isCompanyTypeUser ? [] : [+role],
       is_nomade_staff: isNomadeStaff,
+      company_id: isCompanyTypeUser ? selectedCompanyId : undefined,
     };
 
     const resp = await registerUser(payload);
@@ -175,17 +204,19 @@ const CreateUserForm = ({
                 />
               )}
             </div>
-            <ReusableSelect
-              value={role}
-              setValue={setRole}
-              options={rolesList.map((role) => ({
-                id: role.id,
-                name: role.name,
-                value: role.id,
-              }))}
-              label={"Rol"}
-              disabled={isCompanyTypeUser || isFromUsersApp}
-            />
+            {!isCompanyTypeUser && (
+              <ReusableSelect
+                value={role}
+                setValue={setRole}
+                options={rolesList.map((role) => ({
+                  id: role.id,
+                  name: role.name,
+                  value: role.id,
+                }))}
+                label={"Rol"}
+                disabled={isCompanyTypeUser || isFromUsersApp}
+              />
+            )}
             {!hideCompanyCheckbox && (
               <div className="form-section">
                 <label
@@ -207,6 +238,11 @@ const CreateUserForm = ({
                         setIsCompanyTypeUser(e.target.checked);
                         if (e.target.checked) {
                           setRole(""); // Clear role when checked
+                        } else {
+                          // Clear company selection when unchecked
+                          setSelectedCompanyId(null);
+                          setCompanySearchText("");
+                          setCompanyValidationError(false);
                         }
                       }
                     }}
@@ -214,8 +250,31 @@ const CreateUserForm = ({
                       cursor: isFromUsersApp ? "not-allowed" : "pointer",
                     }}
                   />
-                  <span>Usuario de empresa (sin asignar empresa aún)</span>
+                  <span>Usuario de empresa</span>
                 </label>
+              </div>
+            )}
+            {isCompanyTypeUser && (
+              <div className="form-section">
+                <TypeAhead
+                  value={selectedCompanyId}
+                  label="Seleccionar empresa"
+                  options={
+                    companyOptions.map((c) => ({
+                      id: c.id,
+                      name: c.company || c.company_name,
+                      value: c.id,
+                    })) as OptionsStructure[]
+                  }
+                  setValue={setSelectedCompanyId}
+                  getFunctions={searchCompanies}
+                  searchText={companySearchText}
+                />
+                {companyValidationError && (
+                  <span className="login-form__error-message">
+                    Debe seleccionar una empresa
+                  </span>
+                )}
               </div>
             )}
             <div

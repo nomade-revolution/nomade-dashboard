@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { AuthRegisterNomadeInterface } from "@auth";
 import { ErrorMessage, Field, Formik } from "formik";
 import LoginFormStyled from "sections/auth/components/LoginForm/LoginFormStyled";
@@ -9,6 +9,9 @@ import GoBackButton from "sections/shared/components/GoBackButton/GoBackButton";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
 import { useNavigate } from "react-router-dom";
 import ReusableSelect from "sections/shared/components/ReusableSelect/ReusableSelect";
+import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
+import TypeAhead from "sections/shared/components/TypeAhead/TypeAhead";
+import { OptionsStructure } from "sections/shared/interfaces/interfaces";
 
 const initialState: AuthRegisterNomadeInterface = {
   name: "",
@@ -22,12 +25,37 @@ const CreateUserPage = () => {
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const { registerUser, rolesList } = useUserContext();
+  const { getCompaniesWithParams, companies: companyOptions } =
+    useCompanyContext();
   const navigate = useNavigate();
   const [loading, setIsLoading] = useState<boolean>(false);
   const [role, setRole] = useState<string>("");
   const [isCompanyTypeUser, setIsCompanyTypeUser] = useState<boolean>(false);
+  const [selectedCompanyId, setSelectedCompanyId] = useState<number | null>(
+    null,
+  );
+  const [companySearchText, setCompanySearchText] = useState<string>("");
+  const [companyValidationError, setCompanyValidationError] =
+    useState<boolean>(false);
+
+  const searchCompanies = useCallback(
+    (text: string) => {
+      if (text.length > 2) {
+        getCompaniesWithParams({ filters: { search: text } });
+      }
+    },
+    [getCompaniesWithParams],
+  );
 
   const handleSubmitForm = async (values: AuthRegisterNomadeInterface) => {
+    // Validate company selection for company users
+    if (isCompanyTypeUser && !selectedCompanyId) {
+      setIsFormSubmitted(true);
+      setCompanyValidationError(true);
+      return;
+    }
+
+    setCompanyValidationError(false);
     setIsLoading(true);
     setIsFormSubmitted(true);
 
@@ -35,17 +63,13 @@ const CreateUserPage = () => {
       ...values,
       roles: isCompanyTypeUser ? [] : [+role],
       is_nomade_staff: isCompanyTypeUser ? false : undefined,
+      company_id: isCompanyTypeUser ? selectedCompanyId : undefined,
     };
-
-    // If creating company-type user without company
-    if (isCompanyTypeUser) {
-      // payload already set above
-    }
 
     const resp = await registerUser(payload);
     setIsSuccess(Boolean(resp.success));
     setIsLoading(false);
-    if (isSuccess) {
+    if (resp.success) {
       setTimeout(() => {
         navigate("/users");
       }, 2000);
@@ -145,17 +169,19 @@ const CreateUserPage = () => {
                 />
               )}
             </div>
-            <ReusableSelect
-              value={role}
-              setValue={setRole}
-              options={rolesList.map((role) => ({
-                id: role.id,
-                name: role.name,
-                value: role.id,
-              }))}
-              label={"Rol"}
-              disabled={isCompanyTypeUser}
-            />
+            {!isCompanyTypeUser && (
+              <ReusableSelect
+                value={role}
+                setValue={setRole}
+                options={rolesList.map((role) => ({
+                  id: role.id,
+                  name: role.name,
+                  value: role.id,
+                }))}
+                label={"Rol"}
+                disabled={isCompanyTypeUser}
+              />
+            )}
             <div className="form-section">
               <label
                 htmlFor="isCompanyTypeUser"
@@ -174,13 +200,41 @@ const CreateUserPage = () => {
                     setIsCompanyTypeUser(e.target.checked);
                     if (e.target.checked) {
                       setRole(""); // Clear role when checked
+                    } else {
+                      // Clear company selection when unchecked
+                      setSelectedCompanyId(null);
+                      setCompanySearchText("");
+                      setCompanyValidationError(false);
                     }
                   }}
                   style={{ cursor: "pointer" }}
                 />
-                <span>Usuario de empresa (sin asignar empresa aún)</span>
+                <span>Usuario de empresa</span>
               </label>
             </div>
+            {isCompanyTypeUser && (
+              <div className="form-section">
+                <TypeAhead
+                  value={selectedCompanyId}
+                  label="Seleccionar empresa"
+                  options={
+                    companyOptions.map((c) => ({
+                      id: c.id,
+                      name: c.company || c.company_name,
+                      value: c.id,
+                    })) as OptionsStructure[]
+                  }
+                  setValue={setSelectedCompanyId}
+                  getFunctions={searchCompanies}
+                  searchText={companySearchText}
+                />
+                {companyValidationError && (
+                  <span className="login-form__error-message">
+                    Debe seleccionar una empresa
+                  </span>
+                )}
+              </div>
+            )}
             <button
               type="submit"
               disabled={loading}

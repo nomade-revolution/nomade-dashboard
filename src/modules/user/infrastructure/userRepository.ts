@@ -86,6 +86,7 @@ export class UsersRepository {
         password: string;
         roles: number[];
         is_nomade_staff?: boolean;
+        company_id?: number;
       } = {
         name: data.name,
         email: data.email,
@@ -96,6 +97,11 @@ export class UsersRepository {
       // Include is_nomade_staff if it's explicitly set
       if (data.is_nomade_staff !== undefined) {
         requestBody.is_nomade_staff = data.is_nomade_staff;
+      }
+
+      // Include company_id if it's provided
+      if (data.company_id !== undefined) {
+        requestBody.company_id = data.company_id;
       }
 
       const response = await this.http.post<UserApiResponse>(

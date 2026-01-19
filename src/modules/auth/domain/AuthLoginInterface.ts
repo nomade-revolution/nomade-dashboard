@@ -14,6 +14,7 @@ export interface AuthRegisterNomadeInterface {
   repeatPassword: string;
   roles: number[];
   is_nomade_staff?: boolean;
+  company_id?: number;
 }
 
 export interface RegisterInfluencerInterface {
