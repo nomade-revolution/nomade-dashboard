@@ -16,6 +16,22 @@ const VerifyEmailPageStyled = styled.div`
     text-align: center;
   }
 
+  .verify-email-page__logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 450px;
+
+    .verify-email-page__logo-image {
+      width: 100%;
+      max-width: 450px;
+      height: auto;
+      filter: brightness(0) saturate(100%) invert(14%) sepia(20%)
+        saturate(1200%) hue-rotate(120deg) brightness(90%) contrast(95%);
+    }
+  }
+
   .verify-email-page__loading {
     display: flex;
     flex-direction: column;

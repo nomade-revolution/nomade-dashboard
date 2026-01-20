@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Loader from "sections/shared/components/Loader/Loader";
-import NomadeLogoSection from "sections/shared/components/NomadeLogoSection/NomadeLogoSection";
+import ImageCustom from "sections/shared/components/ImageCustom/ImageCustom";
 import VerifyEmailPageStyled from "./VerifyEmailPageStyled";
 
 const VerifyEmailPage = (): React.ReactElement => {
@@ -20,7 +20,15 @@ const VerifyEmailPage = (): React.ReactElement => {
   return (
     <VerifyEmailPageStyled className="verify-email-page">
       <div className="verify-email-page__content">
-        <NomadeLogoSection />
+        <div className="verify-email-page__logo">
+          <ImageCustom
+            alt="Nomade logo"
+            className="verify-email-page__logo-image"
+            image="/main_logo.png"
+            width={450}
+            height={166}
+          />
+        </div>
         <div className="verify-email-page__loading">
           <Loader width="40px" height="40px" />
           <p>Verificando email...</p>

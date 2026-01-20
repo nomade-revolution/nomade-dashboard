@@ -118,7 +118,9 @@ const Layout = (): React.ReactElement => {
           location.pathname !== appPaths.recovery_password &&
           location.pathname !== appPaths.new_password &&
           location.pathname !== appPaths.reset_password &&
-          location.pathname !== appPaths.leadsSubmit
+          location.pathname !== appPaths.leadsSubmit &&
+          location.pathname !== appPaths.verifyEmail &&
+          location.pathname !== appPaths.emailVerified
             ? "layout"
             : ""
         }
@@ -131,7 +133,9 @@ const Layout = (): React.ReactElement => {
             location.pathname === appPaths.recovery_password ||
             location.pathname === appPaths.new_password ||
             location.pathname === appPaths.reset_password ||
-            location.pathname === appPaths.leadsSubmit
+            location.pathname === appPaths.leadsSubmit ||
+            location.pathname === appPaths.verifyEmail ||
+            location.pathname === appPaths.emailVerified
               ? "layout__sidebar-hidden"
               : "layout__sidebar"
           }
@@ -142,7 +146,9 @@ const Layout = (): React.ReactElement => {
             location.pathname !== appPaths.recovery_password &&
             location.pathname !== appPaths.new_password &&
             location.pathname !== appPaths.reset_password &&
-            location.pathname !== appPaths.leadsSubmit && (
+            location.pathname !== appPaths.leadsSubmit &&
+            location.pathname !== appPaths.verifyEmail &&
+            location.pathname !== appPaths.emailVerified && (
               <SideBar
                 badgeUsers={0}
                 badgeInfluencers={badgeCountInfluencers}
@@ -176,7 +182,9 @@ const Layout = (): React.ReactElement => {
             location.pathname === appPaths.recovery_password ||
             location.pathname === appPaths.new_password ||
             location.pathname === appPaths.reset_password ||
-            location.pathname === appPaths.leadsSubmit
+            location.pathname === appPaths.leadsSubmit ||
+            location.pathname === appPaths.verifyEmail ||
+            location.pathname === appPaths.emailVerified
               ? "layout__sidebar-hidden"
               : "layout__pages"
           }
