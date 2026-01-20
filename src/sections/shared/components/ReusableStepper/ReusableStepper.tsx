@@ -75,12 +75,12 @@ export default function ReusableStepper({
     ) {
       const result = await handleAcceptWithNotes(id, notes);
 
-      if (result.success) {
+      if (result.success || result.partialSuccess) {
+        // Close modal if state update succeeded (success) or if state was updated but notes failed (partialSuccess)
+        // Notes are optional, so partialSuccess is acceptable - state change is the primary action
         setIsDialogOpen(false);
-      } else if (result.partialSuccess) {
-        // Keep modal open for retry
       } else {
-        // Keep modal open for retry
+        // Error - keep modal open for retry
       }
     } else {
       // Regular state update

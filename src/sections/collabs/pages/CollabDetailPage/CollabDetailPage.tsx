@@ -114,12 +114,11 @@ const CollabDetailPage = (): React.ReactElement => {
 
     try {
       const result = await handleAcceptWithNotes(id, notes ?? "");
-      if (result.success) {
+      if (result.success || result.partialSuccess) {
+        // Close modal if state update succeeded (success) or if state was updated but notes failed (partialSuccess)
+        // Notes are optional, so partialSuccess is acceptable - state change is the primary action
         setIsDialogOpen(false);
         // Success - modal closes and timeline updates automatically via context
-      } else if (result.partialSuccess) {
-        // Partial success: state updated but notes failed - keep modal open for retry
-        // Error logging removed for production
       } else {
         // Error - keep modal open for retry
         // Error logging removed for production
