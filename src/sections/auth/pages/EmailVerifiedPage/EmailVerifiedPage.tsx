@@ -4,6 +4,7 @@ import { appPaths } from "sections/shared/utils/appPaths/appPaths";
 import EmailVerifiedPageStyled from "./EmailVerifiedPageStyled";
 import ActionButton from "sections/shared/components/ActionButton/ActionButton";
 import theme from "assets/styles/theme";
+import { FaArrowRight } from "react-icons/fa";
 
 const EmailVerifiedPage = (): React.ReactElement => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const EmailVerifiedPage = (): React.ReactElement => {
         </div>
         <div className="email-verified-page__actions">
           <ActionButton
+            icon={<FaArrowRight />}
             text="Ir al inicio de sesión"
             onClick={() => navigate(appPaths.login)}
             color={theme.colors.darkBlue}
