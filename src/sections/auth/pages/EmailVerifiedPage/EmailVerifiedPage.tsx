@@ -1,31 +1,24 @@
-import { useNavigate } from "react-router-dom";
-import NomadeLogoSection from "sections/shared/components/NomadeLogoSection/NomadeLogoSection";
-import { appPaths } from "sections/shared/utils/appPaths/appPaths";
+import ImageCustom from "sections/shared/components/ImageCustom/ImageCustom";
 import EmailVerifiedPageStyled from "./EmailVerifiedPageStyled";
-import ActionButton from "sections/shared/components/ActionButton/ActionButton";
-import theme from "assets/styles/theme";
-import { FaArrowRight } from "react-icons/fa";
 
 const EmailVerifiedPage = (): React.ReactElement => {
-  const navigate = useNavigate();
-
   return (
     <EmailVerifiedPageStyled className="email-verified-page">
       <div className="email-verified-page__content">
-        <NomadeLogoSection />
-        <div className="email-verified-page__message">
-          <div className="email-verified-page__icon">✅</div>
-          <h1>Email verificado</h1>
-          <p>Tu email ha sido verificado correctamente.</p>
-          <p>Ya puedes iniciar sesión en tu cuenta.</p>
-        </div>
-        <div className="email-verified-page__actions">
-          <ActionButton
-            icon={<FaArrowRight />}
-            text="Ir al inicio de sesión"
-            onClick={() => navigate(appPaths.login)}
-            color={theme.colors.darkBlue}
+        <div className="email-verified-page__logo">
+          <ImageCustom
+            alt="Nomade logo"
+            className="email-verified-page__logo-image"
+            image="/main_logo.png"
+            width={450}
+            height={166}
           />
+        </div>
+        <div className="email-verified-page__message">
+          <span className="email-verified-page__title">
+            <span className="email-verified-page__icon">✅</span>
+            Email verificado
+          </span>
         </div>
       </div>
     </EmailVerifiedPageStyled>
