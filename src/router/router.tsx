@@ -33,6 +33,8 @@ import UsersAppDetailPage from "sections/user/pages/UsersAppPage/UsersAppDetailP
 import DocumentationPage from "sections/documentation/pages/DocumentationPage";
 import ContactNomadePage from "sections/contactForm/pages/ContactNomadeForm";
 import TermsConditionsOfflinePage from "sections/shared/pages/TermsConditionsOffline/TermsConditionsOffline";
+import VerifyEmailPage from "sections/auth/pages/VerifyEmailPage/VerifyEmailPage";
+import EmailVerifiedPage from "sections/auth/pages/EmailVerifiedPage/EmailVerifiedPage";
 
 const routes: RouteObject[] = [
   {
@@ -159,6 +161,14 @@ const routes: RouteObject[] = [
       {
         path: appPaths.contact,
         element: <ContactNomadePage />,
+      },
+      {
+        path: appPaths.verifyEmail,
+        element: <VerifyEmailPage />,
+      },
+      {
+        path: appPaths.emailVerified,
+        element: <EmailVerifiedPage />,
       },
     ],
   },

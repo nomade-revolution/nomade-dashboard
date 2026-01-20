@@ -33,4 +33,6 @@ export const appPaths = {
   termsConditionsOffline: "/terms-and-conditions",
   documentation: "/documentation",
   contact: "/contact",
+  verifyEmail: "/verify-email",
+  emailVerified: "/email-verified",
 };
