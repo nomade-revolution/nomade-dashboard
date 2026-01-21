@@ -9,26 +9,29 @@ import VerifyEmailPageStyled from "./VerifyEmailPageStyled";
 type VerificationStatus = "loading" | "success" | "error";
 
 const VerifyEmailPage = (): React.ReactElement => {
+  console.log("VERIFY EMAIL PAGE MOUNTED");
+
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [status, setStatus] = useState<VerificationStatus>("loading");
 
   useEffect(() => {
     const verify = async () => {
+      console.log("VERIFY EMAIL EFFECT TRIGGERED");
+      // Read parameters from URL
+      const user = searchParams.get("user");
+      const hash = searchParams.get("hash");
+      const expires = searchParams.get("expires");
+      const signature = searchParams.get("signature");
+
+      // Validate all required parameters are present
+      if (!user || !hash || !expires || !signature) {
+        setStatus("error");
+        return;
+      }
+
       try {
         setStatus("loading");
-
-        // Read parameters from URL
-        const user = searchParams.get("user");
-        const hash = searchParams.get("hash");
-        const expires = searchParams.get("expires");
-        const signature = searchParams.get("signature");
-
-        // Validate all required parameters are present
-        if (!user || !hash || !expires || !signature) {
-          setStatus("error");
-          return;
-        }
 
         // Prepare payload
         const payload = {
@@ -39,16 +42,16 @@ const VerifyEmailPage = (): React.ReactElement => {
         };
 
         // Call backend API
+        // Construct URL: baseUrl already includes /api, so append /email/verify
         const baseUrl = environments.baseUrl?.endsWith("/")
           ? environments.baseUrl.slice(0, -1)
           : environments.baseUrl;
-        const apiUrl = `${baseUrl}/api/email/verify`;
+        const apiUrl = `${baseUrl}/email/verify`;
         const response = await customAxios("POST", apiUrl, {
           data: payload,
         });
 
         if (response.success) {
-          setStatus("success");
           navigate("/email-verified");
         } else {
           setStatus("error");
