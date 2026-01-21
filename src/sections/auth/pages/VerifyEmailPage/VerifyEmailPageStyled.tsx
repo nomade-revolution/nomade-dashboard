@@ -44,6 +44,20 @@ const VerifyEmailPageStyled = styled.div`
       font-family: Arial, sans-serif;
     }
   }
+
+  .verify-email-page__error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+
+    p {
+      color: #d32f2f;
+      font-size: 16px;
+      font-family: Arial, sans-serif;
+      max-width: 500px;
+    }
+  }
 `;
 
 export default VerifyEmailPageStyled;
