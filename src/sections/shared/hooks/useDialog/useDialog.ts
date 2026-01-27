@@ -105,16 +105,29 @@ const useDialog = () => {
     switch (pageName) {
       case SectionTypes.offers:
         return handleDeleteOffer(sectionId);
-      case SectionTypes.collabs:
-        return type === CollabActionTypes.accept
-          ? acceptCollab(sectionId, accept_state_id)
-          : type === CollabActionTypes.refuse
-            ? rejectCollab(sectionId, rejected_colab_reason_id!, reasonText)
-            : type === CollabActionTypes.cancel
-              ? cancelCollab(sectionId)
-              : type === CollabActionTypes.sendPackage
-                ? sendPackageCollab(sectionId)
-                : handleDeleteCollab(sectionId);
+      case SectionTypes.collabs: {
+        if (type === CollabActionTypes.accept) {
+          return acceptCollab(sectionId, accept_state_id);
+        }
+        if (type === CollabActionTypes.refuse) {
+          return rejectCollab(sectionId, rejected_colab_reason_id!, reasonText);
+        }
+        if (type === CollabActionTypes.cancel) {
+          return cancelCollab(sectionId);
+        }
+        if (type === CollabActionTypes.sendPackage) {
+          return sendPackageCollab(sectionId);
+        }
+        // Unknown/unsupported type: never default to delete. Handle via onAccept.
+        if (import.meta.env.MODE !== "production") {
+          console.warn(
+            "[getFunctionForDialog] Unhandled collab type:",
+            type,
+            "- handle via onAccept in DialogDeleteConfirm.",
+          );
+        }
+        return null;
+      }
       case SectionTypes.customers:
         return handleDeleteCompany(sectionId);
       case SectionTypes.usersApp:
