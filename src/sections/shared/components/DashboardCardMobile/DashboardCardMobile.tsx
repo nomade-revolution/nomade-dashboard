@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { HeaderSection } from "../../interfaces/interfaces";
+import { HeaderSection, SectionTypes } from "../../interfaces/interfaces";
 import DashboardContentSections from "../DashboardContentSections/DashboardContentSections";
 import DashboardCardMobileStyled from "./DashboardCardMobileStyles";
 import CustomDropdown from "../CustomDropdown/CustomDropdown";
@@ -11,6 +11,7 @@ import {
 } from "modules/collabs/domain/Collabs";
 import * as collabStates from "../../../collabs/utils/collabsStates";
 import DialogDeleteConfirm from "../DialogDeleteConfirm/DialogDeleteConfirm";
+import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
 
 interface DashboardCardMobileProps {
   bodySection: object;
@@ -31,6 +32,25 @@ const DashboardCardMobile = ({
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
   const { handleCollabStateUpdate } = useActions();
+  const { handleAcceptWithNotes } = useCollabsContext();
+
+  const handleOnAcceptWithNotes = async (
+    id: number,
+    _reason?: number,
+    _reasonText?: string,
+    notes?: string,
+  ) => {
+    if (type !== CollabActionTypes.modifyStateWithNotes) return;
+
+    try {
+      const result = await handleAcceptWithNotes(id, notes ?? "");
+      if (result.success || result.partialSuccess) {
+        setIsDialogOpen(false);
+      }
+    } catch {
+      // Keep modal open on error for retry
+    }
+  };
 
   let state_id: number | undefined;
 
@@ -88,6 +108,12 @@ const DashboardCardMobile = ({
             collabStates.COLAB_PENDING_NOMADE_STATE
             ? collabStates.COLAB_PENDING_COMPANY_STATE
             : collabStates.COLAB_ACCEPTED_STATE
+        }
+        onAccept={
+          pageName === SectionTypes.collabs &&
+          type === CollabActionTypes.modifyStateWithNotes
+            ? handleOnAcceptWithNotes
+            : undefined
         }
       />
     </DashboardCardMobileStyled>
