@@ -172,7 +172,9 @@ const CompanyForm = ({
       formData.append("address", JSON.stringify(defaultAddress));
     }
 
-    formData.append("start_date", formattedDate);
+    if (formattedDate) {
+      formData.append("start_date", formattedDate);
+    }
 
     // Always send accept_conditions (required by backend, even when false)
     formData.append("accept_conditions", checkedTerms ? "true" : "false");
@@ -195,7 +197,7 @@ const CompanyForm = ({
 
     formData.delete("comments");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    formData.append("comments", (values as any)?.company_comments);
+    formData.append("comments", (values as any)?.company_comments ?? "");
     formData.append("plan_id", formState.company_plan_id);
 
     // hash field removed - not needed for cms-register endpoint

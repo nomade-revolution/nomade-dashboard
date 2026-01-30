@@ -10,21 +10,25 @@ export default function LinearBuffer({
   progress,
   buffer = 100,
 }: LinearBufferProps) {
+  const value = Number(progress);
+  const valueBuffer = Number(buffer);
+  const safeValue = Number.isFinite(value) ? value : 0;
+  const safeBuffer = Number.isFinite(valueBuffer) ? valueBuffer : 100;
   return (
     <Box sx={{ width: "100%" }}>
       <LinearProgress
         variant="buffer"
-        value={progress}
-        valueBuffer={buffer}
+        value={safeValue}
+        valueBuffer={safeBuffer}
         sx={{ height: "20px" }}
         color={
-          progress < 25
+          safeValue < 25
             ? "error"
-            : progress < 50
+            : safeValue < 50
               ? "warning"
-              : progress < 75
+              : safeValue < 75
                 ? "info"
-                : progress < 100
+                : safeValue < 100
                   ? "primary"
                   : "success"
         }
