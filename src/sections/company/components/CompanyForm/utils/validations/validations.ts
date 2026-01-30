@@ -47,7 +47,7 @@ export const editClientSchema = yup.object().shape({
     ),
   company: yup.string().nullable(),
   company_name: yup.string().required("La razón social es un campo requerido"),
-  description: yup.string().required("La descripción es un campo requerido"),
+  description: yup.string().nullable(),
   phone: yup.string(),
   instagram: yup.string(),
   web: yup.string(),

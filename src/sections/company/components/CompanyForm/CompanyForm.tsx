@@ -109,6 +109,14 @@ const CompanyForm = ({
     values: SubmitValues,
     { setSubmitting, setErrors }: FormikHelpers<PartialCompany>,
   ) => {
+    const isDev = import.meta.env.MODE !== "production";
+    if (isDev) {
+      // eslint-disable-next-line no-console
+      console.log("[CompanyForm] onSubmit start", {
+        clientId: client?.id,
+        plan_id: formState.company_plan_id,
+      });
+    }
     if (!checkedTerms) {
       setErrors({ company: "Debes aceptar los términos y condiciones" });
     }
@@ -202,8 +210,13 @@ const CompanyForm = ({
 
     // hash field removed - not needed for cms-register endpoint
 
-    // DEV-only debug logging removed for production
-
+    if (isDev) {
+      // eslint-disable-next-line no-console
+      console.log("[CompanyForm] calling onSubmit (editCompanyCms)", {
+        clientId: client?.id,
+        plan_id: formState.company_plan_id,
+      });
+    }
     const response = await onSubmit(formData, client && client?.id);
 
     // DEV-only debug logging
@@ -862,6 +875,7 @@ const CompanyForm = ({
               )}
             </button>
             <button
+              type="button"
               onClick={() => setIsOpen(false)}
               className={"datasheet-form__error"}
             >

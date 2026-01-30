@@ -234,6 +234,12 @@ export const CompanyContextProvider = ({
   };
 
   const editCompanyCms = async (company: FormData, id?: number) => {
+    if (import.meta.env.MODE !== "production") {
+      // eslint-disable-next-line no-console
+      console.log("[editCompanyCms] about to call editCompany", {
+        companyId: id,
+      });
+    }
     setLoading(true);
     const response = await editCompany(repository, company, id!);
 
