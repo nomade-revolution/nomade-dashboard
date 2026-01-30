@@ -244,7 +244,7 @@ const CompanyForm = ({
       client?.socialMedia?.find((s) => s.name === "Instagram")?.account_name ||
       "",
     ...client,
-    plan_comments: client?.plan?.comments || "",
+    plan_comments: client?.plan?.comments ?? "",
     plan: {
       ...client?.plan,
       start_date: convertDateToISO(client?.plan?.start_date?.slice(0, 10)),
