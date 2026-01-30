@@ -19,6 +19,7 @@ import PlanForm from "sections/plans/components/PlanForm/PlanForm";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
 import { companyPlanTableSections } from "sections/plans/utils/plansTableSections";
 import { usePlansContext } from "sections/plans/PlansContext/usePlansContext";
+import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
 import contactsHeader from "./utils/contactsHeader";
 
 const InfluencerDetailPage = (): React.ReactElement => {
@@ -40,7 +41,10 @@ const InfluencerDetailPage = (): React.ReactElement => {
 
   const handleEditCompany = async (company: FormData, id?: number) => {
     const res = await editCompanyCms(company, id);
-    getPlan(+id!);
+    if (id && isHttpSuccessResponse(res)) {
+      getCompany(+id);
+      getPlan(+id);
+    }
     return res;
   };
 
