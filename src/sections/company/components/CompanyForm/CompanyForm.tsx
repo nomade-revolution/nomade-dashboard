@@ -123,12 +123,6 @@ const CompanyForm = ({
 
     setSubmitting(true);
 
-    // DEV-only debug logging
-    const isDev = import.meta.env.MODE !== "production";
-    if (isDev) {
-      // Debug logging removed for production
-    }
-
     try {
       if (type === "edit" && deleteImageMode) {
         await editCompanyCms(
