@@ -11,6 +11,7 @@ import {
   getCompaniesWithPagination,
   registerBaseCompany,
 } from "@company/application/company";
+import { HttpResponseInterface } from "@core";
 import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
 import { Company } from "modules/user/domain/User";
 import { PaginationStucture } from "sections/shared/interfaces/interfaces";
@@ -44,7 +45,10 @@ interface ContextState {
   postBaseCompany: (company: FormData) => void;
   getCompaniesStatusBadge: () => void;
   postCompanyCms: (company: FormData) => Promise<unknown>;
-  editCompanyCms: (company: FormData, id?: number) => void;
+  editCompanyCms: (
+    company: FormData,
+    id?: number,
+  ) => Promise<HttpResponseInterface<Company>>;
   exportCompaniesExcel: () => void;
   exportCompanyBillingExcel: (params?: FilterParams) => void;
   setBadgeCount: (count: number) => void;
@@ -234,12 +238,6 @@ export const CompanyContextProvider = ({
   };
 
   const editCompanyCms = async (company: FormData, id?: number) => {
-    if (import.meta.env.MODE !== "production") {
-      // eslint-disable-next-line no-console
-      console.log("[editCompanyCms] about to call editCompany", {
-        companyId: id,
-      });
-    }
     setLoading(true);
     const response = await editCompany(repository, company, id!);
 
