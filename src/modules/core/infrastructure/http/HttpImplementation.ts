@@ -20,7 +20,9 @@ export class HttpImplementation implements HttpInterface {
   private readonly REQUEST_TIMEOUT: number = 30000;
   private token?: string | null = null;
 
-  constructor() {}
+  constructor() {
+    axios.defaults.headers.common["Accept"] = "application/json";
+  }
 
   public async get(
     url: string,

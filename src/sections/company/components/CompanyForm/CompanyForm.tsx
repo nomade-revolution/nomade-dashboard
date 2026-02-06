@@ -787,7 +787,7 @@ const CompanyForm = ({
               <span>
                 He leído y acepto los{" "}
                 <Link
-                  to={appPaths.termsConditionsOffline}
+                  to={`${appPaths.termsConditionsOffline}?type=company`}
                   target="_blank"
                   style={{
                     color: theme.fontsColors.corporativeColor,
