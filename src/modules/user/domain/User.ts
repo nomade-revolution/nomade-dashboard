@@ -7,6 +7,7 @@ import { PaginationStucture } from "sections/shared/interfaces/interfaces";
 export interface User {
   id: number;
   name: string;
+  surname?: string;
   email: string;
   type: "Company" | "Influencer" | "Nomade" | "users_app";
   roles: number[];

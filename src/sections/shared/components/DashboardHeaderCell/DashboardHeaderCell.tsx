@@ -66,7 +66,11 @@ const DashBoardHeaderCell = ({ section }: Props) => {
       }
     }
 
-    if (section.pageName === "user" || section.pageName === "influencer") {
+    if (
+      section.pageName === "user" ||
+      section.pageName === "influencer" ||
+      section.pageName === "usersApp"
+    ) {
       if (order?.sortTag === section?.sortTag) {
         return order.direction;
       } else {
@@ -122,6 +126,8 @@ const DashBoardHeaderCell = ({ section }: Props) => {
       user: (sortTag, direction) =>
         setOrder(direction ? { sortTag, direction } : ({} as OrderItem)),
       influencer: (sortTag, direction) =>
+        setOrder(direction ? { sortTag, direction } : ({} as OrderItem)),
+      usersApp: (sortTag, direction) =>
         setOrder(direction ? { sortTag, direction } : ({} as OrderItem)),
     };
 

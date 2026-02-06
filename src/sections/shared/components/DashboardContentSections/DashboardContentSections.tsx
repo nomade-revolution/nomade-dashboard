@@ -277,18 +277,22 @@ const DashboardContentSections = ({
       return <span>{(section as Contact).surname || "—"}</span>;
 
     case "name_compa":
-      // if (pageName === SectionTypes.usersApp) {
       return (
         <Tooltip title="Ver perfil">
           <Link
             to={`/user-app/${(section as User).id}`}
             className="dashboard__link-icon"
           >
-            <span className="dashboard__name">{(section as User).name}</span>
+            <span className="dashboard__name">
+              {(section as User).surname
+                ? `${(section as User).name} ${(section as User).surname}`
+                : (section as User).name}
+            </span>
           </Link>
         </Tooltip>
       );
-    // }
+    case "surname_user":
+      return <span>{(section as User).surname || "—"}</span>;
     case "email":
       return (
         <Tooltip title="Enviar email">
