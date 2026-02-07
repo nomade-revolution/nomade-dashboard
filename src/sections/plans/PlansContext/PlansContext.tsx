@@ -78,6 +78,11 @@ export const PlansContextProvider = ({
     data: PlanUpdateStructure,
   ) => {
     setLoading(true);
+    // eslint-disable-next-line no-console
+    console.log("[PlansContext] PUT /api/companies/{id}/company-plan payload", {
+      company_id,
+      payload: data,
+    });
     const response = await updateCompanyPlan(repository, company_id, data);
 
     if (isHttpSuccessResponse(response)) {

@@ -27,7 +27,7 @@ const InfluencerDetailPage = (): React.ReactElement => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isPlanModalOpen, setIsPlanModalOpen] = useState<boolean>(false);
-  const { getPlan, plan } = usePlansContext();
+  const { getPlan, plan, updateCompanyPlanPeriod } = usePlansContext();
   const { handleIsDialogOpen } = useActions();
   const { id } = useParams();
   const handleDeleteButton = () => {
@@ -39,11 +39,23 @@ const InfluencerDetailPage = (): React.ReactElement => {
     getPlan(+id!);
   }, [getCompany, id, getPlan]);
 
-  const handleEditCompany = async (company: FormData, id?: number) => {
-    const res = await editCompanyCms(company, id);
-    if (id && isHttpSuccessResponse(res)) {
-      getCompany(+id);
-      getPlan(+id);
+  const handleEditCompany = async (
+    companyFormData: FormData,
+    companyId?: number,
+    planPayload?: {
+      plan_id: number;
+      date: string;
+      extension: number;
+      comments: string | null;
+    },
+  ) => {
+    const res = await editCompanyCms(companyFormData, companyId);
+    if (companyId && isHttpSuccessResponse(res)) {
+      if (planPayload && planPayload.date) {
+        await updateCompanyPlanPeriod(companyId, planPayload);
+      }
+      getCompany(+companyId);
+      getPlan(+companyId);
     }
     return res;
   };

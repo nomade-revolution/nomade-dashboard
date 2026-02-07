@@ -28,7 +28,6 @@ import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { Checkbox } from "@mui/material";
 import { appPaths } from "sections/shared/utils/appPaths/appPaths";
 import theme from "assets/styles/theme";
-import { appendContactsToFormData } from "sections/shared/utils/appendContactsToFormData";
 
 const EXCLUDED_FIELDS = [
   "id",
@@ -37,14 +36,38 @@ const EXCLUDED_FIELDS = [
   "contacts",
   "start_date",
   "image",
+  "plan", // never send object (would become "[object Object]")
+];
+
+/** Keys that must NOT be sent in PUT /api/companies/{id} (company only). Sent via PUT company-plan instead. */
+const COMPANY_PLAN_FORM_DATA_KEYS = [
+  "plan_id",
+  "start_date",
+  "plan_comments",
+  "conditions",
+  "percentage",
+  "offer_type",
+  "offer_id",
 ];
 
 interface SubmitValues extends PartialCompany {
   plan: { start_date: string };
 }
 
+/** Payload for PUT /api/companies/{id}/company-plan (plan_id from dropdown, date Y-m-d, extension months, comments). */
+export interface CompanyPlanPayload {
+  plan_id: number;
+  date: string;
+  extension: number;
+  comments: string | null;
+}
+
 interface Props {
-  onSubmit: (values: FormData, id?: number) => Promise<unknown>;
+  onSubmit: (
+    companyFormData: FormData,
+    id?: number,
+    planPayload?: CompanyPlanPayload,
+  ) => Promise<unknown>;
   type?: string;
   client?: Company;
   setIsOpen: (value: boolean) => void;
@@ -56,8 +79,9 @@ const CompanyForm = ({
   type,
   setIsOpen,
 }: Props): React.ReactElement => {
+  // plan_id from "Tipo de plan" dropdown (stored as string; sent as number in company-plan payload)
   const [formState, setFormState] = useState<{ company_plan_id: string }>({
-    company_plan_id: client?.plan?.plan_id?.toString() || "1", // Default to plan ID 1 for new clients
+    company_plan_id: client?.plan?.plan_id?.toString() || "1",
   });
   const { user } = useAuthContext();
   const [file, setFile] = useState<File[] | null>(() => {
@@ -181,10 +205,27 @@ const CompanyForm = ({
     // Always send accept_conditions (required by backend, even when false)
     formData.append("accept_conditions", checkedTerms ? "true" : "false");
 
-    // Use bracket notation for contacts (more standard for multipart/form-data)
-    if (registerContacts.length > 0) {
-      appendContactsToFormData(formData, registerContacts);
-    }
+    // Contacts: array of full objects, serialized as JSON (backend expects JSON string and merges in UpdateCompanyRequest)
+    const seenEmails = new Set<string>();
+    const contactsPayload = registerContacts
+      .filter(Boolean)
+      .map((c) => ({
+        name: String(c?.name ?? "").trim(),
+        surname: c?.surname != null ? String(c.surname).trim() : undefined,
+        email: String(c?.email ?? "").trim(),
+        phone:
+          c?.phone != null && c.phone !== ""
+            ? String(c.phone).trim()
+            : undefined,
+        type_id: Number(c?.type_id) || 0,
+      }))
+      .filter((c) => {
+        if (c.email === "" || c.type_id <= 0 || seenEmails.has(c.email))
+          return false;
+        seenEmails.add(c.email);
+        return true;
+      });
+    formData.append("contacts", JSON.stringify(contactsPayload));
 
     // socialMedia field removed - not needed for cms-register endpoint
 
@@ -204,14 +245,36 @@ const CompanyForm = ({
 
     // hash field removed - not needed for cms-register endpoint
 
+    // Edit: PUT /companies/{id} must receive only company data. Plan goes to PUT /companies/{id}/company-plan.
+    let planPayload: CompanyPlanPayload | undefined;
+    if (type === "edit") {
+      COMPANY_PLAN_FORM_DATA_KEYS.forEach((key) => formData.delete(key));
+      // date for company-plan API: YYYY-MM-DD (formattedDate is d-m-Y)
+      const [d, m, y] = formattedDate ? formattedDate.split("-") : ["", "", ""];
+      const dateYmd = d && m && y ? `${y}-${m}-${d}` : "";
+      const planId = Number(formState.company_plan_id);
+      const comments =
+        (values as { plan_comments?: string })?.plan_comments ?? null;
+      planPayload = {
+        plan_id: planId,
+        date: dateYmd,
+        extension: 0,
+        comments: comments === "" ? null : comments,
+      };
+    }
+
     if (isDev) {
       // eslint-disable-next-line no-console
       console.log("[CompanyForm] calling onSubmit (editCompanyCms)", {
         clientId: client?.id,
-        plan_id: formState.company_plan_id,
+        planPayload,
       });
     }
-    const response = await onSubmit(formData, client && client?.id);
+    const response = await onSubmit(
+      formData,
+      client && client?.id,
+      planPayload,
+    );
 
     // DEV-only debug logging
     if (isDev) {

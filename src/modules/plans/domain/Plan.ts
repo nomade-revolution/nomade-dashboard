@@ -22,7 +22,8 @@ export interface PlansApiResponse {
 }
 
 export interface PlanUpdateStructure {
+  plan_id?: number;
   date: string;
   extension: number;
-  comments?: string;
+  comments?: string | null;
 }
