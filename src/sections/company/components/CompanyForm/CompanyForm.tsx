@@ -214,9 +214,7 @@ const CompanyForm = ({
     const contactsPayload = (
       Array.isArray(registerContacts) ? registerContacts : []
     )
-      .filter(
-        (c): c is Record<string, unknown> => c != null && typeof c === "object",
-      )
+      .filter((c): c is Contact => c != null && typeof c === "object")
       .map((c) => {
         const name = String(c?.name ?? "").trim();
         const surname =
