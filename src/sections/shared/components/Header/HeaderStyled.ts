@@ -36,11 +36,21 @@ const HeaderStyled = styled.header`
 
     &__profile-icon {
       font-size: ${(props) => props.theme.fontsSize.__XXL};
-      color: ${(props) => props.theme.fontsColors.corporativeColor};
+      color: ${(props) => props.theme.colors.light};
+    }
+
+    &__profile-subIcon {
+      color: ${(props) => props.theme.colors.light};
     }
 
     &__image {
       display: flex;
+      max-width: min(144px, 40vw);
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+      margin-bottom: 6px;
 
       @media (min-width: 1000px) {
         display: none;

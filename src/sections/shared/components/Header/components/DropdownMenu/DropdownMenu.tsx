@@ -3,6 +3,7 @@ import {
   sideBarDownSections,
 } from "../../../SideBar/utils/sideBarSections";
 import { Link, useLocation } from "react-router-dom";
+import { appPaths } from "sections/shared/utils/appPaths/appPaths";
 import DropdownMenuStyled from "./DropdownMenuStyled";
 import { Divider } from "@mui/material";
 import { User } from "modules/user/domain/User";
@@ -54,9 +55,42 @@ const DropdownMenu = ({
           badgeCountsCollabs,
         ).filter((section) => section.pathname !== "oferta");
 
+  const cuentaSection = sideBarDownSections.find(
+    (s) => s.path === appPaths.plan,
+  );
+  const downSectionsWithoutCuenta = sideBarDownSections.filter(
+    (s) => s.path !== appPaths.plan,
+  );
+
   return (
     <DropdownMenuStyled>
       <ul className="dropdown-menu">
+        {cuentaSection && (
+          <li key={cuentaSection.id}>
+            <Link to={cuentaSection.path} onClick={handleMenuState}>
+              <div
+                className={
+                  location.pathname === cuentaSection.path
+                    ? "actions__section--active"
+                    : "actions__section"
+                }
+              >
+                <div className="actions__subsection">
+                  <span
+                    className={
+                      location.pathname === cuentaSection.path
+                        ? "actions__icon--selected"
+                        : "actions__icon"
+                    }
+                  >
+                    {cuentaSection.icon}
+                  </span>
+                  <span className="actions__name">{cuentaSection.name}</span>
+                </div>
+              </div>
+            </Link>
+          </li>
+        )}
         {sideBarUpperSections.map((section) => (
           <li key={section.id}>
             <Link to={section.path} onClick={handleMenuState}>
@@ -87,7 +121,7 @@ const DropdownMenu = ({
           </li>
         ))}
         <Divider />
-        {sideBarDownSections.map((section) => (
+        {downSectionsWithoutCuenta.map((section) => (
           <li key={section.id}>
             <div key={section.id} className="user-actions__section">
               <span className="user-actions__icon">{section.icon}</span>

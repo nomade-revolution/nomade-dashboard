@@ -17,8 +17,38 @@ const DashboardCardMobileStyled = styled.article`
       justify-content: space-between;
     }
 
+    &__section-content {
+      margin-left: auto;
+      text-align: right;
+
+      .dashboard__link-icon {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+      }
+    }
+
     &__section-title {
       font-weight: 700;
+    }
+
+    &__ver-collab-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 16px;
+      background: ${(props) => props.theme.colors.outerSpace};
+      color: ${(props) => props.theme.colors.light};
+      font-weight: 700;
+      font-size: ${(props) => props.theme.fontsSize.__SM};
+      border-radius: ${(props) => props.theme.borderRadius.inputs};
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    &__ver-collab-btn:hover {
+      opacity: 0.9;
     }
 
     &__section-name,

@@ -109,6 +109,12 @@ export const getSideBarUpperSections = (
 
 export const sideBarDownSections = [
   {
+    id: 10,
+    icon: <FaUserTie />,
+    name: "Cuenta",
+    path: appPaths.plan,
+  },
+  {
     id: 11,
     icon: <IoIosSettings />,
     name: "Mi cuenta",

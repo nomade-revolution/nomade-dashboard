@@ -37,6 +37,7 @@ const EXCLUDED_FIELDS = [
   "start_date",
   "image",
   "plan", // never send object (would become "[object Object]")
+  "conditions", // object/array from form state, not expected by backend
 ];
 
 /** Keys that must NOT be sent in PUT /api/companies/{id} (company only). Sent via PUT company-plan instead. */
@@ -169,7 +170,9 @@ const CompanyForm = ({
     Object.keys(values).forEach((key) => {
       if (!EXCLUDED_FIELDS.includes(key)) {
         const value = values[key as keyof PartialCompany];
-        formData.append(key, value || "");
+        // Skip objects/arrays to avoid "[object Object]" in payload
+        if (value != null && typeof value === "object") return;
+        formData.append(key, value ?? "");
       }
     });
 
@@ -205,25 +208,55 @@ const CompanyForm = ({
     // Always send accept_conditions (required by backend, even when false)
     formData.append("accept_conditions", checkedTerms ? "true" : "false");
 
-    // Contacts: array of full objects, serialized as JSON (backend expects JSON string and merges in UpdateCompanyRequest)
+    // Contacts: array of full objects for backend validation
+    // Expected: { name, surname?, email, phone?, type_id } with name, email, type_id required
     const seenEmails = new Set<string>();
-    const contactsPayload = registerContacts
-      .filter(Boolean)
-      .map((c) => ({
-        name: String(c?.name ?? "").trim(),
-        surname: c?.surname != null ? String(c.surname).trim() : undefined,
-        email: String(c?.email ?? "").trim(),
-        phone:
-          c?.phone != null && c.phone !== ""
+    const contactsPayload = (
+      Array.isArray(registerContacts) ? registerContacts : []
+    )
+      .filter(
+        (c): c is Record<string, unknown> => c != null && typeof c === "object",
+      )
+      .map((c) => {
+        const name = String(c?.name ?? "").trim();
+        const surname =
+          c?.surname != null && String(c.surname).trim() !== ""
+            ? String(c.surname).trim()
+            : undefined;
+        const email = String(c?.email ?? "").trim();
+        const phone =
+          c?.phone != null && String(c.phone).trim() !== ""
             ? String(c.phone).trim()
-            : undefined,
-        type_id: Number(c?.type_id) || 0,
-      }))
+            : undefined;
+        const typeId = Number(c?.type_id) || 0;
+        return { name, surname, email, phone, type_id: typeId };
+      })
       .filter((c) => {
-        if (c.email === "" || c.type_id <= 0 || seenEmails.has(c.email))
+        if (
+          c.name === "" ||
+          c.email === "" ||
+          c.type_id <= 0 ||
+          seenEmails.has(c.email)
+        )
           return false;
         seenEmails.add(c.email);
         return true;
+      })
+      .map(({ name, surname, email, phone, type_id }) => {
+        const contact: {
+          name: string;
+          surname?: string;
+          email: string;
+          phone?: string;
+          type_id: number;
+        } = {
+          name,
+          email,
+          type_id,
+        };
+        if (surname) contact.surname = surname;
+        if (phone) contact.phone = phone;
+        return contact;
       });
     formData.append("contacts", JSON.stringify(contactsPayload));
 

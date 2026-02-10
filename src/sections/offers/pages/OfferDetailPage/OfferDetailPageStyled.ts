@@ -1,5 +1,7 @@
 import styled from "styled-components";
 
+const MOBILE_BREAKPOINT = "768px";
+
 const OfferDetailPageStyled = styled.div`
   display: flex;
   flex-direction: column;
@@ -10,6 +12,64 @@ const OfferDetailPageStyled = styled.div`
   height: 100%;
   padding: 50px;
 
+  @media (max-width: ${MOBILE_BREAKPOINT}) {
+    padding: 24px 25px;
+  }
+
+  .offer-detail__goback-wrap {
+    @media (max-width: ${MOBILE_BREAKPOINT}) {
+      display: none;
+    }
+  }
+
+  .offer-detail__location-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    @media (max-width: ${MOBILE_BREAKPOINT}) {
+      width: 100%;
+      background: ${(props) => props.theme.colors.light};
+      box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      padding: 16px;
+    }
+  }
+
+  .offer-detail__description-section-desktop {
+    @media (max-width: ${MOBILE_BREAKPOINT}) {
+      display: none;
+    }
+  }
+
+  .offer-detail__description-section-mobile {
+    display: none;
+
+    @media (max-width: ${MOBILE_BREAKPOINT}) {
+      display: block;
+
+      .dashboard-card {
+        color: ${(props) => props.theme.colors.outerSpace};
+
+        .dashboard-card__section {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 6px;
+        }
+
+        .dashboard-card__section-title {
+          color: ${(props) => props.theme.colors.outerSpace};
+        }
+
+        .dashboard__description,
+        .dashboard__type,
+        span {
+          color: ${(props) => props.theme.colors.outerSpace};
+        }
+      }
+    }
+  }
+
   .details-container {
     display: flex;
     flex-direction: column;
@@ -18,6 +78,11 @@ const OfferDetailPageStyled = styled.div`
     letter-spacing: 0.6px;
     border-radius: 10px;
     padding-top: 20px;
+    width: 100%;
+
+    @media (max-width: ${MOBILE_BREAKPOINT}) {
+      align-items: stretch;
+    }
 
     @media (min-width: 1000px) {
       box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
@@ -37,6 +102,24 @@ const OfferDetailPageStyled = styled.div`
     overflow: auto;
     flex-wrap: wrap;
     margin-top: 20px;
+
+    @media (max-width: ${MOBILE_BREAKPOINT}) {
+      flex-direction: column;
+      gap: 12px;
+      margin-left: 0;
+      margin-right: 0;
+      width: 100%;
+    }
+  }
+
+  .offer-detail__offer-img {
+    @media (max-width: ${MOBILE_BREAKPOINT}) {
+      width: 100% !important;
+      max-width: 100%;
+      height: auto !important;
+      min-height: 200px;
+      object-fit: cover;
+    }
   }
 
   .adress-list {

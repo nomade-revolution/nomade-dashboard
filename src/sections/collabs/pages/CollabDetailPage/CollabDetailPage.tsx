@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
 import CollabDetail from "sections/collabs/components/CollabDetail/CollabDetail";
@@ -10,13 +10,11 @@ import { useOffersContext } from "sections/offers/OffersContext/useOffersContext
 import { useAddressContext } from "sections/address/AddressContext/useAddressContext";
 import ReusableStepper from "sections/shared/components/ReusableStepper/ReusableStepper";
 import { CollabActionTypes, CollabTypes } from "modules/collabs/domain/Collabs";
-import ActionButton from "sections/shared/components/ActionButton/ActionButton";
 import useActions from "sections/shared/hooks/useActions/useActions";
 import DialogDeleteConfirm from "sections/shared/components/DialogDeleteConfirm/DialogDeleteConfirm";
 import { SectionTypes } from "sections/shared/interfaces/interfaces";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { MdDoNotDisturbOn } from "react-icons/md";
-import theme from "assets/styles/theme";
 import { FaCheckCircle, FaEdit } from "react-icons/fa";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
@@ -28,6 +26,18 @@ import * as collabStates from "../../utils/collabsStates";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
 import EditCollabForm from "sections/collabs/components/CollabsForm/EditCollabsForm/EditCollabsForm";
 import { UserTypes } from "modules/user/domain/User";
+import { useMediaQuery } from "@mui/material";
+import ActionMenu from "sections/shared/components/ActionMenu";
+
+const MOBILE_BREAKPOINT = 768;
+
+export interface CollabActionItem {
+  key: string;
+  label: string;
+  icon: React.ReactElement;
+  onClick: () => void;
+  destructive?: boolean;
+}
 
 const HIDE_CANCEL_BUTTON_STATES = [
   collabStates.COLAB_REJECTED_STATE,
@@ -156,15 +166,21 @@ const CollabDetailPage = (): React.ReactElement => {
   }, [getCollabById, getAllRejectedCollabReasons, id]);
 
   useEffect(() => {
-    getInfluencer(collab.influencer_id);
+    if (collab.influencer_id != null && collab.influencer_id !== undefined) {
+      getInfluencer(collab.influencer_id);
+    }
   }, [collab.influencer_id, getInfluencer]);
 
   useEffect(() => {
-    getOffer(collab.offer_id);
+    if (collab.offer_id != null && collab.offer_id !== undefined) {
+      getOffer(collab.offer_id);
+    }
   }, [collab.offer_id, getOffer]);
 
   useEffect(() => {
-    getAddress(collab.addresses_id);
+    if (collab.addresses_id != null && collab.addresses_id !== undefined) {
+      getAddress(collab.addresses_id);
+    }
   }, [collab.addresses_id, getAddress]);
 
   const showCancelButton = () => {
@@ -177,25 +193,98 @@ const CollabDetailPage = (): React.ReactElement => {
     return true;
   };
 
-  const renderSendPackageButton = () => {
-    if (user.type !== UserTypes.company) return null;
-    if (collab.type !== CollabTypes.brand) return null;
-    if (!collab.state) return null;
+  const isMobile = useMediaQuery(`(max-width:${MOBILE_BREAKPOINT}px)`);
+
+  const collabActions = useMemo((): CollabActionItem[] => {
+    const primary: CollabActionItem[] = [];
+    const operational: CollabActionItem[] = [];
+    const destructive: CollabActionItem[] = [];
+
+    if (user.type === "Nomade") {
+      primary.push({
+        key: "editar",
+        label: "Editar",
+        icon: <FaEdit />,
+        onClick: () => setIsOpenEdit(true),
+      });
+    }
+
     if (
-      collab.state.id === collabStates.COLAB_INCIDENT_STATE ||
-      collab.state.id === collabStates.COLAB_ACCEPTED_STATE
+      collab.state &&
+      collab.state.id === COLAB_PENDING_NOMADE_STATE &&
+      user.type === "Nomade"
     ) {
-      return (
-        <ActionButton
-          icon={<FaCheckCircle />}
-          onClick={handleOpenDialogSendPackage}
-          text="Paquete enviado"
-          color={theme.colors.softGreen}
-        />
+      operational.push(
+        {
+          key: "aceptar",
+          label: "Aceptar",
+          icon: <FaCheckCircle />,
+          onClick: handleOpenDialogAccept,
+        },
+        {
+          key: "rechazar",
+          label: "Rechazar",
+          icon: <MdDoNotDisturbOn />,
+          onClick: handleOpenDialogRefuse,
+        },
+      );
+      destructive.push({
+        key: "borrar",
+        label: "Borrar",
+        icon: <FaRegTrashCan />,
+        onClick: handleOpenDialogDelete,
+        destructive: true,
+      });
+    }
+
+    if (
+      collab.state &&
+      collab.state.id === COLAB_PENDING_COMPANY_STATE &&
+      user.type === "Company"
+    ) {
+      operational.push(
+        {
+          key: "aceptar",
+          label: "Aceptar",
+          icon: <FaCheckCircle />,
+          onClick: handleOpenDialogAcceptClient,
+        },
+        {
+          key: "rechazar",
+          label: "Rechazar",
+          icon: <MdDoNotDisturbOn />,
+          onClick: handleOpenDialogRefuseClient,
+        },
       );
     }
-    return null;
-  };
+
+    if (
+      user.type === UserTypes.company &&
+      collab.type === CollabTypes.brand &&
+      collab.state &&
+      (collab.state.id === collabStates.COLAB_INCIDENT_STATE ||
+        collab.state.id === collabStates.COLAB_ACCEPTED_STATE)
+    ) {
+      operational.push({
+        key: "paquete-enviado",
+        label: "Paquete enviado",
+        icon: <FaCheckCircle />,
+        onClick: handleOpenDialogSendPackage,
+      });
+    }
+
+    if (showCancelButton()) {
+      destructive.push({
+        key: "cancelar",
+        label: "Cancelar",
+        icon: <IoMdCloseCircleOutline size={15} />,
+        onClick: handleOpenDialogCancel,
+        destructive: true,
+      });
+    }
+
+    return [...primary, ...operational, ...destructive];
+  }, [user.type, collab.state, collab.type]);
 
   return (
     <>
@@ -203,76 +292,41 @@ const CollabDetailPage = (): React.ReactElement => {
         <Loader height="20px" width="20px" />
       ) : (
         <CollabsDetailPageStyled className="detail-collab">
-          <GoBackButton />
-          <header className="detail-collab__header">
-            <h2>Collab</h2>
-            <section className="detail-collab__actions">
-              {showCancelButton() && (
-                <ActionButton
-                  icon={<IoMdCloseCircleOutline size={15} />}
-                  onClick={handleOpenDialogCancel}
-                  text="Cancelar"
-                  color={theme.colors.black}
+          {/* Mobile: header bar with outer space, back + title + actions menu */}
+          {isMobile && (
+            <header className="detail-collab__header-bar-mobile">
+              <div className="detail-collab__back-wrap-mobile">
+                <GoBackButton />
+              </div>
+              <h2 className="detail-collab__title-mobile">Collab</h2>
+              {collabActions.length > 0 ? (
+                <ActionMenu
+                  actions={collabActions}
+                  variant="auto"
+                  align="right"
                 />
+              ) : (
+                <span style={{ width: 44, flexShrink: 0 }} />
               )}
-              {/* Always show Edit for Nomade users, regardless of state */}
-              {user.type === "Nomade" && (
-                <ActionButton
-                  onClick={() => setIsOpenEdit(true)}
-                  text="Editar"
-                  icon={<FaEdit />}
-                  color={theme.colors.darkBlue}
-                />
-              )}
-              {/* Nomade users in state 1 */}
-              {collab.state &&
-                collab.state.id === COLAB_PENDING_NOMADE_STATE &&
-                user.type === "Nomade" && (
-                  <>
-                    <ActionButton
-                      icon={<FaCheckCircle />}
-                      onClick={handleOpenDialogAccept}
-                      text="Aceptar"
-                      color={theme.colors.softGreen}
-                    />
-                    <ActionButton
-                      icon={<MdDoNotDisturbOn />}
-                      onClick={handleOpenDialogRefuse}
-                      text="Rechazar"
-                      color={theme.colors.darkRed}
-                    />
-                    <ActionButton
-                      onClick={handleOpenDialogDelete}
-                      text="Borrar"
-                      icon={<FaRegTrashCan />}
-                      color={theme.colors.red}
-                    />
-                  </>
-                )}
+            </header>
+          )}
 
-              {/* Client users in state 2 */}
-              {collab.state &&
-                collab.state.id === COLAB_PENDING_COMPANY_STATE &&
-                user.type === "Company" && (
-                  <>
-                    <ActionButton
-                      icon={<FaCheckCircle />}
-                      onClick={handleOpenDialogAcceptClient}
-                      text="Aceptar"
-                      color={theme.colors.softGreen}
-                    />
-                    <ActionButton
-                      icon={<MdDoNotDisturbOn />}
-                      onClick={handleOpenDialogRefuseClient}
-                      text="Rechazar"
-                      color={theme.colors.darkRed}
-                    />
-                  </>
-                )}
-              {renderSendPackageButton()}
-            </section>
-          </header>
-          <div className="detail-collab__data">
+          {/* Desktop: go-back + header with title and action buttons */}
+          <div className="detail-collab__desktop-top">
+            <GoBackButton />
+            <header className="detail-collab__header">
+              <h2>Collab</h2>
+              <section className="detail-collab__actions detail-collab__actions--desktop">
+                <ActionMenu
+                  actions={collabActions}
+                  variant="auto"
+                  align="right"
+                />
+              </section>
+            </header>
+          </div>
+
+          <div className="detail-collab__data detail-collab__content-wrap">
             <CollabDetail
               collab={collab}
               influencer={influencer}

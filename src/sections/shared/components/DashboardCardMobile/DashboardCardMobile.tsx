@@ -68,15 +68,18 @@ const DashboardCardMobile = ({
             <span className="dashboard-card__section-title">
               {headerSection.name}
             </span>
-            <DashboardContentSections
-              headerSection={headerSection}
-              section={bodySection}
-              pageName={pageName}
-              setIsDialogOpen={setIsDialogOpen}
-              anchorEl={anchorEl}
-              setAnchorEl={setAnchorEl}
-              setCollabStateActionType={setCollabStateActionType}
-            />
+            <div className="dashboard-card__section-content">
+              <DashboardContentSections
+                headerSection={headerSection}
+                section={bodySection}
+                pageName={pageName}
+                setIsDialogOpen={setIsDialogOpen}
+                anchorEl={anchorEl}
+                setAnchorEl={setAnchorEl}
+                setCollabStateActionType={setCollabStateActionType}
+                variant="mobileCard"
+              />
+            </div>
           </div>
         </div>
       ))}

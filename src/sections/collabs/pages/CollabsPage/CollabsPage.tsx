@@ -173,7 +173,7 @@ const CollabsPage = (): React.ReactElement => {
   }
 
   return (
-    <ReusablePageStyled>
+    <ReusablePageStyled className="collabs-page">
       <div className="dashboard__filtersContainer">
         {user.type === "Nomade" ? (
           <div

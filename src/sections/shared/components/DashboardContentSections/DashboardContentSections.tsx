@@ -61,6 +61,7 @@ interface Props {
   setCollabStateActionType?: (value: CollabActionTypes) => void;
   anchorEl: null | HTMLElement;
   setAnchorEl: (value: null | HTMLElement) => void;
+  variant?: "table" | "mobileCard";
 }
 
 const DashboardContentSections = ({
@@ -71,6 +72,7 @@ const DashboardContentSections = ({
   setCollabStateActionType,
   anchorEl,
   setAnchorEl,
+  variant = "table",
 }: Props) => {
   const calendar = (section as FullOffer).calendar;
   const daysSet = new Set<string>();
@@ -697,6 +699,16 @@ const DashboardContentSections = ({
       return null;
 
     case "actions":
+      if (variant === "mobileCard" && pageName === SectionTypes.collabs) {
+        return (
+          <Link
+            to={`/collab/${(section as FullCollab).id}`}
+            className="dashboard-card__ver-collab-btn"
+          >
+            ver collab
+          </Link>
+        );
+      }
       return (
         <Actions
           pageName={pageName}

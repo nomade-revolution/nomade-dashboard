@@ -107,9 +107,9 @@ const getLeftContent = (
   // Add reason on new line if it exists
   if (step?.reason) {
     contentParts.push(
-      <>
+      <Fragment key="reason">
         <br />
-        <span key="reason" style={{ ...styles.errorText, marginTop: 5 }}>
+        <span style={{ ...styles.errorText, marginTop: 5 }}>
           {step.rejected_colab_reason_text ? (
             <>
               {step.reason}
@@ -122,7 +122,7 @@ const getLeftContent = (
             step.reason
           )}
         </span>
-      </>,
+      </Fragment>,
     );
   }
 

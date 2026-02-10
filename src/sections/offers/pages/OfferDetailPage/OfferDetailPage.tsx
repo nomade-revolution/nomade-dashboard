@@ -21,6 +21,7 @@ import { useCitiesContext } from "sections/city/CityContext/useCitiesContext";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
 import CompanySelector from "sections/shared/components/CompanySelector";
 import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
+import SimpleCardMobile from "sections/shared/components/SimpleCardMobile/SimpleCardMobile";
 
 export interface AddresTableData {
   address: string;
@@ -178,7 +179,9 @@ const OfferDetailsPage = () => {
 
   return (
     <OfferDetailPageStyled>
-      <GoBackButton />
+      <div className="offer-detail__goback-wrap">
+        <GoBackButton />
+      </div>
       <div className="offer-detail__heading">
         <h3 className="offer-detail__title">
           {offer.company}{" "}
@@ -198,15 +201,17 @@ const OfferDetailsPage = () => {
         )}
       </div>
       <div className="details-container">
-        <span className="offer-detail__description">
-          <strong>País: </strong>
-          {country}
-        </span>
-        {city ? (
-          <span className="offer-detail__conditions">
-            <strong>Ciudad:</strong> {city}
+        <div className="offer-detail__location-card">
+          <span className="offer-detail__description">
+            <strong>País: </strong>
+            {country}
           </span>
-        ) : null}
+          {city ? (
+            <span className="offer-detail__conditions">
+              <strong>Ciudad:</strong> {city}
+            </span>
+          ) : null}
+        </div>
         <div className="images-container">
           {offer.images?.length > 0 &&
             offer.images.map((image) => (
@@ -221,11 +226,20 @@ const OfferDetailsPage = () => {
             ))}
         </div>
       </div>
-      <DashboardTable
-        bodySections={[offer]}
-        headerSections={headerOffers}
-        pageName="offerDetail"
-      />
+      <div className="offer-detail__description-section-desktop">
+        <DashboardTable
+          bodySections={[offer]}
+          headerSections={headerOffers}
+          pageName="offerDetail"
+        />
+      </div>
+      <div className="offer-detail__description-section-mobile">
+        <SimpleCardMobile
+          bodySection={offer}
+          headerSections={headerOffers}
+          pageName="offerDetail"
+        />
+      </div>
 
       {offer?.calendar && (
         <>

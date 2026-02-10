@@ -1,7 +1,7 @@
 import ImageCustom from "../ImageCustom/ImageCustom";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import DropdownMenu from "./components/DropdownMenu/DropdownMenu";
 import { useLocation, useNavigate } from "react-router-dom";
 import HeaderStyled from "./HeaderStyled";
@@ -31,10 +31,26 @@ const Header = ({
   offer,
 }: HeaderProps): React.ReactElement => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const headerRef = useRef<HTMLDivElement>(null);
   const { token } = useAuthContext();
   const { handleLogout: logoutUser } = useLogout();
   const navigate = useNavigate();
   const { pathname } = useLocation();
+
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+      if (headerRef.current && !headerRef.current.contains(e.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [isMenuOpen]);
 
   const handleMenuState = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -47,13 +63,13 @@ const Header = ({
   };
 
   return (
-    <HeaderStyled className="header">
+    <HeaderStyled className="header" ref={headerRef}>
       <ImageCustom
-        alt="Fresatitan logo"
+        alt="Nomade logo"
         className="header__image"
-        height={30}
-        width={120}
-        image="/main_logo.png"
+        height={36}
+        width={144}
+        image="/Nomade_Logo_Color.svg"
       />
       {pathname !== appPaths.login &&
         pathname !== appPaths.register &&
@@ -67,7 +83,10 @@ const Header = ({
             <button className="header__button" onClick={handleMenuState}>
               <div className="header__icons-section">
                 <IoPersonCircleSharp className="header__profile-icon" />
-                <MdOutlineKeyboardArrowDown className="header__profile-subIcon" />
+                <MdOutlineKeyboardArrowDown
+                  className="header__profile-subIcon"
+                  aria-hidden
+                />
               </div>
             </button>
           </div>

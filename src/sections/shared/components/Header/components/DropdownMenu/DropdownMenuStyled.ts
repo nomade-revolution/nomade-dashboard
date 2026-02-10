@@ -10,12 +10,22 @@ const DropdownMenuStyled = styled.div`
     top: 30px;
     right: 0px;
     background: ${(props) => props.theme.colors.light};
+    color: ${(props) => props.theme.colors.outerSpace};
     display: flex;
     flex-direction: column;
     gap: 15px;
     width: 250px;
     border: 1px solid ${(props) => props.theme.borders.lightGrey};
     padding: 5px;
+
+    a {
+      color: ${(props) => props.theme.colors.outerSpace};
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: ${(props) => props.theme.colors.outerSpace};
+    }
   }
 
   .actions {
@@ -54,13 +64,31 @@ const DropdownMenuStyled = styled.div`
       border-radius: ${(props) => props.theme.borderRadius.badges};
     }
 
+    &__name {
+      color: ${(props) => props.theme.colors.outerSpace};
+    }
+
     &__icon,
     &__icon--selected {
       font-size: large;
+      color: ${(props) => props.theme.colors.outerSpace};
+
+      svg {
+        color: inherit;
+      }
+    }
+
+    &__section:hover &__name,
+    &__section:hover &__icon {
+      color: ${(props) => props.theme.colors.outerSpace};
     }
 
     &__icon--selected {
       color: ${(props) => props.theme.fontsColors.corporativeColor};
+
+      svg {
+        color: inherit;
+      }
     }
   }
 
@@ -78,8 +106,22 @@ const DropdownMenuStyled = styled.div`
       padding: 10px;
     }
 
+    &__name {
+      color: ${(props) => props.theme.colors.outerSpace};
+    }
+
     &__icon {
       font-size: large;
+      color: ${(props) => props.theme.colors.outerSpace};
+
+      svg {
+        color: inherit;
+      }
+    }
+
+    &__section:hover &__name,
+    &__section:hover &__icon {
+      color: ${(props) => props.theme.colors.outerSpace};
     }
   }
 `;

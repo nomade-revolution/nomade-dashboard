@@ -23,6 +23,23 @@ const ReusablePageStyled = styled.main`
     justify-content: flex-start;
     align-items: center;
   }
+  &.collabs-page {
+    @media (max-width: 999px) {
+      padding-top: 16px;
+    }
+    .dashboard__filtersContainer {
+      @media (max-width: 999px) {
+        padding-left: 25px;
+        padding-right: 25px;
+      }
+    }
+    .dashboard__mobile {
+      @media (max-width: 999px) {
+        margin-top: -12px;
+      }
+    }
+  }
+
   .dashboard {
     width: 100%;
     &__table {
@@ -43,6 +60,7 @@ const ReusablePageStyled = styled.main`
       flex-direction: column;
       gap: 20px;
       width: 100%;
+      padding: 24px 25px;
 
       @media (min-width: 1000px) {
         display: none;
@@ -509,6 +527,41 @@ const ReusablePageStyled = styled.main`
 
   .plans-page {
     padding-top: 20px;
+
+    &__title-mobile {
+      margin: 0 0 8px 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: ${(props) => props.theme.fontsColors.dashBoard};
+    }
+
+    &__mobile {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 24px 25px;
+
+      @media (min-width: 769px) {
+        display: none;
+      }
+    }
+
+    &__desktop {
+      display: none;
+
+      @media (min-width: 769px) {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+    }
+
+    &__empty {
+      margin: 0;
+      font-size: ${(props) => props.theme.fontsSize.__SM};
+      color: ${(props) => props.theme.fontsColors.lightGrey};
+    }
+
     &__mensual {
       display: flex;
       flex-direction: column;

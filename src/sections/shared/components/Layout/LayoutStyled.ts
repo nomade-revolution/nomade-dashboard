@@ -31,10 +31,11 @@ const LayoutStyled = styled.div<Props>`
       width: 100%;
       position: sticky;
       top: 0;
-      background: ${(props) => `${props.theme.colors.softMainColor}`};
+      background: ${(props) => props.theme.colors.outerSpace};
       box-shadow: 0px 0px 20px 0.2em rgba(0, 0, 0, 0.1);
       z-index: 100;
       padding: 10px 20px;
+      color: ${(props) => props.theme.colors.light};
 
       @media (min-width: 1000px) {
         display: none;
