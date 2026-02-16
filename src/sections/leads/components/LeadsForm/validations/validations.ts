@@ -1,4 +1,3 @@
-import { FullAddress } from "modules/address/domain/Address";
 import * as yup from "yup";
 
 export const errorMessages = {
@@ -39,5 +38,5 @@ export const leadsScheme = yup.object({
     .required(errorMessages.required)
     .oneOf([yup.ref("password")], errorMessages.passwordMismatch),
   contacts: yup.array().length(3, errorMessages.required),
-  address: yup.object<FullAddress>(),
+  address: yup.mixed().required("Debe añadir una dirección"),
 });
