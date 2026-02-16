@@ -121,6 +121,10 @@ const ContactForm = ({
     }
   }, [contacts, contact_types]);
 
+  const filteredContactTypes = contact_types.filter(
+    (type) => type.name.toLowerCase() !== "usuario app",
+  );
+
   return (
     <ReusableFormStyled
       className="contact-form-modal"
@@ -230,7 +234,7 @@ const ContactForm = ({
                 </label>
                 <ReusableSelect
                   label="Tipos"
-                  options={contact_types.map((type) => ({
+                  options={filteredContactTypes.map((type) => ({
                     id: type.id,
                     name: type.name,
                     value: type.id,
