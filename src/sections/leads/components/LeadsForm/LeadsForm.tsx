@@ -38,6 +38,8 @@ const initialState: CompanyRegisterStructure = {
   password_confirmation: "",
   phone: "",
   web: "",
+  name: "",
+  surname: "",
 };
 
 const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
@@ -327,25 +329,6 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                     />
                   )}
                 </div>
-                <div className="form-subsection">
-                  <label htmlFor="email" className="form-subsection__label">
-                    Email
-                  </label>
-                  <Field
-                    type="email"
-                    id="email"
-                    className="lead-form__field"
-                    aria-label="Correo electrónico"
-                    {...getFieldProps("email")}
-                  />
-                  {errors.email && touched.email && (
-                    <ErrorMessage
-                      className="form-subsection__error-message"
-                      component="span"
-                      name="email"
-                    />
-                  )}
-                </div>
               </section>
               <section className="lead-form__section">
                 <div className="form-subsection">
@@ -443,56 +426,121 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                 </div>
               </section>
               <section className="lead-form__section">
-                <div className="form-subsection">
-                  <label htmlFor="password" className="form-subsection__label">
-                    Contraseña
-                  </label>
-                  <Field
-                    type="password"
-                    id="password"
-                    className="lead-form__field"
-                    aria-label="Comentarios"
-                    {...getFieldProps("password")}
-                  />
-                  {errors.password && touched.password && (
-                    <ErrorMessage
-                      className="form-subsection__error-message"
-                      component="span"
-                      name="password"
+                <h4 className="lead-form__title">Credenciales plataforma</h4>
+                <div className="lead-form__section">
+                  <div className="form-subsection">
+                    <label htmlFor="name" className="form-subsection__label">
+                      Nombre
+                    </label>
+                    <Field
+                      type="text"
+                      id="name"
+                      className="lead-form__field"
+                      aria-label="Nombre"
+                      {...getFieldProps("name")}
                     />
-                  )}
-                </div>
-                <div className="form-subsection">
-                  <label
-                    htmlFor="password_confirmation"
-                    className="form-subsection__label"
-                  >
-                    Repite contraseña
-                  </label>
-                  <Field
-                    type="password"
-                    id="password_confirmation"
-                    className="lead-form__field"
-                    aria-label="Comentarios"
-                    {...getFieldProps("password_confirmation")}
-                  />
-                  {errors.password_confirmation &&
-                    touched.password_confirmation && (
+                    {errors["name" as keyof typeof errors] &&
+                      touched["name" as keyof typeof touched] && (
+                        <ErrorMessage
+                          className="form-subsection__error-message"
+                          component="span"
+                          name="name"
+                        />
+                      )}
+                  </div>
+                  <div className="form-subsection">
+                    <label htmlFor="surname" className="form-subsection__label">
+                      Apellidos
+                    </label>
+                    <Field
+                      type="text"
+                      id="surname"
+                      className="lead-form__field"
+                      aria-label="Apellidos"
+                      {...getFieldProps("surname")}
+                    />
+                    {errors["surname" as keyof typeof errors] &&
+                      touched["surname" as keyof typeof touched] && (
+                        <ErrorMessage
+                          className="form-subsection__error-message"
+                          component="span"
+                          name="surname"
+                        />
+                      )}
+                  </div>
+                  <div className="form-subsection">
+                    <label htmlFor="email" className="form-subsection__label">
+                      Email
+                    </label>
+                    <Field
+                      type="email"
+                      id="email"
+                      className="lead-form__field"
+                      aria-label="Correo electrónico"
+                      {...getFieldProps("email")}
+                    />
+                    {errors.email && touched.email && (
                       <ErrorMessage
                         className="form-subsection__error-message"
                         component="span"
-                        name="password_confirmation"
+                        name="email"
                       />
                     )}
+                  </div>
+                  <div className="form-subsection">
+                    <label
+                      htmlFor="password"
+                      className="form-subsection__label"
+                    >
+                      Contraseña
+                    </label>
+                    <Field
+                      type="password"
+                      id="password"
+                      className="lead-form__field"
+                      aria-label="Contraseña"
+                      {...getFieldProps("password")}
+                    />
+                    {errors.password && touched.password && (
+                      <ErrorMessage
+                        className="form-subsection__error-message"
+                        component="span"
+                        name="password"
+                      />
+                    )}
+                  </div>
+                  <div className="form-subsection">
+                    <label
+                      htmlFor="password_confirmation"
+                      className="form-subsection__label"
+                    >
+                      Repite contraseña
+                    </label>
+                    <Field
+                      type="password"
+                      id="password_confirmation"
+                      className="lead-form__field"
+                      aria-label="Repite contraseña"
+                      {...getFieldProps("password_confirmation")}
+                    />
+                    {errors.password_confirmation &&
+                      touched.password_confirmation && (
+                        <ErrorMessage
+                          className="form-subsection__error-message"
+                          component="span"
+                          name="password_confirmation"
+                        />
+                      )}
+                  </div>
+                  <Field
+                    type="hidden"
+                    id="hash"
+                    name="hash"
+                    className="lead-form__field"
+                    aria-label="Hash"
+                    value={hash}
+                  />
                 </div>
-                <Field
-                  type="hidden"
-                  id="hash"
-                  name="hash"
-                  className="lead-form__field"
-                  aria-label="Comentarios"
-                  value={hash}
-                />
               </section>
 
               <div className="lead-form__checkbox-container">

@@ -127,6 +127,8 @@ export interface CompanyRegisterStructure {
   password_confirmation: string;
   address: FullAddress;
   contacts?: [];
+  name?: string;
+  surname?: string;
 }
 
 export interface UserRol {
