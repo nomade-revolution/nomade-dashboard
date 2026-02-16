@@ -1,13 +1,18 @@
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 import { useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
+import { IoAddCircle } from "react-icons/io5";
 import { useLeadsContext } from "sections/leads/LeadsContext/useLeadsContext";
 import { leadsHeaderSection } from "sections/leads/utils/leadsSections";
+import CreateLeadForm from "sections/leads/components/CreateLeadForm/CreateLeadForm";
+import ActionButton from "sections/shared/components/ActionButton/ActionButton";
 import DashboardCardListMobile from "sections/shared/components/DashboardCardListMobile/DashboardCardListMobile";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
 import Loader from "sections/shared/components/Loader/Loader";
 import PaginationComponent from "sections/shared/components/Pagination/PaginationComponent";
+import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
 import SearchBar from "sections/shared/components/SearchBar/SearchBar";
+import theme from "assets/styles/theme";
 import {
   FilterParams,
   SectionTypes,
@@ -15,6 +20,7 @@ import {
 
 const LeadsPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
+  const [isCreateLeadModalOpen, setIsCreateLeadModalOpen] = useState(false);
 
   const { getLeadsPaginated, loading, leads, pagination, order } =
     useLeadsContext();
@@ -48,14 +54,15 @@ const LeadsPage = (): React.ReactElement => {
         <Loader width="40px" height="40px" />
       ) : (
         <ReusablePageStyled className="dashboard">
-          <div
-            className="dashboard__search"
-            style={{
-              width: "100%",
-              display: "flex",
-              justifyContent: "flex-end",
-            }}
-          >
+          <div className="dashboard__searchContainer">
+            <section className="dashboard__btns-section">
+              <ActionButton
+                color={theme.colors.darkBlue}
+                icon={<IoAddCircle className="dashboard__create--icon" />}
+                onClick={() => setIsCreateLeadModalOpen(true)}
+                text="Añadir lead"
+              />
+            </section>
             <SearchBar
               pageName={SectionTypes.leads}
               pageTypes={SectionTypes.leads}
@@ -86,6 +93,18 @@ const LeadsPage = (): React.ReactElement => {
             per_page={pagination.per_page}
             pageName={SectionTypes.leads}
             filterParams={""}
+          />
+          <ReusableModal
+            openModal={isCreateLeadModalOpen}
+            setIsModalOpen={setIsCreateLeadModalOpen}
+            children={
+              <CreateLeadForm
+                onSuccess={() => {
+                  setIsCreateLeadModalOpen(false);
+                  getLeadsData();
+                }}
+              />
+            }
           />
         </ReusablePageStyled>
       )}

@@ -1,8 +1,15 @@
 import { HttpResponseInterface } from "@core/domain";
 import { Lead, LeadsApiResponse } from "../domain/Leads";
-import { LeadsRepository } from "../domain/LeadsRepository";
+import { LeadsRepository, CreateLeadPayload } from "../domain/LeadsRepository";
 import { CompanyRegisterStructure } from "modules/user/domain/User";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
+
+export const createLead = (
+  leadsRepo: LeadsRepository<LeadsApiResponse>,
+  payload: CreateLeadPayload,
+): Promise<HttpResponseInterface<Lead>> => {
+  return leadsRepo.createLead(payload);
+};
 
 export const getLeads = (
   leadsRepo: LeadsRepository<LeadsApiResponse>,

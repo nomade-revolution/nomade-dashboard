@@ -1,13 +1,27 @@
 import { Http } from "@core/application";
 import { HttpResponseInterface } from "@core/domain";
 import { Lead, LeadsApiResponse } from "../domain/Leads";
-import { LeadsRepository as ILeadsRepository } from "../domain/LeadsRepository";
+import {
+  LeadsRepository as ILeadsRepository,
+  CreateLeadPayload,
+} from "../domain/LeadsRepository";
 import { LEADS_BASE, endpoints } from "../application/routes";
 import { CompanyRegisterStructure } from "modules/user/domain/User";
 import { FilterParams } from "sections/shared/interfaces/interfaces";
 
 export class LeadsRepository implements ILeadsRepository<LeadsApiResponse> {
   private readonly http: Http = Http.getInstance();
+
+  public async createLead(
+    payload: CreateLeadPayload,
+  ): Promise<HttpResponseInterface<Lead>> {
+    try {
+      const resp = await this.http.post<Lead>(LEADS_BASE, payload);
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
 
   public async getLeads(
     page: number,

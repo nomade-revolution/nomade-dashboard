@@ -7,11 +7,13 @@ import {
 import { LeadsRepository } from "modules/leads/domain/LeadsRepository";
 import { Lead, LeadsApiResponse } from "modules/leads/domain/Leads";
 import {
+  createLead as createLeadApplication,
   getLeads,
   getLeadsBadge,
   getLeadsForm,
   sendLeadLink,
 } from "modules/leads/application/leads";
+import { CreateLeadPayload } from "modules/leads/domain/LeadsRepository";
 import { CompanyRegisterStructure } from "modules/user/domain/User";
 import { OrderItem } from "sections/user/UserContext/UserContext";
 
@@ -35,6 +37,7 @@ interface ContextState {
   getLeadsStatusBadge: () => void;
   setBadgeCount: (count: number) => void;
   markLeadRead: (id: number | string) => Promise<unknown>;
+  createLead: (payload: CreateLeadPayload) => Promise<unknown>;
 }
 
 export const LeadsContext = createContext<ContextState>({} as ContextState);
@@ -108,6 +111,15 @@ export const LeadsContextProvider = ({
     [repository],
   );
 
+  const createLead = useCallback(
+    async (payload: CreateLeadPayload) => {
+      const response = await createLeadApplication(repository, payload);
+      setIsSuccess(response.success);
+      return response;
+    },
+    [repository],
+  );
+
   const markLeadRead = useCallback(
     async (id: number | string) => {
       const response = await repository.markLeadRead(id);
@@ -156,6 +168,7 @@ export const LeadsContextProvider = ({
         setOrder,
         setBadgeCount,
         markLeadRead,
+        createLead,
       }}
     >
       {children}
