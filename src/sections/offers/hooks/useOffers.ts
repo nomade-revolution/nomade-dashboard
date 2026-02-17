@@ -162,7 +162,12 @@ const useOffers = () => {
       formData.append(`offer_categories[${index}]`, String(category));
     });
 
-    images.forEach((image) => formData.append("images[]", image));
+    images.forEach((img) => {
+      const file = img instanceof File ? img : (img as { file?: File })?.file;
+      if (file instanceof File) {
+        formData.append("images[]", file);
+      }
+    });
 
     return formData;
   };
