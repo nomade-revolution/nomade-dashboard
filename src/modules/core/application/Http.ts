@@ -31,8 +31,9 @@ export class Http implements HttpInterface {
     );
     if (!response) {
       return {
-        code: 0,
         success: false,
+        message: "Network or request error",
+        code: 0,
         data: undefined,
       } as HttpErrorResponseInterface;
     }

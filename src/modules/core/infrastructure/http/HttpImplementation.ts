@@ -1,9 +1,4 @@
-import axios, {
-  AxiosHeaders,
-  AxiosRequestHeaders,
-  AxiosResponse,
-  RawAxiosRequestHeaders,
-} from "axios";
+import axios, { AxiosResponse, RawAxiosRequestHeaders } from "axios";
 import { HttpInterface, HttpHeadersInterface } from "@core/domain";
 import {
   AsyncCookiesImplementation,
@@ -18,7 +13,6 @@ export class HttpImplementation implements HttpInterface {
   private readonly cookies = new AsyncCookiesImplementation();
   private headers: HttpHeadersInterface = {};
   private readonly REQUEST_TIMEOUT: number = 30000;
-  private token?: string | null = null;
 
   constructor() {
     axios.defaults.headers.common["Accept"] = "application/json";
@@ -134,13 +128,6 @@ export class HttpImplementation implements HttpInterface {
 
   public setHeader(headerKey: string, headerValue: string): void {
     this.headers[headerKey] = headerValue;
-  }
-
-  private getHeaders(): AxiosRequestHeaders {
-    const headers: AxiosRequestHeaders = <
-      RawAxiosRequestHeaders & AxiosHeaders
-    >this.headers;
-    return headers;
   }
 
   /**

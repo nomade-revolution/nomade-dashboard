@@ -58,7 +58,12 @@ const CreateLeadForm = ({ onSuccess }: Props): React.ReactElement => {
 
     const response = await createLead(payload);
     setSubmitting(false);
-    if (response?.success) {
+    if (
+      response &&
+      typeof response === "object" &&
+      "success" in response &&
+      (response as { success: boolean }).success
+    ) {
       onSuccess?.();
     }
   };

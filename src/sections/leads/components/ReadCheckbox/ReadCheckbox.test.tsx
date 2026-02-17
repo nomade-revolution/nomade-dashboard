@@ -11,6 +11,7 @@ import { OrderItem } from "sections/user/UserContext/UserContext";
 const mockMarkLeadRead = vi.fn();
 const mockContextValue = {
   markLeadRead: mockMarkLeadRead,
+  createLead: vi.fn(),
   leads: [],
   lead: {} as CompanyRegisterStructure,
   loading: false,
