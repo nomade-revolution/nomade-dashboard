@@ -75,7 +75,8 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
     const formData = new FormData();
 
     Object.keys(values).forEach((key) => {
-      key !== "id" && formData.append(key, (values as never)[key as never]);
+      if (key === "id" || key === "address") return;
+      formData.append(key, (values as never)[key as never]);
     });
 
     if (registerContacts.length > 0) {
@@ -86,9 +87,9 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
       setSubmitting(false);
       return;
     }
-    registerAddress &&
+    if (registerAddress) {
       formData.append("address", JSON.stringify(registerAddress));
-    formData.append("name", values.company_name);
+    }
     formData.append("gocardless", JSON.stringify(isGocardlessChecked));
     formData.append("accept_conditions", JSON.stringify(isTermsChecked));
 
