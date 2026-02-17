@@ -84,7 +84,17 @@ const CompanyForm = ({
   const [formState, setFormState] = useState<{ company_plan_id: string }>({
     company_plan_id: client?.plan?.plan_id?.toString() || "1",
   });
+  const [hasTouchedPlan, setHasTouchedPlan] = useState(false);
   const { user } = useAuthContext();
+
+  // Sync plan selector from client when client (or client.plan) changes and user has not touched it
+  useEffect(() => {
+    if (hasTouchedPlan) return;
+    const planId = client?.plan?.plan_id;
+    if (planId != null) {
+      setFormState((prev) => ({ ...prev, company_plan_id: String(planId) }));
+    }
+  }, [client?.plan?.plan_id, hasTouchedPlan]);
   const [file, setFile] = useState<File[] | null>(() => {
     // if (client?.image) {
     //   const blob = new Blob([client.image], { type: "image/png" });
@@ -661,6 +671,7 @@ const CompanyForm = ({
                   label="Plan"
                   options={billingOptions}
                   setValue={(value) => {
+                    setHasTouchedPlan(true);
                     handleFormStateChange("company_plan_id", value);
                   }}
                   value={
