@@ -52,6 +52,7 @@ const CreateLeadForm = ({ onSuccess }: Props): React.ReactElement => {
       prefix: prefixValue,
       phone: values.phone,
       email: values.email,
+      message: "Generado desde el CMS",
       created_in_cms: true,
     };
 

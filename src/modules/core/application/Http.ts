@@ -29,22 +29,27 @@ export class Http implements HttpInterface {
       params,
       responseType,
     );
-    if ("success" in response && response.success) {
-      return response as HttpResponseInterface<T>;
-    } else {
-      if (response.statusText === "Unauthorized") {
-        const token = await Cookies.get(environments.cookies!);
-        if (token) {
-          await Cookies.remove(environments.cookies!);
-          window.location.href = "logout";
-        }
-      }
-
+    if (!response) {
       return {
-        code: response.status,
-        ...response.data,
+        code: 0,
+        success: false,
+        data: undefined,
       } as HttpErrorResponseInterface;
     }
+    if ("success" in response && response.success) {
+      return response as HttpResponseInterface<T>;
+    }
+    if (response.statusText === "Unauthorized") {
+      const token = await Cookies.get(environments.cookies!);
+      if (token) {
+        await Cookies.remove(environments.cookies!);
+        window.location.href = "logout";
+      }
+    }
+    return {
+      code: response.status,
+      ...response.data,
+    } as HttpErrorResponseInterface;
   }
 
   public async getFile<T>(

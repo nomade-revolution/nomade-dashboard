@@ -69,10 +69,10 @@ export const LeadsContextProvider = ({
 
       const response = await getLeads(repository, page, per_page, params);
       if (isHttpSuccessResponse(response)) {
-        setLoading(false);
         setLeads(response.data.leads);
         setPagination(response.data.pagination);
       }
+      setLoading(false);
     },
     [repository],
   );

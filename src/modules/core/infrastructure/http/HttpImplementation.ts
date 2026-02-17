@@ -30,9 +30,9 @@ export class HttpImplementation implements HttpInterface {
     responseType?: string,
   ): Promise<AxiosResponse> {
     try {
-      await this.buildHeaders();
+      const headers = await this.buildRequestHeaders();
       const response = await axios.get(url, {
-        headers: this.getHeaders(),
+        headers,
         timeout: this.REQUEST_TIMEOUT,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         params: { ...(params as any) },
@@ -53,31 +53,17 @@ export class HttpImplementation implements HttpInterface {
     responseType: string = "json",
   ): Promise<AxiosResponse> {
     try {
-      await this.buildHeaders();
-
-      // DEV-only debug logging
-      const isDev = import.meta.env.MODE !== "production";
-      if (isDev) {
-        // Debug logging removed for production
-      }
+      const headers = await this.buildRequestHeaders();
 
       const response = await axios.post(url, body, {
-        headers: this.getHeaders(),
+        headers,
         timeout: this.REQUEST_TIMEOUT,
         responseType: responseType as "json",
       });
 
-      if (isDev) {
-        // Debug logging removed for production
-      }
-
-      return response; // FIXED: Return full response object, not just response.data
+      return response;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const isDev = import.meta.env.MODE !== "production";
-        if (isDev) {
-          // Debug logging removed for production
-        }
         return error.response as AxiosResponse;
       }
       return Promise.reject(error);
@@ -90,9 +76,9 @@ export class HttpImplementation implements HttpInterface {
     responseType: string = "json",
   ): Promise<AxiosResponse> {
     try {
-      await this.buildHeaders();
+      const headers = await this.buildRequestHeaders();
       const response = await axios.patch(url, body, {
-        headers: this.getHeaders(),
+        headers,
         timeout: this.REQUEST_TIMEOUT,
         responseType: responseType as "json",
       });
@@ -111,9 +97,9 @@ export class HttpImplementation implements HttpInterface {
     responseType: string = "json",
   ): Promise<AxiosResponse> {
     try {
-      await this.buildHeaders();
+      const headers = await this.buildRequestHeaders();
       const response = await axios.put(url, body, {
-        headers: this.getHeaders(),
+        headers,
         timeout: this.REQUEST_TIMEOUT,
         responseType: responseType as "json",
       });
@@ -131,9 +117,9 @@ export class HttpImplementation implements HttpInterface {
     responseType: string = "json",
   ): Promise<AxiosResponse> {
     try {
-      await this.buildHeaders();
+      const headers = await this.buildRequestHeaders();
       const response = await axios.delete(url, {
-        headers: this.getHeaders(),
+        headers,
         timeout: this.REQUEST_TIMEOUT,
         responseType: responseType as "json",
       });
@@ -157,34 +143,20 @@ export class HttpImplementation implements HttpInterface {
     return headers;
   }
 
-  private async buildHeaders(): Promise<void> {
-    try {
-      // Get token from cookies
-      this.token = await this.cookies.get(environments.cookies!);
-
-      // DEV-only debug logging
-      const isDev = import.meta.env.MODE !== "production";
-      if (isDev) {
-        // Debug logging removed for production
-      }
-
-      // Set Authorization header if token exists
-      if (this.token) {
-        this.setHeader("Authorization", "Bearer " + this.token);
-        if (isDev) {
-          // Debug logging removed for production
-        }
-      } else {
-        if (isDev) {
-          // Debug logging removed for production
-        }
-      }
-    } catch (error) {
-      const isDev = import.meta.env.MODE !== "production";
-      if (isDev) {
-        // Debug logging removed for production
-      }
-      return Promise.resolve();
+  /**
+   * Build a fresh headers object for each request so Authorization is never stale or missing.
+   * Uses the same cookie key as login (environments.cookies / VITE_COOKIES_USER_TOKEN).
+   */
+  private async buildRequestHeaders(): Promise<RawAxiosRequestHeaders> {
+    const cookieKey = environments.cookies ?? "nomade_token";
+    const token = await this.cookies.get(cookieKey);
+    const headers: RawAxiosRequestHeaders = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    };
+    if (token) {
+      headers.Authorization = "Bearer " + token;
     }
+    return headers;
   }
 }
