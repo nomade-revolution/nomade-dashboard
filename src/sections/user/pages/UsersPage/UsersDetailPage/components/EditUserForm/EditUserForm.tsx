@@ -15,6 +15,7 @@ interface Props {
 
 interface EditUserFormState {
   name: string;
+  surname: string;
   email: string;
   rol: string;
 }
@@ -39,6 +40,7 @@ const EditUserForm = ({ initialState, onSubmit }: Props) => {
       : "";
     const parsedInitialState: EditUserFormState = {
       name: initialState.name,
+      surname: initialState.surname ?? "",
       email: initialState.email,
       rol: rol,
     };
@@ -53,6 +55,7 @@ const EditUserForm = ({ initialState, onSubmit }: Props) => {
 
     const formData = new FormData();
     formData.append("name", values.name);
+    formData.append("surname", values.surname);
     formData.append(`roles[0]`, values.rol);
 
     try {
@@ -112,6 +115,25 @@ const EditUserForm = ({ initialState, onSubmit }: Props) => {
                   className="login-form__error-message"
                   component="span"
                   name="name"
+                />
+              )}
+            </div>
+            <div className="form-section">
+              <label htmlFor="surname" className="login-form__label">
+                Apellido
+              </label>
+              <Field
+                type="text"
+                id="surname"
+                className="form-section__field"
+                aria-label="surname"
+                {...getFieldProps("surname")}
+              />
+              {errors.surname && touched.surname && (
+                <ErrorMessage
+                  className="login-form__error-message"
+                  component="span"
+                  name="surname"
                 />
               )}
             </div>

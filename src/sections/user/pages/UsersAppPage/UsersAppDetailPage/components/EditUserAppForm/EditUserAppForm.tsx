@@ -15,6 +15,7 @@ interface Props {
 
 interface EditUserAppFormState {
   name: string;
+  surname: string;
   email: string;
   // password: string;
 }
@@ -34,6 +35,7 @@ const EditUserAppForm = ({ initialState, onSubmit, setIsOpen }: Props) => {
   const fetchInitialData = async () => {
     const parsedInitialState: EditUserAppFormState = {
       name: initialState.name,
+      surname: initialState.surname ?? "",
       email: initialState.email,
       // password: "",
     };
@@ -46,6 +48,7 @@ const EditUserAppForm = ({ initialState, onSubmit, setIsOpen }: Props) => {
 
     const formData = new FormData();
     formData.append("name", values.name);
+    formData.append("surname", values.surname);
     // formData.append(`password`, values.password);
     formData.append("email", values.email);
 
@@ -100,6 +103,25 @@ const EditUserAppForm = ({ initialState, onSubmit, setIsOpen }: Props) => {
                   className="login-form__error-message"
                   component="span"
                   name="name"
+                />
+              )}
+            </div>
+            <div className="form-section">
+              <label htmlFor="surname" className="login-form__label">
+                Apellido
+              </label>
+              <Field
+                type="text"
+                id="surname"
+                className="form-section__field"
+                aria-label="surname"
+                {...getFieldProps("surname")}
+              />
+              {errors.surname && touched.surname && (
+                <ErrorMessage
+                  className="login-form__error-message"
+                  component="span"
+                  name="surname"
                 />
               )}
             </div>
