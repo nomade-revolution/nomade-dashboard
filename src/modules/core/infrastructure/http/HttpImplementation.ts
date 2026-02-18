@@ -48,6 +48,9 @@ export class HttpImplementation implements HttpInterface {
   ): Promise<AxiosResponse> {
     try {
       const headers = await this.buildRequestHeaders();
+      if (!(body instanceof FormData)) {
+        headers["Content-Type"] = "application/json";
+      }
 
       const response = await axios.post(url, body, {
         headers,
@@ -71,6 +74,9 @@ export class HttpImplementation implements HttpInterface {
   ): Promise<AxiosResponse> {
     try {
       const headers = await this.buildRequestHeaders();
+      if (!(body instanceof FormData)) {
+        headers["Content-Type"] = "application/json";
+      }
       const response = await axios.patch(url, body, {
         headers,
         timeout: this.REQUEST_TIMEOUT,
@@ -92,6 +98,9 @@ export class HttpImplementation implements HttpInterface {
   ): Promise<AxiosResponse> {
     try {
       const headers = await this.buildRequestHeaders();
+      if (!(body instanceof FormData)) {
+        headers["Content-Type"] = "application/json";
+      }
       const response = await axios.put(url, body, {
         headers,
         timeout: this.REQUEST_TIMEOUT,
@@ -139,7 +148,6 @@ export class HttpImplementation implements HttpInterface {
     const token = await this.cookies.get(cookieKey);
     const headers: RawAxiosRequestHeaders = {
       Accept: "application/json",
-      "Content-Type": "application/json",
     };
     if (token) {
       headers.Authorization = "Bearer " + token;
