@@ -168,14 +168,6 @@ export const AssignExistingCompanyModal = ({
                 <div className="assign-modal__actions">
                   <button
                     type="button"
-                    className="assign-modal__btn-cancel"
-                    onClick={handleCloseConfirm}
-                    disabled={assigning}
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    type="button"
                     className="assign-modal__btn-confirm"
                     onClick={handleConfirm}
                     disabled={assigning}
@@ -185,6 +177,14 @@ export const AssignExistingCompanyModal = ({
                     ) : (
                       "Confirmar"
                     )}
+                  </button>
+                  <button
+                    type="button"
+                    className="assign-modal__btn-cancel"
+                    onClick={handleCloseConfirm}
+                    disabled={assigning}
+                  >
+                    Cancelar
                   </button>
                 </div>
               </>
@@ -215,14 +215,6 @@ export const AssignExistingCompanyModal = ({
                 <div className="assign-modal__actions">
                   <button
                     type="button"
-                    className="assign-modal__btn-cancel"
-                    onClick={handleCloseConfirm}
-                    disabled={assigning}
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    type="button"
                     className="assign-modal__btn-confirm"
                     onClick={handleConfirm}
                     disabled={assigning}
@@ -232,6 +224,14 @@ export const AssignExistingCompanyModal = ({
                     ) : (
                       "Confirmar reasignación"
                     )}
+                  </button>
+                  <button
+                    type="button"
+                    className="assign-modal__btn-cancel"
+                    onClick={handleCloseConfirm}
+                    disabled={assigning}
+                  >
+                    Cancelar
                   </button>
                 </div>
               </>

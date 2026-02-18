@@ -139,14 +139,15 @@ export const AssignExistingCompanyModalStyled = styled.div`
       font-size: ${(props) => props.theme.fontsSize.__SM};
     }
 
-    /* Mismo contenedor de botones que EditUserAppForm: flex, gap 10px, justify-content flex-end */
+    /* Contenedor de botones centrado; orden: Confirmar (izq), Cancelar (der), gap 10px */
     &__actions {
       display: flex;
       gap: 10px;
       width: 100%;
-      justify-content: flex-end;
+      justify-content: center;
       align-items: center;
       flex-wrap: wrap;
+      padding-top: 20px;
     }
 
     /* Mismo estilo que Cancelar en EditUser (login-form__error): rojo, padding/width/radius idénticos */
