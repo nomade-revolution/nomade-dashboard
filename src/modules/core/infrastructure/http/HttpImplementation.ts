@@ -43,7 +43,7 @@ export class HttpImplementation implements HttpInterface {
 
   public async post(
     url: string,
-    body?: never,
+    body?: unknown,
     responseType: string = "json",
   ): Promise<AxiosResponse> {
     try {
@@ -69,7 +69,7 @@ export class HttpImplementation implements HttpInterface {
 
   public async patch(
     url: string,
-    body?: never,
+    body?: unknown,
     responseType: string = "json",
   ): Promise<AxiosResponse> {
     try {
@@ -93,7 +93,7 @@ export class HttpImplementation implements HttpInterface {
 
   public async put(
     url: string,
-    body?: never,
+    body?: unknown,
     responseType: string = "json",
   ): Promise<AxiosResponse> {
     try {
