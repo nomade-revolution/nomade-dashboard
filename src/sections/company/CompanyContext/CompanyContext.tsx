@@ -41,6 +41,7 @@ interface ContextState {
   ) => void;
   deleteCompanyById: (company_id: number) => void;
   getCompany: (company_id: number) => void;
+  fetchCompanyById: (company_id: number) => Promise<Company | null>;
   postCompany: (company: FormData) => void;
   postBaseCompany: (company: FormData) => void;
   getCompaniesStatusBadge: () => void;
@@ -96,6 +97,14 @@ export const CompanyContextProvider = ({
       setLoading(false);
 
       return response;
+    },
+    [repository],
+  );
+
+  const fetchCompanyById = useCallback(
+    async (company_id: number): Promise<Company | null> => {
+      const response = await getCompanyById(repository, company_id);
+      return isHttpSuccessResponse(response) ? response.data : null;
     },
     [repository],
   );
@@ -276,6 +285,7 @@ export const CompanyContextProvider = ({
         getCompaniesPaginated,
         getCompaniesWithParams,
         getCompany,
+        fetchCompanyById,
         deleteCompanyById,
         postCompany,
         postBaseCompany,

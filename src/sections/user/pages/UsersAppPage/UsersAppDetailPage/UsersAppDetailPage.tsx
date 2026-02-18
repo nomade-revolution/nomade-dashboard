@@ -22,6 +22,7 @@ import { SectionTypes } from "sections/shared/interfaces/interfaces";
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 import DialogDeleteConfirm from "sections/shared/components/DialogDeleteConfirm/DialogDeleteConfirm";
 import AddCompanyForm from "./components/AddCompanyForm/AddCompanyForm";
+import AssignExistingCompanyModal from "./components/AssignExistingCompanyModal/AssignExistingCompanyModal";
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
 // import useActions from "sections/shared/hooks/useActions/useActions";
 
@@ -33,6 +34,8 @@ const UsersAppDetailPage = (): React.ReactElement => {
   // const { handleIsDialogOpen } = useActions();
 
   const [isAddCompanyFormOpen, setIsAddCompanyFormOpen] =
+    useState<boolean>(false);
+  const [isAssignExistingCompanyOpen, setIsAssignExistingCompanyOpen] =
     useState<boolean>(false);
   const [isEditFormOpen, setIsEditFormOpen] = useState<boolean>(false);
   const [isDialogEditStateOpen, setIsDialogEditStateOpen] =
@@ -127,6 +130,14 @@ const UsersAppDetailPage = (): React.ReactElement => {
               <ActionButton
                 onClick={() => setIsAddCompanyFormOpen(true)}
                 text="Añadir cliente"
+                icon={<FaEdit />}
+                color={theme.colors.darkBlue}
+              />
+            )}
+            {user.type === "Nomade" && (
+              <ActionButton
+                onClick={() => setIsAssignExistingCompanyOpen(true)}
+                text="Asignar cliente existente"
                 icon={<FaEdit />}
                 color={theme.colors.darkBlue}
               />
@@ -231,6 +242,15 @@ const UsersAppDetailPage = (): React.ReactElement => {
           setIsModalOpen={setIsAddCompanyFormOpen}
           type="client"
         />
+
+        {id && (
+          <AssignExistingCompanyModal
+            open={isAssignExistingCompanyOpen}
+            onClose={() => setIsAssignExistingCompanyOpen(false)}
+            currentUserId={+id}
+            onSuccess={() => getUser(+id)}
+          />
+        )}
       </UsersAppDetailPageStyled>
     </ReusablePageStyled>
   );

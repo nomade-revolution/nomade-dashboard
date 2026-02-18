@@ -42,6 +42,8 @@ export interface Company extends User {
   status: string;
   company_comments: string;
   offer_id?: number;
+  /** Assigned users (included when loading company via GET /companies/{id}) */
+  users?: Array<{ id: number; name: string; surname: string; email: string }>;
 }
 
 export interface CompanySocialMedia {
