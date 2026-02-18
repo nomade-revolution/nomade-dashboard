@@ -29,7 +29,7 @@ const LeadsPage = (): React.ReactElement => {
   const getLeadsData = useCallback(
     (text?: string) => {
       const filters: FilterParams = {};
-      if (searchText) {
+      if (text) {
         filters.search = text;
       }
       if (order?.sortTag) {
@@ -37,7 +37,7 @@ const LeadsPage = (): React.ReactElement => {
       }
       getLeadsPaginated(+page!, 10, filters);
     },
-    [getLeadsPaginated, page, searchText, order.direction, order.sortTag],
+    [getLeadsPaginated, page, order.direction, order.sortTag],
   );
 
   const handleSearch = (text: string) => {
