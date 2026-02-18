@@ -285,11 +285,7 @@ const DashboardContentSections = ({
             to={`/user-app/${(section as User).id}`}
             className="dashboard__link-icon"
           >
-            <span className="dashboard__name">
-              {(section as User).surname
-                ? `${(section as User).name} ${(section as User).surname}`
-                : (section as User).name}
-            </span>
+            <span className="dashboard__name">{(section as User).name}</span>
           </Link>
         </Tooltip>
       );

@@ -11,7 +11,9 @@ const UserAppDetailData = ({ user }: Props): React.ReactElement => {
       <div className="influencer-data__mainData">
         <div className="influencer-data__data">
           <div className="influencer-data__names">
-            <span className="influencer-data__name">{user?.name}</span>
+            <span className="influencer-data__name">
+              {[user?.name, user?.surname].filter(Boolean).join(" ")}
+            </span>
           </div>
 
           {user.email && <span>{user.email}</span>}
