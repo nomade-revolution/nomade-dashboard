@@ -11,6 +11,7 @@ export interface FullAddress {
   address_2: string;
   city?: string;
   city_id: string;
+  billing_city?: string | null;
   province: string;
   country?: string;
   country_id: number;

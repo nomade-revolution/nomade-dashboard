@@ -54,24 +54,49 @@ const AddressForm = ({
   const [country, setCountry] = useState<string>(
     { ...initialState, ...address }.country_id?.toString() || "1",
   );
-  const [city, setCity] = useState<string>(
-    { ...initialState, ...address }.city_id?.toString() || "1",
-  );
+  const [city, setCity] = useState<string>(() => {
+    const merged = { ...initialState, ...address };
+    if (merged.billing_city && merged.city_id === "9999") return "other";
+    return merged.city_id?.toString() || "1";
+  });
   const handleSubmitForm = async (
     values: FullAddress,
-    { setSubmitting }: FormikHelpers<FullAddress>,
+    { setSubmitting, setFieldError }: FormikHelpers<FullAddress>,
   ) => {
     setSubmitting(true);
 
-    // Ensure all required string fields are properly set
+    // When "Otra ciudad" (other) is selected, require free-text and use fixed city_id 9999
+    if (city === "other") {
+      const bc = String((values as FullAddress).billing_city || "").trim();
+      if (!bc) {
+        setFieldError("billing_city", "Indique la ciudad de facturación");
+        setSubmitting(false);
+        return;
+      }
+    }
+
+    const cityId =
+      city === "other"
+        ? 9999
+        : typeof city === "string"
+          ? parseInt(city, 10)
+          : city;
+    const billingCity =
+      city === "other"
+        ? String((values as FullAddress).billing_city || "").trim() || null
+        : null;
+
     const cleanedValues: Record<string, unknown> = {
-      city_id: city,
+      city_id: cityId,
       country_id: +country,
       province: String(values.province || ""),
       zip_code: String(values.zip_code || ""),
       name: String(values.name || ""),
       address: String(values.address || ""),
     };
+    if (billingCity !== null) {
+      cleanedValues.billing_city = billingCity;
+    }
 
     // Only include address_2 if it has a value, otherwise omit it completely
     if (values.address_2 && values.address_2.trim() !== "") {
@@ -113,12 +138,16 @@ const AddressForm = ({
   }, [countries]);
 
   useEffect(() => {
-    const citiesArr: OptionsStructure[] = cities.map((city) => ({
-      id: city.id,
-      name: city.name,
-      value: city.id,
-    }));
-
+    const citiesArr: OptionsStructure[] = [
+      ...cities
+        .filter((c) => c.id !== 9999)
+        .map((c) => ({
+          id: c.id,
+          name: c.name,
+          value: c.id,
+        })),
+      { id: 9999, name: "Otra ciudad", value: "other" },
+    ];
     setCitiesFormat(citiesArr);
   }, [cities]);
 
@@ -136,12 +165,12 @@ const AddressForm = ({
   const initialValues = {
     ...initialState,
     ...address,
-    // Ensure all required string fields are strings, not undefined/null
     address_2: address.address_2 ? String(address.address_2) : "",
     province: String(address.province || ""),
     zip_code: String(address.zip_code || ""),
     name: String(address.name || ""),
     address: String(address.address || ""),
+    billing_city: address.billing_city ?? "",
   };
 
   return (
@@ -271,10 +300,40 @@ const AddressForm = ({
                 options={citiesFormat}
                 setValue={(v) => {
                   setCity(v);
-                  setFieldValue("city_id", v);
+                  setFieldValue("city_id", v === "other" ? "9999" : v);
                 }}
                 value={city}
               />
+              {city === "other" && (
+                <div
+                  className="form-subsection"
+                  style={{ marginTop: "0.5rem" }}
+                >
+                  <label
+                    htmlFor="billing_city"
+                    className="form-subsection__label"
+                  >
+                    Nombre de la ciudad (facturación)
+                  </label>
+                  <Field
+                    type="text"
+                    id="billing_city"
+                    name="billing_city"
+                    className="form-subsection__field"
+                    aria-label="Ciudad de facturación"
+                    maxLength={255}
+                    placeholder="Escriba la ciudad"
+                    {...getFieldProps("billing_city")}
+                  />
+                  {errors.billing_city && touched.billing_city && (
+                    <ErrorMessage
+                      className="form-subsection__error-message"
+                      component="span"
+                      name="billing_city"
+                    />
+                  )}
+                </div>
+              )}
               {errors.city_id && touched.city_id && (
                 <ErrorMessage
                   className="form-subsection__error-message"

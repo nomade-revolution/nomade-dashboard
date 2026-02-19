@@ -10,13 +10,9 @@ export const errorMessages = {
 export const addressSchema = yup.object({
   address: yup.string().required(errorMessages.required),
   address_2: yup.string().optional(),
-  // contact_name: yup.string().required(errorMessages.required),
-  // contact_phone: yup
-  //   .string()
-  //   .required(errorMessages.required)
-  //   .matches(/^\+?[0-9\s-]{7,15}$/, errorMessages.invalidPhone),
   country_id: yup.number().required(errorMessages.required),
   city_id: yup.string().required(errorMessages.required),
+  billing_city: yup.string().nullable().max(255).optional(),
   name: yup.string().optional(),
   province: yup.string().required(errorMessages.required),
   zip_code: yup
