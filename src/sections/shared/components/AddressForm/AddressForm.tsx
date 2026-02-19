@@ -59,15 +59,19 @@ const AddressForm = ({
     if (merged.billing_city && merged.city_id === "9999") return "other";
     return merged.city_id?.toString() || "1";
   });
+  type AddressFormValues = Omit<FullAddress, "billing_city"> & {
+    billing_city: string;
+  };
+
   const handleSubmitForm = async (
-    values: FullAddress,
-    { setSubmitting, setFieldError }: FormikHelpers<FullAddress>,
+    values: AddressFormValues,
+    { setSubmitting, setFieldError }: FormikHelpers<AddressFormValues>,
   ) => {
     setSubmitting(true);
 
     // When "Otra ciudad" (other) is selected, require free-text and use fixed city_id 9999
     if (city === "other") {
-      const bc = String((values as FullAddress).billing_city || "").trim();
+      const bc = values.billing_city.trim();
       if (!bc) {
         setFieldError("billing_city", "Indique la ciudad de facturación");
         setSubmitting(false);
@@ -82,9 +86,7 @@ const AddressForm = ({
           ? parseInt(city, 10)
           : city;
     const billingCity =
-      city === "other"
-        ? String((values as FullAddress).billing_city || "").trim() || null
-        : null;
+      city === "other" ? values.billing_city.trim() || null : null;
 
     const cleanedValues: Record<string, unknown> = {
       city_id: cityId,
@@ -318,7 +320,6 @@ const AddressForm = ({
                   <Field
                     type="text"
                     id="billing_city"
-                    name="billing_city"
                     className="form-subsection__field"
                     aria-label="Ciudad de facturación"
                     maxLength={255}
