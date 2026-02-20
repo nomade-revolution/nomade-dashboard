@@ -71,6 +71,7 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
     values: CompanyRegisterStructure,
     { setSubmitting, setErrors }: FormikHelpers<CompanyRegisterStructure>,
   ) => {
+    console.log("SUBMIT FIRED");
     setSubmitting(true);
     const formData = new FormData();
 
@@ -124,6 +125,12 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
       setFieldValueRef.current("address", registerAddress || null);
     }
   }, [registerAddress]);
+
+  useEffect(() => {
+    if (setFieldValueRef.current) {
+      setFieldValueRef.current("contacts", registerContacts);
+    }
+  }, [registerContacts]);
 
   return (
     <Formik
