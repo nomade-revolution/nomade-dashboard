@@ -2,7 +2,27 @@ import { Http } from "@core";
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 import { DOCUMENTATION } from "modules/documentation/application/routes";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Loader from "sections/shared/components/Loader/Loader";
+import { appPaths } from "sections/shared/utils/appPaths/appPaths";
+import styled from "styled-components";
+
+const DocHeader = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 16px;
+`;
+
+const VerEmailsLink = styled(Link)`
+  color: ${(p) => p.theme?.colors?.mainColor ?? "#B78D00"};
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
 
 interface DocumentationData {
   content: string;
@@ -36,13 +56,16 @@ const DocumentationPage = () => {
 
   return (
     <ReusablePageStyled className="plans-page">
-      <>
-        {loading ? (
-          <Loader width="20px" height="20px" />
-        ) : (
-          <div dangerouslySetInnerHTML={{ __html: documentation || "" }} />
-        )}
-      </>
+      <DocHeader>
+        <VerEmailsLink to={appPaths.documentationEmails}>
+          Ver emails
+        </VerEmailsLink>
+      </DocHeader>
+      {loading ? (
+        <Loader width="20px" height="20px" />
+      ) : (
+        <div dangerouslySetInnerHTML={{ __html: documentation || "" }} />
+      )}
     </ReusablePageStyled>
   );
 };
