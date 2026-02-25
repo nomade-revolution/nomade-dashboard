@@ -295,7 +295,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
     subject: "Recordatorio: confirmar recepción del producto",
     trigger: "auto",
     send_when:
-      "Se envía al influencer: primer recordatorio para confirmar recepción del producto.",
+      "Se envía automáticamente 7 días después de que el cliente marque el producto como enviado (estado SENT), siempre que el influencer aún no haya confirmado la recepción y la colaboración siga en estado SENT.",
     mailableClass: "Reminder1ProductReceivedInfluencerEmail",
   },
   {
@@ -304,7 +304,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
     subject: "Oferta favorita modificada – {clientName}",
     trigger: "auto",
     send_when:
-      "Se envía al influencer cuando se modifica una oferta que tenía en favoritos.",
+      "Actualmente no se envía. El envío está deshabilitado en backend (método con return).",
     mailableClass: "FavouriteOfferUpdateInfluencerEmail",
   },
   {
@@ -312,17 +312,15 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
     title: "Recordatorio 1 para publicación de contenido",
     subject: "Recordatorio: publicar contenido – {clientName}",
     trigger: "auto",
-    send_when:
-      "Se envía al influencer: primer recordatorio para publicar contenido.",
-    mailableClass: "ReminderPublishInfluencerEmail",
+    send_when: "Se envía al influencer: 10 días después de Producto recibido.",
+    mailableClass: "Reminder1PublishContentNoCalendarEmail",
   },
   {
     n: 35,
     title: "Recordatorio 2 para publicación de contenido",
     subject: "Segundo recordatorio: publicar contenido",
     trigger: "auto",
-    send_when:
-      "Se envía al influencer: segundo recordatorio para publicar contenido.",
+    send_when: "Se envía al influencer: 20 días después de Producto recibido.",
     mailableClass: "Reminder2PublishContentNoCalendarEmail",
   },
   {
@@ -330,8 +328,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
     title: "Recordatorio 3 para publicación de contenido",
     subject: "Tercer recordatorio: publicar contenido",
     trigger: "auto",
-    send_when:
-      "Se envía al influencer: tercer recordatorio para publicar contenido.",
+    send_when: "Se envía al influencer: 27 días después de Producto recibido.",
     mailableClass: "Reminder3PublishContentNoCalendarEmail",
   },
   {
@@ -339,8 +336,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
     title: "Recordatorio 4 para publicación de contenido",
     subject: "Cuarto recordatorio: publicar contenido",
     trigger: "auto",
-    send_when:
-      "Se envía al influencer: cuarto recordatorio para publicar contenido.",
+    send_when: "Se envía al influencer: 29 días después de Producto recibido.",
     mailableClass: "Reminder4PublishContentNoCalendarEmail",
   },
   {
