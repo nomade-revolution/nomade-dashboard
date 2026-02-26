@@ -56,7 +56,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 5,
     title: "Solicitud de info lead (por web o app)",
-    subject: "Hemos recibido tu solicitud de registro",
+    subject: "Hemos recibido tu solicitud de información",
     trigger: "auto",
     send_when:
       "Se envía al cliente (usuario de la company) cuando completa el registro de company (POST /api/companies/register).",
@@ -83,7 +83,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 8,
     title: "Email de bienvenida al cliente (registro completado)",
-    subject: "Activación de cuenta",
+    subject: "¡Bienvenidos a Nomade Revolution!",
     trigger: "auto",
     send_when:
       "Se envía al cliente cuando desde el CMS se le asigna plan (pending → activo).",
@@ -127,7 +127,8 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 13,
     title: "Solicitud pdt aceptar (Por cliente) – 2o recordatorio",
-    subject: "Segundo recordatorio: solicitud de colaboración pendiente",
+    subject:
+      "⏳ Último recordatorio: Tienes una solicitud de colaboración pendiente",
     trigger: "auto",
     send_when:
       "Se envía tras la validación de Nomade (cuando la collab pasa a Pendiente de aceptación) como último recordatorio fijo a 4 h antes del evento, siempre que en el momento de validar todavía quede tiempo para ese envío (es decir, que ‘4 h antes’ siga quedando en el futuro).",
