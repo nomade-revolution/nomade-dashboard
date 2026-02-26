@@ -32,6 +32,7 @@ import UsersDetailPage from "sections/user/pages/UsersPage/UsersDetailPage/Users
 import UsersAppDetailPage from "sections/user/pages/UsersAppPage/UsersAppDetailPage/UsersAppDetailPage";
 import DocumentationPage from "sections/documentation/pages/DocumentationPage";
 import DocumentationEmailsPage from "sections/documentation/pages/DocumentationEmailsPage";
+import DocumentationNotificationsPage from "sections/documentation/pages/DocumentationNotificationsPage";
 import ContactNomadePage from "sections/contactForm/pages/ContactNomadeForm";
 import TermsConditionsOfflinePage from "sections/shared/pages/TermsConditionsOffline/TermsConditionsOffline";
 import VerifyEmailPage from "sections/auth/pages/VerifyEmailPage/VerifyEmailPage";
@@ -130,6 +131,10 @@ const routes: RouteObject[] = [
       {
         path: appPaths.documentationEmails,
         element: <DocumentationEmailsPage />,
+      },
+      {
+        path: appPaths.documentationNotifications,
+        element: <DocumentationNotificationsPage />,
       },
       {
         path: appPaths.collabsReservations,

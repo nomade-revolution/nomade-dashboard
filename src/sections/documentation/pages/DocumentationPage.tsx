@@ -14,7 +14,7 @@ const DocHeader = styled.div`
   margin-bottom: 16px;
 `;
 
-const VerEmailsLink = styled(Link)`
+const DocLink = styled(Link)`
   color: ${(p) => p.theme?.colors?.mainColor ?? "#B78D00"};
   text-decoration: none;
   font-size: 14px;
@@ -22,6 +22,12 @@ const VerEmailsLink = styled(Link)`
   &:hover {
     text-decoration: underline;
   }
+`;
+
+const DocLinksRow = styled.div`
+  display: flex;
+  gap: 16px;
+  align-items: center;
 `;
 
 interface DocumentationData {
@@ -57,9 +63,12 @@ const DocumentationPage = () => {
   return (
     <ReusablePageStyled className="plans-page">
       <DocHeader>
-        <VerEmailsLink to={appPaths.documentationEmails}>
-          Ver emails
-        </VerEmailsLink>
+        <DocLinksRow>
+          <DocLink to={appPaths.documentationEmails}>Ver emails</DocLink>
+          <DocLink to={appPaths.documentationNotifications}>
+            Ver notificaciones
+          </DocLink>
+        </DocLinksRow>
       </DocHeader>
       {loading ? (
         <Loader width="20px" height="20px" />
