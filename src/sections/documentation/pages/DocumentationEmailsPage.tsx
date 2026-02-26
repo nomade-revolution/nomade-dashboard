@@ -110,6 +110,58 @@ const SendWhenCell = styled.td`
   max-width: 320px;
 `;
 
+const SectionTitle = styled.h2`
+  font-size: 1.25rem;
+  margin: 0;
+  margin-top: 8px;
+  color: ${(p) => p.theme?.fontsColors?.dashBoard ?? "#333"};
+`;
+
+const UNDOCUMENTED_MAILABLES = [
+  "IncidentOtherInternalEmail",
+  "IncidentSizeInternalEmail",
+  "IncidentWrongProductInternalEmail",
+  "AutoCanceledColabInfluencerEmail",
+  "AutoCanceledColabNomadeEmail",
+  "ProductSentReminder2InternalEmail",
+  "CanceledColabEmail",
+  "ProductSentCompanyEmail",
+  "PublishedContentInternalEmail",
+  "NewColabNomadeEmail",
+  "InfluencerCanceledPendingNomadeInternalEmail",
+  "NomadeCanceledPendingClientInfluencerEmail",
+  "InfluencerCanceledPendingInternalEmail",
+  "ClientCanceledPendingInternalEmail",
+  "ClientCanceledModificationInternalEmail",
+  "ClientCanceledAcceptedInternalEmail",
+  "AutoCanceledModificationInternalEmail",
+  "ConfirmedModificationInfluencerEmail",
+  "ClientCanceledModificationInfluencerEmail",
+  "InfluencerCanceledPendingEmail",
+  "ClientCanceledAcceptedInfluencerEmail",
+  "ClientCanceledPendingInfluencerEmail",
+  "AutoCanceledModificationInfluencerEmail",
+  "GenericEmail",
+  "RegistrationCompanyAdminEmail",
+  "ContactEmail",
+  "ReminderPublishInfluencerEmail",
+  "ReminderReserveCompanyEmail",
+  "ReminderReceivedInfluencerEmail",
+  "FeedbackEmail",
+  "DataChangedColabEmail",
+  "ReminderReserveInfluencerEmail",
+  "RegistrationRequestNomadeEmail",
+  "RegistrationRequestCompanyEmail",
+  "RegistrationInfluencerEmail",
+  "PublishedContentInfluencerEmail",
+  "ProductReceivedInfluencerEmail",
+  "IncidentWrongProductInfluencerEmail",
+  "IncidentSizeInfluencerEmail",
+  "IncidentOtherInfluencerEmail",
+  "PendingColabModificationReminderCompanyEmail",
+  "ClientRejectedColabCompanyEmail",
+];
+
 const DocumentationEmailsPage = () => {
   return (
     <ReusablePageStyled className="plans-page">
@@ -169,6 +221,42 @@ const DocumentationEmailsPage = () => {
                       ) : (
                         <NoPreview>(sin preview)</NoPreview>
                       )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </Table>
+        </TableWrap>
+
+        <SectionTitle>
+          Mailables no documentados (pendientes de auditoría)
+        </SectionTitle>
+        <TableWrap>
+          <Table>
+            <thead>
+              <tr>
+                <th>Nº</th>
+                <th>Mailable</th>
+                <th>Preview</th>
+              </tr>
+            </thead>
+            <tbody>
+              {UNDOCUMENTED_MAILABLES.map((mailable, index) => {
+                const previewPath = `/api/mailables/${mailable}`;
+                const previewUrl = `${MAILABLES_PREVIEW_BASE}/${mailable}`;
+                return (
+                  <tr key={mailable}>
+                    <td>S{index + 1}</td>
+                    <td>{mailable}</td>
+                    <td>
+                      <TitleLink
+                        href={previewUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {previewPath}
+                      </TitleLink>
                     </td>
                   </tr>
                 );
