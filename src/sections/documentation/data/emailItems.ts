@@ -435,7 +435,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
       "⏰ Recordatorio: solicitud de modificación pendiente de gestionar",
     trigger: "auto",
     send_when:
-      "Actualmente no se envía. Está diseñado para programarse 24 horas antes de la fecha del evento y enviarse al cliente como recordatorio de modificación pendiente.",
+      "Se programa para enviarse 24h antes del evento, pero solo si en el momento de la solicitud faltan más de 24h",
     mailableClass: "InfluencerModificationReminderCompanyEmail",
   },
   {
@@ -444,7 +444,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
     subject: "⚠️ Último aviso: solicitud de modificación pendiente de revisión",
     trigger: "auto",
     send_when:
-      "Actualmente no se envía. Está diseñado para programarse 48 horas antes de la fecha del evento y enviarse al cliente como segundo recordatorio de modificación pendiente.",
+      "Se programa para enviarse 48h antes del evento, pero solo si en el momento de la solicitud faltan más de 48h.",
     mailableClass: "InfluencerModificationReminder2CompanyEmail",
   },
   {
@@ -455,7 +455,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
       "❌ Collab cancelada automáticamente – {clientName} y {influencerFullName} ({instagramUsername})",
     trigger: "auto",
     send_when:
-      "Se envía al cliente cuando una collab en Modificación en curso pasa a Cancelada por el proceso automático de expiración: el sistema ejecuta nomade:cancel-expired-collaborations cada minuto (08:00–22:00) y cancela collabs con calendario cuando faltan 2 horas o menos para el evento (o ya ha pasado)",
+      "Se envía al cliente cuando una collab en ‘Modificación en curso’ se cancela automáticamente al entrar en la ventana de expiración: cuando faltan 2 horas o menos para la fecha/hora del evento (o ya ha pasado). La cancelación la ejecuta el comando nomade:cancel-expired-collaborations (cada minuto de 08:00 a 22:00). Si el cliente acepta la modificación y la collab vuelve a ACCEPTED, se cancelan automáticamente estos recordatorios.",
     mailableClass: "AutoCanceledModificationCompanyEmail",
   },
   {
