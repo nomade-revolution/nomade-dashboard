@@ -20,7 +20,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 1,
     title: "Solicitud de alta (por influencer)",
-    subject: "Nuevo registro – {influencerFullName} (@{instagramHandle})",
+    subject: "Nuevo registro – {fullName}{instagramHandle}",
     trigger: "auto",
     send_when:
       "Se envía a Nomade cuando un influencer solicita el alta desde la app.",
@@ -29,7 +29,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 2,
     title: "Email verificación de correo electrónico",
-    subject: "Verifica tu correo electrónico",
+    subject: "✅ Verificación de correo electrónico",
     trigger: "auto",
     send_when:
       "Se envía al usuario (influencer o cliente) al registrarse para verificar su correo.",
@@ -38,7 +38,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 3,
     title: "Email bienvenida al influencer (registro aprobado)",
-    subject: "Bienvenido a Nomade",
+    subject: "¡Tu cuenta ha sido aprobada! Bienvenid@ a Nomade ✨",
     trigger: "nomade",
     send_when:
       "Se envía al influencer cuando Nomade aprueba su solicitud de registro.",
@@ -47,7 +47,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 4,
     title: "Solicitud de registro de influ no aprobado",
-    subject: "Solicitud de registro no aprobada",
+    subject: "Hemos revisado tu solicitud de acceso a Nomade",
     trigger: "nomade",
     send_when:
       "Se envía al influencer cuando Nomade rechaza su solicitud de registro.",
@@ -83,7 +83,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 8,
     title: "Email de bienvenida al cliente (registro completado)",
-    subject: "Bienvenido a Nomade",
+    subject: "Activación de cuenta",
     trigger: "auto",
     send_when:
       "Se envía al cliente cuando desde el CMS se le asigna plan (pending → activo).",
@@ -92,7 +92,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 9,
     title: "Restablecer contraseña",
-    subject: "Restablece tu contraseña",
+    subject: "Recuperación de contraseña",
     trigger: "auto",
     send_when: "Se envía al usuario cuando solicita restablecer contraseña.",
     mailableClass: "ResetCodePasswordEmail",
@@ -109,7 +109,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 11,
     title: "Solicitud aceptada (Por Nomade)",
-    subject: "Solicitud aceptada por Nomade – {clientName}",
+    subject: "Nueva solicitud de colaboración en Nomade",
     trigger: "nomade",
     send_when:
       "Se envía al cliente cuando Nomade acepta la solicitud de collab.",
@@ -118,7 +118,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 12,
     title: "Solicitud pdt aceptar (Por cliente) - 1er recordatorio",
-    subject: "Recordatorio: tienes una solicitud de colaboración pendiente",
+    subject: "Recordatorio: Tienes una colaboración pendiente de aceptación",
     trigger: "auto",
     send_when:
       "Se programa al validar Nomade y se envía 6 h después, salvo que la colaboración esté a menos de 9 h, en cuyo caso se envía a mitad de tiempo entre validación y fecha del evento..",
@@ -136,7 +136,8 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 14,
     title: "Solicitud pdt aceptar (Por cliente) – cancelación automática",
-    subject: "Solicitud de colaboración cancelada por falta de respuesta",
+    subject:
+      "Solicitud cancelada automáticamente – {companyName} y {influencerFullName} ({instagramUser})",
     trigger: "auto",
     send_when:
       "Se envía automáticamente cuando una colaboración pendiente no ha sido aceptada y la fecha del evento ya ha pasado o faltan 2 horas o menos para que ocurra, momento en el que el sistema la cancela automáticamente.",
@@ -145,7 +146,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 15,
     title: "Solicitud aceptada (Por cliente) – noti/email al influ",
-    subject: "Tu colaboración ha sido aceptada por el cliente",
+    subject: "✅ ¡Colaboración confirmada con {offerName}!",
     trigger: "company",
     send_when: "Se envía al influencer cuando el cliente acepta la collab.",
     mailableClass: "AcceptedColabInfluencerEmail",
@@ -153,7 +154,8 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 16,
     title: "Solicitud aceptada (Por cliente) – noti/email al cliente",
-    subject: "Has aceptado la colaboración con {influencerFullName}",
+    subject:
+      "Has aceptado una colaboración con {influencerFullName} (@{instagramUser})",
     trigger: "company",
     send_when: "Se envía al cliente cuando acepta la collab (confirmación).",
     mailableClass: "ClientAcceptedColabCompanyEmail",
@@ -177,7 +179,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 19,
     title: "Solicitud rechazada (por Nomade)",
-    subject: "Solicitud de colaboración no aceptada",
+    subject: "Solicitud no aceptada – {offerName}",
     trigger: "nomade",
     send_when:
       "Se envía al influencer cuando Nomade rechaza la solicitud de collab.",
@@ -186,7 +188,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 20,
     title: "Solicitud rechazada (Por cliente)",
-    subject: "El cliente ha rechazado la colaboración",
+    subject: "Solicitud de reserva no aceptada",
     trigger: "company",
     send_when: "Se envía al influencer cuando el cliente rechaza la collab.",
     mailableClass: "RejectedColabNomadeEmail",
@@ -194,7 +196,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 21,
     title: "Apertura de chat (por influencer)",
-    subject: "Nuevo mensaje en la colaboración – {clientName}",
+    subject: "Nuevo mensaje de {displayHandle}",
     trigger: "influencer",
     send_when:
       "Se envía al cliente cuando el influencer solicita modificación a través chat de la collab.",
@@ -203,7 +205,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 22,
     title: "Apertura de chat (por cliente)",
-    subject: "Nuevo mensaje en la colaboración – {influencerFullName}",
+    subject: "Nuevo mensaje de {company}",
     trigger: "company",
     send_when:
       "Se envía al influencer cuando el cliente envía un mensaje en el chat de la collab.",
@@ -212,7 +214,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 23,
     title: "Nuevo mensaje de chat",
-    subject: "Tienes un nuevo mensaje",
+    subject: "Nuevo mensaje de {company}",
     trigger: "auto",
     send_when:
       "Se envía al influencer cuando el cliente (company) provoca la transición de la colaboración a estado Modificación en curso.",
@@ -221,7 +223,8 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 24,
     title: "Contenido publicado",
-    subject: "Contenido publicado – {influencerFullName}",
+    subject:
+      "🧾 {instagramUsername} ha publicado el contenido de tu colaboración",
     trigger: "influencer",
     send_when:
       "Se envía al cliente cuando el influencer marca el contenido como publicado.",
@@ -230,7 +233,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 25,
     title: "Producto enviado",
-    subject: "Producto enviado – {clientName}",
+    subject: "Producto enviado a {instagramUsername}",
     trigger: "company",
     send_when:
       "Se envía al influencer cuando el cliente registra el envío del producto.",
@@ -257,7 +260,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 28,
     title: "Incidencia de talla",
-    subject: "Incidencia en la colaboración – talla",
+    subject: "⚠️ Incidencia de talla reportada por {displayHandle}",
     trigger: "company",
     send_when:
       "Se envía a Nomade (y/o cliente según flujo) cuando se registra una incidencia de talla.",
@@ -266,7 +269,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 29,
     title: "Incidencia de producto equivocado",
-    subject: "Incidencia en la colaboración – producto equivocado",
+    subject: "⚠️ Incidencia: producto erróneo enviado a {displayHandle}",
     trigger: "company",
     send_when:
       "Se envía cuando se registra una incidencia de producto equivocado.",
@@ -275,7 +278,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 30,
     title: "Incidencia general (Otras razones)",
-    subject: "Incidencia en la colaboración",
+    subject: "⚠️ Incidencia reportada por {displayHandle}",
     trigger: "company",
     send_when: "Se envía cuando se registra una incidencia de otro tipo.",
     mailableClass: "IncidentOtherCompanyEmail",
@@ -283,7 +286,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 31,
     title: "Producto recibido",
-    subject: "Producto recibido – {influencerFullName}",
+    subject: "¡Paquete entregado a {influencerName} – {instagramUsername}!",
     trigger: "influencer",
     send_when:
       "Se envía al cliente cuando el influencer confirma que ha recibido el producto.",
@@ -292,7 +295,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 32,
     title: "Recordatorio 1: Producto recibido",
-    subject: "Recordatorio: confirmar recepción del producto",
+    subject: "📦 ¿Has recibido ya tu paquete de {company}?",
     trigger: "auto",
     send_when:
       "Se envía automáticamente 7 días después de que el cliente marque el producto como enviado (estado SENT), siempre que el influencer aún no haya confirmado la recepción y la colaboración siga en estado SENT.",
@@ -301,7 +304,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 33,
     title: "Alerta en pantalla: Oferta favorita modificada",
-    subject: "Oferta favorita modificada – {clientName}",
+    subject: "Modificación oferta",
     trigger: "auto",
     send_when:
       "Actualmente no se envía. El envío está deshabilitado en backend (método con return).",
@@ -310,7 +313,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 34,
     title: "Recordatorio 1 para publicación de contenido",
-    subject: "Recordatorio: publicar contenido – {clientName}",
+    subject: "📸 ¿Ya has subido tu contenido de {clientName}?",
     trigger: "auto",
     send_when: "Se envía al influencer: 10 días después de Producto recibido.",
     mailableClass: "Reminder1PublishContentNoCalendarEmail",
@@ -326,7 +329,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 35,
     title: "Recordatorio 2 para publicación de contenido",
-    subject: "Segundo recordatorio: publicar contenido",
+    subject: "🔔 Recuerda subir tu contenido de {clientName}",
     trigger: "auto",
     send_when: "Se envía al influencer: 20 días después de Producto recibido.",
     mailableClass: "Reminder2PublishContentNoCalendarEmail",
@@ -342,7 +345,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 36,
     title: "Recordatorio 3 para publicación de contenido",
-    subject: "Tercer recordatorio: publicar contenido",
+    subject: "📣 Quedan pocos días para subir tu contenido de {clientName}",
     trigger: "auto",
     send_when: "Se envía al influencer: 27 días después de Producto recibido.",
     mailableClass: "Reminder3PublishContentNoCalendarEmail",
@@ -358,7 +361,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 37,
     title: "Recordatorio 4 para publicación de contenido",
-    subject: "Cuarto recordatorio: publicar contenido",
+    subject: "Último día para subir tu contenido de {clientName}",
     trigger: "auto",
     send_when: "Se envía al influencer: 29 días después de Producto recibido.",
     mailableClass: "Reminder4PublishContentNoCalendarEmail",
@@ -366,7 +369,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 38,
     title: "Recordatorio collab calendario 24h (Influencer)",
-    subject: "Tu colaboración es mañana – {clientName}",
+    subject: "⏰ Recordatorio: collab confirmada para mañana con {clientName}",
     trigger: "auto",
     send_when:
       "Se envía al influencer 24 h antes del día de la collab en calendario.",
@@ -375,7 +378,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 39,
     title: "Recordatorio collab calendario 2h (Influencer)",
-    subject: "Tu colaboración es en 2 horas – {clientName}",
+    subject: "⏰ Tu colaboración con {clientName} es en 2 horas",
     trigger: "auto",
     send_when: "Se envía al influencer 2 h antes del evento en calendario.",
     mailableClass: "Reminder2HoursCalendarInfluencerEmail",
@@ -383,7 +386,8 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 40,
     title: "Recordatorio collab calendario 1h (Cliente)",
-    subject: "Colaboración en 1 hora – {influencerFullName}",
+    subject:
+      "Recordatorio: Colaboración en 1h con {influencerFullName} ({instagramUsername})",
     trigger: "auto",
     send_when: "Se envía al cliente 1 h antes del evento en calendario.",
     mailableClass: "Reminder1HourCalendarCompanyEmail",
@@ -391,7 +395,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 41,
     title: "Solicitud modificacion collab pdt aceptar Cliente (por influencer)",
-    subject: "Solicitud de modificación de colaboración – {clientName}",
+    subject: "Has modificado tu solicitud de colaboración con {company}",
     trigger: "influencer",
     send_when: "Se envía al influencer cuando modifica la collab.",
     mailableClass: "InfluencerModificationRequestInfluencerEmail",
@@ -399,7 +403,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 42,
     title: "Solicitud modificacion collab aceptada (por influencer)",
-    subject: "Modificación aceptada – {influencerFullName}",
+    subject: "Has solicitado un cambio en tu colaboración con {clientName}",
     trigger: "influencer",
     send_when:
       "Se envía al influencer informando de su solicitud de modificación.",
@@ -408,7 +412,8 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 42.1,
     title: "Solicitud modificacion collab aceptada (por influencer)",
-    subject: "Modificación aceptada – {influencerFullName}",
+    subject:
+      "{influencerName} ({instagramUsername}) ha solicitado un cambio en la colaboración confirmada",
     trigger: "influencer",
     send_when:
       "Se envía al cliente informando de una solicitud de modificación del influencer",
@@ -417,7 +422,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 43,
     title: "Alerta en pantalla: Reserva modificada",
-    subject: "Reserva modificada – {clientName}",
+    subject: "Nueva fecha para tu {collabType} con {companyName}",
     trigger: "auto",
     send_when:
       "Se envía al destinatario correspondiente cuando se modifica la fecha/reserva de la collab.",
@@ -426,7 +431,8 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 44,
     title: "Solicitud modificacion collab (por influencer) 2: 1er recordatorio",
-    subject: "Recordatorio: solicitud de modificación pendiente",
+    subject:
+      "⏰ Recordatorio: solicitud de modificación pendiente de gestionar",
     trigger: "auto",
     send_when:
       "Actualmente no se envía. Está diseñado para programarse 24 horas antes de la fecha del evento y enviarse al cliente como recordatorio de modificación pendiente.",
@@ -435,7 +441,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 45,
     title: "Solicitud modificacion collab (por influencer) 3: 2º recordatorio",
-    subject: "Segundo recordatorio: modificación pendiente",
+    subject: "⚠️ Último aviso: solicitud de modificación pendiente de revisión",
     trigger: "auto",
     send_when:
       "Actualmente no se envía. Está diseñado para programarse 48 horas antes de la fecha del evento y enviarse al cliente como segundo recordatorio de modificación pendiente.",
@@ -445,7 +451,8 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
     n: 46,
     title:
       "Solicitud modificacion collab (por influencer) 4: cancelación automática",
-    subject: "Solicitud de modificación cancelada por falta de respuesta",
+    subject:
+      "❌ Collab cancelada automáticamente – {clientName} y {influencerFullName} ({instagramUsername})",
     trigger: "auto",
     send_when:
       "Se envía al cliente cuando una collab en Modificación en curso pasa a Cancelada por el proceso automático de expiración: el sistema ejecuta nomade:cancel-expired-collaborations cada minuto (08:00–22:00) y cancela collabs con calendario cuando faltan 2 horas o menos para el evento (o ya ha pasado)",
@@ -454,7 +461,8 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 47,
     title: "Cliente confirma modificación",
-    subject: "El cliente ha confirmado la modificación",
+    subject:
+      "✅ Has confirmado la modificación en tu colaboración con {influencerFullName}",
     trigger: "company",
     send_when:
       "Se envía al influencer cuando el cliente confirma la modificación de la collab.",
@@ -463,7 +471,8 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 48,
     title: "Cliente cancela collab en modificacion",
-    subject: "El cliente ha cancelado durante la modificación",
+    subject:
+      "❌ Collab cancelada – {clientName} y {influencerFullName} ({instagramUsername})",
     trigger: "company",
     send_when:
       "Se envía al influencer cuando el cliente cancela la collab durante una modificación pendiente.",
@@ -472,7 +481,8 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 49,
     title: "Cliente cancela collab aceptada",
-    subject: "Colaboración cancelada por el cliente",
+    subject:
+      "Has cancelado la colaboración con {influencerFullName} ({instagramUsername})",
     trigger: "company",
     send_when:
       "Se envía al influencer cuando el cliente cancela una collab ya aceptada.",
@@ -481,7 +491,8 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 50,
     title: "Cliente cancela collab pendiente de aceptar",
-    subject: "El cliente ha rechazado la colaboración",
+    subject:
+      "Has cancelado la solicitud de colaboración con {influencerFullName} ({instagramUsername})",
     trigger: "company",
     send_when:
       "Se envía al influencer cuando el cliente rechaza o cancela la collab pendiente de aceptar.",
@@ -490,7 +501,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 51,
     title: "Influencer cancela collab pdt aceptar por Nomade",
-    subject: "El influencer ha cancelado la solicitud",
+    subject: "Has cancelado tu solicitud de collab con {clientName}",
     trigger: "influencer",
     send_when:
       "Se envía a Nomade cuando el influencer cancela la solicitud antes de que Nomade la acepte.",
@@ -499,7 +510,8 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 52,
     title: "Influencer cancela collab pdt aceptar por cliente",
-    subject: "El influencer ha cancelado la colaboración",
+    subject:
+      "Cancelación de solicitud de colaboración de {influencerFullName} ({instagramUsername})",
     trigger: "influencer",
     send_when:
       "Se envía al cliente cuando el influencer cancela la collab pendiente de aceptar.",
@@ -508,7 +520,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 53,
     title: "Nomade cancela collab pdt aceptar por Nomade",
-    subject: "Nomade ha cancelado la solicitud de colaboración",
+    subject: "Collab cancelada con {clientName}",
     trigger: "nomade",
     send_when:
       "Se envía al influencer cuando Nomade cancela la collab pendiente de aceptar.",
@@ -517,7 +529,8 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
   {
     n: 54,
     title: "Nomade cancela collab pdt aceptar por el cliente",
-    subject: "Nomade ha cancelado la colaboración",
+    subject:
+      "Colaboración cancelada con {influencerFullName} ({instagramUsername})",
     trigger: "nomade",
     send_when:
       "Se envía al cliente cuando Nomade cancela la collab pendiente de aceptar.",
