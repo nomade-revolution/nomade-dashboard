@@ -7,7 +7,7 @@
 export type TriggerType = "auto" | "influencer" | "company" | "nomade";
 
 export interface EmailItem {
-  n: number;
+  n: number | string;
   title: string;
   subject: string;
   trigger: TriggerType;
@@ -316,6 +316,14 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
     mailableClass: "Reminder1PublishContentNoCalendarEmail",
   },
   {
+    n: "34.1",
+    title: "Recordatorio 1 para publicación de contenido",
+    subject: "📸 ¿Ya has subido tu contenido de {clientName}?",
+    trigger: "auto",
+    send_when: "5 días después del evento (Collabs con calendario)",
+    mailableClass: "Reminder1PublishContentCalendarEmail",
+  },
+  {
     n: 35,
     title: "Recordatorio 2 para publicación de contenido",
     subject: "Segundo recordatorio: publicar contenido",
@@ -324,12 +332,28 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
     mailableClass: "Reminder2PublishContentNoCalendarEmail",
   },
   {
+    n: "35.1",
+    title: "Recordatorio 2 para publicación de contenido",
+    subject: "🔔 Recuerda subir tu contenido de la collab con {clientName}",
+    trigger: "auto",
+    send_when: "11 días después del evento (Collabs con calendario)",
+    mailableClass: "Reminder2PublishContentCalendarEmail",
+  },
+  {
     n: 36,
     title: "Recordatorio 3 para publicación de contenido",
     subject: "Tercer recordatorio: publicar contenido",
     trigger: "auto",
     send_when: "Se envía al influencer: 27 días después de Producto recibido.",
     mailableClass: "Reminder3PublishContentNoCalendarEmail",
+  },
+  {
+    n: "36.1",
+    title: "Recordatorio 3 para publicación de contenido",
+    subject: "⏰ Último día para subir tu contenido de {clientName}",
+    trigger: "auto",
+    send_when: "14 días después del evento (Collabs con calendario)",
+    mailableClass: "Reminder3PublishContentCalendarEmail",
   },
   {
     n: 37,
@@ -369,18 +393,26 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
     title: "Solicitud modificacion collab pdt aceptar Cliente (por influencer)",
     subject: "Solicitud de modificación de colaboración – {clientName}",
     trigger: "influencer",
-    send_when:
-      "Se envía al cliente cuando el influencer solicita modificar la collab.",
-    mailableClass: "ModificationRequestInfluencerEmail",
+    send_when: "Se envía al influencer cuando modifica la collab.",
+    mailableClass: "InfluencerModificationRequestInfluencerEmail",
   },
   {
     n: 42,
     title: "Solicitud modificacion collab aceptada (por influencer)",
     subject: "Modificación aceptada – {influencerFullName}",
-    trigger: "company",
+    trigger: "influencer",
     send_when:
-      "Se envía al influencer cuando el cliente acepta su solicitud de modificación.",
+      "Se envía al influencer informando de su solicitud de modificación.",
     mailableClass: "ConfirmedModificationRequestInfluencerEmail",
+  },
+  {
+    n: 42.1,
+    title: "Solicitud modificacion collab aceptada (por influencer)",
+    subject: "Modificación aceptada – {influencerFullName}",
+    trigger: "influencer",
+    send_when:
+      "Se envía al cliente informando de una solicitud de modificación del influencer",
+    mailableClass: "ConfirmedModificationRequestCompanyEmail",
   },
   {
     n: 43,
@@ -397,7 +429,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
     subject: "Recordatorio: solicitud de modificación pendiente",
     trigger: "auto",
     send_when:
-      "Se envía al cliente: primer recordatorio sobre modificación pendiente.",
+      "Actualmente no se envía. Está diseñado para programarse 24 horas antes de la fecha del evento y enviarse al cliente como recordatorio de modificación pendiente.",
     mailableClass: "InfluencerModificationReminderCompanyEmail",
   },
   {
@@ -406,7 +438,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
     subject: "Segundo recordatorio: modificación pendiente",
     trigger: "auto",
     send_when:
-      "Se envía al cliente: segundo recordatorio sobre modificación pendiente.",
+      "Actualmente no se envía. Está diseñado para programarse 48 horas antes de la fecha del evento y enviarse al cliente como segundo recordatorio de modificación pendiente.",
     mailableClass: "InfluencerModificationReminder2CompanyEmail",
   },
   {
@@ -416,7 +448,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
     subject: "Solicitud de modificación cancelada por falta de respuesta",
     trigger: "auto",
     send_when:
-      "Se envía al cliente cuando la modificación se cancela por no responder.",
+      "Se envía al cliente cuando una collab en Modificación en curso pasa a Cancelada por el proceso automático de expiración: el sistema ejecuta nomade:cancel-expired-collaborations cada minuto (08:00–22:00) y cancela collabs con calendario cuando faltan 2 horas o menos para el evento (o ya ha pasado)",
     mailableClass: "AutoCanceledModificationCompanyEmail",
   },
   {
