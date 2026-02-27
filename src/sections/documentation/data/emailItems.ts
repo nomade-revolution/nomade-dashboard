@@ -121,7 +121,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
     subject: "Recordatorio: Tienes una colaboración pendiente de aceptación",
     trigger: "auto",
     send_when:
-      "Se programa al validar Nomade y se envía 6 h después, salvo que la colaboración esté a menos de 9 h, en cuyo caso se envía a mitad de tiempo entre validación y fecha del evento..",
+      "PENDING_COMPANY: si faltan ≥9h para el evento se envía 6h antes del evento; si faltan <9h se envía a mitad del tiempo restante (solo este recordatorio).",
     mailableClass: "PendingColabReminder1CompanyEmail",
   },
   {
@@ -131,7 +131,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
       "⏳ Último recordatorio: Tienes una solicitud de colaboración pendiente",
     trigger: "auto",
     send_when:
-      "Se envía tras la validación de Nomade (cuando la collab pasa a Pendiente de aceptación) como último recordatorio fijo a 4 h antes del evento, siempre que en el momento de validar todavía quede tiempo para ese envío (es decir, que ‘4 h antes’ siga quedando en el futuro).",
+      "PENDING_COMPANY: solo si faltan ≥9h para el evento. Se envía 4h antes del evento (nunca antes que el 1er recordatorio).",
     mailableClass: "PendingColabReminder2CompanyEmail",
   },
   {
@@ -141,7 +141,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
       "Solicitud cancelada automáticamente – {companyName} y {influencerFullName} ({instagramUser})",
     trigger: "auto",
     send_when:
-      "Se envía automáticamente cuando una colaboración pendiente no ha sido aceptada y la fecha del evento ya ha pasado o faltan 2 horas o menos para que ocurra, momento en el que el sistema la cancela automáticamente.",
+      "Cancelación automática PENDING_COMPANY: company recibe email + push; influencer recibe email + push. El email al influencer se envía correctamente al correo del influencer.",
     mailableClass: "AutoCanceledColabCompanyEmail",
   },
   {

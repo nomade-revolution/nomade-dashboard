@@ -1,5 +1,5 @@
 /**
- * Listado 1–54 de notificaciones push (documentación).
+ * Listado 1–43 de notificaciones push (documentación).
  * Fuente: docs/PushNotifications.md / NotificationService (nomade-back).
  */
 export type PushNotificationStatus = "active" | "inactive" | "not_exists";
@@ -17,24 +17,6 @@ export interface PushNotificationItem {
 export const pushNotifications: readonly PushNotificationItem[] = [
   {
     id: 1,
-    name: "Solicitud de alta (por influencer)",
-    context: "Registro influencer",
-    title: "—",
-    body: "—",
-    method: "—",
-    status: "not_exists",
-  },
-  {
-    id: 2,
-    name: "Email verificación de correo electrónico",
-    context: "Verificación email",
-    title: "—",
-    body: "—",
-    method: "—",
-    status: "not_exists",
-  },
-  {
-    id: 3,
     name: "Email bienvenida al influencer (registro aprobado)",
     context: "Influencer activado tras verify",
     title: "Bienvenido a Nomade.",
@@ -43,61 +25,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 4,
-    name: "Solicitud de registro de influ no aprobado",
-    context: "Rechazo registro influencer",
-    title: "—",
-    body: "—",
-    method: "—",
-    status: "not_exists",
-  },
-  {
-    id: 5,
-    name: "Solicitud de info lead (por web o app)",
-    context: "Lead creado",
-    title: "—",
-    body: "—",
-    method: "—",
-    status: "not_exists",
-  },
-  {
-    id: 6,
-    name: "Lead no interesa",
-    context: "Lead descartado",
-    title: "—",
-    body: "—",
-    method: "—",
-    status: "not_exists",
-  },
-  {
-    id: 7,
-    name: 'Email "completar registro" ficha cliente - "Envío link"',
-    context: "Envío link registro cliente",
-    title: "—",
-    body: "—",
-    method: "—",
-    status: "not_exists",
-  },
-  {
-    id: 8,
-    name: "Email bienvenida al cliente (registro completado)",
-    context: "Cliente completó registro",
-    title: "—",
-    body: "—",
-    method: "—",
-    status: "not_exists",
-  },
-  {
-    id: 9,
-    name: "Restablecer contraseña",
-    context: "Reset password",
-    title: "—",
-    body: "—",
-    method: "—",
-    status: "not_exists",
-  },
-  {
-    id: 10,
+    id: 2,
     name: "Solicitud de collab (por influencer)",
     context: "Colab creada (PENDING_NOMADE), push al influencer",
     title: "Solicitud de colaboración / Solicitud de reserva",
@@ -106,7 +34,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 11,
+    id: 3,
     name: "Solicitud aceptada (Por Nomade)",
     context: "PENDING_NOMADE → PENDING_COMPANY, push al cliente",
     title: "✨ Nueva solicitud de colaboración.",
@@ -115,27 +43,28 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 12,
+    id: 4,
     name: "Solicitud pdt aceptar (Por cliente) - 1er recordatorio",
-    context: "PENDING_COMPANY, 1er recordatorio cliente",
+    context: "PENDING_COMPANY: si ≥9h → 6h antes; si <9h → mitad del tiempo",
     title: "🔔 Solicitud pendiente de respuesta",
     body: "¡Ojo! Tienes una solicitud de colaboración pendiente. Revísala a tiempo para no perderla.",
     method: "sendPendingColabReminder1CompanyNotification",
     status: "active",
   },
   {
-    id: 13,
+    id: 5,
     name: "Solicitud pdt aceptar (Por cliente) - 2º recordatorio",
-    context: "PENDING_COMPANY, 2º recordatorio cliente",
+    context: "PENDING_COMPANY: solo si ≥9h; 4h antes del evento",
     title: "⚠️ Solicitud a punto de cancelarse",
     body: "Recuerda revisar la solicitud de colaboración pendiente antes de que se cancele automáticamente.",
     method: "sendPendingColabReminder2CompanyNotification",
     status: "active",
   },
   {
-    id: 14,
+    id: 6,
     name: "Solicitud pdt aceptar (Por cliente) - cancelación automática",
-    context: "Cancelación automática PENDING_COMPANY",
+    context:
+      "Cancelación automática PENDING_COMPANY; company e influencer reciben email + push",
     title:
       "🔴 Solicitud cancelada (company) / 🔴 Solicitud cancelada (influencer)",
     body: "La solicitud de colaboración con $influencerFullName (@$influencerAcco) se ha cancelado automáticamente por falta de respuesta. / La solicitud de collab con $offer ha sido cancelada.",
@@ -144,7 +73,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 15,
+    id: 7,
     name: "Solicitud aceptada (Por cliente) - noti/email al influ",
     context: "PENDING_COMPANY → ACCEPTED, push al influencer",
     title: "✅  ¡Colaboración confirmada!",
@@ -153,7 +82,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 16,
+    id: 8,
     name: "Solicitud aceptada (Por cliente) - noti/email al cliente",
     context: "PENDING_COMPANY → ACCEPTED, push al cliente",
     title: "✅ ¡Colaboración aceptada!",
@@ -162,25 +91,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 17,
-    name: "Alerta en pantalla: Colaboración aceptada",
-    context: "UX en app",
-    title: "—",
-    body: "—",
-    method: "—",
-    status: "not_exists",
-  },
-  {
-    id: 18,
-    name: "Alerta en pantalla: Colaboración rechazada",
-    context: "UX en app",
-    title: "—",
-    body: "—",
-    method: "—",
-    status: "not_exists",
-  },
-  {
-    id: 19,
+    id: 9,
     name: "Solicitud rechazada (por Nomade)",
     context: "Rechazo por Nomade/Company, push al influencer",
     title: "Solicitud no aceptada",
@@ -189,43 +100,35 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 20,
+    id: 10,
     name: "Solicitud rechazada (Por cliente)",
     context: "Rechazo por cliente",
-    title: "(igual que 19)",
-    body: "(igual que 19)",
+    title: "(igual que 9)",
+    body: "(igual que 9)",
     method: "sendRejectedColabInfluencerNotification",
     status: "active",
   },
   {
-    id: 21,
-    name: "Apertura de chat (por influencer)",
-    context: "Apertura chat",
-    title: "—",
-    body: "—",
-    method: "—",
-    status: "not_exists",
-  },
-  {
-    id: 22,
-    name: "Apertura de chat (por cliente)",
-    context: "MODIFICATION: nuevo chat Company o Influencer",
+    id: 11,
+    name: "Nuevo mensaje en chat (inicio de conversación)",
+    context:
+      "MODIFICATION: primer mensaje / apertura chat (Company o Influencer)",
     title: "📩 Nuevo mensaje recibido",
     body: "Has recibido un mensaje de $username. (company) / Has recibido un mensaje de $companyName. (influencer)",
     method: "sendNewChatCompanyNotification, sendNewChatInfluencerNotification",
     status: "active",
   },
   {
-    id: 23,
+    id: 12,
     name: "Nuevo mensaje de chat",
-    context: "Nuevo mensaje en chat",
+    context: "Cualquier mensaje en chat existente",
     title: "Nuevo mensaje de $name",
     body: "$message (body = texto del mensaje)",
     method: "sendChatMessageSentNotification",
     status: "active",
   },
   {
-    id: 24,
+    id: 13,
     name: "Contenido publicado",
     context: "Colab FINISHED",
     title:
@@ -236,7 +139,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 25,
+    id: 14,
     name: "Producto enviado",
     context: "ACCEPTED → SENT",
     title:
@@ -247,7 +150,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 26,
+    id: 15,
     name: "Recordatorio 1: Producto enviado",
     context: "4 días después de SENT, company",
     title: "📦 ¿Has enviado el producto?",
@@ -256,7 +159,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 27,
+    id: 16,
     name: "Recordatorio 2: Producto enviado",
     context: "11 días después de SENT, company",
     title: "📦 ¿Aún no has enviado el producto?",
@@ -265,7 +168,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 28,
+    id: 17,
     name: "Incidencia de talla",
     context: "Incidencia talla",
     title: "⚠️ Incidencia de talla reportada",
@@ -275,7 +178,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 29,
+    id: 18,
     name: "Incidencia de producto equivocado",
     context: "Incidencia producto equivocado",
     title: "⚠️ Incidencia reportada",
@@ -285,7 +188,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 30,
+    id: 19,
     name: "Incidencia general (Otras razones)",
     context: "Incidencia otras",
     title: "⚠️ Incidencia reportada",
@@ -295,7 +198,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 31,
+    id: 20,
     name: "Producto recibido",
     context: "SENT → RECEIVED",
     title:
@@ -306,7 +209,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 32,
+    id: 21,
     name: "Recordatorio 1: Producto recibido",
     context: "7 días después RECEIVED, influencer",
     title: "📦 ¿Has recibido el producto?",
@@ -315,7 +218,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 33,
+    id: 22,
     name: "Alerta en pantalla: Oferta favorita modificada",
     context: "Oferta favorita modificada",
     title: "Modificación oferta",
@@ -324,7 +227,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 34,
+    id: 23,
     name: "Recordatorio 1 para publicación de contenido",
     context: "Día 5/10, comando reminders:publish-content",
     title: "📸 ¿Ya has subido el contenido?",
@@ -333,7 +236,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 35,
+    id: 24,
     name: "Recordatorio 2 para publicación de contenido",
     context: "Día 11/20",
     title: "⏳ Recuerda subir tu contenido",
@@ -342,7 +245,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 36,
+    id: 25,
     name: "Recordatorio 3 para publicación de contenido",
     context: "Día 14/27",
     title:
@@ -353,7 +256,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 37,
+    id: 26,
     name: "Recordatorio 4 para publicación de contenido",
     context: "Día 29 (no calendar)",
     title: "⏰ Último día para publicar",
@@ -362,7 +265,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 38,
+    id: 27,
     name: "Recordatorio collab calendario 24h (Influencer)",
     context: "24h antes, datable, influencer",
     title: "⏰ Recordatorio de colaboración",
@@ -371,7 +274,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 39,
+    id: 28,
     name: "Recordatorio collab calendario 2h (Influencer)",
     context: "2h antes, influencer",
     title: "⏰ ¡Tu collab es en 2 horas!",
@@ -380,7 +283,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 40,
+    id: 29,
     name: "Recordatorio collab calendario 1h (Cliente)",
     context: "1h antes, cliente",
     title: "⏰ Recordatorio de colaboración",
@@ -389,7 +292,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 41,
+    id: 30,
     name: "Solicitud modificacion collab pdt aceptar Cliente (por influencer)",
     context: "MODIFICATION desde ACCEPTED: push cliente (y al influencer)",
     title:
@@ -400,7 +303,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "inactive",
   },
   {
-    id: 42,
+    id: 31,
     name: "Solicitud modificacion collab aceptada (por influencer)",
     context: "MODIFICATION → ACCEPTED (cliente acepta)",
     title:
@@ -411,9 +314,9 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 43,
+    id: 32,
     name: "Alerta en pantalla: Cambio solicitado",
-    context: "Mismo texto que métodos de (41)",
+    context: "Mismo texto que métodos de (30)",
     title: "Cambio solicitado",
     body: "Te informaremos pronto sobre su estado ✨",
     method:
@@ -421,7 +324,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "inactive",
   },
   {
-    id: 44,
+    id: 33,
     name: "Solicitud modificacion collab (por influencer) 1er recordatorio",
     context: "24 min, company",
     title: "🔔 Modificación pendiente",
@@ -430,7 +333,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 45,
+    id: 34,
     name: "Solicitud modificacion collab (por influencer) 2º recordatorio",
     context: "48 min, company",
     title: "⚠️ A punto de cancelarse",
@@ -439,7 +342,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 46,
+    id: 35,
     name: "Solicitud modificacion collab (por influencer) cancelación automática",
     context: "Cancelación automática en MODIFICATION",
     title:
@@ -450,17 +353,17 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 47,
+    id: 36,
     name: "Cliente confirma modificación",
-    context: "(igual que 42)",
-    title: "(igual que 42)",
-    body: "(igual que 42)",
+    context: "(igual que 31)",
+    title: "(igual que 31)",
+    body: "(igual que 31)",
     method:
       "sendConfirmedModificationCompanyNotification, sendConfirmedModificationInfluencerNotification",
     status: "active",
   },
   {
-    id: 48,
+    id: 37,
     name: "Cliente cancela collab en modificacion",
     context: "Cliente cancela en MODIFICATION",
     title: "🔴 Colaboración cancelada",
@@ -470,7 +373,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 49,
+    id: 38,
     name: "Cliente cancela collab aceptada",
     context: "Cliente cancela desde ACCEPTED",
     title:
@@ -481,7 +384,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 50,
+    id: 39,
     name: "Cliente cancela collab pendiente de aceptar",
     context: "Cliente cancela desde PENDING_COMPANY",
     title: "🔴 Solicitud cancelada",
@@ -491,7 +394,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 51,
+    id: 40,
     name: "Influencer cancela collab pdt aceptar por Nomade",
     context: "Influencer cancela PENDING_NOMADE",
     title: "🔴 Colaboración cancelada",
@@ -500,16 +403,16 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 52,
+    id: 41,
     name: "Influencer cancela collab pdt aceptar por cliente",
     context: "Influencer cancela (PENDING_COMPANY = rama auto)",
-    title: "(mismo que 14 influencer)",
-    body: "(mismo que 14 influencer)",
+    title: "(mismo que 6 influencer)",
+    body: "(mismo que 6 influencer)",
     method: "sendAutoCanceledColabInfluencerNotification (rama auto)",
     status: "active",
   },
   {
-    id: 53,
+    id: 42,
     name: "Nomade cancela collab pdt aceptar por Nomade",
     context: "Nomade cancela PENDING_NOMADE",
     title: "🔴 Colaboración cancelada",
@@ -518,7 +421,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 54,
+    id: 43,
     name: "Nomade cancela collab pdt aceptar por el cliente",
     context: "Nomade cancela PENDING_COMPANY",
     title: "🔴 Colaboración cancelada",
