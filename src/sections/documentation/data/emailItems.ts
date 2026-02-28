@@ -426,7 +426,7 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
     subject: "Nueva fecha para tu {collabType} con {companyName}",
     trigger: "auto",
     send_when:
-      "Se envía al destinatario correspondiente cuando se modifica la fecha/reserva de la collab.",
+      "Actualmente no se envía, mail antiguo previo al sistema de solicitu de mofificación actual",
     mailableClass: "DateChangedColabEmail",
   },
   {
