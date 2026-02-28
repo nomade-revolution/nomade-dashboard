@@ -1,5 +1,5 @@
 /**
- * Listado 1–43 de notificaciones push (documentación).
+ * Listado 1–41 de notificaciones push (documentación).
  * Fuente: docs/PushNotifications.md / NotificationService (nomade-back).
  */
 export type PushNotificationStatus = "active" | "inactive" | "not_exists";
@@ -293,17 +293,6 @@ export const pushNotifications: readonly PushNotificationItem[] = [
   },
   {
     id: 30,
-    name: "Solicitud modificacion collab pdt aceptar Cliente (por influencer)",
-    context: "MODIFICATION desde ACCEPTED: push cliente (y al influencer)",
-    title:
-      "📝 Solicitud de cambio en collab (company) / Cambio solicitado (influencer)",
-    body: "$influencerUser->name . ' (' . $instagramUsername . ') ha solicitado un cambio en la colaboración.' / Te informaremos pronto sobre su estado ✨",
-    method:
-      "sendConfirmedModificationRequestCompanyNotification, sendInfluencerModificationRequestInfluencerNotification",
-    status: "inactive",
-  },
-  {
-    id: 31,
     name: "Solicitud modificacion collab aceptada (por influencer)",
     context: "MODIFICATION → ACCEPTED (cliente acepta)",
     title:
@@ -314,17 +303,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 32,
-    name: "Alerta en pantalla: Cambio solicitado",
-    context: "Mismo texto que métodos de (30)",
-    title: "Cambio solicitado",
-    body: "Te informaremos pronto sobre su estado ✨",
-    method:
-      "sendConfirmedModificationRequestInfluencerNotification / sendInfluencerModificationRequestInfluencerNotification",
-    status: "inactive",
-  },
-  {
-    id: 33,
+    id: 31,
     name: "Solicitud modificacion collab (por influencer) 1er recordatorio",
     context: "24 min, company",
     title: "🔔 Modificación pendiente",
@@ -333,7 +312,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 34,
+    id: 32,
     name: "Solicitud modificacion collab (por influencer) 2º recordatorio",
     context: "48 min, company",
     title: "⚠️ A punto de cancelarse",
@@ -342,7 +321,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 35,
+    id: 33,
     name: "Solicitud modificacion collab (por influencer) cancelación automática",
     context: "Cancelación automática en MODIFICATION",
     title:
@@ -353,17 +332,17 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 36,
+    id: 34,
     name: "Cliente confirma modificación",
-    context: "(igual que 31)",
-    title: "(igual que 31)",
-    body: "(igual que 31)",
+    context: "(igual que 30)",
+    title: "(igual que 30)",
+    body: "(igual que 30)",
     method:
       "sendConfirmedModificationCompanyNotification, sendConfirmedModificationInfluencerNotification",
     status: "active",
   },
   {
-    id: 37,
+    id: 35,
     name: "Cliente cancela collab en modificacion",
     context: "Cliente cancela en MODIFICATION",
     title: "🔴 Colaboración cancelada",
@@ -373,7 +352,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 38,
+    id: 36,
     name: "Cliente cancela collab aceptada",
     context: "Cliente cancela desde ACCEPTED",
     title:
@@ -384,7 +363,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 39,
+    id: 37,
     name: "Cliente cancela collab pendiente de aceptar",
     context: "Cliente cancela desde PENDING_COMPANY",
     title: "🔴 Solicitud cancelada",
@@ -394,7 +373,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 40,
+    id: 38,
     name: "Influencer cancela collab pdt aceptar por Nomade",
     context: "Influencer cancela PENDING_NOMADE",
     title: "🔴 Colaboración cancelada",
@@ -403,7 +382,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 41,
+    id: 39,
     name: "Influencer cancela collab pdt aceptar por cliente",
     context: "Influencer cancela (PENDING_COMPANY = rama auto)",
     title: "(mismo que 6 influencer)",
@@ -412,7 +391,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 42,
+    id: 40,
     name: "Nomade cancela collab pdt aceptar por Nomade",
     context: "Nomade cancela PENDING_NOMADE",
     title: "🔴 Colaboración cancelada",
@@ -421,7 +400,7 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     status: "active",
   },
   {
-    id: 43,
+    id: 41,
     name: "Nomade cancela collab pdt aceptar por el cliente",
     context: "Nomade cancela PENDING_COMPANY",
     title: "🔴 Colaboración cancelada",
