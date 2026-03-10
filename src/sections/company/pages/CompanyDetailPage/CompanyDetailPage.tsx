@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import Loader from "sections/shared/components/Loader/Loader";
 import GoBackButton from "sections/shared/components/GoBackButton/GoBackButton";
 import CompanyDetailPageStyled from "./CompanyDetailPageStyled";
@@ -21,8 +21,10 @@ import { companyPlanTableSections } from "sections/plans/utils/plansTableSection
 import { usePlansContext } from "sections/plans/PlansContext/usePlansContext";
 import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
 import contactsHeader from "./utils/contactsHeader";
+import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 
 const InfluencerDetailPage = (): React.ReactElement => {
+  const { user } = useAuthContext();
   const { getCompany, company, loading, editCompanyCms } = useCompanyContext();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -30,6 +32,7 @@ const InfluencerDetailPage = (): React.ReactElement => {
   const { getPlan, plan, updateCompanyPlanPeriod } = usePlansContext();
   const { handleIsDialogOpen } = useActions();
   const { id } = useParams();
+
   const handleDeleteButton = () => {
     handleIsDialogOpen(setIsDialogOpen);
   };
@@ -38,6 +41,12 @@ const InfluencerDetailPage = (): React.ReactElement => {
     getCompany(+id!);
     getPlan(+id!);
   }, [getCompany, id, getPlan]);
+
+  if (!user) return null;
+
+  if (user.type === "Company") {
+    return <Navigate to="/plan" replace />;
+  }
 
   const handleEditCompany = async (
     companyFormData: FormData,
