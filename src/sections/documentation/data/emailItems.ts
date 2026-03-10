@@ -90,6 +90,16 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
     mailableClass: "ValidationCompanyEmail",
   },
   {
+    n: "8.1",
+    title: "Company Registration Onboarding Email",
+    subject:
+      "✅ Hemos recibido tu ficha – Nos pondremos en contacto para el onboarding",
+    trigger: "company",
+    send_when:
+      "Se envía al cliente cuando completa el registro de company (POST /api/companies/register).",
+    mailableClass: "CompanyRegistrationOnboardingEmail",
+  },
+  {
     n: 9,
     title: "Restablecer contraseña",
     subject: "Recuperación de contraseña",
