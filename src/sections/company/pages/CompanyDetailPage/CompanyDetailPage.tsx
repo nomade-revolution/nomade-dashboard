@@ -23,7 +23,7 @@ import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuar
 import contactsHeader from "./utils/contactsHeader";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 
-const InfluencerDetailPage = (): React.ReactElement => {
+const InfluencerDetailPage = (): React.ReactElement | null => {
   const { user } = useAuthContext();
   const { getCompany, company, loading, editCompanyCms } = useCompanyContext();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
