@@ -268,6 +268,11 @@ const CompanyForm = ({
       });
     formData.append("contacts", JSON.stringify(contactsPayload));
 
+    if (values.instagram?.trim()) {
+      formData.append("socialMedia[0][social_media_id]", "1");
+      formData.append("socialMedia[0][account_name]", values.instagram.trim());
+    }
+
     // socialMedia field removed - not needed for cms-register endpoint
 
     // name field is already added above from values.name (user name)
