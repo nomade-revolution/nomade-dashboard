@@ -161,23 +161,23 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                   <div className="lead-form__section">
                     <div className="form-subsection">
                       <label
-                        htmlFor="company"
+                        htmlFor="company_name"
                         className="form-subsection__label"
                       >
                         Denominación social
                       </label>
                       <Field
                         type="text"
-                        id="company"
+                        id="company_name"
                         className="lead-form__field"
                         aria-label="Denominación social"
-                        {...getFieldProps("company")}
+                        {...getFieldProps("company_name")}
                       />
-                      {errors.company && touched.company && (
+                      {errors.company_name && touched.company_name && (
                         <ErrorMessage
                           className="form-subsection__error-message"
                           component="span"
-                          name="company"
+                          name="company_name"
                         />
                       )}
                     </div>
@@ -275,23 +275,23 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                   <div className="lead-form__section">
                     <div className="form-subsection">
                       <label
-                        htmlFor="company_name"
+                        htmlFor="company"
                         className="form-subsection__label"
                       >
                         Nombre comercial
                       </label>
                       <Field
                         type="text"
-                        id="company_name"
+                        id="company"
                         className="lead-form__field"
-                        aria-label="Nombre del laboratorio"
-                        {...getFieldProps("company_name")}
+                        aria-label="Nombre comercial"
+                        {...getFieldProps("company")}
                       />
-                      {errors.company_name && touched.company_name && (
+                      {errors.company && touched.company && (
                         <ErrorMessage
                           className="form-subsection__error-message"
                           component="span"
-                          name="company_name"
+                          name="company"
                         />
                       )}
                     </div>
