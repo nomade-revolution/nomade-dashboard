@@ -318,13 +318,6 @@ export const companyPlanTableSections: HeaderSection[] = [
     pageName: SectionTypes.plans,
   },
   {
-    id: 15,
-    name: "Período de prueba",
-    property: "trial_period",
-    sortTag: "",
-    pageName: SectionTypes.plans,
-  },
-  {
     id: 12,
     name: "Comentario",
     property: "comments",
