@@ -434,7 +434,9 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                 </div>
               </section>
               <section className="lead-form__section">
-                <h4 className="lead-form__title">Credenciales plataforma</h4>
+                <h4 className="lead-form__title">
+                  Acceso principal a la plataforma
+                </h4>
                 <div className="lead-form__section">
                   <div className="form-subsection">
                     <label htmlFor="name" className="form-subsection__label">
