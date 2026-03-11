@@ -77,7 +77,7 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
     const formData = new FormData();
 
     Object.keys(values).forEach((key) => {
-      if (key === "id" || key === "address") return;
+      if (key === "id" || key === "address" || key === "contacts") return;
       formData.append(key, (values as never)[key as never]);
     });
     formData.set("phone", values.mobile ?? "");
