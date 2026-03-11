@@ -40,6 +40,7 @@ const initialState: CompanyRegisterStructure = {
   web: "",
   name: "",
   surname: "",
+  mobile: "",
 };
 
 const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
@@ -79,10 +80,27 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
       if (key === "id" || key === "address") return;
       formData.append(key, (values as never)[key as never]);
     });
+    formData.set("phone", values.mobile ?? "");
 
-    if (registerContacts.length > 0) {
+    const mainContactTypeId = contact_types.find((t) => t.name === "TODO")?.id;
+    const mainContact =
+      mainContactTypeId != null
+        ? {
+            name: values.name ?? "",
+            surname: values.surname ?? "",
+            email: values.email,
+            phone: values.mobile ?? "",
+            type_id: mainContactTypeId,
+          }
+        : null;
+    const contactsToSend =
+      mainContact != null
+        ? [mainContact, ...registerContacts]
+        : registerContacts;
+
+    if (contactsToSend.length > 0) {
       // Use bracket notation format to match admin cms-register flow
-      appendContactsToFormData(formData, registerContacts);
+      appendContactsToFormData(formData, contactsToSend);
     } else {
       setErrors({ contacts: "Debe añadir al menos un contacto" });
       setSubmitting(false);
@@ -401,38 +419,9 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                         </span>
                       </section>
                     ))}
-
-                  <div className="datasheet-form__contact-section">
-                    <button
-                      type="button"
-                      className="datasheet-form__add-contact"
-                      onClick={handleIsContactModalOpen}
-                    >
-                      {registerContacts.length > 0 ? (
-                        <FaEdit className="datasheet-form__create--icon" />
-                      ) : (
-                        <IoAddCircle className="datasheet-form__create--icon" />
-                      )}
-                      {registerContacts.length > 0
-                        ? "Modificar contacto"
-                        : "Añadir contacto"}
-                    </button>
-                    {registerContacts.length > 0 && (
-                      <span className="datasheet-form__contact-mssg">
-                        <FaCheckCircle />
-                        Contacto añadido
-                      </span>
-                    )}
-                    {errors.contacts && (
-                      <ErrorMessage
-                        className="form-subsection__error-message"
-                        component="span"
-                        name="contacts"
-                      />
-                    )}
-                  </div>
                 </div>
               </section>
+
               <section className="lead-form__section">
                 <h4 className="lead-form__title">
                   Acceso principal a la plataforma
@@ -498,6 +487,25 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                     )}
                   </div>
                   <div className="form-subsection">
+                    <label htmlFor="mobile" className="form-subsection__label">
+                      Móvil
+                    </label>
+                    <Field
+                      type="tel"
+                      id="mobile"
+                      className="lead-form__field"
+                      aria-label="Móvil"
+                      {...getFieldProps("mobile")}
+                    />
+                    {errors.mobile && touched.mobile && (
+                      <ErrorMessage
+                        className="form-subsection__error-message"
+                        component="span"
+                        name="mobile"
+                      />
+                    )}
+                  </div>
+                  <div className="form-subsection">
                     <label
                       htmlFor="password"
                       className="form-subsection__label"
@@ -542,6 +550,7 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                         />
                       )}
                   </div>
+
                   <Field
                     type="hidden"
                     id="hash"
@@ -550,6 +559,38 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                     aria-label="Hash"
                     value={hash}
                   />
+                </div>
+              </section>
+              <section className="lead-form__section">
+                <h4 className="lead-form__title">Contactos adicionales</h4>
+                <div className="datasheet-form__contact-section">
+                  <button
+                    type="button"
+                    className="datasheet-form__add-contact"
+                    onClick={handleIsContactModalOpen}
+                  >
+                    {registerContacts.length > 0 ? (
+                      <FaEdit className="datasheet-form__create--icon" />
+                    ) : (
+                      <IoAddCircle className="datasheet-form__create--icon" />
+                    )}
+                    {registerContacts.length > 0
+                      ? "Modificar contacto"
+                      : "Añadir contacto"}
+                  </button>
+                  {registerContacts.length > 0 && (
+                    <span className="datasheet-form__contact-mssg">
+                      <FaCheckCircle />
+                      Contacto añadido
+                    </span>
+                  )}
+                  {errors.contacts && (
+                    <ErrorMessage
+                      className="form-subsection__error-message"
+                      component="span"
+                      name="contacts"
+                    />
+                  )}
                 </div>
               </section>
 

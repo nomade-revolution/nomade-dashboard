@@ -37,6 +37,7 @@ export const leadsScheme = yup.object({
     .string()
     .required(errorMessages.required)
     .oneOf([yup.ref("password")], errorMessages.passwordMismatch),
+  mobile: yup.string().required(errorMessages.required),
   contacts: yup.array().optional(),
   address: yup.mixed().required("Debe añadir una dirección"),
 });

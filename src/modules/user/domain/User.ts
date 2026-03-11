@@ -131,6 +131,7 @@ export interface CompanyRegisterStructure {
   contacts?: [];
   name?: string;
   surname?: string;
+  mobile?: string;
 }
 
 export interface UserRol {

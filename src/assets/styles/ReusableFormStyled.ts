@@ -70,11 +70,17 @@ const ReusableFormStyled = styled.form<Props>`
       gap: 30px;
     }
 
-    &__address-section,
+    &__address-section {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
     &__contact-section {
       display: flex;
       align-items: flex-end;
       gap: 10px;
+      padding-bottom: 40px;
     }
 
     &__add-address,
