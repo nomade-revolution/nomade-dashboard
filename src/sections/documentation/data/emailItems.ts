@@ -547,4 +547,23 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
       "Se envía al cliente cuando Nomade cancela la collab pendiente de aceptar.",
     mailableClass: "NomadeCanceledPendingClientCompanyEmail",
   },
+  {
+    n: 55,
+    title: "NomadeCanceledPendingInfluencerEmail",
+    subject: "Collab cancelada con [Nombre del cliente]",
+    trigger: "nomade",
+    send_when:
+      "Email enviado al influencer cuando Nomade cancela una colaboración que ya había sido aceptada.",
+    mailableClass: "NomadeCanceledPendingInfluencerEmail",
+  },
+  {
+    n: 56,
+    title: "NomadeCanceledPendingClientCompanyEmail",
+    subject:
+      "Colaboración cancelada con [Nombre y apellido del influencer] (@usuarioInstagram)",
+    trigger: "nomade",
+    send_when:
+      "Email enviado al cliente cuando Nomade cancela una colaboración que ya había sido aceptada.",
+    mailableClass: "NomadeCanceledPendingClientCompanyEmail",
+  },
 ] as const;

@@ -1,5 +1,5 @@
 /**
- * Listado 1–41 de notificaciones push (documentación).
+ * Listado 1–43 de notificaciones push (documentación).
  * Fuente: docs/PushNotifications.md / NotificationService (nomade-back).
  */
 export type PushNotificationStatus = "active" | "inactive" | "not_exists";
@@ -407,6 +407,24 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     body: "La colaboración con $clientName ha sido cancelada (influencer) / La colaboración con $influencerFullName (@$instagramUsername) ha sido cancelada (company)",
     method:
       "sendNomadeCanceledPendingClientInfluencerNotification, sendNomadeCanceledPendingClientCompanyNotification",
+    status: "active",
+  },
+  {
+    id: 42,
+    name: "Nomade cancela colaboración (Influencer)",
+    context: "Nomade cancela una collab ACCEPTED",
+    title: "🔴 Colaboración cancelada",
+    body: "La colaboración con [Nombre del cliente] ha sido cancelada",
+    method: "sendNomadeCanceledPendingInfluencerNotification",
+    status: "active",
+  },
+  {
+    id: 43,
+    name: "Nomade cancela colaboración (Cliente)",
+    context: "Nomade cancela una collab ACCEPTED",
+    title: "🔴 Colaboración cancelada",
+    body: "La colaboración con [Nombre del influencer] (@usuarioInstagram) ha sido cancelada",
+    method: "sendNomadeCanceledPendingClientCompanyNotification",
     status: "active",
   },
 ];
