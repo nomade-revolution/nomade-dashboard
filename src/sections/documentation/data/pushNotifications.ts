@@ -1,5 +1,5 @@
 /**
- * Listado 1–43 de notificaciones push (documentación).
+ * Listado 1–46 de notificaciones push (documentación).
  * Fuente: docs/PushNotifications.md / NotificationService (nomade-back).
  */
 export type PushNotificationStatus = "active" | "inactive" | "not_exists";
@@ -425,6 +425,33 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     title: "🔴 Colaboración cancelada",
     body: "La colaboración con [Nombre del influencer] (@usuarioInstagram) ha sido cancelada",
     method: "sendNomadeCanceledPendingClientCompanyNotification",
+    status: "active",
+  },
+  {
+    id: 44,
+    name: "BrandCollabReminder1CompanyNotification",
+    context: "Recordatorio de colaboración Brand pendiente de revisión.",
+    title: "🔔 Solicitud pendiente",
+    body: "Tienes una solicitud de colaboración pendiente. Revísala a tiempo para no perderla.",
+    method: "sendPendingBrandCollabReminder1CompanyNotification",
+    status: "active",
+  },
+  {
+    id: 45,
+    name: "BrandCollabReminder2CompanyNotification",
+    context: "Segundo recordatorio de colaboración Brand pendiente.",
+    title: "🔔 Colaboración pendiente",
+    body: "Tienes una colaboración pendiente de revisión. Revísala antes de que se cancele automáticamente.",
+    method: "sendPendingBrandCollabReminder2CompanyNotification",
+    status: "active",
+  },
+  {
+    id: 46,
+    name: "BrandCollabReminder3CompanyNotification",
+    context: "Último recordatorio antes de cancelación automática.",
+    title: "⚠️ Último aviso",
+    body: "¡Ojo! Esta solicitud se cancelará pronto si no la revisas.",
+    method: "sendPendingBrandCollabReminder3CompanyNotification",
     status: "active",
   },
 ];

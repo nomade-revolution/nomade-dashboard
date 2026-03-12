@@ -566,4 +566,31 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
       "Email enviado al cliente cuando Nomade cancela una colaboración que ya había sido aceptada.",
     mailableClass: "NomadeCanceledPendingClientCompanyEmail",
   },
+  {
+    n: 57,
+    title: "PendingBrandCollabReminder1CompanyEmail",
+    subject: "Recordatorio: Tienes una solicitud de colaboración pendiente",
+    trigger: "company",
+    send_when:
+      "48 horas después de que Nomade valida la colaboración Brand (t0 + 48h). Se envía si la colaboración sigue en estado PENDING_COMPANY.",
+    mailableClass: "PendingBrandCollabReminder1CompanyEmail",
+  },
+  {
+    n: 58,
+    title: "PendingBrandCollabReminder2CompanyEmail",
+    subject: "Recordatorio: Tienes una colaboración pendiente de revisar",
+    trigger: "company",
+    send_when:
+      "96 horas después de la validación de Nomade (t0 + 96h). Se envía si la colaboración sigue en estado PENDING_COMPANY.",
+    mailableClass: "PendingBrandCollabReminder2CompanyEmail",
+  },
+  {
+    n: 59,
+    title: "PendingBrandCollabReminder3CompanyEmail",
+    subject: "⏳ Último recordatorio: solicitud de colaboración pendiente",
+    trigger: "company",
+    send_when:
+      "144 horas después de la validación de Nomade (t0 + 144h). Último recordatorio antes de la cancelación automática.",
+    mailableClass: "PendingBrandCollabReminder3CompanyEmail",
+  },
 ] as const;
