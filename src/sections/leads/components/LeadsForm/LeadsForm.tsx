@@ -131,6 +131,7 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
   const initialValues = {
     ...initialState,
     ...(typeof lead !== "string" ? lead : ""),
+    company_name: "",
     hash,
   };
 
