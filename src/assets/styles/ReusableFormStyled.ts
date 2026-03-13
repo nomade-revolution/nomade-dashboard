@@ -401,8 +401,19 @@ const ReusableFormStyled = styled.form<Props>`
       gap: 10px;
     }
 
+    &__section-header {
+      margin-bottom: 16px;
+    }
+
     &__title {
       color: ${(props) => props.theme.colors.mainColor};
+    }
+
+    &__subtitle {
+      font-size: 0.9rem;
+      color: #9aa3a7;
+      margin-top: 4px;
+      margin-bottom: 16px;
     }
 
     &__thirdparty-link {

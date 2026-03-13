@@ -423,9 +423,16 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
               </section>
 
               <section className="lead-form__section">
-                <h4 className="lead-form__title">
-                  Acceso principal a la plataforma
-                </h4>
+                <div className="lead-form__section-header">
+                  <h4 className="lead-form__title">
+                    Acceso principal a la plataforma
+                  </h4>
+                  <p className="lead-form__subtitle">
+                    Estos datos se utilizarán para crear el acceso principal a
+                    la plataforma y, a su vez, el contacto principal de la
+                    empresa.
+                  </p>
+                </div>
                 <div className="lead-form__section">
                   <div className="form-subsection">
                     <label htmlFor="name" className="form-subsection__label">
@@ -562,7 +569,15 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                 </div>
               </section>
               <section className="lead-form__section">
-                <h4 className="lead-form__title">Contactos adicionales</h4>
+                <div className="lead-form__section-header">
+                  <h4 className="lead-form__title">
+                    Contactos adicionales (opcional)
+                  </h4>
+                  <p className="lead-form__subtitle">
+                    Si necesitan añadir otros contactos para facturación,
+                    gestión o colaboraciones, pueden hacerlo aquí.
+                  </p>
+                </div>
                 <div className="datasheet-form__contact-section">
                   <button
                     type="button"
