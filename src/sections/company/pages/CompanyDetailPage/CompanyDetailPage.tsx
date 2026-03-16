@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import Loader from "sections/shared/components/Loader/Loader";
 import GoBackButton from "sections/shared/components/GoBackButton/GoBackButton";
@@ -41,6 +41,37 @@ const InfluencerDetailPage = (): React.ReactElement | null => {
     getCompany(+id!);
     getPlan(+id!);
   }, [getCompany, id, getPlan]);
+
+  // Deduplicate contacts by first_name/last_name/email/phone for display (temporary frontend patch)
+  const uniqueContacts = useMemo(() => {
+    const contacts = company.contacts ?? [];
+    const result: typeof contacts = [];
+    const seen = new Set<string>();
+    contacts.forEach(
+      (contact: {
+        first_name?: string;
+        last_name?: string;
+        name?: string;
+        surname?: string;
+        email?: string;
+        phone?: string;
+      }) => {
+        const firstName = contact.first_name ?? contact.name ?? "";
+        const lastName = contact.last_name ?? contact.surname ?? "";
+        const key = [
+          firstName,
+          lastName,
+          contact.email ?? "",
+          contact.phone ?? "",
+        ].join("|");
+        if (!seen.has(key)) {
+          seen.add(key);
+          result.push(contact);
+        }
+      },
+    );
+    return result;
+  }, [company.contacts]);
 
   if (!user) return null;
 
@@ -170,7 +201,7 @@ const InfluencerDetailPage = (): React.ReactElement | null => {
             Contactos
           </h2>
           <DashboardTable
-            bodySections={company.contacts}
+            bodySections={uniqueContacts}
             headerSections={contactsHeader}
             pageName={SectionTypes.users}
           />
