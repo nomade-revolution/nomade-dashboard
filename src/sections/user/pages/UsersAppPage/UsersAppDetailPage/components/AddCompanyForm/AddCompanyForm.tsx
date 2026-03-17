@@ -150,17 +150,27 @@ const AddCompanyForm = ({
       // caso "ya hay socialMedia" -> actualizar instagram; cada item debe tener social_media_id y account_name
       if (client?.socialMedia?.length) {
         const newSocialMedias = client.socialMedia.map((socialMedia) => ({
-          social_media_id: socialMedia.id,
+          social_media_id:
+            socialMedia.id ??
+            (socialMedia as { social_media_id?: number }).social_media_id,
           account_name:
             socialMedia.name === "Instagram"
               ? values.instagram
               : socialMedia.account_name ?? "",
         }));
-        formData.append("socialMedia", JSON.stringify(newSocialMedias));
+        // Filter out items without valid social_media_id (e.g. if API returned wrong shape)
+        const valid = newSocialMedias.filter(
+          (sm) => sm.social_media_id != null && sm.social_media_id !== "",
+        );
+        formData.append("socialMedia", JSON.stringify(valid));
       } else {
-        // caso "no hay socialMedia" -> un solo objeto en índice 0 (ambos campos mismo índice)
-        formData.append("socialMedia[0][social_media_id]", "1");
-        formData.append("socialMedia[0][account_name]", values.instagram);
+        // caso "no hay socialMedia" -> single JSON so backend never gets mixed indexed + raw
+        formData.append(
+          "socialMedia",
+          JSON.stringify([
+            { social_media_id: "1", account_name: values.instagram },
+          ]),
+        );
       }
     }
 

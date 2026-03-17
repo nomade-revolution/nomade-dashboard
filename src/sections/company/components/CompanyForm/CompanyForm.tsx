@@ -271,15 +271,25 @@ const CompanyForm = ({
     // Ensure only one representation of socialMedia: remove any existing (e.g. from generic loop or other source)
     const socialMediaKeys: string[] = [];
     formData.forEach((_, key) => {
-      if (key === "socialMedia" || key.startsWith("socialMedia[")) {
+      if (
+        key === "socialMedia" ||
+        key === "social_media" ||
+        key.startsWith("socialMedia[") ||
+        key.startsWith("social_media[")
+      ) {
         socialMediaKeys.push(key);
       }
     });
     socialMediaKeys.forEach((k) => formData.delete(k));
 
+    // Send as single JSON string so backend never receives mixed indexed + raw (which can yield two objects)
     if (values.instagram?.trim()) {
-      formData.append("socialMedia[0][social_media_id]", "1");
-      formData.append("socialMedia[0][account_name]", values.instagram.trim());
+      formData.append(
+        "socialMedia",
+        JSON.stringify([
+          { social_media_id: "1", account_name: values.instagram.trim() },
+        ]),
+      );
     }
 
     // socialMedia field removed - not needed for cms-register endpoint
