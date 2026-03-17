@@ -268,6 +268,15 @@ const CompanyForm = ({
       });
     formData.append("contacts", JSON.stringify(contactsPayload));
 
+    // Ensure only one representation of socialMedia: remove any existing (e.g. from generic loop or other source)
+    const socialMediaKeys: string[] = [];
+    formData.forEach((_, key) => {
+      if (key === "socialMedia" || key.startsWith("socialMedia[")) {
+        socialMediaKeys.push(key);
+      }
+    });
+    socialMediaKeys.forEach((k) => formData.delete(k));
+
     if (values.instagram?.trim()) {
       formData.append("socialMedia[0][social_media_id]", "1");
       formData.append("socialMedia[0][account_name]", values.instagram.trim());
@@ -316,6 +325,9 @@ const CompanyForm = ({
         planPayload,
       });
     }
+    // Temporary: inspect FormData before send to verify socialMedia is not duplicated or wrong
+    // eslint-disable-next-line no-console
+    console.log("[CompanyForm] formData entries", [...formData.entries()]);
     const response = await onSubmit(
       formData,
       client && client?.id,

@@ -132,31 +132,35 @@ const AddCompanyForm = ({
       });
     }
 
+    // Ensure only one representation of socialMedia (remove any from generic loop or other source)
+    const socialMediaKeys: string[] = [];
+    formData.forEach((_, key) => {
+      if (
+        key === "socialMedia" ||
+        key === "social_media" ||
+        key.startsWith("socialMedia[") ||
+        key.startsWith("social_media[")
+      ) {
+        socialMediaKeys.push(key);
+      }
+    });
+    socialMediaKeys.forEach((k) => formData.delete(k));
+
     if (values.instagram) {
-      // caso "ya hay socialMedia" -> buscar y actualizar instagram
+      // caso "ya hay socialMedia" -> actualizar instagram; cada item debe tener social_media_id y account_name
       if (client?.socialMedia?.length) {
-        const newSocialMedias = client.socialMedia.map((socialMedia) => {
-          if (socialMedia.name === "Instagram") {
-            return {
-              social_media_id: socialMedia.id,
-              account_name: values.instagram,
-            };
-          }
-          return socialMedia;
-        });
+        const newSocialMedias = client.socialMedia.map((socialMedia) => ({
+          social_media_id: socialMedia.id,
+          account_name:
+            socialMedia.name === "Instagram"
+              ? values.instagram
+              : socialMedia.account_name ?? "",
+        }));
         formData.append("socialMedia", JSON.stringify(newSocialMedias));
       } else {
-        // caso "no hay socialMedia" -> crear uno nuevo con instagram
-        // const newSocialMedias = [
-        //   {
-        //     social_media_id: 1, // hardcoded id for instagram
-        //     account_name: values.instagram,
-        //   },
-        // ];
-        // formData.append("socialMedia", JSON.stringify(newSocialMedias));
+        // caso "no hay socialMedia" -> un solo objeto en índice 0 (ambos campos mismo índice)
         formData.append("socialMedia[0][social_media_id]", "1");
         formData.append("socialMedia[0][account_name]", values.instagram);
-        // formData.append("socialMedia[0][followers]", "10");
       }
     }
 
