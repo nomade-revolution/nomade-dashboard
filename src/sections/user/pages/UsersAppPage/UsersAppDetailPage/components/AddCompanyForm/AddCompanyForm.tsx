@@ -160,7 +160,7 @@ const AddCompanyForm = ({
         }));
         // Filter out items without valid social_media_id (e.g. if API returned wrong shape)
         const valid = newSocialMedias.filter(
-          (sm) => sm.social_media_id != null && sm.social_media_id !== "",
+          (sm) => sm.social_media_id != null,
         );
         formData.append("socialMedia", JSON.stringify(valid));
       } else {

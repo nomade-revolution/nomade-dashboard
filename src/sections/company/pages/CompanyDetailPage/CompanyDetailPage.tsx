@@ -22,6 +22,7 @@ import { usePlansContext } from "sections/plans/PlansContext/usePlansContext";
 import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
 import contactsHeader from "./utils/contactsHeader";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
+import { Contact } from "modules/contact/domain/Contact";
 
 const InfluencerDetailPage = (): React.ReactElement | null => {
   const { user } = useAuthContext();
@@ -55,6 +56,8 @@ const InfluencerDetailPage = (): React.ReactElement | null => {
         surname?: string;
         email?: string;
         phone?: string;
+        type?: string;
+        type_id?: number;
       }) => {
         const firstName = contact.first_name ?? contact.name ?? "";
         const lastName = contact.last_name ?? contact.surname ?? "";
@@ -66,7 +69,15 @@ const InfluencerDetailPage = (): React.ReactElement | null => {
         ].join("|");
         if (!seen.has(key)) {
           seen.add(key);
-          result.push(contact);
+          const normalizedContact: Contact = {
+            name: contact.name ?? contact.first_name ?? "",
+            surname: contact.surname ?? contact.last_name ?? "",
+            email: contact.email ?? "",
+            phone: contact.phone ?? "",
+            type: contact.type ?? "",
+            type_id: contact.type_id ?? 0,
+          };
+          result.push(normalizedContact);
         }
       },
     );
