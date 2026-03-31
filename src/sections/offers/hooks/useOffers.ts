@@ -11,6 +11,9 @@ import {
 import { normalizeWeekData } from "sections/offers/utils/normalizeTimeFormat";
 
 const useOffers = () => {
+  const hasValidAddressId = (value: unknown): value is number =>
+    Number.isInteger(value) && Number(value) > 0;
+
   const handleOfferFormData = (
     values: OfferFormStructure,
     offerable:
@@ -59,18 +62,20 @@ const useOffers = () => {
       if (Array.isArray(lodgingArray) && lodgingArray.length > 0) {
         // Backend expects array for Lodging
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        finalOfferable = lodgingArray.map((item) => ({
-          address_id: item.address_id,
-          min_guests: item.min_guests || 0,
-          max_guests: item.max_guests || 0,
-          advance_notice_time:
-            values.advance_notice_time !== undefined
-              ? values.advance_notice_time
-              : item.advance_notice_time || 0,
-          // Week is optional for Lodging (backend auto-adds full week if not provided)
-          ...(item.week && { week: normalizeWeekData(item.week) }),
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        })) as any;
+        finalOfferable = lodgingArray
+          .filter((item) => hasValidAddressId(item?.address_id))
+          .map((item) => ({
+            address_id: item.address_id,
+            min_guests: item.min_guests || 0,
+            max_guests: item.max_guests || 0,
+            advance_notice_time:
+              values.advance_notice_time !== undefined
+                ? values.advance_notice_time
+                : item.advance_notice_time || 0,
+            // Week is optional for Lodging (backend auto-adds full week if not provided)
+            ...(item.week && { week: normalizeWeekData(item.week) }),
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          })) as any;
       }
     } else if (offerable_type === "App\\Models\\OfferableBrand") {
       // For Brand offers: Always create the offerable object with advance_notice_time
@@ -119,34 +124,32 @@ const useOffers = () => {
           // Backend expects array of objects, each with advance_notice_time
           // Normalize week data to ensure proper time format (HH:mm:ss)
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          finalOfferable = offerableArray.map((item) => ({
-            address_id: item.address_id,
-            min_guests: item.min_guests || 0,
-            max_guests: item.max_guests || 0,
-            week: item.week ? normalizeWeekData(item.week) : [],
-            advance_notice_time:
-              values.advance_notice_time !== undefined
-                ? values.advance_notice_time
-                : item.advance_notice_time || 0,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          })) as any;
-        } else {
-          // Handle case where offerable is not an array or empty
-          finalOfferable = [
-            {
-              address_id: 0,
-              min_guests: 0,
-              max_guests: 0,
-              week: [],
+          finalOfferable = offerableArray
+            .filter((item) => hasValidAddressId(item?.address_id))
+            .map((item) => ({
+              address_id: Number(item.address_id),
+              min_guests: item.min_guests || 0,
+              max_guests: item.max_guests || 0,
+              week: item.week ? normalizeWeekData(item.week) : [],
               advance_notice_time:
                 values.advance_notice_time !== undefined
                   ? values.advance_notice_time
-                  : 0,
-            },
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          ] as any;
+                  : item.advance_notice_time || 0,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            })) as any;
         }
       }
+    }
+
+    if (
+      (offerable_type === "App\\Models\\OfferableRestaurant" ||
+        offerable_type === "App\\Models\\OfferableActivity" ||
+        offerable_type === "App\\Models\\OfferableLodging") &&
+      Array.isArray(finalOfferable)
+    ) {
+      finalOfferable = finalOfferable.filter((item) =>
+        hasValidAddressId((item as { address_id?: unknown }).address_id),
+      ) as typeof finalOfferable;
     }
 
     formData.append("offerable", JSON.stringify(finalOfferable));
@@ -163,9 +166,8 @@ const useOffers = () => {
     });
 
     images.forEach((img) => {
-      const file = img instanceof File ? img : (img as { file?: File })?.file;
-      if (file instanceof File) {
-        formData.append("images[]", file);
+      if (img instanceof File) {
+        formData.append("images[]", img);
       }
     });
 

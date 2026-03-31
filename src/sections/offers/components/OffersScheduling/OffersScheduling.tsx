@@ -111,6 +111,7 @@ const OffersScheduling = ({
   const [isAddressModalOpen, setIsAddressModalOpen] = useState<boolean>(false);
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [editingAddressId, setEditingAddressId] = useState<number | null>(null);
+  const [scheduleError, setScheduleError] = useState<string>("");
 
   const schedulingStateSelected =
     type === OfferTypes.restaurant
@@ -333,6 +334,21 @@ const OffersScheduling = ({
 
   const handleOfferTimetables = () => {
     const updatedSchedulingState = { ...schedulingState };
+    const selectedAddressId = Number.parseInt(address, 10);
+    const requiresAddress =
+      type === OfferTypes.restaurant ||
+      type === OfferTypes.activity ||
+      type === OfferTypes.lodging;
+
+    if (
+      requiresAddress &&
+      (!Number.isInteger(selectedAddressId) || selectedAddressId <= 0)
+    ) {
+      setScheduleError("Debes seleccionar una direccion antes de guardar.");
+      return;
+    }
+
+    setScheduleError("");
 
     switch (type) {
       case OfferTypes.restaurant: {
@@ -340,97 +356,72 @@ const OffersScheduling = ({
           offer?.type.toLocaleLowerCase() as keyof typeof schedulingState;
 
         const newOfferableRestaurant: OfferableRestaurant = {
-          address_id: +address,
+          address_id: selectedAddressId,
           min_guests: +getFieldProps("min_guests").value,
           max_guests: +getFieldProps("max_guests").value || 0,
           week: week || [],
           advance_notice_time: +getFieldProps("advance_notice_time").value || 0,
         };
 
-        if (
-          selectedIndex !== null &&
-          schedulingState.restaurant.length > 0 &&
-          schedulingState.restaurant[selectedIndex]
-        ) {
-          updatedSchedulingState[key] = schedulingState.restaurant.map(
-            (item, idx) =>
-              idx === selectedIndex ? newOfferableRestaurant : item,
-          ) as never;
+        const indexByAddress = schedulingState.restaurant.findIndex(
+          (item) => item.address_id === selectedAddressId,
+        );
+        const nextRestaurant =
+          indexByAddress !== -1
+            ? schedulingState.restaurant.map((item, idx) =>
+                idx === indexByAddress ? newOfferableRestaurant : item,
+              )
+            : [...schedulingState.restaurant, newOfferableRestaurant];
+        updatedSchedulingState[key] = nextRestaurant as never;
 
-          handleScheduling(
-            "restaurant",
-            updatedSchedulingState[key] as OfferableRestaurant[],
-          );
-        } else {
-          updatedSchedulingState[key] = [
-            ...schedulingState.restaurant,
-            newOfferableRestaurant,
-          ] as never;
-
-          handleScheduling(
-            "restaurant",
-            updatedSchedulingState[key] as OfferableRestaurant[],
-          );
-        }
+        handleScheduling(
+          "restaurant",
+          updatedSchedulingState[key] as OfferableRestaurant[],
+        );
         break;
       }
 
       case OfferTypes.lodging: {
         const newOfferableLodging: OfferableLodging = {
-          address_id: +address,
+          address_id: selectedAddressId,
           min_guests: +getFieldProps("min_guests").value || 0,
           max_guests: +getFieldProps("max_guests").value || 0,
         };
 
-        if (
-          selectedIndex !== null &&
-          schedulingState.lodging.length > 0 &&
-          schedulingState.lodging[selectedIndex]
-        ) {
-          updatedSchedulingState.lodging = schedulingState.lodging.map(
-            (item, idx) => (idx === selectedIndex ? newOfferableLodging : item),
-          );
+        const indexByAddress = schedulingState.lodging.findIndex(
+          (item) => item.address_id === selectedAddressId,
+        );
+        updatedSchedulingState.lodging =
+          indexByAddress !== -1
+            ? schedulingState.lodging.map((item, idx) =>
+                idx === indexByAddress ? newOfferableLodging : item,
+              )
+            : [...schedulingState.lodging, newOfferableLodging];
 
-          handleScheduling("lodging", updatedSchedulingState.lodging);
-        } else {
-          updatedSchedulingState.lodging = [
-            ...schedulingState.lodging,
-            newOfferableLodging,
-          ];
-
-          handleScheduling("lodging", updatedSchedulingState.lodging);
-        }
+        handleScheduling("lodging", updatedSchedulingState.lodging);
         break;
       }
 
       case OfferTypes.activity: {
         const newOfferableActivity: OfferableActivity = {
-          address_id: +address,
+          address_id: selectedAddressId,
           min_guests: +getFieldProps("min_guests").value || 0,
           max_guests: +getFieldProps("max_guests").value || 0,
           week: week,
           advance_notice_time: +getFieldProps("advance_notice_time").value || 0,
         };
 
-        if (
-          selectedIndex !== null &&
-          schedulingState.activity.length > 0 &&
-          schedulingState.activity[selectedIndex]
-        ) {
-          updatedSchedulingState.activity = schedulingState.activity.map(
-            (item, idx) =>
-              idx === selectedIndex ? newOfferableActivity : item,
-          );
+        const indexByAddress = schedulingState.activity.findIndex(
+          (item) => item.address_id === selectedAddressId,
+        );
+        updatedSchedulingState.activity =
+          indexByAddress !== -1
+            ? schedulingState.activity.map((item, idx) =>
+                idx === indexByAddress ? newOfferableActivity : item,
+              )
+            : [...schedulingState.activity, newOfferableActivity];
 
-          handleScheduling("activity", updatedSchedulingState.activity);
-        } else {
-          updatedSchedulingState.activity = [
-            ...schedulingState.activity,
-            newOfferableActivity,
-          ];
-
-          handleScheduling("activity", updatedSchedulingState.activity);
-        }
+        handleScheduling("activity", updatedSchedulingState.activity);
         break;
       }
 
@@ -462,7 +453,6 @@ const OffersScheduling = ({
     });
     setWeek([]);
     setSelectedDays([]);
-    setAddress("", null);
     setFieldValue("min_guests", 0);
     setFieldValue("max_guests", 0);
     setFieldValue("advance_notice_time", 0);
@@ -487,8 +477,14 @@ const OffersScheduling = ({
             <ReusableSelect
               label="Direcciones"
               options={addresses}
-              // @ts-expect-error TODO: fix this
-              setValue={(value) => setAddress(value, getIndexAddress(value))}
+              setValue={(value) => {
+                const parsedAddressId = Number.parseInt(value, 10);
+                const nextIndex = Number.isInteger(parsedAddressId)
+                  ? getIndexAddress(parsedAddressId)
+                  : null;
+                setAddress(value, nextIndex);
+                setScheduleError("");
+              }}
               value={address}
             />
             <button
@@ -685,11 +681,20 @@ const OffersScheduling = ({
             type="button"
             className="scheduling__save-btn"
             onClick={handleOfferTimetables}
+            disabled={
+              (type === OfferTypes.restaurant ||
+                type === OfferTypes.activity ||
+                type === OfferTypes.lodging) &&
+              (!address || Number.parseInt(address, 10) <= 0)
+            }
           >
             Guardar horario
           </button>
         ) : null}
       </div>
+      {scheduleError ? (
+        <span className="form-subsection__error-message">{scheduleError}</span>
+      ) : null}
 
       <ReusableModal
         children={

@@ -99,6 +99,7 @@ const OffersForm = ({
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
   const [citiesFormat, setCitiesFormat] = useState<OptionsStructure[]>([]);
   const [file, setFile] = useState<File[] | []>([]);
+  const [submitError, setSubmitError] = useState<string>("");
   const [offerResume, setOfferResume] = useState<
     | OfferableRestaurant[]
     | OfferableLodging[]
@@ -366,6 +367,80 @@ const OffersForm = ({
           ? offerResumeEdit
           : parsedOfferResume;
 
+    const hasValidSlots = (
+      weekData:
+        | OfferableRestaurant["week"]
+        | OfferableActivity["week"]
+        | unknown,
+    ) =>
+      Array.isArray(weekData) &&
+      weekData.some(
+        (day) =>
+          Array.isArray(day) &&
+          day.some(
+            (d) =>
+              Array.isArray(
+                (
+                  d as {
+                    time_slot?: Array<{ from_time?: string; to_time?: string }>;
+                  }
+                ).time_slot,
+              ) &&
+              (
+                d as {
+                  time_slot: Array<{ from_time?: string; to_time?: string }>;
+                }
+              ).time_slot.some((slot) => !!slot.from_time && !!slot.to_time),
+          ),
+      );
+
+    const sanitizeOfferables = (
+      data: unknown,
+      type: OfferTypes | string,
+    ): unknown => {
+      if (!Array.isArray(data)) {
+        return data;
+      }
+
+      const filtered = data.filter((item) => {
+        const addressId = (item as { address_id?: unknown }).address_id;
+        if (!Number.isInteger(addressId) || Number(addressId) <= 0) {
+          return false;
+        }
+
+        if (type === OfferTypes.restaurant || type === OfferTypes.activity) {
+          return hasValidSlots(
+            (item as OfferableRestaurant | OfferableActivity).week,
+          );
+        }
+
+        return true;
+      });
+
+      return filtered;
+    };
+
+    const sanitizedOfferableData = sanitizeOfferables(
+      offerableData,
+      formState.type,
+    );
+    const requiresArrayOfferables =
+      formState.type === OfferTypes.restaurant ||
+      formState.type === OfferTypes.activity ||
+      formState.type === OfferTypes.lodging;
+
+    if (
+      requiresArrayOfferables &&
+      (!Array.isArray(sanitizedOfferableData) ||
+        sanitizedOfferableData.length === 0)
+    ) {
+      setSubmitError("Debes añadir al menos un horario a una direccion.");
+      setSubmitting(false);
+      return;
+    }
+
+    setSubmitError("");
+
     // Ensure offerableData is not empty - if it is, backend will fail
     // if (mode === "edit" && (!offerableData || (Array.isArray(offerableData) && offerableData.length === 0))) {
     //   Warning: No offerable data to submit. This may cause backend errors.
@@ -373,7 +448,7 @@ const OffersForm = ({
 
     const formData = handleOfferFormData(
       values,
-      offerableData as never,
+      sanitizedOfferableData as never,
       formState.offerable_type,
       formState.location,
       location_id,
@@ -866,6 +941,7 @@ const OffersForm = ({
                     setAddress={(value, index) => {
                       handleFormStateChange("address", value);
                       setSelectedIndex(index);
+                      setSubmitError("");
                     }}
                     handleScheduling={handleSchedulingStateChange}
                     schedulingState={schedulingState}
@@ -893,6 +969,11 @@ const OffersForm = ({
               paddingTop: "20px",
             }}
           >
+            {submitError ? (
+              <span className="form-subsection__error-message">
+                {submitError}
+              </span>
+            ) : null}
             <button
               type="submit"
               disabled={
