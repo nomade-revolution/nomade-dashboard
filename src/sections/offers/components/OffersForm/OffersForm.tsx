@@ -376,22 +376,18 @@ const OffersForm = ({
       Array.isArray(weekData) &&
       weekData.some(
         (day) =>
-          Array.isArray(day) &&
-          day.some(
-            (d) =>
-              Array.isArray(
-                (
-                  d as {
-                    time_slot?: Array<{ from_time?: string; to_time?: string }>;
-                  }
-                ).time_slot,
-              ) &&
-              (
-                d as {
-                  time_slot: Array<{ from_time?: string; to_time?: string }>;
-                }
-              ).time_slot.some((slot) => !!slot.from_time && !!slot.to_time),
-          ),
+          Array.isArray(
+            (
+              day as {
+                time_slot?: Array<{ from_time?: string; to_time?: string }>;
+              }
+            ).time_slot,
+          ) &&
+          (
+            day as {
+              time_slot: Array<{ from_time?: string; to_time?: string }>;
+            }
+          ).time_slot.some((slot) => !!slot.from_time && !!slot.to_time),
       );
 
     const sanitizeOfferables = (
@@ -440,6 +436,11 @@ const OffersForm = ({
     }
 
     setSubmitError("");
+    console.log("[OffersForm] offerables before submit", {
+      type: formState.type,
+      offerableData,
+      sanitizedOfferableData,
+    });
 
     // Ensure offerableData is not empty - if it is, backend will fail
     // if (mode === "edit" && (!offerableData || (Array.isArray(offerableData) && offerableData.length === 0))) {
@@ -951,8 +952,6 @@ const OffersForm = ({
                     // @ts-expect-error TODO: fix this
                     week={week}
                     offer={offer!}
-                    selectedIndex={selectedIndex}
-                    setSelectedIndex={setSelectedIndex}
                   />
                 </section>
               </section>

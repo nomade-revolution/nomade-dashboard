@@ -34,6 +34,7 @@ import { Addresses } from "../OffersForm/OffersForm";
 import { FullAddress } from "modules/address/domain/Address";
 import { useAddressContext } from "sections/address/AddressContext/useAddressContext";
 import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
+import { offersTimetable } from "sections/offers/utils/offersTimetable";
 
 interface Props {
   type: OfferTypes | string;
@@ -77,7 +78,6 @@ interface Props {
   setSelectedDays: Dispatch<SetStateAction<SelectedDay[]>>;
   setWeek: (value: WeekDay[]) => void;
   offer: FullOffer;
-  selectedIndex: number | null;
   addresses: Addresses[];
   setAddresses: Dispatch<SetStateAction<Addresses[]>>;
 }
@@ -96,7 +96,6 @@ const OffersScheduling = ({
   setSelectedDays,
   setWeek,
   offer,
-  selectedIndex,
   addresses,
   setAddresses,
 }: Props): React.ReactElement => {
@@ -113,51 +112,79 @@ const OffersScheduling = ({
   const [editingAddressId, setEditingAddressId] = useState<number | null>(null);
   const [scheduleError, setScheduleError] = useState<string>("");
 
-  const schedulingStateSelected =
-    type === OfferTypes.restaurant
-      ? schedulingState.restaurant
-      : type === OfferTypes.lodging
-        ? schedulingState.lodging
-        : type === OfferTypes.delivery
-          ? schedulingState.delivery
-          : type === OfferTypes.activity
-            ? schedulingState.activity
-            : schedulingState.brand;
-
   useEffect(() => {
-    const parsedSchedulingState = schedulingStateSelected as
-      | OfferableRestaurant[]
-      | OfferableActivity[]
-      | OfferableLodging[];
-    if (parsedSchedulingState[0]?.min_guests !== undefined) {
-      setFieldValue("min_guests", parsedSchedulingState[0].min_guests || 0);
+    const selectedAddressId = Number.parseInt(address, 10);
+    const hasValidAddress =
+      Number.isInteger(selectedAddressId) && selectedAddressId > 0;
+
+    if (!hasValidAddress) {
+      setWeek([]);
+      setSelectedDays([]);
+      return;
     }
 
-    if (parsedSchedulingState[0]?.max_guests !== undefined) {
-      setFieldValue("max_guests", parsedSchedulingState[0].max_guests || 0);
+    const byTypeOfferables =
+      type === OfferTypes.restaurant
+        ? schedulingState.restaurant
+        : type === OfferTypes.activity
+          ? schedulingState.activity
+          : type === OfferTypes.lodging
+            ? schedulingState.lodging
+            : [];
+
+    const existingOfferable = Array.isArray(byTypeOfferables)
+      ? byTypeOfferables.find((item) => item.address_id === selectedAddressId)
+      : undefined;
+
+    if (!existingOfferable) {
+      setWeek([]);
+      setSelectedDays([]);
+      setFieldValue("min_guests", 0);
+      setFieldValue("max_guests", 0);
+      setFieldValue("advance_notice_time", 0);
+      return;
     }
 
-    if (
-      (parsedSchedulingState[0] as OfferableRestaurant | OfferableActivity)
-        ?.advance_notice_time !== undefined
-    ) {
-      setFieldValue(
-        "advance_notice_time",
-        (parsedSchedulingState[0] as OfferableRestaurant | OfferableActivity)
-          .advance_notice_time || 0,
+    setFieldValue("min_guests", existingOfferable.min_guests || 0);
+    setFieldValue("max_guests", existingOfferable.max_guests || 0);
+    setFieldValue(
+      "advance_notice_time",
+      "advance_notice_time" in existingOfferable
+        ? existingOfferable.advance_notice_time || 0
+        : 0,
+    );
+
+    const existingWeek = (
+      existingOfferable as OfferableRestaurant | OfferableActivity
+    ).week;
+    const normalizedWeek = Array.isArray(existingWeek)
+      ? (existingWeek as unknown as WeekDay[])
+      : [];
+
+    setWeek(normalizedWeek);
+
+    const mappedSelectedDays: SelectedDay[] = normalizedWeek.map((day) => {
+      const timetableDay = offersTimetable.find(
+        (item) => item.day_number === day.day_of_week,
       );
-    }
-  }, [schedulingStateSelected, setFieldValue]);
-
-  useEffect(() => {
-    const allWeekDays = [0, 1, 2, 3, 4, 5, 6];
-    allWeekDays.forEach((day) => {
-      setFieldValue(`from_time_day_${day}_1`, "");
-      setFieldValue(`to_time_day_${day}_1`, "");
-      setFieldValue(`from_time_day_${day}_2`, "");
-      setFieldValue(`to_time_day_${day}_2`, "");
+      return {
+        day_number: day.day_of_week,
+        day_name: day.day_name || timetableDay?.name || "",
+        shifts: {
+          firstShift: {
+            from_time: day.time_slot?.[0]?.from_time || "",
+            to_time: day.time_slot?.[0]?.to_time || "",
+          },
+          secondShift: {
+            from_time: day.time_slot?.[1]?.from_time || "",
+            to_time: day.time_slot?.[1]?.to_time || "",
+          },
+        },
+      };
     });
-  }, [selectedIndex, setFieldValue]);
+
+    setSelectedDays(mappedSelectedDays);
+  }, [address, schedulingState, type, setFieldValue, setSelectedDays, setWeek]);
 
   const handleCreateAddress = async (address: FullAddress) => {
     if (!address) return;
@@ -349,6 +376,38 @@ const OffersScheduling = ({
     }
 
     setScheduleError("");
+    const sanitizeWeek = (weekData: unknown): WeekDay[] => {
+      if (!Array.isArray(weekData)) {
+        return [];
+      }
+
+      return weekData
+        .map((day) => {
+          const timeSlots = Array.isArray(
+            (day as { time_slot?: unknown }).time_slot,
+          )
+            ? (
+                day as {
+                  time_slot: Array<{ from_time?: string; to_time?: string }>;
+                }
+              ).time_slot
+            : [];
+          const validTimeSlots = timeSlots.filter(
+            (slot) => !!slot?.from_time && !!slot?.to_time,
+          );
+
+          return {
+            ...(day as WeekDay),
+            time_slot: validTimeSlots,
+          };
+        })
+        .filter(
+          (day) =>
+            Array.isArray((day as { time_slot?: unknown }).time_slot) &&
+            (day as { time_slot: unknown[] }).time_slot.length > 0,
+        );
+    };
+    const cleanedWeek = sanitizeWeek(week);
 
     switch (type) {
       case OfferTypes.restaurant: {
@@ -359,7 +418,7 @@ const OffersScheduling = ({
           address_id: selectedAddressId,
           min_guests: +getFieldProps("min_guests").value,
           max_guests: +getFieldProps("max_guests").value || 0,
-          week: week || [],
+          week: cleanedWeek as unknown as WeekDay[][],
           advance_notice_time: +getFieldProps("advance_notice_time").value || 0,
         };
 
@@ -373,6 +432,11 @@ const OffersScheduling = ({
               )
             : [...schedulingState.restaurant, newOfferableRestaurant];
         updatedSchedulingState[key] = nextRestaurant as never;
+        console.log("[OffersScheduling] restaurant upsert", {
+          selectedAddressId,
+          cleanedWeek,
+          nextOfferables: updatedSchedulingState[key],
+        });
 
         handleScheduling(
           "restaurant",
@@ -407,7 +471,7 @@ const OffersScheduling = ({
           address_id: selectedAddressId,
           min_guests: +getFieldProps("min_guests").value || 0,
           max_guests: +getFieldProps("max_guests").value || 0,
-          week: week,
+          week: cleanedWeek as unknown as WeekDay[][],
           advance_notice_time: +getFieldProps("advance_notice_time").value || 0,
         };
 
@@ -420,6 +484,11 @@ const OffersScheduling = ({
                 idx === indexByAddress ? newOfferableActivity : item,
               )
             : [...schedulingState.activity, newOfferableActivity];
+        console.log("[OffersScheduling] activity upsert", {
+          selectedAddressId,
+          cleanedWeek,
+          nextOfferables: updatedSchedulingState.activity,
+        });
 
         handleScheduling("activity", updatedSchedulingState.activity);
         break;
@@ -440,28 +509,17 @@ const OffersScheduling = ({
       default:
         break;
     }
-
-    week.forEach((day) => {
-      // @ts-expect-error TODO: fix this
-      setFieldValue(`from_time_day_${day.day_of_week}_1`, "");
-      // @ts-expect-error TODO: fix this
-      setFieldValue(`to_time_day_${day.day_of_week}_1`, "");
-      // @ts-expect-error TODO: fix this
-      setFieldValue(`from_time_day_${day.day_of_week}_2`, "");
-      // @ts-expect-error TODO: fix this
-      setFieldValue(`to_time_day_${day.day_of_week}_2`, "");
-    });
-    setWeek([]);
-    setSelectedDays([]);
-    setFieldValue("min_guests", 0);
-    setFieldValue("max_guests", 0);
-    setFieldValue("advance_notice_time", 0);
   };
 
   const getIndexAddress = (addressId: number) => {
     const index = addresses.findIndex((address) => address.id === addressId);
     return index !== -1 ? index : null;
   };
+
+  const addressOptions = addresses.map((item) => ({
+    ...item,
+    value: String(item.id),
+  }));
 
   return (
     <OfferSchedulingStyled className="scheduling">
@@ -476,7 +534,7 @@ const OffersScheduling = ({
           >
             <ReusableSelect
               label="Direcciones"
-              options={addresses}
+              options={addressOptions}
               setValue={(value) => {
                 const parsedAddressId = Number.parseInt(value, 10);
                 const nextIndex = Number.isInteger(parsedAddressId)
@@ -533,14 +591,7 @@ const OffersScheduling = ({
                       | OfferableRestaurant
                       | OfferableActivity
                       | OfferableLodging
-                  ).min_guests ??
-                  (
-                    schedulingStateSelected as
-                      | OfferableRestaurant[]
-                      | OfferableActivity[]
-                      | OfferableLodging[]
-                  )[0]?.min_guests ??
-                  0
+                  ).min_guests ?? 0
                 }
               />
               {(
@@ -578,14 +629,7 @@ const OffersScheduling = ({
                       | OfferableRestaurant
                       | OfferableActivity
                       | OfferableLodging
-                  ).max_guests ??
-                  (
-                    schedulingStateSelected as
-                      | OfferableRestaurant[]
-                      | OfferableActivity[]
-                      | OfferableLodging[]
-                  )[0]?.max_guests ??
-                  0
+                  ).max_guests ?? 0
                 }
               />
               {(
