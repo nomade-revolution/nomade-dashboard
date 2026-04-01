@@ -36,6 +36,11 @@ import { useAddressContext } from "sections/address/AddressContext/useAddressCon
 import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
 import { offersTimetable } from "sections/offers/utils/offersTimetable";
 
+type WeekScheduleSlot = { from_time: string; to_time: string };
+type WeekScheduleDay = Omit<WeekDay, "time_slot"> & {
+  time_slot: WeekScheduleSlot[];
+};
+
 interface Props {
   type: OfferTypes | string;
   errors: FormikErrors<
@@ -158,26 +163,27 @@ const OffersScheduling = ({
       existingOfferable as OfferableRestaurant | OfferableActivity
     ).week;
     const normalizedWeek = Array.isArray(existingWeek)
-      ? (existingWeek as unknown as WeekDay[])
+      ? (existingWeek as unknown as WeekScheduleDay[])
       : [];
 
-    setWeek(normalizedWeek);
+    setWeek(normalizedWeek as unknown as WeekDay[]);
 
     const mappedSelectedDays: SelectedDay[] = normalizedWeek.map((day) => {
       const timetableDay = offersTimetable.find(
         (item) => item.day_number === day.day_of_week,
       );
+      const daySlots = Array.isArray(day.time_slot) ? day.time_slot : [];
       return {
         day_number: day.day_of_week,
         day_name: day.day_name || timetableDay?.name || "",
         shifts: {
           firstShift: {
-            from_time: day.time_slot?.[0]?.from_time || "",
-            to_time: day.time_slot?.[0]?.to_time || "",
+            from_time: daySlots[0]?.from_time || "",
+            to_time: daySlots[0]?.to_time || "",
           },
           secondShift: {
-            from_time: day.time_slot?.[1]?.from_time || "",
-            to_time: day.time_slot?.[1]?.to_time || "",
+            from_time: daySlots[1]?.from_time || "",
+            to_time: daySlots[1]?.to_time || "",
           },
         },
       };
@@ -376,7 +382,7 @@ const OffersScheduling = ({
     }
 
     setScheduleError("");
-    const sanitizeWeek = (weekData: unknown): WeekDay[] => {
+    const sanitizeWeek = (weekData: unknown): WeekScheduleDay[] => {
       if (!Array.isArray(weekData)) {
         return [];
       }
@@ -393,11 +399,15 @@ const OffersScheduling = ({
               ).time_slot
             : [];
           const validTimeSlots = timeSlots.filter(
-            (slot) => !!slot?.from_time && !!slot?.to_time,
+            (slot): slot is WeekScheduleSlot =>
+              typeof slot?.from_time === "string" &&
+              slot.from_time.length > 0 &&
+              typeof slot?.to_time === "string" &&
+              slot.to_time.length > 0,
           );
 
           return {
-            ...(day as WeekDay),
+            ...(day as WeekScheduleDay),
             time_slot: validTimeSlots,
           };
         })
