@@ -50,13 +50,17 @@ const OffersTimetable = ({
 }: Props): React.ReactElement => {
   const getValidSlotsFromFormik = (dayNumber: number) => {
     const firstShiftFrom =
-      (getFieldProps(`from_time_day_${dayNumber}_1`).value as string) || "";
+      (getFieldProps(`from_time_day_${dayNumber}_1`)
+        .value as unknown as string) || "";
     const firstShiftTo =
-      (getFieldProps(`to_time_day_${dayNumber}_1`).value as string) || "";
+      (getFieldProps(`to_time_day_${dayNumber}_1`)
+        .value as unknown as string) || "";
     const secondShiftFrom =
-      (getFieldProps(`from_time_day_${dayNumber}_2`).value as string) || "";
+      (getFieldProps(`from_time_day_${dayNumber}_2`)
+        .value as unknown as string) || "";
     const secondShiftTo =
-      (getFieldProps(`to_time_day_${dayNumber}_2`).value as string) || "";
+      (getFieldProps(`to_time_day_${dayNumber}_2`)
+        .value as unknown as string) || "";
 
     const slots: Array<{ from_time: string; to_time: string }> = [];
     if (firstShiftFrom && firstShiftTo) {
