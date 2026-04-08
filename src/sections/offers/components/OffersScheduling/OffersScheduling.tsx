@@ -116,6 +116,8 @@ const OffersScheduling = ({
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
   const [editingAddressId, setEditingAddressId] = useState<number | null>(null);
   const [scheduleError, setScheduleError] = useState<string>("");
+  const [scheduleSaved, setScheduleSaved] = useState<boolean>(false);
+  const [showScheduleToast, setShowScheduleToast] = useState<boolean>(false);
 
   useEffect(() => {
     const selectedAddressId = Number.parseInt(address, 10);
@@ -191,6 +193,10 @@ const OffersScheduling = ({
 
     setSelectedDays(mappedSelectedDays);
   }, [address, schedulingState, type, setFieldValue, setSelectedDays, setWeek]);
+
+  useEffect(() => {
+    setScheduleSaved(false);
+  }, [address, week]);
 
   const handleCreateAddress = async (address: FullAddress) => {
     if (!address) return;
@@ -519,6 +525,12 @@ const OffersScheduling = ({
       default:
         break;
     }
+
+    setScheduleSaved(true);
+    setShowScheduleToast(true);
+    window.setTimeout(() => {
+      setShowScheduleToast(false);
+    }, 2500);
   };
 
   const getIndexAddress = (addressId: number) => {
@@ -533,6 +545,24 @@ const OffersScheduling = ({
 
   return (
     <OfferSchedulingStyled className="scheduling">
+      {showScheduleToast ? (
+        <div
+          style={{
+            position: "fixed",
+            top: "24px",
+            right: "24px",
+            background: "#335d53",
+            color: "#fff",
+            padding: "10px 14px",
+            borderRadius: "8px",
+            zIndex: 2000,
+            fontWeight: 600,
+          }}
+        >
+          Horario guardado correctamente
+        </div>
+      ) : null}
+
       {(type === OfferTypes.restaurant ||
         type === OfferTypes.activity ||
         type === OfferTypes.lodging) && (
@@ -746,6 +776,12 @@ const OffersScheduling = ({
           </button>
         ) : null}
       </div>
+      {scheduleSaved ? (
+        <p style={{ color: "#666", marginTop: "8px", textAlign: "right" }}>
+          Horario modificado. Recuerda guardar la oferta para aplicar los
+          cambios
+        </p>
+      ) : null}
       {scheduleError ? (
         <span className="form-subsection__error-message">{scheduleError}</span>
       ) : null}
