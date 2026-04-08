@@ -48,6 +48,28 @@ const OffersTimetable = ({
   setFieldValue,
   offer,
 }: Props): React.ReactElement => {
+  const getValidSlotsFromFormik = (dayNumber: number) => {
+    const firstShiftFrom =
+      (getFieldProps(`from_time_day_${dayNumber}_1`).value as string) || "";
+    const firstShiftTo =
+      (getFieldProps(`to_time_day_${dayNumber}_1`).value as string) || "";
+    const secondShiftFrom =
+      (getFieldProps(`from_time_day_${dayNumber}_2`).value as string) || "";
+    const secondShiftTo =
+      (getFieldProps(`to_time_day_${dayNumber}_2`).value as string) || "";
+
+    const slots: Array<{ from_time: string; to_time: string }> = [];
+    if (firstShiftFrom && firstShiftTo) {
+      slots.push({ from_time: firstShiftFrom, to_time: firstShiftTo });
+    }
+    if (secondShiftFrom && secondShiftTo) {
+      slots.push({ from_time: secondShiftFrom, to_time: secondShiftTo });
+    }
+
+    // Defensive deep clone to avoid sharing references.
+    return slots.map((slot) => ({ ...slot }));
+  };
+
   const handleCheckboxChange = (selectedDay: (typeof offersTimetable)[0]) => {
     setSelectedDays((prevDays: SelectedDay[]) => {
       const isSelected = prevDays.some(
@@ -59,15 +81,38 @@ const OffersTimetable = ({
           (day) => day.day_number !== selectedDay.day_number,
         );
       } else {
+        const emptyShifts = {
+          firstShift: { from_time: "", to_time: "" },
+          secondShift: { from_time: "", to_time: "" },
+        };
+
+        // Copy from previous day only when checking a new day
+        // and the previous day has at least one valid slot in Formik.
+        let shifts = emptyShifts;
+        if (selectedDay.day_number > 0) {
+          const previousSlots = getValidSlotsFromFormik(
+            selectedDay.day_number - 1,
+          );
+          if (previousSlots.length > 0) {
+            shifts = {
+              firstShift: {
+                from_time: previousSlots[0]?.from_time || "",
+                to_time: previousSlots[0]?.to_time || "",
+              },
+              secondShift: {
+                from_time: previousSlots[1]?.from_time || "",
+                to_time: previousSlots[1]?.to_time || "",
+              },
+            };
+          }
+        }
+
         return [
           ...prevDays,
           {
             day_number: selectedDay.day_number,
             day_name: selectedDay.name,
-            shifts: {
-              firstShift: { from_time: "", to_time: "" },
-              secondShift: { from_time: "", to_time: "" },
-            },
+            shifts,
           },
         ];
       }
