@@ -14,6 +14,38 @@ interface Props {
   onImageItemsChange?: (value: OfferImageItem[]) => void;
 }
 
+const ArrowIcon = ({
+  direction = "right",
+}: {
+  direction?: "left" | "right";
+}): React.ReactElement => (
+  <svg
+    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-n8417t-MuiSvgIcon-root-MuiPaginationItem-icon"
+    focusable="false"
+    aria-hidden="true"
+    viewBox="0 0 24 24"
+    data-testid="NavigateNextIcon"
+    style={direction === "left" ? { transform: "rotate(180deg)" } : undefined}
+  >
+    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
+  </svg>
+);
+
+const TrashIcon = (): React.ReactElement => (
+  <svg
+    className="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium file-icon-svg"
+    focusable="false"
+    aria-hidden="true"
+    viewBox="0 0 24 24"
+    data-testid="DeleteIcon"
+  >
+    <path
+      fill="currentColor"
+      d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zm3.46-7.12 1.41-1.41L12 11.59l1.12-1.12 1.41 1.41L13.41 13l1.12 1.12-1.41 1.41L12 14.41l-1.12 1.12-1.41-1.41L10.59 13zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"
+    ></path>
+  </svg>
+);
+
 const CustomFileInput = ({
   setFile,
   file,
@@ -139,23 +171,26 @@ const CustomFileInput = ({
                     type="button"
                     onClick={() => moveImageItem(index, -1)}
                     disabled={index === 0}
+                    aria-label="Mover imagen a la izquierda"
                   >
-                    Subir
+                    <ArrowIcon direction="left" />
                   </button>
                   <button
                     className="file-order-btn"
                     type="button"
                     onClick={() => moveImageItem(index, 1)}
                     disabled={index === currentImageItems.length - 1}
+                    aria-label="Mover imagen a la derecha"
                   >
-                    Bajar
+                    <ArrowIcon direction="right" />
                   </button>
                   <button
                     className="file-delete-btn"
                     type="button"
                     onClick={() => removeImageItem(item.clientId)}
+                    aria-label="Eliminar imagen"
                   >
-                    Eliminar
+                    <TrashIcon />
                   </button>
                 </div>
               </div>
@@ -200,7 +235,7 @@ const CustomFileInput = ({
           {file?.length > 0 ||
           (images && images!.length > 0) ||
           (imageItems && imageItems.length > 0)
-            ? "Modificar"
+            ? "Subir imagen"
             : "Subir"}
         </label>
         {showDeleteButton ? (

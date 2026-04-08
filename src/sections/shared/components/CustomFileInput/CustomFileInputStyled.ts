@@ -5,14 +5,15 @@ const FileInputWrapper = styled.div`
   align-items: center;
 
   .file-input-label {
-    padding: 10px 20px;
+    padding: 0;
     background-color: ${(props) => props.theme.colors.mainColor};
     color: ${(props) => props.theme.colors.light};
     border-radius: 10px;
     cursor: pointer;
     transition: background 0.3s;
-    width: 150px;
-    height: 60px;
+    width: fit-content;
+    min-width: 120px;
+    height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -108,6 +109,12 @@ const FileInputWrapper = styled.div`
     padding: 4px 8px;
     cursor: pointer;
     font-size: ${(props) => props.theme.fontsSize.__S};
+  }
+
+  .file-icon-svg {
+    width: 18px;
+    height: 18px;
+    display: block;
   }
 
   .file-delete-btn {
