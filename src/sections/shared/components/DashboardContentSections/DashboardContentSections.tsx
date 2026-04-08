@@ -436,18 +436,18 @@ const DashboardContentSections = ({
       return (
         <span
           className={`dashboard__plan${
-            (section as Company).plan.plan_name === "Básico"
+            (section as Company).plan?.plan_name === "Básico"
               ? "--basic"
-              : (section as Company).plan.plan_name === "Estándar"
+              : (section as Company).plan?.plan_name === "Estándar"
                 ? "--standard"
-                : (section as Company).plan.plan_name === "Premium"
+                : (section as Company).plan?.plan_name === "Premium"
                   ? "--premium"
-                  : (section as Company).plan.plan_name === "Pendiente"
+                  : (section as Company).plan?.plan_name === "Pendiente"
                     ? "--pending"
                     : ""
           }`}
         >
-          {(section as Company).plan.plan_name}
+          {(section as Company).plan?.plan_name ?? "-"}
         </span>
       );
 
@@ -455,16 +455,14 @@ const DashboardContentSections = ({
       return (
         <span
           className={`dashboard__plan${
-            (section as Company).plan.billing === "Mensual"
+            (section as Company).plan?.billing === "Mensual"
               ? "--mensual"
-              : (section as Company).plan.billing === "Trimestral"
+              : (section as Company).plan?.billing === "Trimestral"
                 ? "--trimestral"
                 : "--pending"
           }`}
         >
-          {(section as Company).plan.billing
-            ? (section as Company).plan.billing
-            : "-"}
+          {(section as Company).plan?.billing ?? "-"}
         </span>
       );
 
