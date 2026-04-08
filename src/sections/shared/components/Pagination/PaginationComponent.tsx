@@ -1,6 +1,8 @@
 import Pagination from "@mui/material/Pagination";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { useLocation } from "react-router-dom";
+import { toCleanQueryString } from "sections/shared/utils/queryParams/queryParams";
 
 interface PaginationProps {
   pageName: string;
@@ -21,27 +23,35 @@ const PaginationComponent = ({
 }: PaginationProps): React.ReactElement => {
   const [page, setPage] = useState<number>(current_page);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const currentQuery = toCleanQueryString(
+    new URLSearchParams(
+      filterParams && filterParams.length > 0
+        ? filterParams
+        : location.search.replace(/^\?/, ""),
+    ),
+  );
+  const querySuffix = currentQuery ? `?${currentQuery}` : "";
 
   const handlePaginationChange = (
     _event: React.ChangeEvent<unknown>,
     value: number,
   ) => {
     setPage(value);
-    navigate(
-      `/${pageName}/${id ? `${id}/` : ""}page/${value}?${
-        filterParams ? filterParams : ""
-      }`,
-    );
+    navigate(`/${pageName}/${id ? `${id}/` : ""}page/${value}${querySuffix}`);
   };
 
   useEffect(() => {
     if (current_page <= last_page) return;
     pageName !== "" &&
-      navigate(`/${pageName}/${id ? `${id}/` : ""}page/${last_page}`);
+      navigate(
+        `/${pageName}/${id ? `${id}/` : ""}page/${last_page}${querySuffix}`,
+      );
 
     if (!current_page && pageName !== "")
-      navigate(`/${pageName}/${id ? `${id}/` : ""}page/1`);
-  }, [last_page, current_page, navigate, pageName, id]);
+      navigate(`/${pageName}/${id ? `${id}/` : ""}page/1${querySuffix}`);
+  }, [last_page, current_page, navigate, pageName, id, querySuffix]);
 
   useEffect(() => {
     setPage(current_page);

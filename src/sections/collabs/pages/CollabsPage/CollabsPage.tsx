@@ -4,7 +4,12 @@ import DashboardTable from "sections/shared/components/DashboardTable/DashboardT
 import Loader from "sections/shared/components/Loader/Loader";
 import PaginationComponent from "sections/shared/components/Pagination/PaginationComponent";
 import { SectionTypes } from "sections/shared/interfaces/interfaces";
-import { useLocation, useParams } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 import SearchBar from "sections/shared/components/SearchBar/SearchBar";
 import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
@@ -30,6 +35,10 @@ import ActionButton from "sections/shared/components/ActionButton/ActionButton";
 import theme from "assets/styles/theme";
 import { FaFilter } from "react-icons/fa6";
 import CompanySelector from "sections/shared/components/CompanySelector";
+import {
+  setOrDeleteSearchParam,
+  toCleanQueryString,
+} from "sections/shared/utils/queryParams/queryParams";
 
 const CollabsPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
@@ -40,6 +49,8 @@ const CollabsPage = (): React.ReactElement => {
     useState<CollabActionTypes | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { state } = useLocation();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const {
     getAllCollabs,
     collabs,
@@ -68,61 +79,80 @@ const CollabsPage = (): React.ReactElement => {
   const [filterId, setFilterId] = useState<string>("");
   const { getInfluencersWithParams, influencers } = useInfluencerContext();
   const { getCompaniesWithParams, companies } = useCompanyContext();
+  const searchParam = searchParams.get("search") ?? "";
+  const stateParam = searchParams.get("states") ?? "";
+  const influencerParam = searchParams.get("influencer") ?? "";
+  const companyParam = searchParams.get("client") ?? "";
+
+  const navigateToPageWithParams = (
+    pageNumber: number,
+    updates: Record<string, string | number | null | undefined>,
+  ) => {
+    const params = new URLSearchParams(searchParams);
+    Object.entries(updates).forEach(([key, value]) => {
+      setOrDeleteSearchParam(params, key, value);
+    });
+    const queryString = toCleanQueryString(params);
+    navigate(
+      `/collabs/page/${pageNumber}${
+        queryString.length > 0 ? `?${queryString}` : ""
+      }`,
+    );
+  };
+
   const handleSearch = (text: string) => {
-    getCollabs(text);
+    navigateToPageWithParams(1, { search: text || null });
   };
   const [totalFilters, setTotalFilters] = useState<FilterParams>({});
 
-  const getCollabs = useCallback(
-    (text?: string) => {
-      const companyId = selectedCompany;
+  const getCollabs = useCallback(() => {
+    const companyId = selectedCompany;
 
-      const filters: FilterParams =
-        user.type === "Company"
-          ? { filters: { company_id: companyId } }
-          : { filters: {} };
+    const filters: FilterParams =
+      user.type === "Company"
+        ? { filters: { company_id: companyId } }
+        : { filters: {} };
 
-      if (order?.sortTag && order.direction) {
-        filters.order = [{ by: order.sortTag, dir: order.direction }];
-      }
-      if (text) {
-        filters.filters = { ...(filters.filters as object), search: text };
-      }
-      if (filterId !== "") {
-        filters.filters = {
-          ...(filters.filters as object),
-          states: [+filterId],
-        };
-      }
-      if (influencerSelect) {
-        filters.filters = {
-          ...(filters.filters as object),
-          influencer_id: influencerSelect,
-        };
-      }
-      if (companySelect || state?.company_id) {
-        filters.filters = {
-          ...(filters.filters as object),
-          company_id: companySelect || state?.company_id,
-        };
-      }
-      setTotalFilters(filters);
-      setIsOpenFilters(false);
-      getAllCollabs(+page!, 10, filters);
-    },
-    [
-      state,
-      getAllCollabs,
-      filterId,
-      order.direction,
-      order.sortTag,
-      page,
-      user.type,
-      influencerSelect,
-      companySelect,
-      selectedCompany,
-    ],
-  );
+    if (order?.sortTag && order.direction) {
+      filters.order = [{ by: order.sortTag, dir: order.direction }];
+    }
+    if (searchParam) {
+      filters.filters = { ...(filters.filters as object), search: searchParam };
+    }
+    if (stateParam !== "") {
+      filters.filters = {
+        ...(filters.filters as object),
+        states: [+stateParam],
+      };
+    }
+    if (influencerParam) {
+      filters.filters = {
+        ...(filters.filters as object),
+        influencer_id: +influencerParam,
+      };
+    }
+    if (companyParam || (user.type === "Company" && companyId)) {
+      filters.filters = {
+        ...(filters.filters as object),
+        company_id:
+          user.type === "Company" && companyId ? companyId : +companyParam,
+      };
+    }
+    setTotalFilters(filters);
+    setIsOpenFilters(false);
+    getAllCollabs(+page!, 10, filters);
+  }, [
+    getAllCollabs,
+    order.direction,
+    order.sortTag,
+    page,
+    user.type,
+    selectedCompany,
+    searchParam,
+    stateParam,
+    influencerParam,
+    companyParam,
+  ]);
   const getInfluencersSearch = async (text: string) => {
     await getInfluencersWithParams({
       filters: {
@@ -139,34 +169,48 @@ const CollabsPage = (): React.ReactElement => {
   };
 
   const handleRemoveFilter = (key: string) => {
-    setTotalFilters((prevFilters) => {
-      const updatedFilters = { ...prevFilters };
-      if (updatedFilters.filters && updatedFilters.filters[key as never]) {
-        delete updatedFilters.filters[key as never];
-      }
-      return updatedFilters;
-    });
-
-    if (!(totalFilters.filters as FilterParams).states) {
+    if (key === "search") {
+      setSearchText("");
+      navigateToPageWithParams(1, { search: null });
+      return;
+    }
+    if (key === "states") {
       setFilterId("");
+      navigateToPageWithParams(1, { states: null });
+      return;
     }
-
-    if (!(totalFilters.filters as FilterParams).influencer_id) {
+    if (key === "influencer_id") {
       setInfluencerSelect(null);
+      navigateToPageWithParams(1, { influencer: null });
+      return;
     }
-
-    if (!(totalFilters.filters as FilterParams).company_id) {
+    if (key === "company_id") {
       setCompanySelect(null);
+      navigateToPageWithParams(1, { client: null });
     }
-
-    getAllCollabs(+page!, 20, totalFilters);
   };
 
   const [isOpenFilters, setIsOpenFilters] = useState<boolean>(false);
 
   useEffect(() => {
+    if (state?.company_id && !searchParams.get("client")) {
+      navigateToPageWithParams(1, { client: state.company_id });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state?.company_id]);
+
+  useEffect(() => {
+    setSearchText(searchParam);
+    setFilterId(stateParam);
+    setInfluencerSelect(influencerParam ? +influencerParam : null);
+    setCompanySelect(companyParam ? +companyParam : null);
+  }, [searchParam, stateParam, influencerParam, companyParam]);
+
+  const queryKey = searchParams.toString();
+
+  useEffect(() => {
     getCollabs();
-  }, [page, order, getCollabs, filterId, state]);
+  }, [page, order, getCollabs, queryKey]);
 
   if (loading) {
     return <Loader width="20px" height="20px" />;
@@ -219,7 +263,10 @@ const CollabsPage = (): React.ReactElement => {
           pageTypes={SectionTypes.collabs}
           searchText={searchText!}
           setSearchText={setSearchText}
-          onReset={() => getCollabs()}
+          onReset={() => {
+            setSearchText("");
+            navigateToPageWithParams(1, { search: null });
+          }}
           onSearchSubmit={() => handleSearch(searchText)}
         />
       </div>
@@ -235,7 +282,10 @@ const CollabsPage = (): React.ReactElement => {
                 };
               })}
               label="Filtrar por cliente"
-              setValue={setCompanySelect}
+              setValue={(value) => {
+                setCompanySelect(value);
+                navigateToPageWithParams(1, { client: value });
+              }}
               value={companySelect}
               searchText={""}
               getFunctions={getCompanySearch}
@@ -244,7 +294,10 @@ const CollabsPage = (): React.ReactElement => {
 
           <TypeAhead
             label="Filtrar por influencer"
-            setValue={setInfluencerSelect}
+            setValue={(value) => {
+              setInfluencerSelect(value);
+              navigateToPageWithParams(1, { influencer: value });
+            }}
             value={influencerSelect}
             options={influencers?.map((influencer) => {
               return {
@@ -264,7 +317,10 @@ const CollabsPage = (): React.ReactElement => {
                   ? collabsFiltersCompany
                   : collabsFiltersNomade
               }
-              setValue={setFilterId}
+              setValue={(value) => {
+                setFilterId(value);
+                navigateToPageWithParams(1, { states: value || null });
+              }}
               value={filterId}
             />
           </div>
@@ -333,7 +389,7 @@ const CollabsPage = (): React.ReactElement => {
         last_page={pagination.last_page}
         per_page={pagination.per_page}
         pageName={SectionTypes.collabs}
-        filterParams=""
+        filterParams={toCleanQueryString(searchParams)}
       />
       <ReusableModal
         children={<CollabsForm />}

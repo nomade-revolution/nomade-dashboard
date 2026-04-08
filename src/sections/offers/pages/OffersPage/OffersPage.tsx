@@ -10,12 +10,16 @@ import { offersHeaderSections } from "../../utils/offersSections";
 import OffersPageStyled from "./OffersPageStyled";
 import { useOffersContext } from "sections/offers/OffersContext/useOffersContext";
 import { useCallback, useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import SearchBar from "sections/shared/components/SearchBar/SearchBar";
 import OffersButton from "sections/offers/components/OffersButton/OffersButton";
 import OffersForm from "sections/offers/components/OffersForm/OffersForm";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
 import ExportFilesButton from "sections/shared/components/ExportButton/ExportButton";
+import {
+  setOrDeleteSearchParam,
+  toCleanQueryString,
+} from "sections/shared/utils/queryParams/queryParams";
 
 const OffersPage = (): React.ReactElement => {
   const {
@@ -29,8 +33,25 @@ const OffersPage = (): React.ReactElement => {
   } = useOffersContext();
   const { page } = useParams();
   const [searchText, setSearchText] = useState<string>("");
-  const { state } = useLocation();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const searchParam = searchParams.get("search") ?? "";
+  const navigateToPageWithParams = (
+    pageNumber: number,
+    updates: Record<string, string | number | null | undefined>,
+  ) => {
+    const params = new URLSearchParams(searchParams);
+    Object.entries(updates).forEach(([key, value]) => {
+      setOrDeleteSearchParam(params, key, value);
+    });
+    const queryString = toCleanQueryString(params);
+    navigate(
+      `/ofertas/page/${pageNumber}${
+        queryString.length > 0 ? `?${queryString}` : ""
+      }`,
+    );
+  };
 
   const handleIsModalOpen = () => {
     setIsModalOpen(true);
@@ -45,37 +66,31 @@ const OffersPage = (): React.ReactElement => {
   };
 
   const handleSearch = (text: string) => {
-    if (text === "") {
-      getOffers();
-      return;
-    }
-    getOffers(text);
+    navigateToPageWithParams(1, { search: text || null });
   };
 
-  const getOffers = useCallback(
-    (search?: string) => {
-      const filters: FilterParams = { filters: {} };
+  const getOffers = useCallback(() => {
+    const filters: FilterParams = { filters: {} };
 
-      if (order.sortTag) {
-        filters.order = [{ by: order.sortTag, dir: order.direction }];
-      }
-      if (search) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (filters as any).filters.search = search;
-      }
-      if (state) {
-        setSearchText(state.search);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (filters as any).filters.search = state.search;
-      }
-      getAllOffers(+page!, 10, filters);
-    },
-    [getAllOffers, page, order, state],
-  );
+    if (order.sortTag) {
+      filters.order = [{ by: order.sortTag, dir: order.direction }];
+    }
+    if (searchParam) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (filters as any).filters.search = searchParam;
+    }
+    getAllOffers(+page!, 10, filters);
+  }, [getAllOffers, page, order, searchParam]);
+
+  useEffect(() => {
+    setSearchText(searchParam);
+  }, [searchParam]);
+
+  const queryKey = searchParams.toString();
 
   useEffect(() => {
     getOffers();
-  }, [getOffers, page]);
+  }, [getOffers, page, queryKey]);
 
   return (
     <>
@@ -104,7 +119,8 @@ const OffersPage = (): React.ReactElement => {
             </div>
             <SearchBar
               onReset={() => {
-                getOffers();
+                setSearchText("");
+                navigateToPageWithParams(1, { search: null });
               }}
               pageName={SectionTypes.offers}
               pageTypes={SectionTypes.offers}
@@ -143,7 +159,7 @@ const OffersPage = (): React.ReactElement => {
               last_page={pagination.last_page}
               per_page={pagination.per_page}
               pageName={SectionTypes.offers}
-              filterParams=""
+              filterParams={toCleanQueryString(searchParams)}
             />
           </div>
           <ReusableModal
