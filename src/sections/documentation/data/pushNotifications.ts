@@ -454,4 +454,14 @@ export const pushNotifications: readonly PushNotificationItem[] = [
     method: "sendPendingBrandCollabReminder3CompanyNotification",
     status: "active",
   },
+  {
+    id: 47,
+    name: "Recordatorio diario fuera de plazo (publicación de contenido)",
+    context:
+      "Diario desde overdue start (datable día 15+, no-calendar día 30+) mientras no esté publicada.",
+    title: "⏰ Contenido pendiente",
+    body: "El contenido de {clientName} está fuera de plazo. Súbelo y márcalo como publicado.",
+    method: "sendPublishContentOverdueDailyNotification",
+    status: "active",
+  },
 ];

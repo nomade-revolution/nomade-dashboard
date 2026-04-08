@@ -593,4 +593,13 @@ export const EMAIL_ITEMS: readonly EmailItem[] = [
       "144 horas después de la validación de Nomade (t0 + 144h). Último recordatorio antes de la cancelación automática.",
     mailableClass: "PendingBrandCollabReminder3CompanyEmail",
   },
+  {
+    n: 60,
+    title: "Recordatorio diario fuera de plazo (publicación de contenido)",
+    subject: "⏰ Contenido fuera de plazo – {clientName}",
+    trigger: "auto",
+    send_when:
+      "Se envía al influencer diariamente desde el día posterior al último día de publicación (datable: día 15+, brand: día 30+) mientras la collab siga sin publicarse.",
+    mailableClass: "PublishContentOverdueDailyInfluencerEmail",
+  },
 ] as const;
