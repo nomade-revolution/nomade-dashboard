@@ -8,6 +8,7 @@ import {
   OfferTypes,
   WeekDay,
 } from "modules/offers/domain/Offer";
+import { OfferImageItem } from "modules/offers/domain/OfferImage";
 import { normalizeWeekData } from "sections/offers/utils/normalizeTimeFormat";
 
 const useOffers = () => {
@@ -29,6 +30,7 @@ const useOffers = () => {
     company_id: number,
     images: File[],
     categories: number[],
+    imageItems?: OfferImageItem[],
   ) => {
     const formData = new FormData();
 
@@ -170,6 +172,26 @@ const useOffers = () => {
         formData.append("images[]", img);
       }
     });
+
+    if (imageItems && imageItems.length > 0) {
+      const existingImageIds = imageItems
+        .filter((image) => !image.isNew && Number.isInteger(image.id))
+        .map((image) => image.id as number);
+      const orderedTokens = imageItems.map((image) =>
+        image.isNew ? `new:${image.clientId}` : `id:${image.id}`,
+      );
+      const newImageKeys = imageItems
+        .filter((image) => image.isNew)
+        .map((image) => image.clientId);
+
+      existingImageIds.forEach((id) =>
+        formData.append("existing_images[]", String(id)),
+      );
+      orderedTokens.forEach((token) =>
+        formData.append("images_order[]", token),
+      );
+      newImageKeys.forEach((key) => formData.append("new_images_keys[]", key));
+    }
 
     return formData;
   };

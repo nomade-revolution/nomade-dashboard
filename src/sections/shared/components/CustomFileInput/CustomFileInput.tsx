@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import ImageCustom from "../ImageCustom/ImageCustom";
 import FileInputWrapper from "./CustomFileInputStyled";
+import { OfferImageItem } from "modules/offers/domain/OfferImage";
 
 interface Props {
   setFile: (value: File[]) => void;
@@ -9,6 +10,8 @@ interface Props {
   images?: string[];
   multiple?: boolean;
   onDeleteImage?: (status?: false) => void;
+  imageItems?: OfferImageItem[];
+  onImageItemsChange?: (value: OfferImageItem[]) => void;
 }
 
 const CustomFileInput = ({
@@ -18,6 +21,8 @@ const CustomFileInput = ({
   multiple = false,
   text,
   onDeleteImage,
+  imageItems,
+  onImageItemsChange,
 }: Props): React.ReactElement => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [fileNames, setFileNames] = useState<string[]>([]);
@@ -40,7 +45,26 @@ const CustomFileInput = ({
     if (event.target.files) {
       const filesArray = Array.from(event.target.files);
       setFileNames(filesArray.map((f) => f.name));
-      setFile(filesArray);
+
+      if (imageItems && onImageItemsChange) {
+        const nextItems = filesArray.map((newFile) => ({
+          clientId: `new_${Date.now()}_${Math.random()
+            .toString(36)
+            .slice(2, 10)}`,
+          file: newFile,
+          preview: URL.createObjectURL(newFile),
+          isNew: true,
+        }));
+        const merged = [...imageItems, ...nextItems];
+        onImageItemsChange(merged);
+        setFile(
+          merged
+            .filter((item) => item.isNew && item.file)
+            .map((item) => item.file as File),
+        );
+      } else {
+        setFile(filesArray);
+      }
     }
   };
 
@@ -52,11 +76,91 @@ const CustomFileInput = ({
   const showDeleteButton =
     onDeleteImage && (file?.length > 0 || (images && images?.length > 0));
 
+  const currentImageItems: OfferImageItem[] = imageItems
+    ? imageItems
+    : objectUrls.map((url, index) => ({
+        clientId: `legacy_file_${index}`,
+        preview: url,
+        isNew: true,
+      }));
+
+  const removeImageItem = (clientId: string) => {
+    if (!imageItems || !onImageItemsChange) {
+      return;
+    }
+
+    const nextItems = imageItems.filter((item) => item.clientId !== clientId);
+    onImageItemsChange(nextItems);
+    setFile(
+      nextItems
+        .filter((item) => item.isNew && item.file)
+        .map((item) => item.file as File),
+    );
+  };
+
+  const moveImageItem = (index: number, direction: -1 | 1) => {
+    if (!imageItems || !onImageItemsChange) {
+      return;
+    }
+
+    const newIndex = index + direction;
+    if (newIndex < 0 || newIndex >= imageItems.length) {
+      return;
+    }
+
+    const nextItems = [...imageItems];
+    const [moved] = nextItems.splice(index, 1);
+    nextItems.splice(newIndex, 0, moved);
+    onImageItemsChange(nextItems);
+    setFile(
+      nextItems
+        .filter((item) => item.isNew && item.file)
+        .map((item) => item.file as File),
+    );
+  };
+
   return (
     <FileInputWrapper className="file">
       <section className="file-section">
         <div className="file-images">
-          {objectUrls.length > 0 ? (
+          {imageItems ? (
+            currentImageItems.map((item, index) => (
+              <div key={item.clientId} className="file-image-item">
+                <ImageCustom
+                  alt={`Image preview ${index + 1}`}
+                  className="create-fourth__image-preview"
+                  height={80}
+                  width={100}
+                  image={item.preview || item.url || "/icons/imagen.svg"}
+                />
+                <div className="file-image-actions">
+                  <button
+                    className="file-order-btn"
+                    type="button"
+                    onClick={() => moveImageItem(index, -1)}
+                    disabled={index === 0}
+                  >
+                    Subir
+                  </button>
+                  <button
+                    className="file-order-btn"
+                    type="button"
+                    onClick={() => moveImageItem(index, 1)}
+                    disabled={index === currentImageItems.length - 1}
+                  >
+                    Bajar
+                  </button>
+                  <button
+                    className="file-delete-btn"
+                    type="button"
+                    onClick={() => removeImageItem(item.clientId)}
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : objectUrls.length > 0 ? (
             objectUrls.map((url, index) => (
               <ImageCustom
                 key={index}
@@ -93,7 +197,9 @@ const CustomFileInput = ({
           {text ? text : "Sube al menos una foto para que destaque la oferta"}
         </span>
         <label className="file-input-label" onClick={handleClick}>
-          {file?.length > 0 || (images && images!.length > 0)
+          {file?.length > 0 ||
+          (images && images!.length > 0) ||
+          (imageItems && imageItems.length > 0)
             ? "Modificar"
             : "Subir"}
         </label>

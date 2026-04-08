@@ -38,6 +38,7 @@ import { useOffersContext } from "sections/offers/OffersContext/useOffersContext
 // import { useNavigate } from "react-router-dom";
 import Loader from "sections/shared/components/Loader/Loader";
 import { Calendar } from "modules/offers/domain/OfferCalendar";
+import { OfferImageItem } from "modules/offers/domain/OfferImage";
 import formatOfferResume, {
   formatOfferResumeMultiple,
 } from "sections/offers/utils/formatOfferResume";
@@ -99,6 +100,7 @@ const OffersForm = ({
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
   const [citiesFormat, setCitiesFormat] = useState<OptionsStructure[]>([]);
   const [file, setFile] = useState<File[] | []>([]);
+  const [offerImages, setOfferImages] = useState<OfferImageItem[]>([]);
   const [submitError, setSubmitError] = useState<string>("");
   const [offerResume, setOfferResume] = useState<
     | OfferableRestaurant[]
@@ -231,6 +233,22 @@ const OffersForm = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (!offer?.images) {
+      setOfferImages([]);
+      return;
+    }
+
+    setOfferImages(
+      offer.images.map((image) => ({
+        clientId: `existing_${image.id}`,
+        id: image.id,
+        url: image.url,
+        isNew: false,
+      })),
+    );
+  }, [offer]);
 
   const handleFormStateChange = (field: string, value: string) => {
     setFormState((prevState) => ({ ...prevState, [field]: value }));
@@ -457,6 +475,7 @@ const OffersForm = ({
       company.id,
       file!,
       offerCategories,
+      offerImages,
     );
 
     await onSubmit(formData, offer && offer?.id);
@@ -912,6 +931,8 @@ const OffersForm = ({
                     setFile={setFile}
                     file={file!}
                     images={offer?.images.map((image) => image.url)}
+                    imageItems={offerImages}
+                    onImageItemsChange={setOfferImages}
                     multiple
                   />
                   <OffersScheduling
