@@ -33,45 +33,12 @@ const PlansPage = (): React.ReactElement => {
   const { exportCompanyBillingExcel } = useCompanyContext();
   const { page } = useParams();
 
-  const handleSearch = () => {
-    const filters: FilterParams = {
-      filters: { billing_id },
-    };
-    if (date) {
-      const formattedDate = `${date}-01`;
-      // @ts-expect-error any
-      filters.filters.date = formattedDate;
-    }
-    if (textToSearch) {
-      // @ts-expect-error any
-      filters.filters.search = textToSearch;
-    }
-    getPlans(+page!, 10, filters);
-  };
-
-  const handleSearchByText = async (text: string) => {
-    await getPlansData(text);
+  const handleSearchByText = (text: string) => {
+    getPlansData(text);
   };
 
   const handleCalendarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedMonth = event.target.value;
-
-    if (selectedMonth) {
-      setDate(selectedMonth);
-      // handleSearch will be called after state update via useEffect or we call it directly
-      // We need to format the date for the API call
-      const formattedDate = `${selectedMonth}-01`;
-      const filters: FilterParams = {
-        filters: { billing_id },
-      };
-      // @ts-expect-error any
-      filters.filters.date = formattedDate;
-      if (textToSearch) {
-        // @ts-expect-error any
-        filters.filters.search = textToSearch;
-      }
-      getPlans(+page!, 10, filters);
-    }
+    setDate(event.target.value || "");
   };
 
   const getPlansData = useCallback(
@@ -153,7 +120,6 @@ const PlansPage = (): React.ReactElement => {
                         <button
                           onClick={() => {
                             setDate("");
-                            handleSearch();
                           }}
                           className="plans-page__filter-close"
                         >
@@ -220,7 +186,6 @@ const PlansPage = (): React.ReactElement => {
                         <button
                           onClick={() => {
                             setDate("");
-                            handleSearch();
                           }}
                           className="plans-page__filter-close"
                         >

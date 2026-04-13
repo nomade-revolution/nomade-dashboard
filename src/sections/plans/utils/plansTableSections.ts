@@ -36,7 +36,7 @@ export const monthPlansTableSections: HeaderSection[] = [
     id: 6,
     name: "Collabs",
     property: "colabs",
-    sortTag: "colabs",
+    sortTag: "collabs",
     pageName: SectionTypes.plans,
   },
   {
@@ -103,7 +103,7 @@ export const trimestralPlansTableSections: HeaderSection[] = [
     id: 9,
     name: "Collabs",
     property: "colabs",
-    sortTag: "colabs",
+    sortTag: "collabs",
     pageName: SectionTypes.plans,
   },
   {
