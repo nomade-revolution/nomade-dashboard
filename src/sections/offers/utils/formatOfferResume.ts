@@ -53,7 +53,6 @@ const formatOfferCalendar = (offer: FullOffer, calendar: Calendar) => {
 
   switch (offer?.type) {
     case OfferTypes.restaurant:
-    case OfferTypes.lodging:
     case OfferTypes.activity: {
       return [
         {
@@ -61,6 +60,22 @@ const formatOfferCalendar = (offer: FullOffer, calendar: Calendar) => {
           address_id: calendar.address_id,
           min_guests: calendar.min_guests,
           max_guests: calendar.max_guests,
+          week: combinedWeek.map((daySlots) => ({
+            day_of_week: daySlots[0].day_of_week,
+            day_name: daySlots[0].day_name,
+            time_slot: daySlots[0].time_slot,
+          })),
+        },
+      ];
+    }
+    case OfferTypes.lodging: {
+      return [
+        {
+          type: offer.type,
+          address_id: calendar.address_id,
+          min_guests: calendar.min_guests,
+          max_guests: calendar.max_guests,
+          advance_notice_time: offer.advance_notice_time ?? 0,
           week: combinedWeek.map((daySlots) => ({
             day_of_week: daySlots[0].day_of_week,
             day_name: daySlots[0].day_name,

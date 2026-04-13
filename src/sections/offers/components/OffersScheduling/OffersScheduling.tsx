@@ -40,6 +40,15 @@ type WeekScheduleSlot = { from_time: string; to_time: string };
 type WeekScheduleDay = Omit<WeekDay, "time_slot"> & {
   time_slot: WeekScheduleSlot[];
 };
+const ADVANCE_NOTICE_OPTIONS = [
+  { value: 0, label: "Sin antelacion" },
+  { value: 1440, label: "24h" },
+  { value: 2880, label: "48h" },
+  { value: 4320, label: "72h" },
+  { value: 10080, label: "1 semana" },
+  { value: 20160, label: "2 semanas" },
+  { value: 43200, label: "1 mes (30 días)" },
+];
 
 interface Props {
   type: OfferTypes | string;
@@ -448,12 +457,6 @@ const OffersScheduling = ({
               )
             : [...schedulingState.restaurant, newOfferableRestaurant];
         updatedSchedulingState[key] = nextRestaurant as never;
-        console.log("[OffersScheduling] restaurant upsert", {
-          selectedAddressId,
-          cleanedWeek,
-          nextOfferables: updatedSchedulingState[key],
-        });
-
         handleScheduling(
           "restaurant",
           updatedSchedulingState[key] as OfferableRestaurant[],
@@ -466,6 +469,7 @@ const OffersScheduling = ({
           address_id: selectedAddressId,
           min_guests: +getFieldProps("min_guests").value || 0,
           max_guests: +getFieldProps("max_guests").value || 0,
+          advance_notice_time: +getFieldProps("advance_notice_time").value || 0,
         };
 
         const indexByAddress = schedulingState.lodging.findIndex(
@@ -500,12 +504,6 @@ const OffersScheduling = ({
                 idx === indexByAddress ? newOfferableActivity : item,
               )
             : [...schedulingState.activity, newOfferableActivity];
-        console.log("[OffersScheduling] activity upsert", {
-          selectedAddressId,
-          cleanedWeek,
-          nextOfferables: updatedSchedulingState.activity,
-        });
-
         handleScheduling("activity", updatedSchedulingState.activity);
         break;
       }
@@ -721,6 +719,50 @@ const OffersScheduling = ({
             )}
         </div>
       )}
+      {type === OfferTypes.lodging && (
+        <div className="form-subsection">
+          <label
+            htmlFor="advance_notice_time"
+            className="form-subsection__label"
+          >
+            Tiempo previo de aviso
+          </label>
+          <Field
+            as="select"
+            id="advance_notice_time"
+            className="form-subsection__field--small"
+            aria-label="Tiempo previo de aviso"
+            value={
+              (
+                values as
+                  | OfferableRestaurant
+                  | OfferableActivity
+                  | OfferableLodging
+              ).advance_notice_time ?? 0
+            }
+            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+              setFieldValue(
+                "advance_notice_time",
+                Number(event.target.value) || 0,
+              );
+            }}
+          >
+            {ADVANCE_NOTICE_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </Field>
+          {(errors as OfferableLodging).advance_notice_time &&
+            (touched as OfferableLodging).advance_notice_time && (
+              <ErrorMessage
+                className="form-subsection__error-message"
+                component="span"
+                name="advance_notice_time"
+              />
+            )}
+        </div>
+      )}
       {type === OfferTypes.delivery && (
         <div className="form-subsection">
           <label
@@ -736,8 +778,8 @@ const OffersScheduling = ({
             aria-label="Correo electrónico"
             {...getFieldProps("advance_notice_time")}
           />
-          {(errors as OfferableDelivery).advance_notice_time &&
-            (touched as OfferableDelivery).advance_notice_time && (
+          {(errors as unknown as OfferableDelivery).advance_notice_time &&
+            (touched as unknown as OfferableDelivery).advance_notice_time && (
               <ErrorMessage
                 className="form-subsection__error-message"
                 component="span"

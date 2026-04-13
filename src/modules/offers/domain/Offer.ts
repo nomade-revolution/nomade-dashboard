@@ -92,6 +92,7 @@ export interface OfferableLodging {
   address_id: number;
   min_guests: number;
   max_guests: number;
+  advance_notice_time?: number;
 }
 
 export interface OfferableActivity {
