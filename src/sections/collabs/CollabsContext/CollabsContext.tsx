@@ -51,6 +51,7 @@ interface ContextState {
   order: OrderItem;
   getCollabById: (collab_id: number) => void;
   addNewCollab: (collab: FormData) => void;
+  resetCreateCollabSuccess: () => void;
   exportCollabsExcel: () => void;
   editCollab: (id: number, collab: Partial<FullCollab>) => Promise<boolean>;
   badgeCount: number;
@@ -153,22 +154,24 @@ export const CollabsContextProvider = ({
     [repository],
   );
 
+  const resetCreateCollabSuccess = useCallback(() => {
+    setIsSuccess(false);
+  }, []);
+
   const addNewCollab = async (collab: FormData) => {
     setCreateLoading(true);
+    setError(null);
     const response = await createCollab(repository, collab);
 
     if (isHttpSuccessResponse(response)) {
       setCollab(response.data);
-      setCreateLoading(false);
       setIsSuccess(true);
-
-      setTimeout(() => setLoading(true), 3000);
     } else {
       setError(response.error as unknown as string);
+      setIsSuccess(false);
     }
 
     setCreateLoading(false);
-    setIsSuccess(response.success);
 
     return response;
   };
@@ -338,6 +341,7 @@ export const CollabsContextProvider = ({
         setOrder,
         getCollabById,
         addNewCollab,
+        resetCreateCollabSuccess,
         exportCollabsExcel,
         editCollab,
         badgeCount,

@@ -58,6 +58,8 @@ const CollabsPage = (): React.ReactElement => {
     loading,
     order,
     exportCollabsExcel,
+    isSuccess: isCreateCollabSuccess,
+    resetCreateCollabSuccess,
   } = useCollabsContext();
 
   const { user, selectedCompany } = useAuthContext();
@@ -211,6 +213,15 @@ const CollabsPage = (): React.ReactElement => {
   useEffect(() => {
     getCollabs();
   }, [page, order, getCollabs, queryKey]);
+
+  useEffect(() => {
+    if (!isCreateCollabSuccess) {
+      return;
+    }
+    getCollabs();
+    setIsModalOpen(false);
+    resetCreateCollabSuccess();
+  }, [isCreateCollabSuccess, getCollabs, resetCreateCollabSuccess]);
 
   if (loading) {
     return <Loader width="20px" height="20px" />;
