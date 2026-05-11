@@ -88,10 +88,19 @@ const CollabsForm = (): React.ReactElement => {
 
     const excludedKeys = ["influencer_id", "offer_id", "collabable"];
 
+    const omitIfEmpty = ["comment", "note"];
+
     Object.entries(values).forEach(([key, value]) => {
-      if (!excludedKeys.includes(key)) {
-        formData.append(key, value as string);
+      if (excludedKeys.includes(key)) {
+        return;
       }
+      if (
+        omitIfEmpty.includes(key) &&
+        (value == null || String(value).trim() === "")
+      ) {
+        return;
+      }
+      formData.append(key, value as string);
     });
 
     formData.append("influencer_id", JSON.stringify(influencer.id));
@@ -319,9 +328,10 @@ const CollabsForm = (): React.ReactElement => {
               type="text"
               id="comment"
               className="form-subsection__field-textarea--company"
-              aria-label="Observaciones influencer"
+              aria-label="Observaciones influencer, opcional"
               as={"textarea"}
               {...getFieldProps("comment")}
+              required={false}
             />
             {errors.comment && touched.comment && (
               <ErrorMessage
@@ -334,15 +344,16 @@ const CollabsForm = (): React.ReactElement => {
 
           <div className="form-subsection">
             <label htmlFor="note" className="form-subsection__label">
-              Notas internas
+              Notas internas (opcional)
             </label>
             <Field
               type="text"
               id="note"
               className="form-subsection__field-textarea--company"
-              aria-label="Notas internas"
+              aria-label="Notas internas, opcional"
               as={"textarea"}
               {...getFieldProps("note")}
+              required={false}
             />
             {errors.note && touched.note && (
               <ErrorMessage
