@@ -71,6 +71,23 @@ const CollabsForm = (): React.ReactElement => {
     setShowInfluencerSuggestions(false);
   };
 
+  const normalizeAccountName = (accountName?: string) => {
+    if (!accountName) return "";
+    return accountName.startsWith("@") ? accountName : `@${accountName}`;
+  };
+
+  const getInfluencerDisplayName = (selectedInfluencer: Influencer) => {
+    const fullName = `${selectedInfluencer.name ?? ""} ${
+      selectedInfluencer.surnames ?? ""
+    }`.trim();
+    const mainSocial = selectedInfluencer.socialMedia?.find((sm) => sm.main);
+    const socialUsername = normalizeAccountName(mainSocial?.account_name);
+    const fallbackUsername = normalizeAccountName(selectedInfluencer.user_name);
+    const username = socialUsername || fallbackUsername;
+
+    return username ? `${fullName} - ${username}` : fullName;
+  };
+
   const handleOfferSelect = (offer_id: string) => {
     const offer = offers.find((offer) => offer.id === +offer_id);
 
@@ -198,42 +215,58 @@ const CollabsForm = (): React.ReactElement => {
           <h3>Collab</h3>
 
           <div className="form-subsection">
-            <label htmlFor="offer_id" className="form-subsection__label">
+            <label
+              htmlFor="collab-company-search"
+              className="form-subsection__label"
+            >
               Cliente
             </label>
-            <Field
-              type="text"
-              id="offer_id"
-              placeholder="Introduce el nombre de un cliente"
-              className="form-subsection__field-large--company"
-              aria-label="Oferta"
-              {...getFieldProps("offer_id")}
-              value={companySearch}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setCompanySearch(event.target.value);
-                setShowCompanySuggestions(true);
-              }}
-            />
-            {showCompanySuggestions && companySearch && (
-              <ul className="datasheet-form__suggestions-dropdown">
-                {companies.length > 0 ? (
-                  companies.map((suggestion) => (
-                    <li key={suggestion.id}>
-                      <button
-                        onClick={() => {
-                          handleCompanySelect(suggestion.company);
-                          setCompany(suggestion);
-                        }}
-                      >
-                        {suggestion.company}
-                      </button>
-                    </li>
-                  ))
-                ) : (
-                  <span>No se han encontrado resultados</span>
-                )}
-              </ul>
-            )}
+            <div className="datasheet-form__company-combobox">
+              <Field
+                type="text"
+                className="form-subsection__field-large--company"
+                placeholder="Introduce el nombre de un cliente"
+                aria-label="Buscar cliente"
+                {...getFieldProps("offer_id")}
+                id="collab-company-search"
+                autoComplete="off"
+                autoCorrect="off"
+                spellCheck={false}
+                aria-autocomplete="list"
+                aria-expanded={Boolean(showCompanySuggestions && companySearch)}
+                aria-controls="collab-company-search-results"
+                value={companySearch}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  setCompanySearch(event.target.value);
+                  setShowCompanySuggestions(true);
+                }}
+              />
+              {showCompanySuggestions && companySearch && (
+                <ul
+                  id="collab-company-search-results"
+                  className="datasheet-form__suggestions-dropdown"
+                  role="listbox"
+                >
+                  {companies.length > 0 ? (
+                    companies.map((suggestion) => (
+                      <li key={suggestion.id} role="option">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            handleCompanySelect(suggestion.company);
+                            setCompany(suggestion);
+                          }}
+                        >
+                          {suggestion.company}
+                        </button>
+                      </li>
+                    ))
+                  ) : (
+                    <span>No se han encontrado resultados</span>
+                  )}
+                </ul>
+              )}
+            </div>
 
             {errors.offer_id && touched.offer_id && (
               <ErrorMessage
@@ -255,46 +288,62 @@ const CollabsForm = (): React.ReactElement => {
             )}
           </div>
           <div className="form-subsection">
-            <label htmlFor="influencer_id" className="form-subsection__label">
+            <label
+              htmlFor="collab-influencer-search"
+              className="form-subsection__label"
+            >
               Influencer
             </label>
-            <Field
-              type="text"
-              id="influencer_id"
-              placeholder="Introduce a un influencer"
-              className="form-subsection__field-large--company"
-              aria-label="Influencer"
-              {...getFieldProps("influencer_id")}
-              value={influencerSearch}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setInfluencerSearch(event.target.value);
-                setShowInfluencerSuggestions(true);
-              }}
-            />
-            {showInfluencerSuggestions && influencerSearch && (
-              <ul className="datasheet-form__suggestions-dropdown">
-                {influencers.length > 0 ? (
-                  influencers.map((suggestion) => (
-                    <li key={suggestion.id}>
-                      <button
-                        onClick={() => {
-                          handleInfluencerSelect(suggestion.name);
-                          // TODO entiendo que estaría bien mostrar el surname tambien, por ahora oculto
-                          // handleInfluencerSelect(
-                          //   `${suggestion.name} ${suggestion.surnames}`,
-                          // );
-                          setInfluencer(suggestion);
-                        }}
-                      >
-                        {suggestion.name} {suggestion.surnames}
-                      </button>
-                    </li>
-                  ))
-                ) : (
-                  <span>No se han encontrado resultados</span>
+            <div className="datasheet-form__company-combobox">
+              <Field
+                type="text"
+                className="form-subsection__field-large--company"
+                placeholder="Introduce a un influencer"
+                aria-label="Buscar influencer"
+                {...getFieldProps("influencer_id")}
+                id="collab-influencer-search"
+                autoComplete="off"
+                autoCorrect="off"
+                spellCheck={false}
+                aria-autocomplete="list"
+                aria-expanded={Boolean(
+                  showInfluencerSuggestions && influencerSearch,
                 )}
-              </ul>
-            )}
+                aria-controls="collab-influencer-search-results"
+                value={influencerSearch}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  setInfluencerSearch(event.target.value);
+                  setShowInfluencerSuggestions(true);
+                }}
+              />
+              {showInfluencerSuggestions && influencerSearch && (
+                <ul
+                  id="collab-influencer-search-results"
+                  className="datasheet-form__suggestions-dropdown"
+                  role="listbox"
+                >
+                  {influencers.length > 0 ? (
+                    influencers.map((suggestion) => (
+                      <li key={suggestion.id} role="option">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            handleInfluencerSelect(
+                              getInfluencerDisplayName(suggestion),
+                            );
+                            setInfluencer(suggestion);
+                          }}
+                        >
+                          {getInfluencerDisplayName(suggestion)}
+                        </button>
+                      </li>
+                    ))
+                  ) : (
+                    <span>No se han encontrado resultados</span>
+                  )}
+                </ul>
+              )}
+            </div>
 
             {errors.influencer_id && touched.influencer_id && (
               <ErrorMessage
