@@ -158,6 +158,57 @@ const ReusableFormStyled = styled.form<Props>`
       font-size: ${(props) => props.theme.fontsSize.__SM};
     }
 
+    /* Ofertas: anclar el desplegable al input (evita “segunda lista” y gap raro) */
+    &__company-combobox {
+      position: relative;
+      width: 100%;
+
+      @media (min-width: 1600px) {
+        width: 400px;
+      }
+
+      .datasheet-form__suggestions-dropdown {
+        top: calc(100% + 6px);
+        left: 0;
+        right: 0;
+        width: 100%;
+        max-width: none;
+        z-index: 100;
+        margin: 0;
+        padding: 6px 0;
+        list-style: none;
+        max-height: min(320px, 50vh);
+        overflow-y: auto;
+        border: 1px solid ${(props) => props.theme.borders.lightGrey};
+        border-radius: ${(props) => props.theme.borderRadius.inputs};
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        font-size: ${(props) => props.theme.fontsSize.__SM};
+        background: ${(props) => props.theme.colors.light};
+
+        button {
+          width: 100%;
+          text-align: left;
+          padding: 10px 12px;
+          border: none;
+          background: transparent;
+          cursor: pointer;
+          font: inherit;
+          color: inherit;
+
+          &:hover,
+          &:focus-visible {
+            background: ${(props) => props.theme.colors.lightGrey};
+          }
+        }
+
+        span {
+          display: block;
+          padding: 10px 12px;
+          color: ${(props) => props.theme.fontsColors.lightGrey};
+        }
+      }
+    }
+
     &__success {
       background: ${(props) => props.theme.colors.softGreen};
       color: ${(props) => props.theme.fontsColors.light};

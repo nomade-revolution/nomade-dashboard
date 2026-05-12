@@ -454,11 +454,6 @@ const OffersForm = ({
     }
 
     setSubmitError("");
-    console.log("[OffersForm] offerables before submit", {
-      type: formState.type,
-      offerableData,
-      sanitizedOfferableData,
-    });
 
     // Ensure offerableData is not empty - if it is, backend will fail
     // if (mode === "edit" && (!offerableData || (Array.isArray(offerableData) && offerableData.length === 0))) {
@@ -555,7 +550,6 @@ const OffersForm = ({
 
     if (companySearch) {
       getCompaniesWithParams(filters);
-      setShowSuggestions(true);
     } else {
       setShowSuggestions(false);
     }
@@ -660,49 +654,65 @@ const OffersForm = ({
           <h3>Oferta</h3>
           <div className="datasheet-form__content">
             <div className="form-subsection">
-              <label htmlFor="company" className="form-subsection__label">
+              <label
+                htmlFor="company-search"
+                className="form-subsection__label"
+              >
                 Cliente
               </label>
-              <Field
-                type="text"
-                id="company"
-                className="form-subsection__field-large--offer"
-                aria-label="Nombre del laboratorio"
-                {...getFieldProps("company")}
-                value={companySearch}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  setCompanySearch(event.target.value);
+              <div className="datasheet-form__company-combobox">
+                <Field
+                  type="text"
+                  className="form-subsection__field-large--offer"
+                  {...getFieldProps("company")}
+                  id="company-search"
+                  autoComplete="off"
+                  autoCorrect="off"
+                  spellCheck={false}
+                  aria-label="Buscar cliente"
+                  aria-autocomplete="list"
+                  aria-expanded={Boolean(showSuggestions && companySearch)}
+                  aria-controls="company-search-results"
+                  value={companySearch}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    setCompanySearch(event.target.value);
 
-                  setShowSuggestions(true);
-                }}
-              />
-              {showSuggestions && companySearch && (
-                <ul className="datasheet-form__suggestions-dropdown">
-                  {companies.length > 0 ? (
-                    companies.map((suggestion) => (
-                      <li key={suggestion.id}>
-                        <button
-                          onClick={() => {
-                            handleCompanySelect(suggestion.company);
-                            setCompany(suggestion);
-                            setAddresses([
-                              {
-                                id: suggestion.address?.id,
-                                name: suggestion.address?.address,
-                                value: suggestion.address?.id,
-                              },
-                            ]);
-                          }}
-                        >
-                          {suggestion.company}
-                        </button>
-                      </li>
-                    ))
-                  ) : (
-                    <span>No se han encontrado resultados</span>
-                  )}
-                </ul>
-              )}
+                    setShowSuggestions(true);
+                  }}
+                />
+                {showSuggestions && companySearch && (
+                  <ul
+                    id="company-search-results"
+                    className="datasheet-form__suggestions-dropdown"
+                    role="listbox"
+                  >
+                    {companies.length > 0 ? (
+                      companies.map((suggestion) => (
+                        <li key={suggestion.id} role="option">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              handleCompanySelect(suggestion.company);
+                              setCompany(suggestion);
+                              setAddresses([
+                                {
+                                  id: suggestion.address?.id,
+                                  name: suggestion.address?.address,
+                                  value: suggestion.address?.id,
+                                },
+                              ]);
+                            }}
+                          >
+                            {suggestion.company}
+                          </button>
+                        </li>
+                      ))
+                    ) : (
+                      <span>No se han encontrado resultados</span>
+                    )}
+                  </ul>
+                )}
+              </div>
               {errors.company_id && touched.company_id && (
                 <ErrorMessage
                   className="form-subsection__error-message"
