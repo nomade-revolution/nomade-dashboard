@@ -40,12 +40,16 @@ const FORM_FIELD_ROOTS = new Set([
   "company",
   "company_name",
   "name",
+  "surname",
+  "mobile",
   "password",
   "phone",
   "web",
   "description",
   "company_comments",
   "instagram",
+  "terms",
+  "contacts",
 ]);
 
 /**

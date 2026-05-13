@@ -1,16 +1,29 @@
 import ReusableFormStyled from "assets/styles/ReusableFormStyled";
-import { Formik, Field, ErrorMessage, FormikHelpers } from "formik";
-import { useEffect, useState } from "react";
+import {
+  Formik,
+  Field,
+  FormikHelpers,
+  FormikErrors,
+  FormikTouched,
+} from "formik";
+import { useEffect, useState, useRef } from "react";
 import CustomFileInput from "sections/shared/components/CustomFileInput/CustomFileInput";
 import ReusableSelect from "sections/shared/components/ReusableSelect/ReusableSelect";
 import {
   clientSchema,
   editClientSchema,
   initialData,
+  type CompanyFormValues,
 } from "./utils/validations/validations";
-import { PartialCompany } from "@company";
+import { Company } from "modules/user/domain/User";
 import { FullAddress } from "modules/address/domain/Address";
-import { FaEdit, FaEyeSlash, FaEye, FaLink } from "react-icons/fa";
+import {
+  FaEdit,
+  FaEyeSlash,
+  FaEye,
+  FaLink,
+  FaCheckCircle,
+} from "react-icons/fa";
 import { IoAddCircle } from "react-icons/io5";
 import AddressForm from "sections/shared/components/AddressForm/AddressForm";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
@@ -23,7 +36,6 @@ import CustomCheckbox from "sections/shared/components/CustomCheckbox/CustomChec
 import Loader from "sections/shared/components/Loader/Loader";
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
 import { formatDateWithDash } from "sections/shared/utils/formatDate/formatDate";
-import { Company } from "modules/user/domain/User";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { Checkbox } from "@mui/material";
 import { appPaths } from "sections/shared/utils/appPaths/appPaths";
@@ -35,6 +47,49 @@ import {
   splitLaravelErrorsForFormik,
 } from "sections/shared/utils/mapLaravelErrorsForFormik";
 
+function fieldErrorMessage(
+  errors: FormikErrors<CompanyFormValues>,
+  field: keyof CompanyFormValues,
+): string | null {
+  const e = errors[field];
+  if (typeof e === "string" && e.length > 0) return e;
+  if (Array.isArray(e) && typeof e[0] === "string") return e[0];
+  return null;
+}
+
+function shouldShowFieldError(
+  errors: FormikErrors<CompanyFormValues>,
+  touched: FormikTouched<CompanyFormValues>,
+  submitCount: number,
+  field: keyof CompanyFormValues,
+): boolean {
+  const msg = fieldErrorMessage(errors, field);
+  if (!msg) return false;
+  if (field === "terms" || field === "contacts") return true;
+  return Boolean(touched[field]) || submitCount > 0;
+}
+
+function CompanyFormSubmitDebug(props: {
+  submitCount: number;
+  isValid: boolean;
+  errors: FormikErrors<CompanyFormValues>;
+}): null {
+  const prevSubmitCount = useRef(-1);
+  useEffect(() => {
+    if (!import.meta.env.DEV) return;
+    if (props.submitCount !== prevSubmitCount.current) {
+      prevSubmitCount.current = props.submitCount;
+      // eslint-disable-next-line no-console
+      console.log("[CompanyForm] submitCount changed", {
+        submitCount: props.submitCount,
+        isValid: props.isValid,
+        errors: props.errors,
+      });
+    }
+  }, [props.submitCount, props.isValid, props.errors]);
+  return null;
+}
+
 const EXCLUDED_FIELDS = [
   "id",
   "instagram",
@@ -44,6 +99,7 @@ const EXCLUDED_FIELDS = [
   "image",
   "plan", // never send object (would become "[object Object]")
   "conditions", // object/array from form state, not expected by backend
+  "terms", // UI-only error key for términos
 ];
 
 /** Keys that must NOT be sent in PUT /api/companies/{id} (company only). Sent via PUT company-plan instead. */
@@ -56,10 +112,6 @@ const COMPANY_PLAN_FORM_DATA_KEYS = [
   "offer_type",
   "offer_id",
 ];
-
-interface SubmitValues extends PartialCompany {
-  plan: { start_date: string };
-}
 
 /** Payload for PUT /api/companies/{id}/company-plan (plan_id from dropdown, date Y-m-d, extension months, comments). */
 export interface CompanyPlanPayload {
@@ -147,13 +199,21 @@ const CompanyForm = ({
     setIsChecked(!isCheked);
   };
   const handleSubmitForm = async (
-    values: SubmitValues,
-    { setSubmitting, setErrors, setStatus }: FormikHelpers<PartialCompany>,
+    values: CompanyFormValues,
+    { setSubmitting, setErrors, setStatus }: FormikHelpers<CompanyFormValues>,
   ) => {
     setStatus(undefined);
 
+    if (import.meta.env.DEV) {
+      // eslint-disable-next-line no-console
+      console.log("[CompanyForm] handleSubmitForm enter", {
+        checkedTerms,
+        type,
+      });
+    }
+
     if (!checkedTerms) {
-      setErrors({ company: "Debes aceptar los términos y condiciones" });
+      setErrors({ terms: "Debes aceptar los términos y condiciones" });
       return;
     }
 
@@ -179,10 +239,10 @@ const CompanyForm = ({
 
       Object.keys(values).forEach((key) => {
         if (!EXCLUDED_FIELDS.includes(key)) {
-          const value = values[key as keyof PartialCompany];
+          const value = values[key as keyof CompanyFormValues];
           // Skip objects/arrays to avoid "[object Object]" in payload
           if (value != null && typeof value === "object") return;
-          formData.append(key, value ?? "");
+          formData.append(key, String(value ?? ""));
         }
       });
 
@@ -271,13 +331,29 @@ const CompanyForm = ({
         type_id: c.type_id,
       }));
 
-      if (isCreate && contactsForBracket.length === 0) {
-        setErrors({ contacts: "Debe añadir al menos un contacto" });
-        return;
-      }
+      const contactsToSend = (() => {
+        if (!isCreate) return contactsForBracket;
 
-      if (contactsForBracket.length > 0) {
-        appendContactsToFormData(formData, contactsForBracket);
+        const mainContactTypeId = contact_types.find((t) => t.name === "TODO")
+          ?.id;
+        const mainContact =
+          mainContactTypeId != null
+            ? {
+                name: values.name ?? "",
+                surname: values.surname ?? "",
+                email: values.email ?? "",
+                phone: values.mobile ?? "",
+                type_id: mainContactTypeId,
+              }
+            : null;
+
+        return mainContact != null
+          ? [mainContact, ...contactsForBracket]
+          : contactsForBracket;
+      })();
+
+      if (contactsToSend.length > 0) {
+        appendContactsToFormData(formData, contactsToSend);
       }
 
       if (values.instagram?.trim()) {
@@ -314,6 +390,14 @@ const CompanyForm = ({
           extension: 0,
           comments: comments === "" ? null : comments,
         };
+      }
+
+      if (import.meta.env.DEV) {
+        // eslint-disable-next-line no-console
+        console.log("[CompanyForm] POST onSubmit (cms)", {
+          isCreate,
+          contactsCount: contactsToSend.length,
+        });
       }
 
       const response = await onSubmit(
@@ -386,25 +470,26 @@ const CompanyForm = ({
     setFile([]);
   };
 
-  const initialValues = {
+  const initialValues: CompanyFormValues = {
     ...initialData,
     instagram:
       client?.socialMedia?.find((s) => s.name === "Instagram")?.account_name ||
       "",
     ...client,
+    surname: client?.users?.[0]?.surname ?? "",
+    mobile: (client as { mobile?: string } | undefined)?.mobile ?? "",
     plan_comments: client?.plan?.comments ?? "",
     plan: {
       ...client?.plan,
       start_date: convertDateToISO(client?.plan?.start_date?.slice(0, 10)),
     },
-  };
+    terms: "",
+  } as CompanyFormValues;
 
   return (
-    <Formik
+    <Formik<CompanyFormValues>
       initialValues={initialValues}
       validationSchema={type !== "edit" ? clientSchema : editClientSchema}
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //@ts-expect-error
       onSubmit={handleSubmitForm}
     >
       {({
@@ -414,8 +499,16 @@ const CompanyForm = ({
         getFieldProps,
         isSubmitting,
         status,
+        submitCount,
+        isValid,
+        setFieldError,
       }) => (
         <ReusableFormStyled onSubmit={handleSubmit} className="datasheet-form">
+          <CompanyFormSubmitDebug
+            submitCount={submitCount}
+            isValid={isValid}
+            errors={errors}
+          />
           <h3>Cliente</h3>
           {isFormikServerAlertStatus(status) && (
             <div
@@ -449,12 +542,15 @@ const CompanyForm = ({
                 {...getFieldProps("company")}
               />
 
-              {errors.company && touched.company && (
-                <ErrorMessage
-                  className="form-subsection__error-message"
-                  component="span"
-                  name="company"
-                />
+              {shouldShowFieldError(
+                errors,
+                touched,
+                submitCount,
+                "company",
+              ) && (
+                <span className="form-subsection__error-message" role="alert">
+                  {fieldErrorMessage(errors, "company")}
+                </span>
               )}
             </div>
             <div className="form-subsection">
@@ -469,12 +565,15 @@ const CompanyForm = ({
                 {...getFieldProps("company_name")}
               />
 
-              {errors.company_name && touched.company_name && (
-                <ErrorMessage
-                  className="form-subsection__error-message"
-                  component="span"
-                  name="company_name"
-                />
+              {shouldShowFieldError(
+                errors,
+                touched,
+                submitCount,
+                "company_name",
+              ) && (
+                <span className="form-subsection__error-message" role="alert">
+                  {fieldErrorMessage(errors, "company_name")}
+                </span>
               )}
             </div>
 
@@ -489,12 +588,10 @@ const CompanyForm = ({
                 aria-label="Alias"
                 {...getFieldProps("nif")}
               />
-              {errors.nif && touched.nif && (
-                <ErrorMessage
-                  className="form-subsection__error-message"
-                  component="span"
-                  name="nif"
-                />
+              {shouldShowFieldError(errors, touched, submitCount, "nif") && (
+                <span className="form-subsection__error-message" role="alert">
+                  {fieldErrorMessage(errors, "nif")}
+                </span>
               )}
             </div>
             <div className="form-subsection">
@@ -508,12 +605,10 @@ const CompanyForm = ({
                 aria-label="Correo electrónico"
                 {...getFieldProps("web")}
               />
-              {errors.web && touched.web && (
-                <ErrorMessage
-                  className="form-subsection__error-message"
-                  component="span"
-                  name="web"
-                />
+              {shouldShowFieldError(errors, touched, submitCount, "web") && (
+                <span className="form-subsection__error-message" role="alert">
+                  {fieldErrorMessage(errors, "web")}
+                </span>
               )}
             </div>
             <div className="form-subsection">
@@ -527,12 +622,10 @@ const CompanyForm = ({
                 aria-label="Correo electrónico"
                 {...getFieldProps("phone")}
               />
-              {errors.phone && touched.phone && (
-                <ErrorMessage
-                  className="form-subsection__error-message"
-                  component="span"
-                  name="phone"
-                />
+              {shouldShowFieldError(errors, touched, submitCount, "phone") && (
+                <span className="form-subsection__error-message" role="alert">
+                  {fieldErrorMessage(errors, "phone")}
+                </span>
               )}
             </div>
 
@@ -547,12 +640,15 @@ const CompanyForm = ({
                 aria-label="Alias"
                 {...getFieldProps("instagram")}
               />
-              {errors.instagram && touched.instagram && (
-                <ErrorMessage
-                  className="form-subsection__error-message"
-                  component="span"
-                  name="instagram"
-                />
+              {shouldShowFieldError(
+                errors,
+                touched,
+                submitCount,
+                "instagram",
+              ) && (
+                <span className="form-subsection__error-message" role="alert">
+                  {fieldErrorMessage(errors, "instagram")}
+                </span>
               )}
             </div>
 
@@ -568,12 +664,15 @@ const CompanyForm = ({
                 as={"textarea"}
                 {...getFieldProps("description")}
               />
-              {errors.description && touched.description && (
-                <ErrorMessage
-                  className="form-subsection__error-message"
-                  component="span"
-                  name="description"
-                />
+              {shouldShowFieldError(
+                errors,
+                touched,
+                submitCount,
+                "description",
+              ) && (
+                <span className="form-subsection__error-message" role="alert">
+                  {fieldErrorMessage(errors, "description")}
+                </span>
               )}
             </div>
             <div className="form-subsection">
@@ -591,109 +690,333 @@ const CompanyForm = ({
                 as={"textarea"}
                 {...getFieldProps("company_comments")}
               />
-              {errors.company_comments && touched.company_comments && (
-                <ErrorMessage
-                  className="form-subsection__error-message"
-                  component="span"
-                  name="company_comments"
-                />
+              {shouldShowFieldError(
+                errors,
+                touched,
+                submitCount,
+                "company_comments",
+              ) && (
+                <span className="form-subsection__error-message" role="alert">
+                  {fieldErrorMessage(errors, "company_comments")}
+                </span>
               )}
             </div>
 
             {type !== "edit" ? (
-              <section className="lead-form__section">
-                <h4 className="lead-form__title">
-                  Datos de acceso del usuario
-                </h4>
-                <div className="form-subsection">
-                  <label htmlFor="name" className="form-subsection__label">
-                    Nombre
-                  </label>
-                  <Field
-                    type="text"
-                    id="name"
-                    className="form-subsection__field-large--company"
-                    aria-label="nombre"
-                    {...getFieldProps("name")}
-                  />
-                  {errors.name && touched.name && (
-                    <ErrorMessage
-                      className="form-subsection__error-message"
-                      component="span"
-                      name="name"
-                    />
-                  )}
-                </div>
-                <div className="form-subsection">
-                  <label htmlFor="email" className="form-subsection__label">
-                    Email
-                  </label>
-                  <Field
-                    type="email"
-                    id="email"
-                    className="form-subsection__field-large--company"
-                    aria-label="email"
-                    {...getFieldProps("email")}
-                  />
-                  {errors.email && touched.email && (
-                    <ErrorMessage
-                      className="form-subsection__error-message"
-                      component="span"
-                      name="email"
-                    />
-                  )}
-                </div>
-
-                <div className="dobleContainer">
-                  <div className="form-subsection">
-                    <label
-                      htmlFor="password"
-                      className="form-subsection__label"
-                    >
-                      Contraseña
-                    </label>
-                    <Field
-                      type="password"
-                      id="password"
-                      className="form-subsection__field-large--company"
-                      aria-label="password"
-                      {...getFieldProps("password")}
-                    />
-                    {errors.password && touched.password && (
-                      <ErrorMessage
-                        className="form-subsection__error-message"
-                        component="span"
-                        name="password"
+              <>
+                <section className="lead-form__section">
+                  <div className="datasheet-form__addresses">
+                    {registerContacts &&
+                      registerContacts.map((contact, index) => (
+                        <section
+                          key={`contact-${index}`}
+                          className="lead-form__address"
+                        >
+                          <div>
+                            <span>{contact.name}</span>
+                            <span>{contact.surname}</span>
+                          </div>
+                          <span>{contact.email}</span>
+                          <span>{contact.phone}</span>
+                          <span>
+                            {
+                              contact_types.find(
+                                (t: ContactType) => t.id === contact.type_id,
+                              )?.name
+                            }
+                          </span>
+                        </section>
+                      ))}
+                  </div>
+                </section>
+                <section className="lead-form__section">
+                  <div className="lead-form__section-header">
+                    <h4 className="lead-form__title">
+                      Acceso principal a la plataforma
+                    </h4>
+                    <p className="lead-form__subtitle">
+                      Estos datos se utilizarán para crear el acceso principal a
+                      la plataforma y, a su vez, el contacto principal de la
+                      empresa.
+                    </p>
+                  </div>
+                  <div className="lead-form__section">
+                    <div className="form-subsection">
+                      <label htmlFor="name" className="form-subsection__label">
+                        Nombre
+                      </label>
+                      <Field
+                        type="text"
+                        id="name"
+                        className="lead-form__field"
+                        aria-label="Nombre"
+                        {...getFieldProps("name")}
                       />
+                      {shouldShowFieldError(
+                        errors,
+                        touched,
+                        submitCount,
+                        "name",
+                      ) && (
+                        <span
+                          className="form-subsection__error-message"
+                          role="alert"
+                        >
+                          {fieldErrorMessage(errors, "name")}
+                        </span>
+                      )}
+                    </div>
+                    <div className="form-subsection">
+                      <label
+                        htmlFor="surname"
+                        className="form-subsection__label"
+                      >
+                        Apellidos
+                      </label>
+                      <Field
+                        type="text"
+                        id="surname"
+                        className="lead-form__field"
+                        aria-label="Apellidos"
+                        {...getFieldProps("surname")}
+                      />
+                      {shouldShowFieldError(
+                        errors,
+                        touched,
+                        submitCount,
+                        "surname",
+                      ) && (
+                        <span
+                          className="form-subsection__error-message"
+                          role="alert"
+                        >
+                          {fieldErrorMessage(errors, "surname")}
+                        </span>
+                      )}
+                    </div>
+                    <div className="form-subsection">
+                      <label htmlFor="email" className="form-subsection__label">
+                        Email
+                      </label>
+                      <Field
+                        type="email"
+                        id="email"
+                        className="lead-form__field"
+                        aria-label="Correo electrónico"
+                        {...getFieldProps("email")}
+                      />
+                      {shouldShowFieldError(
+                        errors,
+                        touched,
+                        submitCount,
+                        "email",
+                      ) && (
+                        <span
+                          className="form-subsection__error-message"
+                          role="alert"
+                        >
+                          {fieldErrorMessage(errors, "email")}
+                        </span>
+                      )}
+                    </div>
+                    <div className="form-subsection">
+                      <label
+                        htmlFor="mobile"
+                        className="form-subsection__label"
+                      >
+                        Móvil
+                      </label>
+                      <Field
+                        type="tel"
+                        id="mobile"
+                        className="lead-form__field"
+                        aria-label="Móvil"
+                        {...getFieldProps("mobile")}
+                      />
+                      {shouldShowFieldError(
+                        errors,
+                        touched,
+                        submitCount,
+                        "mobile",
+                      ) && (
+                        <span
+                          className="form-subsection__error-message"
+                          role="alert"
+                        >
+                          {fieldErrorMessage(errors, "mobile")}
+                        </span>
+                      )}
+                    </div>
+                    <div className="form-subsection">
+                      <label
+                        htmlFor="password"
+                        className="form-subsection__label"
+                      >
+                        Contraseña
+                      </label>
+                      <Field
+                        type="password"
+                        id="password"
+                        className="lead-form__field"
+                        aria-label="Contraseña"
+                        {...getFieldProps("password")}
+                      />
+                      {shouldShowFieldError(
+                        errors,
+                        touched,
+                        submitCount,
+                        "password",
+                      ) && (
+                        <span
+                          className="form-subsection__error-message"
+                          role="alert"
+                        >
+                          {fieldErrorMessage(errors, "password")}
+                        </span>
+                      )}
+                    </div>
+                    <div className="form-subsection">
+                      <label
+                        htmlFor="password_confirmation"
+                        className="form-subsection__label"
+                      >
+                        Repite contraseña
+                      </label>
+                      <Field
+                        type="password"
+                        id="password_confirmation"
+                        className="lead-form__field"
+                        aria-label="Repite contraseña"
+                        {...getFieldProps("password_confirmation")}
+                      />
+                      {shouldShowFieldError(
+                        errors,
+                        touched,
+                        submitCount,
+                        "password_confirmation",
+                      ) && (
+                        <span
+                          className="form-subsection__error-message"
+                          role="alert"
+                        >
+                          {fieldErrorMessage(errors, "password_confirmation")}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </section>
+                <section className="lead-form__section">
+                  <div className="lead-form__section-header">
+                    <h4 className="lead-form__title">
+                      Contactos adicionales (opcional)
+                    </h4>
+                    <p className="lead-form__subtitle">
+                      Si necesitan añadir otros contactos para facturación,
+                      gestión o colaboraciones, pueden hacerlo aquí.
+                    </p>
+                  </div>
+                  <div className="datasheet-form__contact-section">
+                    <button
+                      type="button"
+                      className="datasheet-form__add-contact"
+                      onClick={handleIsContactModalOpen}
+                    >
+                      {registerContacts.length > 0 ? (
+                        <FaEdit className="datasheet-form__create--icon" />
+                      ) : (
+                        <IoAddCircle className="datasheet-form__create--icon" />
+                      )}
+                      {registerContacts.length > 0
+                        ? "Modificar contacto"
+                        : "Añadir contacto"}
+                    </button>
+                    {registerContacts.length > 0 && (
+                      <span className="datasheet-form__contact-mssg">
+                        <FaCheckCircle />
+                        Contacto añadido
+                      </span>
+                    )}
+                    {fieldErrorMessage(errors, "contacts") && (
+                      <span
+                        className="form-subsection__error-message"
+                        role="alert"
+                      >
+                        {fieldErrorMessage(errors, "contacts")}
+                      </span>
                     )}
                   </div>
-                  <div className="form-subsection">
-                    <label
-                      htmlFor="password_confirmation"
-                      className="form-subsection__label"
-                    >
-                      Repetir contraseña
-                    </label>
-
-                    <Field
-                      type="password"
-                      id="password_confirmation"
-                      className="form-subsection__field-large--company"
-                      aria-label="password_confirmation"
-                      {...getFieldProps("password_confirmation")}
-                    />
-                    {errors.password_confirmation &&
-                      touched.password_confirmation && (
-                        <ErrorMessage
-                          className="form-subsection__error-message"
-                          component="span"
-                          name="password_confirmation"
-                        />
-                      )}
+                </section>
+              </>
+            ) : (
+              <>
+                <section className="lead-form__section">
+                  <div className="datasheet-form__addresses">
+                    {registerContacts &&
+                      registerContacts.map((contact, index) => (
+                        <section
+                          key={`contact-edit-${index}`}
+                          className="lead-form__address"
+                        >
+                          <div>
+                            <span>{contact.name}</span>
+                            <span> {contact.surname}</span>
+                          </div>
+                          <span>{contact.email}</span>
+                          <span>{contact.phone}</span>
+                          <span>
+                            {
+                              contact_types.find(
+                                (t: ContactType) => t.id === contact.type_id,
+                              )?.name
+                            }
+                          </span>
+                        </section>
+                      ))}
                   </div>
-                </div>
-              </section>
-            ) : null}
+                </section>
+                <section className="lead-form__section">
+                  <div className="lead-form__section-header">
+                    <h4 className="lead-form__title">
+                      Contactos adicionales (opcional)
+                    </h4>
+                    <p className="lead-form__subtitle">
+                      Si necesitan añadir otros contactos para facturación,
+                      gestión o colaboraciones, pueden hacerlo aquí.
+                    </p>
+                  </div>
+                  <div className="datasheet-form__contact-section">
+                    <button
+                      type="button"
+                      className="datasheet-form__add-contact"
+                      onClick={handleIsContactModalOpen}
+                    >
+                      {registerContacts.length > 0 ? (
+                        <FaEdit className="datasheet-form__create--icon" />
+                      ) : (
+                        <IoAddCircle className="datasheet-form__create--icon" />
+                      )}
+                      {registerContacts.length > 0
+                        ? "Modificar contacto"
+                        : "Añadir contacto"}
+                    </button>
+                    {registerContacts.length > 0 && (
+                      <span className="datasheet-form__contact-mssg">
+                        <FaCheckCircle />
+                        Contacto añadido
+                      </span>
+                    )}
+                    {fieldErrorMessage(errors, "contacts") && (
+                      <span
+                        className="form-subsection__error-message"
+                        role="alert"
+                      >
+                        {fieldErrorMessage(errors, "contacts")}
+                      </span>
+                    )}
+                  </div>
+                </section>
+              </>
+            )}
 
             {type !== "edit" ? (
               <section className="lead-form__section">
@@ -752,12 +1075,15 @@ const CompanyForm = ({
                   aria-label="Correo electrónico"
                   {...getFieldProps("plan[start_date]")}
                 />
-                {errors.start_date && touched.start_date && (
-                  <ErrorMessage
-                    className="form-subsection__error-message"
-                    component="span"
-                    name="start_date"
-                  />
+                {shouldShowFieldError(
+                  errors,
+                  touched,
+                  submitCount,
+                  "start_date",
+                ) && (
+                  <span className="form-subsection__error-message" role="alert">
+                    {fieldErrorMessage(errors, "start_date")}
+                  </span>
                 )}
               </div>
             </section>
@@ -773,12 +1099,15 @@ const CompanyForm = ({
                 as={"textarea"}
                 {...getFieldProps("plan_comments")}
               />
-              {errors.plan_comments && touched.plan_comments && (
-                <ErrorMessage
-                  className="form-subsection__error-message"
-                  component="span"
-                  name="plan_comments"
-                />
+              {shouldShowFieldError(
+                errors,
+                touched,
+                submitCount,
+                "plan_comments",
+              ) && (
+                <span className="form-subsection__error-message" role="alert">
+                  {fieldErrorMessage(errors, "plan_comments")}
+                </span>
               )}
             </div>
 
@@ -822,49 +1151,6 @@ const CompanyForm = ({
                 {registerAddress ? "Modificar dirección" : "Añadir dirección"}
               </button>
             </div>
-            {registerContacts &&
-              registerContacts.map((contact, index) => (
-                <section
-                  key={`contact-${index}`}
-                  className="lead-form__address"
-                >
-                  <div>
-                    <span>{contact.name}</span>
-                    <span> {contact.surname}</span>
-                  </div>
-                  <span>{contact.email}</span>
-                  <span>{contact.phone}</span>
-                  <span>
-                    {
-                      contact_types.find(
-                        (type: ContactType) => type.id === contact.type_id,
-                      )?.name
-                    }
-                  </span>
-                </section>
-              ))}
-
-            <div className="datasheet-form__contact-section">
-              <button
-                type="button"
-                className="datasheet-form__add-contact"
-                onClick={handleIsContactModalOpen}
-              >
-                {registerContacts?.length > 0 ? (
-                  <FaEdit className="datasheet-form__create--icon" />
-                ) : (
-                  <IoAddCircle className="datasheet-form__create--icon" />
-                )}
-                {registerContacts?.length > 0
-                  ? "Modificar contacto"
-                  : "Añadir contacto"}
-              </button>
-              {errors.contacts && (
-                <span className="form-subsection__error-message" role="alert">
-                  {String(errors.contacts)}
-                </span>
-              )}
-            </div>
             {type === "edit" &&
               user.id === client?.id &&
               user.type !== "Nomade" && (
@@ -891,12 +1177,18 @@ const CompanyForm = ({
                         {isPasswordShown ? <FaEye /> : <FaEyeSlash />}
                       </button>
                     </div>
-                    {errors.password && touched.password && (
-                      <ErrorMessage
+                    {shouldShowFieldError(
+                      errors,
+                      touched,
+                      submitCount,
+                      "password",
+                    ) && (
+                      <span
                         className="form-subsection__error-message"
-                        component="span"
-                        name="password"
-                      />
+                        role="alert"
+                      >
+                        {fieldErrorMessage(errors, "password")}
+                      </span>
                     )}
                   </div>
                   <div className="form-subsection">
@@ -929,44 +1221,68 @@ const CompanyForm = ({
                         )}
                       </button>
                     </div>
-                    {errors.password_confirmation &&
-                      touched.password_confirmation && (
-                        <ErrorMessage
-                          className="form-subsection__error-message"
-                          component="span"
-                          name="password_confirmation"
-                        />
-                      )}
+                    {shouldShowFieldError(
+                      errors,
+                      touched,
+                      submitCount,
+                      "password_confirmation",
+                    ) && (
+                      <span
+                        className="form-subsection__error-message"
+                        role="alert"
+                      >
+                        {fieldErrorMessage(errors, "password_confirmation")}
+                      </span>
+                    )}
                   </div>
                 </>
               )}
           </div>
           {type !== "edit" ? (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Checkbox
-                onChange={(e) => setIsCheckedTerms(e.target.checked)}
-                value={checkedTerms}
-                checked={checkedTerms}
-              />
-              <span>
-                He leído y acepto los{" "}
-                <Link
-                  to={`${appPaths.termsConditionsOffline}?type=company`}
-                  target="_blank"
-                  style={{
-                    color: theme.fontsColors.corporativeColor,
+            <>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Checkbox
+                  onChange={(e) => {
+                    const next = e.target.checked;
+                    setIsCheckedTerms(next);
+                    if (next) {
+                      setFieldError("terms", undefined);
+                    }
                   }}
+                  value={checkedTerms}
+                  checked={checkedTerms}
+                />
+                <span>
+                  He leído y acepto los{" "}
+                  <Link
+                    to={`${appPaths.termsConditionsOffline}?type=company`}
+                    target="_blank"
+                    style={{
+                      color: theme.fontsColors.corporativeColor,
+                    }}
+                  >
+                    Términos y Condiciones
+                  </Link>
+                </span>
+              </div>
+              {fieldErrorMessage(errors, "terms") && (
+                <div
+                  className="form-subsection"
+                  role="alert"
+                  style={{ width: "100%" }}
                 >
-                  Términos y Condiciones
-                </Link>
-              </span>
-            </div>
+                  <span className="form-subsection__error-message">
+                    {fieldErrorMessage(errors, "terms")}
+                  </span>
+                </div>
+              )}
+            </>
           ) : null}
           <ReusableModal
             children={

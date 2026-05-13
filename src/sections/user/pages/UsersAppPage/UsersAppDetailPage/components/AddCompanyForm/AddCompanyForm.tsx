@@ -159,7 +159,7 @@ const AddCompanyForm = ({
               : socialMedia.account_name ?? "",
         }));
         const valid = newSocialMedias.filter(
-          (sm) => sm.social_media_id != null && sm.social_media_id !== "",
+          (sm) => sm.social_media_id != null,
         );
         appendSocialMediaToFormData(formData, valid);
       } else {
