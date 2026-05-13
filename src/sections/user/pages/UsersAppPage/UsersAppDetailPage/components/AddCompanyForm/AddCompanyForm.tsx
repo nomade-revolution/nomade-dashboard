@@ -23,6 +23,7 @@ import { Company } from "modules/user/domain/User";
 import { Checkbox } from "@mui/material";
 import { appPaths } from "sections/shared/utils/appPaths/appPaths";
 import theme from "assets/styles/theme";
+import { appendSocialMediaToFormData } from "sections/shared/utils/appendSocialMediaToFormData";
 
 const EXCLUDED_FIELDS = [
   "id",
@@ -63,7 +64,6 @@ const AddCompanyForm = ({
     client ? (client.contacts as never) : [],
   );
   const [isAddressModalOpen, setIsAddressModalOpen] = useState<boolean>(false);
-  useState<boolean>(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState<boolean>(false);
   const [isCheked, setIsChecked] = useState<boolean>(
     client ? Boolean(client.goCardless) : false,
@@ -94,6 +94,7 @@ const AddCompanyForm = ({
   ) => {
     if (!checkedTerms) {
       setErrors({ company: "Debes aceptar los términos y condiciones" });
+      return;
     }
 
     setSubmitting(true);
@@ -147,7 +148,6 @@ const AddCompanyForm = ({
     socialMediaKeys.forEach((k) => formData.delete(k));
 
     if (values.instagram) {
-      // caso "ya hay socialMedia" -> actualizar instagram; cada item debe tener social_media_id y account_name
       if (client?.socialMedia?.length) {
         const newSocialMedias = client.socialMedia.map((socialMedia) => ({
           social_media_id:
@@ -158,19 +158,14 @@ const AddCompanyForm = ({
               ? values.instagram
               : socialMedia.account_name ?? "",
         }));
-        // Filter out items without valid social_media_id (e.g. if API returned wrong shape)
         const valid = newSocialMedias.filter(
-          (sm) => sm.social_media_id != null,
+          (sm) => sm.social_media_id != null && sm.social_media_id !== "",
         );
-        formData.append("socialMedia", JSON.stringify(valid));
+        appendSocialMediaToFormData(formData, valid);
       } else {
-        // caso "no hay socialMedia" -> single JSON so backend never gets mixed indexed + raw
-        formData.append(
-          "socialMedia",
-          JSON.stringify([
-            { social_media_id: "1", account_name: values.instagram },
-          ]),
-        );
+        appendSocialMediaToFormData(formData, [
+          { social_media_id: 1, account_name: values.instagram },
+        ]);
       }
     }
 

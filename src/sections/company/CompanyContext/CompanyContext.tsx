@@ -231,17 +231,15 @@ export const CompanyContextProvider = ({
     }
 
     if (isHttpSuccessResponse(response)) {
-      // Debug logging removed for production
       setCompany(response.data);
-      setLoading(false);
       setIsSuccess(true);
+      setIsError(false);
     } else {
-      // Debug logging removed for production
-      setIsError(Boolean(response.error));
+      setIsError(true);
+      setIsSuccess(false);
     }
 
     setLoading(false);
-    setIsSuccess(response.success);
 
     return response;
   };

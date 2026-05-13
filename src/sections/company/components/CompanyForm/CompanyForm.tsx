@@ -28,6 +28,12 @@ import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { Checkbox } from "@mui/material";
 import { appPaths } from "sections/shared/utils/appPaths/appPaths";
 import theme from "assets/styles/theme";
+import { appendContactsToFormData } from "sections/shared/utils/appendContactsToFormData";
+import { appendSocialMediaToFormData } from "sections/shared/utils/appendSocialMediaToFormData";
+import {
+  isFormikServerAlertStatus,
+  splitLaravelErrorsForFormik,
+} from "sections/shared/utils/mapLaravelErrorsForFormik";
 
 const EXCLUDED_FIELDS = [
   "id",
@@ -142,19 +148,16 @@ const CompanyForm = ({
   };
   const handleSubmitForm = async (
     values: SubmitValues,
-    { setSubmitting, setErrors }: FormikHelpers<PartialCompany>,
+    { setSubmitting, setErrors, setStatus }: FormikHelpers<PartialCompany>,
   ) => {
-    const isDev = import.meta.env.MODE !== "production";
-    if (isDev) {
-      // eslint-disable-next-line no-console
-      console.log("[CompanyForm] onSubmit start", {
-        clientId: client?.id,
-        plan_id: formState.company_plan_id,
-      });
-    }
+    setStatus(undefined);
+
     if (!checkedTerms) {
       setErrors({ company: "Debes aceptar los términos y condiciones" });
+      return;
     }
+
+    const isCreate = type !== "edit";
 
     setSubmitting(true);
 
@@ -168,195 +171,200 @@ const CompanyForm = ({
           initialValues.id,
         );
       }
-    } catch (error) {
-      //
-    }
 
-    const formData = new FormData();
-    const formattedDate = formatDateWithDash(
-      values.plan?.start_date || new Date().toISOString().split("T")[0],
-    );
-
-    Object.keys(values).forEach((key) => {
-      if (!EXCLUDED_FIELDS.includes(key)) {
-        const value = values[key as keyof PartialCompany];
-        // Skip objects/arrays to avoid "[object Object]" in payload
-        if (value != null && typeof value === "object") return;
-        formData.append(key, value ?? "");
-      }
-    });
-
-    // Add password_confirmation (mirror the password value)
-    if (values.password) {
-      formData.append("password_confirmation", values.password);
-    }
-    if (registerAddress) {
-      formData.delete("address");
-
-      const newAddress = {
-        ...registerAddress,
-        address_2: registerAddress.address_2 ?? "",
-      };
-      formData.append("address", JSON.stringify(newAddress));
-    } else {
-      // For new clients without address, provide minimal required fields
-      const defaultAddress = {
-        address: "Default Address", // Required field
-        city_id: 1, // Required field - default to first city
-        country_id: 1, // Required field - default to Spain (ID 1)
-        province: "Default Province",
-        zip_code: "00000",
-        name: "Default Address Name",
-      };
-      formData.append("address", JSON.stringify(defaultAddress));
-    }
-
-    if (formattedDate) {
-      formData.append("start_date", formattedDate);
-    }
-
-    // Always send accept_conditions (required by backend, even when false)
-    formData.append("accept_conditions", checkedTerms ? "true" : "false");
-
-    // Contacts: array of full objects for backend validation
-    // Expected: { name, surname?, email, phone?, type_id } with name, email, type_id required
-    const seenEmails = new Set<string>();
-    const contactsPayload = (
-      Array.isArray(registerContacts) ? registerContacts : []
-    )
-      .filter((c): c is Contact => c != null && typeof c === "object")
-      .map((c) => {
-        const name = String(c?.name ?? "").trim();
-        const surname =
-          c?.surname != null && String(c.surname).trim() !== ""
-            ? String(c.surname).trim()
-            : undefined;
-        const email = String(c?.email ?? "").trim();
-        const phone =
-          c?.phone != null && String(c.phone).trim() !== ""
-            ? String(c.phone).trim()
-            : undefined;
-        const typeId = Number(c?.type_id) || 0;
-        return { name, surname, email, phone, type_id: typeId };
-      })
-      .filter((c) => {
-        if (
-          c.name === "" ||
-          c.email === "" ||
-          c.type_id <= 0 ||
-          seenEmails.has(c.email)
-        )
-          return false;
-        seenEmails.add(c.email);
-        return true;
-      })
-      .map(({ name, surname, email, phone, type_id }) => {
-        const contact: {
-          name: string;
-          surname?: string;
-          email: string;
-          phone?: string;
-          type_id: number;
-        } = {
-          name,
-          email,
-          type_id,
-        };
-        if (surname) contact.surname = surname;
-        if (phone) contact.phone = phone;
-        return contact;
-      });
-    formData.append("contacts", JSON.stringify(contactsPayload));
-
-    // Ensure only one representation of socialMedia: remove any existing (e.g. from generic loop or other source)
-    const socialMediaKeys: string[] = [];
-    formData.forEach((_, key) => {
-      if (
-        key === "socialMedia" ||
-        key === "social_media" ||
-        key.startsWith("socialMedia[") ||
-        key.startsWith("social_media[")
-      ) {
-        socialMediaKeys.push(key);
-      }
-    });
-    socialMediaKeys.forEach((k) => formData.delete(k));
-
-    // Send as single JSON string so backend never receives mixed indexed + raw (which can yield two objects)
-    if (values.instagram?.trim()) {
-      formData.append(
-        "socialMedia",
-        JSON.stringify([
-          { social_media_id: "1", account_name: values.instagram.trim() },
-        ]),
+      const formData = new FormData();
+      const formattedDate = formatDateWithDash(
+        values.plan?.start_date || new Date().toISOString().split("T")[0],
       );
-    }
 
-    // socialMedia field removed - not needed for cms-register endpoint
-
-    // name field is already added above from values.name (user name)
-    // company name is handled via company_name field
-    // Convert boolean to string for FormData
-    formData.append("gocardless", isCheked ? "true" : "false");
-
-    if (!deleteImageMode && file && file[0]) {
-      formData.append("image", file![0]);
-    }
-
-    formData.delete("comments");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    formData.append("comments", (values as any)?.company_comments ?? "");
-    formData.append("plan_id", formState.company_plan_id);
-
-    // hash field removed - not needed for cms-register endpoint
-
-    // Edit: PUT /companies/{id} must receive only company data. Plan goes to PUT /companies/{id}/company-plan.
-    let planPayload: CompanyPlanPayload | undefined;
-    if (type === "edit") {
-      COMPANY_PLAN_FORM_DATA_KEYS.forEach((key) => formData.delete(key));
-      // date for company-plan API: YYYY-MM-DD (formattedDate is d-m-Y)
-      const [d, m, y] = formattedDate ? formattedDate.split("-") : ["", "", ""];
-      const dateYmd = d && m && y ? `${y}-${m}-${d}` : "";
-      const planId = Number(formState.company_plan_id);
-      const comments =
-        (values as { plan_comments?: string })?.plan_comments ?? null;
-      planPayload = {
-        plan_id: planId,
-        date: dateYmd,
-        extension: 0,
-        comments: comments === "" ? null : comments,
-      };
-    }
-
-    if (isDev) {
-      // eslint-disable-next-line no-console
-      console.log("[CompanyForm] calling onSubmit (editCompanyCms)", {
-        clientId: client?.id,
-        planPayload,
+      Object.keys(values).forEach((key) => {
+        if (!EXCLUDED_FIELDS.includes(key)) {
+          const value = values[key as keyof PartialCompany];
+          // Skip objects/arrays to avoid "[object Object]" in payload
+          if (value != null && typeof value === "object") return;
+          formData.append(key, value ?? "");
+        }
       });
-    }
-    // Temporary: inspect FormData before send to verify socialMedia is not duplicated or wrong
-    // eslint-disable-next-line no-console
-    console.log("[CompanyForm] formData entries", [...formData.entries()]);
-    const response = await onSubmit(
-      formData,
-      client && client?.id,
-      planPayload,
-    );
 
-    // DEV-only debug logging
-    if (isDev) {
-      // Debug logging removed for production
-    }
+      if (values.password) {
+        formData.append("password_confirmation", values.password);
+      }
 
-    if ((response as { success?: boolean })?.success) {
-      // Debug logging removed for production
-      setIsOpen(false);
-    } else {
-      // Debug logging removed for production
-    }
+      if (registerAddress) {
+        formData.delete("address");
+        const newAddress = {
+          ...registerAddress,
+          address_2: registerAddress.address_2 ?? "",
+        };
+        formData.append("address", JSON.stringify(newAddress));
+      } else {
+        const defaultAddress = {
+          address: "Default Address",
+          city_id: 1,
+          country_id: 1,
+          province: "Default Province",
+          zip_code: "00000",
+          name: "Default Address Name",
+        };
+        formData.append("address", JSON.stringify(defaultAddress));
+      }
 
-    setSubmitting(false);
+      if (formattedDate) {
+        formData.append("start_date", formattedDate);
+      }
+
+      formData.append("accept_conditions", JSON.stringify(checkedTerms));
+      formData.append("gocardless", JSON.stringify(isCheked));
+
+      const seenEmails = new Set<string>();
+      const contactsPayload = (
+        Array.isArray(registerContacts) ? registerContacts : []
+      )
+        .filter((c): c is Contact => c != null && typeof c === "object")
+        .map((c) => {
+          const name = String(c?.name ?? "").trim();
+          const surname =
+            c?.surname != null && String(c.surname).trim() !== ""
+              ? String(c.surname).trim()
+              : undefined;
+          const email = String(c?.email ?? "").trim();
+          const phone =
+            c?.phone != null && String(c.phone).trim() !== ""
+              ? String(c.phone).trim()
+              : undefined;
+          const typeId = Number(c?.type_id) || 0;
+          return { name, surname, email, phone, type_id: typeId };
+        })
+        .filter((c) => {
+          if (
+            c.name === "" ||
+            c.email === "" ||
+            c.type_id <= 0 ||
+            seenEmails.has(c.email)
+          )
+            return false;
+          seenEmails.add(c.email);
+          return true;
+        })
+        .map(({ name, surname, email, phone, type_id }) => {
+          const contact: {
+            name: string;
+            surname?: string;
+            email: string;
+            phone?: string;
+            type_id: number;
+          } = {
+            name,
+            email,
+            type_id,
+          };
+          if (surname) contact.surname = surname;
+          if (phone) contact.phone = phone;
+          return contact;
+        });
+
+      const contactsForBracket = contactsPayload.map((c) => ({
+        name: c.name,
+        surname: c.surname ?? "",
+        email: c.email,
+        phone: c.phone ?? "",
+        type_id: c.type_id,
+      }));
+
+      if (isCreate && contactsForBracket.length === 0) {
+        setErrors({ contacts: "Debe añadir al menos un contacto" });
+        return;
+      }
+
+      if (contactsForBracket.length > 0) {
+        appendContactsToFormData(formData, contactsForBracket);
+      }
+
+      if (values.instagram?.trim()) {
+        appendSocialMediaToFormData(formData, [
+          {
+            social_media_id: 1,
+            account_name: values.instagram.trim(),
+          },
+        ]);
+      }
+
+      if (!deleteImageMode && file && file[0]) {
+        formData.append("image", file[0]);
+      }
+
+      formData.delete("comments");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      formData.append("comments", (values as any)?.company_comments ?? "");
+      formData.append("plan_id", formState.company_plan_id);
+
+      let planPayload: CompanyPlanPayload | undefined;
+      if (type === "edit") {
+        COMPANY_PLAN_FORM_DATA_KEYS.forEach((key) => formData.delete(key));
+        const [d, m, y] = formattedDate
+          ? formattedDate.split("-")
+          : ["", "", ""];
+        const dateYmd = d && m && y ? `${y}-${m}-${d}` : "";
+        const planId = Number(formState.company_plan_id);
+        const comments =
+          (values as { plan_comments?: string })?.plan_comments ?? null;
+        planPayload = {
+          plan_id: planId,
+          date: dateYmd,
+          extension: 0,
+          comments: comments === "" ? null : comments,
+        };
+      }
+
+      const response = await onSubmit(
+        formData,
+        client && client?.id,
+        planPayload,
+      );
+
+      const res = response as {
+        success?: boolean;
+        errors?: Record<string, string[] | string>;
+        message?: string;
+      };
+
+      if (res?.success) {
+        setIsOpen(false);
+        setStatus(undefined);
+        setErrors({});
+      } else {
+        const { fieldErrors, otherLabels } = splitLaravelErrorsForFormik(
+          res.errors,
+        );
+        setErrors(fieldErrors);
+        const hasLines = otherLabels.length > 0;
+        const hasMsg = Boolean(res.message?.trim());
+        if (hasLines || hasMsg) {
+          setStatus({
+            serverTitle:
+              (hasMsg ? res.message : null) ?? "No se pudo guardar el cliente",
+            serverLines: otherLabels,
+          });
+        } else if (Object.keys(fieldErrors).length > 0) {
+          setStatus({
+            serverTitle: "Revisa los campos indicados en el formulario.",
+            serverLines: [],
+          });
+        } else {
+          setStatus({
+            serverTitle: "No se pudo guardar el cliente.",
+            serverLines: [],
+          });
+        }
+      }
+    } catch {
+      setStatus({
+        serverTitle: "Error de red o del servidor",
+        serverLines: [],
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   useEffect(() => {
@@ -399,9 +407,34 @@ const CompanyForm = ({
       //@ts-expect-error
       onSubmit={handleSubmitForm}
     >
-      {({ errors, touched, handleSubmit, getFieldProps, isSubmitting }) => (
+      {({
+        errors,
+        touched,
+        handleSubmit,
+        getFieldProps,
+        isSubmitting,
+        status,
+      }) => (
         <ReusableFormStyled onSubmit={handleSubmit} className="datasheet-form">
           <h3>Cliente</h3>
+          {isFormikServerAlertStatus(status) && (
+            <div
+              className="form-subsection"
+              role="alert"
+              style={{ color: theme.colors.red }}
+            >
+              <p className="form-subsection__error-message">
+                {status.serverTitle}
+              </p>
+              {status.serverLines.length > 0 && (
+                <ul style={{ margin: "0.5rem 0 0", paddingLeft: "1.25rem" }}>
+                  {status.serverLines.map((line, idx) => (
+                    <li key={`${idx}-${line}`}>{line}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
           <div className="datasheet-form__content">
             <h4 className="datasheet-form__title">Información del cliente</h4>
             <div className="form-subsection">
@@ -826,6 +859,11 @@ const CompanyForm = ({
                   ? "Modificar contacto"
                   : "Añadir contacto"}
               </button>
+              {errors.contacts && (
+                <span className="form-subsection__error-message" role="alert">
+                  {String(errors.contacts)}
+                </span>
+              )}
             </div>
             {type === "edit" &&
               user.id === client?.id &&
