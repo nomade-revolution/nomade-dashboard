@@ -1,6 +1,7 @@
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 import { Company } from "modules/user/domain/User";
-import { useCallback, useEffect } from "react";
+import { Contact } from "modules/contact/domain/Contact";
+import { useCallback, useEffect, useMemo } from "react";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import contactsHeader from "sections/company/pages/CompanyDetailPage/utils/contactsHeader";
 import { usePlansContext } from "sections/plans/PlansContext/usePlansContext";
@@ -43,7 +44,46 @@ const PlanPage = (): React.ReactElement => {
     return planTableSections;
   };
 
-  const contacts = companyData?.contacts ?? [];
+  // Deduplicate contacts by first_name/last_name/email/phone for display (temporary frontend patch)
+  const uniqueContacts = useMemo(() => {
+    const contacts = companyData?.contacts ?? [];
+    const result: Contact[] = [];
+    const seen = new Set<string>();
+    contacts.forEach(
+      (contact: {
+        first_name?: string;
+        last_name?: string;
+        name?: string;
+        surname?: string;
+        email?: string;
+        phone?: string;
+        type?: string;
+        type_id?: number;
+      }) => {
+        const firstName = contact.first_name ?? contact.name ?? "";
+        const lastName = contact.last_name ?? contact.surname ?? "";
+        const key = [
+          firstName,
+          lastName,
+          contact.email ?? "",
+          contact.phone ?? "",
+        ].join("|");
+        if (!seen.has(key)) {
+          seen.add(key);
+          const normalizedContact: Contact = {
+            name: contact.name ?? contact.first_name ?? "",
+            surname: contact.surname ?? contact.last_name ?? "",
+            email: contact.email ?? "",
+            phone: contact.phone ?? "",
+            type: contact.type ?? "",
+            type_id: contact.type_id ?? 0,
+          };
+          result.push(normalizedContact);
+        }
+      },
+    );
+    return result;
+  }, [companyData?.contacts]);
 
   return (
     <ReusablePageStyled className="plans-page">
@@ -73,10 +113,10 @@ const PlanPage = (): React.ReactElement => {
         )}
         <section className="plans-page__mensual">
           <h3>Contactos</h3>
-          {contacts.length === 0 ? (
+          {uniqueContacts.length === 0 ? (
             <p className="plans-page__empty">No hay contactos</p>
           ) : (
-            contacts.map((contact, index) => (
+            uniqueContacts.map((contact, index) => (
               <SimpleCardMobile
                 key={(contact as { id?: number })?.id ?? index}
                 bodySection={contact}
@@ -112,7 +152,7 @@ const PlanPage = (): React.ReactElement => {
         <section className="plans-page__mensual">
           <h3>Contactos</h3>
           <DashboardTable
-            bodySections={contacts}
+            bodySections={uniqueContacts}
             headerSections={contactsHeader}
             pageName={SectionTypes.users}
           />

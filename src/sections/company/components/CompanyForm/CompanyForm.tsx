@@ -6,7 +6,7 @@ import {
   FormikErrors,
   FormikTouched,
 } from "formik";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import CustomFileInput from "sections/shared/components/CustomFileInput/CustomFileInput";
 import ReusableSelect from "sections/shared/components/ReusableSelect/ReusableSelect";
 import {
@@ -67,27 +67,6 @@ function shouldShowFieldError(
   if (!msg) return false;
   if (field === "terms" || field === "contacts") return true;
   return Boolean(touched[field]) || submitCount > 0;
-}
-
-function CompanyFormSubmitDebug(props: {
-  submitCount: number;
-  isValid: boolean;
-  errors: FormikErrors<CompanyFormValues>;
-}): null {
-  const prevSubmitCount = useRef(-1);
-  useEffect(() => {
-    if (!import.meta.env.DEV) return;
-    if (props.submitCount !== prevSubmitCount.current) {
-      prevSubmitCount.current = props.submitCount;
-      // eslint-disable-next-line no-console
-      console.log("[CompanyForm] submitCount changed", {
-        submitCount: props.submitCount,
-        isValid: props.isValid,
-        errors: props.errors,
-      });
-    }
-  }, [props.submitCount, props.isValid, props.errors]);
-  return null;
 }
 
 const EXCLUDED_FIELDS = [
@@ -167,9 +146,43 @@ const CompanyForm = ({
   const [registerAddress, setRegisterAddress] = useState<FullAddress | null>(
     client ? client.address : null,
   );
-  const [registerContacts, setRegisterContacts] = useState<Contact[]>(
-    client ? (client.contacts as never) : [],
-  );
+  // Deduplicate contacts by first_name/last_name/email/phone for initial state (temporary frontend patch)
+  const [registerContacts, setRegisterContacts] = useState<Contact[]>(() => {
+    const contacts = (client?.contacts ?? []) as Array<{
+      first_name?: string;
+      last_name?: string;
+      name?: string;
+      surname?: string;
+      email?: string;
+      phone?: string;
+      type?: string;
+      type_id?: number;
+    }>;
+    const result: Contact[] = [];
+    const seen = new Set<string>();
+    contacts.forEach((contact) => {
+      const firstName = contact.first_name ?? contact.name ?? "";
+      const lastName = contact.last_name ?? contact.surname ?? "";
+      const key = [
+        firstName,
+        lastName,
+        contact.email ?? "",
+        contact.phone ?? "",
+      ].join("|");
+      if (!seen.has(key)) {
+        seen.add(key);
+        result.push({
+          name: contact.name ?? contact.first_name ?? "",
+          surname: contact.surname ?? contact.last_name ?? "",
+          email: contact.email ?? "",
+          phone: contact.phone ?? "",
+          type: contact.type ?? "",
+          type_id: contact.type_id ?? 0,
+        });
+      }
+    });
+    return result;
+  });
   const [isAddressModalOpen, setIsAddressModalOpen] = useState<boolean>(false);
   const [isPasswordShown, setIsPasswordShown] = useState<boolean>(false);
   const [isPasswordConfirmationShown, setIsPasswordConfirmationShown] =
@@ -203,14 +216,6 @@ const CompanyForm = ({
     { setSubmitting, setErrors, setStatus }: FormikHelpers<CompanyFormValues>,
   ) => {
     setStatus(undefined);
-
-    if (import.meta.env.DEV) {
-      // eslint-disable-next-line no-console
-      console.log("[CompanyForm] handleSubmitForm enter", {
-        checkedTerms,
-        type,
-      });
-    }
 
     if (!checkedTerms) {
       setErrors({ terms: "Debes aceptar los términos y condiciones" });
@@ -392,14 +397,6 @@ const CompanyForm = ({
         };
       }
 
-      if (import.meta.env.DEV) {
-        // eslint-disable-next-line no-console
-        console.log("[CompanyForm] POST onSubmit (cms)", {
-          isCreate,
-          contactsCount: contactsToSend.length,
-        });
-      }
-
       const response = await onSubmit(
         formData,
         client && client?.id,
@@ -500,15 +497,9 @@ const CompanyForm = ({
         isSubmitting,
         status,
         submitCount,
-        isValid,
         setFieldError,
       }) => (
         <ReusableFormStyled onSubmit={handleSubmit} className="datasheet-form">
-          <CompanyFormSubmitDebug
-            submitCount={submitCount}
-            isValid={isValid}
-            errors={errors}
-          />
           <h3>Cliente</h3>
           {isFormikServerAlertStatus(status) && (
             <div
