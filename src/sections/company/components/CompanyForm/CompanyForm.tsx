@@ -217,12 +217,15 @@ const CompanyForm = ({
   ) => {
     setStatus(undefined);
 
-    if (!checkedTerms) {
+    const isCreate = type !== "edit";
+
+    // Terms acceptance is only required in create mode. In edit mode there is
+    // no terms checkbox rendered, so checkedTerms is permanently false and
+    // would silently block the submit. Restrict the guard to create only.
+    if (isCreate && !checkedTerms) {
       setErrors({ terms: "Debes aceptar los términos y condiciones" });
       return;
     }
-
-    const isCreate = type !== "edit";
 
     setSubmitting(true);
 

@@ -171,7 +171,12 @@ export class CompanyRepository {
     id: number,
   ): Promise<HttpResponseInterface<Company>> {
     try {
-      const resp = await this.http.put<Company>(
+      // PHP does not auto-parse multipart/form-data on PUT, so nested keys
+      // like contacts[0][name] arrive malformed. Use Laravel's method
+      // spoofing (POST + _method=PUT) so PHP populates the request body
+      // correctly while the router still dispatches to the PUT update route.
+      company.append("_method", "PUT");
+      const resp = await this.http.post<Company>(
         `${COMPANY_BASE}/${id}`,
         company,
       );
