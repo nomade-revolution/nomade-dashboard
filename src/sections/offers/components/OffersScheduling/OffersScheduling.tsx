@@ -157,18 +157,17 @@ const OffersScheduling = ({
       setSelectedDays([]);
       setFieldValue("min_guests", 0);
       setFieldValue("max_guests", 0);
-      setFieldValue("advance_notice_time", 0);
+      // advance_notice_time is offer-level (not per-address) and is hydrated
+      // from Formik initialValues via `{...initialData, ...offer}`. Do NOT
+      // reset it here, otherwise it overwrites the value loaded from the API.
       return;
     }
 
     setFieldValue("min_guests", existingOfferable.min_guests || 0);
     setFieldValue("max_guests", existingOfferable.max_guests || 0);
-    setFieldValue(
-      "advance_notice_time",
-      "advance_notice_time" in existingOfferable
-        ? existingOfferable.advance_notice_time || 0
-        : 0,
-    );
+    // advance_notice_time is offer-level (not per-address) and is hydrated
+    // from Formik initialValues via `{...initialData, ...offer}`. Do NOT
+    // reset it here, otherwise it overwrites the value loaded from the API.
 
     const existingWeek = (
       existingOfferable as OfferableRestaurant | OfferableActivity
