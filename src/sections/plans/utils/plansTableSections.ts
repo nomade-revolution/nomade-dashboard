@@ -284,8 +284,8 @@ export const companyPlanTableSections: HeaderSection[] = [
   },
   {
     id: 6,
-    name: "Fecha inicio trimestre",
-    property: "start_date",
+    name: "Fecha inicio",
+    property: "plan_start_date",
     sortTag: "",
     pageName: SectionTypes.plans,
   },
