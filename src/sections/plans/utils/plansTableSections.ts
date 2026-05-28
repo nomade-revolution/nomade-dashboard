@@ -175,14 +175,14 @@ export const planTableSections: HeaderSection[] = [
   {
     id: 6,
     name: "Fecha de alta",
-    property: "created_at",
+    property: "company_created_at",
     sortTag: "",
     pageName: "offers",
   },
   {
     id: 7,
     name: "Fecha inicio plan",
-    property: "start_date",
+    property: "plan_start_date",
     sortTag: "",
     pageName: "offers",
   },
