@@ -1,4 +1,5 @@
 import { PartialCompany } from "@company";
+import { Contact } from "modules/contact/domain/Contact";
 import * as yup from "yup";
 
 /** Form values for CompanyForm (extends API company fields with UI-only keys). */
@@ -7,12 +8,12 @@ export type CompanyFormValues = PartialCompany & {
   surname?: string;
   mobile?: string;
   plan: { start_date?: string };
-  company_comments?: string;
+  company_comments?: string | null;
   image?: string;
   /** Client-side only: términos no aceptados al enviar */
   terms?: string;
-  /** Set by submit validation / API mapping only; not a real input. */
-  contacts?: string;
+  /** Hydrated from API; the submit handler rebuilds payload from a separate state. */
+  contacts?: Contact[];
 };
 
 export const clientSchema = yup.object().shape({
@@ -26,20 +27,20 @@ export const clientSchema = yup.object().shape({
   company: yup.string().nullable(),
   company_name: yup.string().required("La razón social es un campo requerido"),
   description: yup.string().required("La descripción es un campo requerido"),
-  phone: yup.string(),
-  instagram: yup.string(),
-  web: yup.string(),
+  phone: yup.string().nullable(),
+  instagram: yup.string().nullable(),
+  web: yup.string().nullable(),
   start_date: yup
     .string()
     .typeError("La fecha debe tener un formato válido")
     .nullable(),
 
-  company_comments: yup.string(),
+  company_comments: yup.string().nullable(),
 
   name: yup.string().required("El nombre es un campo requerido"),
-  surname: yup.string().max(255, "Máximo 255 caracteres"),
+  surname: yup.string().max(255, "Máximo 255 caracteres").nullable(),
   email: yup.string().required("El email es un campo requerido").email(),
-  mobile: yup.string().max(50, "Máximo 50 caracteres"),
+  mobile: yup.string().max(50, "Máximo 50 caracteres").nullable(),
   password: yup
     .string()
     .min(8, "Debe contener almenos 8 caracteres")
@@ -55,7 +56,7 @@ export const clientSchema = yup.object().shape({
     .oneOf([yup.ref("password")], "Las contraseñas deben coincidir"),
 
   terms: yup.string().nullable(),
-  contacts: yup.string().nullable(),
+  contacts: yup.array().nullable().optional(),
 });
 
 export const editClientSchema = yup.object().shape({
@@ -69,18 +70,18 @@ export const editClientSchema = yup.object().shape({
   company: yup.string().nullable(),
   company_name: yup.string().required("La razón social es un campo requerido"),
   description: yup.string().nullable(),
-  phone: yup.string(),
-  instagram: yup.string(),
-  web: yup.string(),
+  phone: yup.string().nullable(),
+  instagram: yup.string().nullable(),
+  web: yup.string().nullable(),
   start_date: yup
     .string()
     .typeError("La fecha debe tener un formato válido")
     .nullable(),
-  surname: yup.string().max(255, "Máximo 255 caracteres"),
-  mobile: yup.string().max(50, "Máximo 50 caracteres"),
-  company_comments: yup.string(),
+  surname: yup.string().max(255, "Máximo 255 caracteres").nullable(),
+  mobile: yup.string().max(50, "Máximo 50 caracteres").nullable(),
+  company_comments: yup.string().nullable(),
   terms: yup.string().nullable(),
-  contacts: yup.string().nullable(),
+  contacts: yup.array().nullable().optional(),
 });
 
 export const initialData: CompanyFormValues = {
