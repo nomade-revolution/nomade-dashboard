@@ -149,7 +149,9 @@ const OffersScheduling = ({
             : [];
 
     const existingOfferable = Array.isArray(byTypeOfferables)
-      ? byTypeOfferables.find((item) => item.address_id === selectedAddressId)
+      ? byTypeOfferables.find(
+          (item) => item != null && item.address_id === selectedAddressId,
+        )
       : undefined;
 
     if (!existingOfferable) {

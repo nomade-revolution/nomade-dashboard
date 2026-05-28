@@ -171,8 +171,15 @@ const OffersForm = ({
     if (offerType === OfferTypes.brand || !offerType) return data;
 
     if (typeof selectedIndex === "number") {
+      // When the user selects a newly-created address (not yet in
+      // offerResumeEdit), `offerResumeEdit[selectedIndex]` is undefined.
+      // Returning `[undefined]` would crash downstream consumers that read
+      // `.address_id`, so we default to an empty list and let the user
+      // configure the schedule from scratch for that address.
       // @ts-expect-error TODO: fix this
-      data[offerType.toLowerCase()] = [offerResumeEdit[selectedIndex]];
+      const resumeEntry = offerResumeEdit[selectedIndex];
+      // @ts-expect-error TODO: fix this
+      data[offerType.toLowerCase()] = resumeEntry ? [resumeEntry] : [];
     } else {
       // @ts-expect-error TODO: fix this
       data[offerType.toLowerCase()] = offerResumeFormat;
