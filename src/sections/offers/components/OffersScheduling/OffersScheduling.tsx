@@ -129,6 +129,18 @@ const OffersScheduling = ({
   const [showScheduleToast, setShowScheduleToast] = useState<boolean>(false);
 
   useEffect(() => {
+    // Reset Formik time fields for all 7 days; we'll repopulate from the
+    // existing offerable below (if any). Avoids stale values leaking from
+    // a previously selected address.
+    const clearAllDayTimeFields = () => {
+      offersTimetable.forEach((item) => {
+        setFieldValue(`from_time_day_${item.day_number}_1`, "");
+        setFieldValue(`to_time_day_${item.day_number}_1`, "");
+        setFieldValue(`from_time_day_${item.day_number}_2`, "");
+        setFieldValue(`to_time_day_${item.day_number}_2`, "");
+      });
+    };
+
     const selectedAddressId = Number.parseInt(address, 10);
     const hasValidAddress =
       Number.isInteger(selectedAddressId) && selectedAddressId > 0;
@@ -136,6 +148,7 @@ const OffersScheduling = ({
     if (!hasValidAddress) {
       setWeek([]);
       setSelectedDays([]);
+      clearAllDayTimeFields();
       return;
     }
 
@@ -159,6 +172,7 @@ const OffersScheduling = ({
       setSelectedDays([]);
       setFieldValue("min_guests", 0);
       setFieldValue("max_guests", 0);
+      clearAllDayTimeFields();
       // advance_notice_time is offer-level (not per-address) and is hydrated
       // from Formik initialValues via `{...initialData, ...offer}`. Do NOT
       // reset it here, otherwise it overwrites the value loaded from the API.
@@ -199,6 +213,29 @@ const OffersScheduling = ({
           },
         },
       };
+    });
+
+    // Reset all day time fields first to avoid leftovers, then hydrate
+    // Formik for the days present in this offerable. Never coerce missing
+    // values to `0`; `<Field type="time">` expects an HH:mm string or "".
+    clearAllDayTimeFields();
+    mappedSelectedDays.forEach((day) => {
+      setFieldValue(
+        `from_time_day_${day.day_number}_1`,
+        day.shifts.firstShift.from_time,
+      );
+      setFieldValue(
+        `to_time_day_${day.day_number}_1`,
+        day.shifts.firstShift.to_time,
+      );
+      setFieldValue(
+        `from_time_day_${day.day_number}_2`,
+        day.shifts.secondShift.from_time,
+      );
+      setFieldValue(
+        `to_time_day_${day.day_number}_2`,
+        day.shifts.secondShift.to_time,
+      );
     });
 
     setSelectedDays(mappedSelectedDays);
@@ -799,7 +836,6 @@ const OffersScheduling = ({
         selectedDays={selectedDays}
         setSelectedDays={setSelectedDays}
         setFieldValue={setFieldValue}
-        offer={offer}
       />
 
       <div className="scheduling__btn-container">

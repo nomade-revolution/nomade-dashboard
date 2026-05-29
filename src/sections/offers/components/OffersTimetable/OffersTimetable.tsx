@@ -8,7 +8,6 @@ import {
   ErrorMessage,
 } from "formik";
 import {
-  FullOffer,
   OfferTypes,
   SelectedDay,
   TimeSlot,
@@ -34,7 +33,6 @@ interface Props {
     value: unknown,
     shouldValidate?: boolean,
   ) => Promise<void | FormikErrors<unknown>>;
-  offer: FullOffer;
 }
 
 const OffersTimetable = ({
@@ -46,7 +44,6 @@ const OffersTimetable = ({
   selectedDays,
   setSelectedDays,
   setFieldValue,
-  offer,
 }: Props): React.ReactElement => {
   const getValidSlotsFromFormik = (dayNumber: number) => {
     const firstShiftFrom =
@@ -75,52 +72,67 @@ const OffersTimetable = ({
   };
 
   const handleCheckboxChange = (selectedDay: (typeof offersTimetable)[0]) => {
-    setSelectedDays((prevDays: SelectedDay[]) => {
-      const isSelected = prevDays.some(
-        (day) => day.day_number === selectedDay.day_number,
+    const isSelected = selectedDays.some(
+      (day) => day.day_number === selectedDay.day_number,
+    );
+
+    if (isSelected) {
+      setSelectedDays((prevDays) =>
+        prevDays.filter((day) => day.day_number !== selectedDay.day_number),
       );
+      return;
+    }
 
-      if (isSelected) {
-        return prevDays.filter(
-          (day) => day.day_number !== selectedDay.day_number,
-        );
-      } else {
-        const emptyShifts = {
-          firstShift: { from_time: "", to_time: "" },
-          secondShift: { from_time: "", to_time: "" },
-        };
-
-        // Copy from previous day only when checking a new day
-        // and the previous day has at least one valid slot in Formik.
-        let shifts = emptyShifts;
-        if (selectedDay.day_number > 0) {
-          const previousSlots = getValidSlotsFromFormik(
-            selectedDay.day_number - 1,
-          );
-          if (previousSlots.length > 0) {
-            shifts = {
-              firstShift: {
-                from_time: previousSlots[0]?.from_time || "",
-                to_time: previousSlots[0]?.to_time || "",
-              },
-              secondShift: {
-                from_time: previousSlots[1]?.from_time || "",
-                to_time: previousSlots[1]?.to_time || "",
-              },
-            };
-          }
-        }
-
-        return [
-          ...prevDays,
-          {
-            day_number: selectedDay.day_number,
-            day_name: selectedDay.name,
-            shifts,
+    // Compute shifts for the newly checked day. Copy from the previous day
+    // only when its Formik values are valid; otherwise leave them empty.
+    const emptyShifts = {
+      firstShift: { from_time: "", to_time: "" },
+      secondShift: { from_time: "", to_time: "" },
+    };
+    let shifts = emptyShifts;
+    if (selectedDay.day_number > 0) {
+      const previousSlots = getValidSlotsFromFormik(selectedDay.day_number - 1);
+      if (previousSlots.length > 0) {
+        shifts = {
+          firstShift: {
+            from_time: previousSlots[0]?.from_time || "",
+            to_time: previousSlots[0]?.to_time || "",
           },
-        ];
+          secondShift: {
+            from_time: previousSlots[1]?.from_time || "",
+            to_time: previousSlots[1]?.to_time || "",
+          },
+        };
       }
-    });
+    }
+
+    // Write Formik for ONLY the newly added day. Never use `|| 0` here:
+    // `<Field type="time">` requires a string in HH:mm format or "".
+    setFieldValue(
+      `from_time_day_${selectedDay.day_number}_1`,
+      shifts.firstShift.from_time,
+    );
+    setFieldValue(
+      `to_time_day_${selectedDay.day_number}_1`,
+      shifts.firstShift.to_time,
+    );
+    setFieldValue(
+      `from_time_day_${selectedDay.day_number}_2`,
+      shifts.secondShift.from_time,
+    );
+    setFieldValue(
+      `to_time_day_${selectedDay.day_number}_2`,
+      shifts.secondShift.to_time,
+    );
+
+    setSelectedDays((prevDays) => [
+      ...prevDays,
+      {
+        day_number: selectedDay.day_number,
+        day_name: selectedDay.name,
+        shifts,
+      },
+    ]);
   };
 
   useEffect(() => {
@@ -182,45 +194,6 @@ const OffersTimetable = ({
 
     setWeek(updatedWeek);
   }, [getFieldProps, selectedDays, setWeek]);
-
-  const offerType = offer?.type;
-  useEffect(() => {
-    if (
-      offerType === OfferTypes.restaurant ||
-      offerType === OfferTypes.activity ||
-      offerType === OfferTypes.delivery
-    ) {
-      selectedDays?.forEach((day) => {
-        if (day.shifts?.firstShift.from_time !== undefined) {
-          setFieldValue(
-            `from_time_day_${day.day_number}_1`,
-            day.shifts.firstShift.from_time || 0,
-          );
-        }
-
-        if (day.shifts?.firstShift.to_time !== undefined) {
-          setFieldValue(
-            `to_time_day_${day.day_number}_1`,
-            day.shifts.firstShift.to_time || 0,
-          );
-        }
-
-        if (day.shifts?.secondShift.from_time !== undefined) {
-          setFieldValue(
-            `from_time_day_${day.day_number}_2`,
-            day.shifts.secondShift.from_time || 0,
-          );
-        }
-
-        if (day.shifts?.secondShift.to_time !== undefined) {
-          setFieldValue(
-            `to_time_day_${day.day_number}_2`,
-            day.shifts.secondShift.to_time || 0,
-          );
-        }
-      });
-    }
-  }, [offerType, selectedDays, setFieldValue]);
 
   return (
     <section>
