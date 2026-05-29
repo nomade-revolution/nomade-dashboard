@@ -1015,14 +1015,19 @@ const OffersForm = ({
               type="submit"
               disabled={
                 isSubmitting ||
-                // Only Restaurant and Activity offers require offerResume
-                // Brand, Lodging, and Delivery don't need it
+                // Only Restaurant and Activity offers require a schedule.
+                // In edit mode the source of truth is `offerResumeEdit` (the
+                // master list sent to backend and updated by "Guardar horario").
+                // In create mode it is `offerResume` (propagated via
+                // schedulingState). Brand, Lodging and Delivery don't need it.
                 ((offerType === OfferTypes.restaurant ||
                   offerType === OfferTypes.activity) &&
-                  (!offerResume ||
-                    (Array.isArray(offerResume) && offerResume.length === 0)))
-                // (!formState.address &&
-                //   categoryId !== DELIVERY_OFFER_ID)
+                  (mode === "edit"
+                    ? !offerResumeEdit ||
+                      (Array.isArray(offerResumeEdit) &&
+                        offerResumeEdit.length === 0)
+                    : !offerResume ||
+                      (Array.isArray(offerResume) && offerResume.length === 0)))
               }
               className={
                 isSuccess
