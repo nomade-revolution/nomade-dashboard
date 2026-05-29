@@ -85,6 +85,17 @@ const PlanPage = (): React.ReactElement => {
     return result;
   }, [companyData?.contacts]);
 
+  // Companies have no email column on backend; derive it from the main contact (type === "TODO")
+  // with a fallback to the first contact. Frontend-only patch, no backend changes.
+  const companyWithMainContactEmail = useMemo(() => {
+    const mainContactEmail =
+      companyData?.contacts?.find((c: { type?: string }) => c?.type === "TODO")
+        ?.email ??
+      companyData?.contacts?.[0]?.email ??
+      "";
+    return { ...companyData, email: mainContactEmail };
+  }, [companyData]);
+
   return (
     <ReusablePageStyled className="plans-page">
       <CompanySelector />
@@ -94,7 +105,7 @@ const PlanPage = (): React.ReactElement => {
         <h1 className="plans-page__title-mobile">Cuenta</h1>
         <section className="plans-page__mensual">
           <SimpleCardMobile
-            bodySection={companyData}
+            bodySection={companyWithMainContactEmail}
             headerSections={userTableSections}
             pageName={SectionTypes.plans}
           />
@@ -132,7 +143,7 @@ const PlanPage = (): React.ReactElement => {
       <div className="plans-page__desktop">
         <section className="plans-page__mensual">
           <DashboardTable
-            bodySections={[companyData]}
+            bodySections={[companyWithMainContactEmail]}
             headerSections={userTableSections}
             pageName={SectionTypes.plans}
           />
