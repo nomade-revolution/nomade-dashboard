@@ -129,6 +129,11 @@ const OffersScheduling = ({
   const [showScheduleToast, setShowScheduleToast] = useState<boolean>(false);
 
   useEffect(() => {
+    // Delivery and brand don't use address-based scheduling; skip this effect entirely.
+    if (type === OfferTypes.delivery || type === OfferTypes.brand || !type) {
+      return;
+    }
+
     // Reset Formik time fields for all 7 days; we'll repopulate from the
     // existing offerable below (if any). Avoids stale values leaking from
     // a previously selected address.
