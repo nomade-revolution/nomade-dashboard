@@ -96,16 +96,19 @@ const useOffers = () => {
       };
     } else if (values.advance_notice_time !== undefined) {
       if (offerable_type === "App\\Models\\OfferableDelivery") {
-        // Extract the actual offerable data from the "0" index if it exists
+        // For Delivery offers backend expects a single object:
+        //   { "advance_notice_time": N, "week": [{day_of_week, time_slot:[{from_time,to_time}, ...]}, ...] }
+        // `offerable` arrives either as that bare object (create) or wrapped in
+        // a 1-element array by formatOfferResume (edit). Peel the wrapper.
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const actualOfferableData = (offerable as any)[0] || offerable;
-        // For Delivery offers: Backend expects a single object (not array)
-        // { "week": [...], "advance_notice_time": 150 }
-        // week is WeekDay[][] - normalize each inner array
-        const weekData = actualOfferableData.week
-          ? (actualOfferableData.week as WeekDay[][]).map((weekArray) =>
-              normalizeWeekData(weekArray),
-            )
+        // `week` is a FLAT WeekDay[] (one entry per selected day). A previous
+        // version typed it as WeekDay[][] and called `.map(d => normalizeWeekData(d))`,
+        // which made each WeekDay object fail Array.isArray() inside
+        // normalizeWeekData and collapsed every day to [], producing
+        // `week: [[],[],[],[],[],[],[]]` and a 422 from the backend.
+        const weekData = Array.isArray(actualOfferableData.week)
+          ? normalizeWeekData(actualOfferableData.week as WeekDay[])
           : [];
         finalOfferable = {
           week: weekData as unknown as WeekDay[][],
