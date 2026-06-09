@@ -189,10 +189,10 @@ const CollabsForm = (): React.ReactElement => {
   useEffect(() => {
     const filters: FilterParams = { filters: { company_id: company.id } };
 
-    if (companySearch) {
+    if (company.id) {
       getAllOffers(1, 10, filters);
     }
-  }, [company.id, companySearch, getAllOffers]);
+  }, [company.id, getAllOffers]);
 
   useEffect(() => {
     const offersArr: OptionsStructure[] = offers.map((offer) => ({
@@ -239,6 +239,9 @@ const CollabsForm = (): React.ReactElement => {
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                   setCompanySearch(event.target.value);
                   setShowCompanySuggestions(true);
+                  setCompany({} as Company);
+                  setOffer({} as FullOffer);
+                  setOffersFormat([]);
                 }}
               />
               {showCompanySuggestions && companySearch && (
