@@ -33,6 +33,7 @@ const CompaniesPage = (): React.ReactElement => {
     loading,
     orderCompanies,
     exportCompaniesExcel,
+    getCompaniesStatusBadge,
   } = useCompanyContext();
   const handleSearch = (searchText: string) => {
     gteCompaniesData(searchText);
@@ -64,7 +65,8 @@ const CompaniesPage = (): React.ReactElement => {
 
   useEffect(() => {
     gteCompaniesData();
-  }, [page, gteCompaniesData]);
+    getCompaniesStatusBadge();
+  }, [page, gteCompaniesData, getCompaniesStatusBadge]);
 
   if (loading) {
     return <Loader width="20px" height="20px" />;

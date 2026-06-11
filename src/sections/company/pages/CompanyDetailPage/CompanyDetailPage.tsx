@@ -26,7 +26,13 @@ import { Contact } from "modules/contact/domain/Contact";
 
 const InfluencerDetailPage = (): React.ReactElement | null => {
   const { user } = useAuthContext();
-  const { getCompany, company, loading, editCompanyCms } = useCompanyContext();
+  const {
+    getCompany,
+    company,
+    loading,
+    editCompanyCms,
+    getCompaniesStatusBadge,
+  } = useCompanyContext();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isPlanModalOpen, setIsPlanModalOpen] = useState<boolean>(false);
@@ -107,6 +113,7 @@ const InfluencerDetailPage = (): React.ReactElement | null => {
       }
       getCompany(+companyId);
       getPlan(+companyId);
+      getCompaniesStatusBadge();
     }
     return res;
   };

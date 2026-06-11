@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PlanFormStyled from "./PlanFormStyled";
 import { usePlansContext } from "sections/plans/PlansContext/usePlansContext";
+import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
 import Loader from "sections/shared/components/Loader/Loader";
 
 interface Props {
@@ -13,6 +14,7 @@ const PlanForm = ({ company_id }: Props): React.ReactElement => {
 
   const { updateCompanyPlanPeriod, isSuccess, error, loading } =
     usePlansContext();
+  const { getCompaniesStatusBadge } = useCompanyContext();
 
   const handleMonthsChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setMonths(+event.target.value);
@@ -33,6 +35,7 @@ const PlanForm = ({ company_id }: Props): React.ReactElement => {
       date: date,
       extension: months,
     });
+    getCompaniesStatusBadge();
   };
 
   return (
