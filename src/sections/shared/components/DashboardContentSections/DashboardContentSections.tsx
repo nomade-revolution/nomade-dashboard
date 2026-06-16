@@ -808,6 +808,19 @@ const DashboardContentSections = ({
         </span>
       );
 
+    case "billing_period_start_date": {
+      // Canonical billing period start. Backend returns "d-m-Y" (no time),
+      // but we defensively split on space in case the format ever picks up
+      // a trailing "H:i" for consistency with start_date. Null/undefined
+      // (no plan attached, or column absent in older payloads) renders "-".
+      const value = (section as Plan).billing_period_start_date;
+      const display =
+        typeof value === "string" && value.length > 0
+          ? value.split(" ")[0]
+          : "-";
+      return <span className="dashboard__start-date">{display}</span>;
+    }
+
     case "end_date":
       return (
         <span className="dashboard__end-date">

@@ -182,7 +182,11 @@ export const planTableSections: HeaderSection[] = [
   {
     id: 7,
     name: "Fecha inicio plan",
-    property: "plan_start_date",
+    // Was "plan_start_date" (raw company_plan.start_date) which left this
+    // column blank because the renderer had no case for it. We now use the
+    // canonical billing period start, fed by CompanyInfoResource via
+    // GET /api/companies/{id}/status/info.
+    property: "billing_period_start_date",
     sortTag: "",
     pageName: "offers",
   },
@@ -285,7 +289,11 @@ export const companyPlanTableSections: HeaderSection[] = [
   {
     id: 6,
     name: "Fecha inicio",
-    property: "plan_start_date",
+    // Switched from "plan_start_date" (raw latestCompanyPlan.start_date) to
+    // the canonical billing period start exposed by CompanyInfoResource.
+    // This is the field consumed by GET /api/companies/{id}/status/info
+    // which feeds the company detail "Plan" table.
+    property: "billing_period_start_date",
     sortTag: "",
     pageName: SectionTypes.plans,
   },
