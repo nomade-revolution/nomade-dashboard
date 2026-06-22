@@ -1,6 +1,12 @@
 export interface HttpInterface {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  get(url: string, params?: unknown, responseType?: string): Promise<any>;
+  get(
+    url: string,
+    params?: unknown,
+    responseType?: string,
+    signal?: AbortSignal,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): Promise<any>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   post(url: string, body?: unknown, responseType?: string): Promise<any>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

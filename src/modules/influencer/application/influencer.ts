@@ -28,8 +28,9 @@ export const getInfluencersBadge = (
 export const getInfluencers = (
   influencerRepo: InfluencerRepository<Influencer[]>,
   params: FilterParams,
+  signal?: AbortSignal,
 ) => {
-  return influencerRepo.getInfluencers(params);
+  return influencerRepo.getInfluencers(params, signal);
 };
 
 export const editInfluencer = (

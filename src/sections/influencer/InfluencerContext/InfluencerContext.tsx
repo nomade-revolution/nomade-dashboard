@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useState } from "react";
+import React, { createContext, useCallback, useRef, useState } from "react";
 import {
   deleteInfluencer,
   getInfluencerById,
@@ -83,6 +83,7 @@ export const InfluencerContextProvider = ({
   );
   const [isSocialMediaModalOpen, setIsSocialMediaModalOpen] =
     useState<boolean>(false);
+  const searchAbortRef = useRef<AbortController | null>(null);
 
   const deleteInfluencerById = async (influencer_id: number) => {
     const response = await deleteInfluencer(repository, influencer_id);
@@ -110,9 +111,14 @@ export const InfluencerContextProvider = ({
 
   const getInfluencersWithParams = useCallback(
     async (params: FilterParams) => {
+      searchAbortRef.current?.abort();
+      searchAbortRef.current = new AbortController();
+      const signal = searchAbortRef.current.signal;
+
       setLoading(true);
 
-      const response = await getInfluencers(repository, params);
+      const response = await getInfluencers(repository, params, signal);
+      if (signal.aborted) return response;
       if (isHttpSuccessResponse(response)) {
         setInfluencers(response.data);
         setLoading(false);

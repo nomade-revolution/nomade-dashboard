@@ -23,11 +23,13 @@ export class Http implements HttpInterface {
     url: string,
     params?: unknown,
     responseType?: string,
+    signal?: AbortSignal,
   ): Promise<HttpResponseInterface<T>> {
     const response = await this.httpInmplementation.get(
       url,
       params,
       responseType,
+      signal,
     );
     if (!response) {
       return {

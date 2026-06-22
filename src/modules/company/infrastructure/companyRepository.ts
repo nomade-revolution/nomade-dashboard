@@ -73,9 +73,15 @@ export class CompanyRepository {
   }
   public async getCompanies(
     params: FilterParams,
+    signal?: AbortSignal,
   ): Promise<HttpResponseInterface<Company[]>> {
     try {
-      const resp = await this.http.get<Company[]>(COMPANY_BASE, { ...params });
+      const resp = await this.http.get<Company[]>(
+        COMPANY_BASE,
+        { ...params },
+        undefined,
+        signal,
+      );
       return resp;
     } catch (error) {
       return Promise.reject(error);

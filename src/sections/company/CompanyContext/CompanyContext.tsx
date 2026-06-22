@@ -1,4 +1,10 @@
-import React, { createContext, useCallback, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { CompanyRepository } from "@company/domain/CompanyRepository";
 import {
   deleteCompany,
@@ -76,6 +82,7 @@ export const CompanyContextProvider = ({
   const [orderCompanies, setOrderCompanies] = useState<OrderItem>(
     {} as OrderItem,
   );
+  const searchAbortRef = useRef<AbortController | null>(null);
 
   const deleteCompanyById = async (company_id: number) => {
     const response = await deleteCompany(repository, company_id);
@@ -182,8 +189,13 @@ export const CompanyContextProvider = ({
 
   const getCompaniesWithParams = useCallback(
     async (params: FilterParams) => {
-      const response = await getCompanies(repository, params);
+      searchAbortRef.current?.abort();
+      searchAbortRef.current = new AbortController();
+      const signal = searchAbortRef.current.signal;
 
+      const response = await getCompanies(repository, params, signal);
+
+      if (signal.aborted) return response;
       if (isHttpSuccessResponse(response)) {
         setCompanies(response.data);
       }

@@ -22,6 +22,7 @@ export class HttpImplementation implements HttpInterface {
     url: string,
     params?: never,
     responseType?: string,
+    signal?: AbortSignal,
   ): Promise<AxiosResponse> {
     try {
       const headers = await this.buildRequestHeaders();
@@ -31,6 +32,7 @@ export class HttpImplementation implements HttpInterface {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         params: { ...(params as any) },
         responseType: responseType as "json",
+        signal,
       });
       return response;
     } catch (error) {

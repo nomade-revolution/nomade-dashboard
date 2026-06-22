@@ -52,8 +52,9 @@ export const getCompaniesBadge = (companyRepo: CompanyRepository<number>) => {
 export const getCompanies = (
   companyRepo: CompanyRepository<Company[]>,
   params: FilterParams,
+  signal?: AbortSignal,
 ) => {
-  return companyRepo.getCompanies(params);
+  return companyRepo.getCompanies(params, signal);
 };
 
 export const getCompaniesWithPagination = (

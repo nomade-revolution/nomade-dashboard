@@ -52,9 +52,15 @@ export class InfluencerRepository {
 
   public async getInfluencers(
     params: FilterParams,
+    signal?: AbortSignal,
   ): Promise<HttpResponseInterface<Influencer[]>> {
     try {
-      const resp = await this.http.get<Influencer[]>(INFLUENCER_BASE, params);
+      const resp = await this.http.get<Influencer[]>(
+        INFLUENCER_BASE,
+        params,
+        undefined,
+        signal,
+      );
       return resp;
     } catch (error) {
       return Promise.reject(error);

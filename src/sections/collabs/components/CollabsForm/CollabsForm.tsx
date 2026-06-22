@@ -173,13 +173,16 @@ const CollabsForm = (): React.ReactElement => {
       companyJustSelected.current = false;
       return;
     }
+    if (companySearch.length < 3) {
+      setShowCompanySuggestions(false);
+      return;
+    }
     const filters: FilterParams = { filters: { search: companySearch } };
-    if (companySearch) {
+    const debounce = setTimeout(() => {
       getCompaniesWithParams(filters);
       setShowCompanySuggestions(true);
-    } else {
-      setShowCompanySuggestions(false);
-    }
+    }, 300);
+    return () => clearTimeout(debounce);
   }, [companySearch, getCompaniesWithParams]);
 
   useEffect(() => {
@@ -187,13 +190,16 @@ const CollabsForm = (): React.ReactElement => {
       influencerJustSelected.current = false;
       return;
     }
+    if (influencerSearch.length < 3) {
+      setShowInfluencerSuggestions(false);
+      return;
+    }
     const filters: FilterParams = { filters: { search: influencerSearch } };
-    if (influencerSearch) {
+    const debounce = setTimeout(() => {
       getInfluencersWithParams(filters);
       setShowInfluencerSuggestions(true);
-    } else {
-      setShowInfluencerSuggestions(false);
-    }
+    }, 300);
+    return () => clearTimeout(debounce);
   }, [getInfluencersWithParams, influencerSearch]);
 
   useEffect(() => {

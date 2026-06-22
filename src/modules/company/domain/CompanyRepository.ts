@@ -7,7 +7,10 @@ export interface CompanyRepository<I> {
   registerCompany(company: FormData): Promise<HttpResponseInterface<I>>;
   registerBaseCompany(company: FormData): Promise<HttpResponseInterface<I>>;
   getCompaniesBadge(): Promise<HttpResponseInterface<I>>;
-  getCompanies: (params: FilterParams) => Promise<HttpResponseInterface<I>>;
+  getCompanies: (
+    params: FilterParams,
+    signal?: AbortSignal,
+  ) => Promise<HttpResponseInterface<I>>;
   getCompaniesWithPagination: (
     page: number,
     per_page: number,

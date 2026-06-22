@@ -8,7 +8,10 @@ export interface InfluencerRepository<I> {
   deleteInfluencer(influencer_id: number): Promise<HttpResponseInterface<I>>;
   getInfluencerById(influencer_id: number): Promise<HttpResponseInterface<I>>;
   getInfluencersBadge(): Promise<HttpResponseInterface<I>>;
-  getInfluencers(params: FilterParams): Promise<HttpResponseInterface<I>>;
+  getInfluencers(
+    params: FilterParams,
+    signal?: AbortSignal,
+  ): Promise<HttpResponseInterface<I>>;
   editInfluencerStats(
     data: EditInfluencerSocials,
     influencer_id: number,
