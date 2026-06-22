@@ -246,6 +246,72 @@ const OffersScheduling = ({
     setSelectedDays(mappedSelectedDays);
   }, [address, schedulingState, type, setFieldValue, setSelectedDays, setWeek]);
 
+  // Hydrate Formik time fields for delivery offers in edit mode.
+  // The address-based effect above skips delivery, so we need a dedicated one.
+  useEffect(() => {
+    if (type !== OfferTypes.delivery) return;
+
+    // At runtime schedulingState.delivery is [deliveryObj] because parseSchedulingState
+    // assigns offerResumeFormat (always an array) to data.delivery
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const raw = schedulingState.delivery as unknown as any;
+    const deliveryData = Array.isArray(raw) ? raw[0] : raw;
+
+    if (!deliveryData?.week?.length) return;
+
+    offersTimetable.forEach((item) => {
+      setFieldValue(`from_time_day_${item.day_number}_1`, "");
+      setFieldValue(`to_time_day_${item.day_number}_1`, "");
+      setFieldValue(`from_time_day_${item.day_number}_2`, "");
+      setFieldValue(`to_time_day_${item.day_number}_2`, "");
+    });
+
+    const days = deliveryData.week as {
+      day_of_week: number;
+      day_name: string;
+      time_slot: Array<{ from_time: string; to_time: string }>;
+    }[];
+
+    const mapped: SelectedDay[] = days.map((day) => {
+      const slots = Array.isArray(day.time_slot) ? day.time_slot : [];
+      setFieldValue(
+        `from_time_day_${day.day_of_week}_1`,
+        slots[0]?.from_time || "",
+      );
+      setFieldValue(
+        `to_time_day_${day.day_of_week}_1`,
+        slots[0]?.to_time || "",
+      );
+      setFieldValue(
+        `from_time_day_${day.day_of_week}_2`,
+        slots[1]?.from_time || "",
+      );
+      setFieldValue(
+        `to_time_day_${day.day_of_week}_2`,
+        slots[1]?.to_time || "",
+      );
+      const timetableDay = offersTimetable.find(
+        (t) => t.day_number === day.day_of_week,
+      );
+      return {
+        day_number: day.day_of_week,
+        day_name: day.day_name || timetableDay?.name || "",
+        shifts: {
+          firstShift: {
+            from_time: slots[0]?.from_time || "",
+            to_time: slots[0]?.to_time || "",
+          },
+          secondShift: {
+            from_time: slots[1]?.from_time || "",
+            to_time: slots[1]?.to_time || "",
+          },
+        },
+      };
+    });
+
+    setSelectedDays(mapped);
+  }, [schedulingState.delivery, type, setFieldValue, setSelectedDays]);
+
   useEffect(() => {
     setScheduleSaved(false);
   }, [address, week]);
