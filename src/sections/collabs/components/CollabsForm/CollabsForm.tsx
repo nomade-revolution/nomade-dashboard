@@ -2,7 +2,7 @@ import ReusableFormStyled from "assets/styles/ReusableFormStyled";
 import { Formik, Field, ErrorMessage, FormikHelpers } from "formik";
 import Loader from "sections/shared/components/Loader/Loader";
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { collabsRequestSchema, initialData } from "./utils/validations";
 import {
   CollabCollabableCreateDefault,
@@ -36,6 +36,8 @@ const CollabsForm = (): React.ReactElement => {
     useState<boolean>(false);
   const [showInfluencerSuggestions, setShowInfluencerSuggestions] =
     useState<boolean>(false);
+  const companyJustSelected = useRef(false);
+  const influencerJustSelected = useRef(false);
   const [companySearch, setCompanySearch] = useState<string>("");
   const [influencerSearch, setInfluencerSearch] = useState<string>("");
   const [company, setCompany] = useState<Company>({} as Company);
@@ -62,11 +64,13 @@ const CollabsForm = (): React.ReactElement => {
   };
 
   const handleCompanySelect = (companyName: string) => {
+    companyJustSelected.current = true;
     setCompanySearch(companyName);
     setShowCompanySuggestions(false);
   };
 
   const handleInfluencerSelect = (influencerName: string) => {
+    influencerJustSelected.current = true;
     setInfluencerSearch(influencerName);
     setShowInfluencerSuggestions(false);
   };
@@ -165,8 +169,11 @@ const CollabsForm = (): React.ReactElement => {
   };
 
   useEffect(() => {
+    if (companyJustSelected.current) {
+      companyJustSelected.current = false;
+      return;
+    }
     const filters: FilterParams = { filters: { search: companySearch } };
-
     if (companySearch) {
       getCompaniesWithParams(filters);
       setShowCompanySuggestions(true);
@@ -176,8 +183,11 @@ const CollabsForm = (): React.ReactElement => {
   }, [companySearch, getCompaniesWithParams]);
 
   useEffect(() => {
+    if (influencerJustSelected.current) {
+      influencerJustSelected.current = false;
+      return;
+    }
     const filters: FilterParams = { filters: { search: influencerSearch } };
-
     if (influencerSearch) {
       getInfluencersWithParams(filters);
       setShowInfluencerSuggestions(true);
