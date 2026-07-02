@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { CollabActionTypes } from "modules/collabs/domain/Collabs";
 import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
 import { influencerCollabsHeaderSections } from "sections/influencer/utils/influencersSections";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
@@ -14,6 +15,8 @@ interface Props {
 
 const InfluencerCollabs = ({ influencer_id }: Props): React.ReactElement => {
   const [page] = useState<number>(1);
+  const [collabStateActionType, setCollabStateActionType] =
+    useState<CollabActionTypes | null>(null);
 
   const { getAllCollabs, collabs, loading, order } = useCollabsContext();
 
@@ -49,6 +52,8 @@ const InfluencerCollabs = ({ influencer_id }: Props): React.ReactElement => {
             bodySections={collabs}
             headerSections={influencerCollabsHeaderSections}
             pageName={SectionTypes.collabs}
+            type={collabStateActionType!}
+            setCollabStateActionType={setCollabStateActionType}
           />
         </section>
       )}
