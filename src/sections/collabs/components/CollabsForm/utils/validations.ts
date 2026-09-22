@@ -19,4 +19,5 @@ export const initialData: CollabsRequestStructure = {
   offer_id: "",
   comment: "",
   note: "",
+  guests: 1,
 };

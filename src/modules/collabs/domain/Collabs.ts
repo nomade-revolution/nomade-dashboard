@@ -65,6 +65,7 @@ export interface CollabsRequestStructure {
   comment?: string;
   note?: string;
   collabable: CollabableRestaurant | CollabableDelivery | CollabableBrand;
+  guests?: number;
 }
 
 export interface RejectedCollab {
