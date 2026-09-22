@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 import { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import DashboardCardListMobile from "sections/shared/components/DashboardCardListMobile/DashboardCardListMobile";
 import DashboardTable from "sections/shared/components/DashboardTable/DashboardTable";
 import Loader from "sections/shared/components/Loader/Loader";
@@ -19,10 +19,16 @@ import { useCompanyContext } from "sections/company/CompanyContext/useCompanyCon
 import ExportFilesButton from "sections/shared/components/ExportButton/ExportButton";
 import ActionButton from "sections/shared/components/ActionButton/ActionButton";
 import theme from "assets/styles/theme";
+import {
+  setOrDeleteSearchParam,
+  toCleanQueryString,
+} from "sections/shared/utils/queryParams/queryParams";
 
 const CompaniesPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const { page } = useParams();
   const {
@@ -35,38 +41,61 @@ const CompaniesPage = (): React.ReactElement => {
     exportCompaniesExcel,
     getCompaniesStatusBadge,
   } = useCompanyContext();
-  const handleSearch = (searchText: string) => {
-    gteCompaniesData(searchText);
+  const searchParam = searchParams.get("search") ?? "";
+
+  const navigateToPageWithParams = (
+    pageNumber: number,
+    updates: Record<string, string | number | null | undefined>,
+  ) => {
+    const params = new URLSearchParams(searchParams);
+    Object.entries(updates).forEach(([key, value]) => {
+      setOrDeleteSearchParam(params, key, value);
+    });
+    const queryString = toCleanQueryString(params);
+    navigate(
+      `/clientes/page/${pageNumber}${
+        queryString.length > 0 ? `?${queryString}` : ""
+      }`,
+    );
   };
-  const gteCompaniesData = useCallback(
-    (text?: string) => {
-      const filters: FilterParams = {};
 
-      if (orderCompanies?.sortTag) {
-        filters.order = [
-          { by: orderCompanies.sortTag, dir: orderCompanies.direction },
-        ];
-      }
+  const handleSearch = (text: string) => {
+    navigateToPageWithParams(1, { search: text || null });
+  };
 
-      if (text) {
-        (filters as any).filters = {};
-        (filters as any).filters.search = text;
-      }
+  const gteCompaniesData = useCallback(() => {
+    const filters: FilterParams = {};
 
-      getCompaniesPaginated(+page!, 10, filters);
-    },
-    [
-      getCompaniesPaginated,
-      orderCompanies.direction,
-      orderCompanies.sortTag,
-      page,
-    ],
-  );
+    if (orderCompanies?.sortTag) {
+      filters.order = [
+        { by: orderCompanies.sortTag, dir: orderCompanies.direction },
+      ];
+    }
+
+    if (searchParam) {
+      (filters as any).filters = {};
+      (filters as any).filters.search = searchParam;
+    }
+
+    getCompaniesPaginated(+page!, 10, filters);
+  }, [
+    getCompaniesPaginated,
+    orderCompanies.direction,
+    orderCompanies.sortTag,
+    page,
+    searchParam,
+  ]);
+
+  useEffect(() => {
+    setSearchText(searchParam);
+  }, [searchParam]);
+
+  const queryKey = searchParams.toString();
 
   useEffect(() => {
     gteCompaniesData();
     getCompaniesStatusBadge();
-  }, [page, gteCompaniesData, getCompaniesStatusBadge]);
+  }, [page, gteCompaniesData, getCompaniesStatusBadge, queryKey]);
 
   if (loading) {
     return <Loader width="20px" height="20px" />;
@@ -93,7 +122,10 @@ const CompaniesPage = (): React.ReactElement => {
           searchText={searchText!}
           setSearchText={setSearchText}
           onSearchSubmit={() => handleSearch(searchText)}
-          onReset={() => gteCompaniesData()}
+          onReset={() => {
+            setSearchText("");
+            navigateToPageWithParams(1, { search: null });
+          }}
         />
       </div>
       <div className="dashboard__table">
@@ -116,7 +148,7 @@ const CompaniesPage = (): React.ReactElement => {
         last_page={pagination.last_page}
         per_page={pagination.per_page}
         pageName={SectionTypes.customers}
-        filterParams={""}
+        filterParams={toCleanQueryString(searchParams)}
       />
       <ReusableModal
         children={

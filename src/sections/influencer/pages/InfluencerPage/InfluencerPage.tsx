@@ -1,9 +1,9 @@
+import { useCallback, useEffect, useState } from "react";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 import theme from "assets/styles/theme";
 import { UserTypes } from "modules/user/domain/User";
-import { useCallback, useEffect, useState } from "react";
 import { IoAddCircle } from "react-icons/io5";
-import { useNavigate, useParams } from "react-router-dom";
 import { influencersTableHeaderSections } from "sections/influencer/utils/influencersSections";
 import ActionButton from "sections/shared/components/ActionButton/ActionButton";
 import DashboardCardListMobile from "sections/shared/components/DashboardCardListMobile/DashboardCardListMobile";
@@ -17,11 +17,16 @@ import {
   SectionTypes,
 } from "sections/shared/interfaces/interfaces";
 import { appPaths } from "sections/shared/utils/appPaths/appPaths";
+import {
+  setOrDeleteSearchParam,
+  toCleanQueryString,
+} from "sections/shared/utils/queryParams/queryParams";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
 
 const InfluencersPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const {
     getUsers,
     users_influencer,
@@ -31,42 +36,62 @@ const InfluencersPage = (): React.ReactElement => {
     exportInfluencers,
   } = useUserContext();
   const { page } = useParams();
+  const searchParam = searchParams.get("search") ?? "";
+
+  const navigateToPageWithParams = (
+    pageNumber: number,
+    updates: Record<string, string | number | null | undefined>,
+  ) => {
+    const params = new URLSearchParams(searchParams);
+    Object.entries(updates).forEach(([key, value]) => {
+      setOrDeleteSearchParam(params, key, value);
+    });
+    const queryString = toCleanQueryString(params);
+    navigate(
+      `/influencers/page/${pageNumber}${
+        queryString.length > 0 ? `?${queryString}` : ""
+      }`,
+    );
+  };
 
   const handleSearch = (text: string) => {
-    getUsersData(text);
+    navigateToPageWithParams(1, { search: text || null });
   };
 
   const handleExportInfluencers = () => {
     exportInfluencers();
   };
 
-  const getUsersData = useCallback(
-    (text?: string) => {
-      const filters: FilterParams = {
-        filters: {
-          types: ["Influencer"],
-        },
-      };
-      if (order?.sortTag) {
-        filters.order = [{ by: order.sortTag, dir: order.direction }];
-      }
+  const getUsersData = useCallback(() => {
+    const filters: FilterParams = {
+      filters: {
+        types: ["Influencer"],
+      },
+    };
+    if (order?.sortTag) {
+      filters.order = [{ by: order.sortTag, dir: order.direction }];
+    }
 
-      if (text) {
-        // @ts-expect-error any
-        filters.filters.search = text;
-      }
-      getUsers(+page!, 10, filters, UserTypes.influencer);
-    },
-    [getUsers, order.direction, order.sortTag, page],
-  );
+    if (searchParam) {
+      // @ts-expect-error any
+      filters.filters.search = searchParam;
+    }
+    getUsers(+page!, 10, filters, UserTypes.influencer);
+  }, [getUsers, order.direction, order.sortTag, page, searchParam]);
 
   const handleCreateUser = () => {
     navigate(appPaths.createInfluencer);
   };
 
   useEffect(() => {
+    setSearchText(searchParam);
+  }, [searchParam]);
+
+  const queryKey = searchParams.toString();
+
+  useEffect(() => {
     getUsersData();
-  }, [page, order, getUsersData]);
+  }, [getUsersData, page, queryKey]);
 
   if (loading) return <Loader width="20px" height="20px" />;
 
@@ -91,7 +116,10 @@ const InfluencersPage = (): React.ReactElement => {
           searchText={searchText!}
           setSearchText={setSearchText}
           onSearchSubmit={() => handleSearch(searchText)}
-          onReset={() => getUsersData()}
+          onReset={() => {
+            setSearchText("");
+            navigateToPageWithParams(1, { search: null });
+          }}
         />
       </div>
 
@@ -115,7 +143,7 @@ const InfluencersPage = (): React.ReactElement => {
         last_page={pagination.last_page}
         per_page={pagination.per_page}
         pageName={SectionTypes.influencers}
-        filterParams={""}
+        filterParams={toCleanQueryString(searchParams)}
       />
     </ReusablePageStyled>
   );
