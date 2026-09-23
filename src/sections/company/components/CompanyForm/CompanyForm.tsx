@@ -1178,8 +1178,7 @@ const CompanyForm = ({
                   }}
                 />
                 <span id="hide_billing_address-label" style={{ flex: 1 }}>
-                  No mostrar mi dirección de facturación en ofertas de Moda
-                  (colaboración 100% online)
+                  No mostrar dirección de facturación en las ofertas
                 </span>
               </div>
             )}
