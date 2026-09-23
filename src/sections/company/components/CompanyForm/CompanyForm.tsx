@@ -47,6 +47,10 @@ import {
   splitLaravelErrorsForFormik,
 } from "sections/shared/utils/mapLaravelErrorsForFormik";
 
+function isHideBillingAddressEnabled(value: unknown): boolean {
+  return value === true || value === 1 || value === "1";
+}
+
 function fieldErrorMessage(
   errors: FormikErrors<CompanyFormValues>,
   field: keyof CompanyFormValues,
@@ -248,6 +252,14 @@ const CompanyForm = ({
       Object.keys(values).forEach((key) => {
         if (!EXCLUDED_FIELDS.includes(key)) {
           const value = values[key as keyof CompanyFormValues];
+          // Laravel's boolean rule accepts "1"/"0", not the strings "true"/"false".
+          // Only the update endpoint validates this field.
+          if (key === "hide_billing_address") {
+            if (!isCreate) {
+              formData.append(key, value ? "1" : "0");
+            }
+            return;
+          }
           // Skip objects/arrays to avoid "[object Object]" in payload
           if (value != null && typeof value === "object") return;
           formData.append(key, String(value ?? ""));
@@ -484,6 +496,9 @@ const CompanyForm = ({
       start_date: convertDateToISO(client?.plan?.start_date?.slice(0, 10)),
     },
     terms: "",
+    hide_billing_address: isHideBillingAddressEnabled(
+      client?.hide_billing_address,
+    ),
   } as CompanyFormValues;
 
   return (
@@ -501,6 +516,8 @@ const CompanyForm = ({
         status,
         submitCount,
         setFieldError,
+        values,
+        setFieldValue,
       }) => (
         <ReusableFormStyled onSubmit={handleSubmit} className="datasheet-form">
           <h3>Cliente</h3>
@@ -1145,6 +1162,27 @@ const CompanyForm = ({
                 {registerAddress ? "Modificar dirección" : "Añadir dirección"}
               </button>
             </div>
+            {type === "edit" && (
+              <div
+                className="lead-form__checkbox-container"
+                style={{ alignItems: "flex-start", marginTop: "12px" }}
+              >
+                <CustomCheckbox
+                  id="hide_billing_address"
+                  checked={Boolean(values.hide_billing_address)}
+                  onChange={(_event, checked) =>
+                    setFieldValue("hide_billing_address", checked)
+                  }
+                  inputProps={{
+                    "aria-labelledby": "hide_billing_address-label",
+                  }}
+                />
+                <span id="hide_billing_address-label" style={{ flex: 1 }}>
+                  No mostrar mi dirección de facturación en ofertas de Moda
+                  (colaboración 100% online)
+                </span>
+              </div>
+            )}
             {type === "edit" &&
               user.id === client?.id &&
               user.type !== "Nomade" && (

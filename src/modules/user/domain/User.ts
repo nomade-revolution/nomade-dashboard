@@ -39,6 +39,8 @@ export interface Company extends User {
     comments: string;
   };
   goCardless: number;
+  /** Hide billing address on fashion offers (100% online collaboration). */
+  hide_billing_address?: boolean;
   status: string;
   company_comments: string;
   offer_id?: number;

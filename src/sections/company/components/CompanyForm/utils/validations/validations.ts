@@ -14,6 +14,8 @@ export type CompanyFormValues = PartialCompany & {
   terms?: string;
   /** Hydrated from API; the submit handler rebuilds payload from a separate state. */
   contacts?: Contact[];
+  /** Hide billing address on fashion offers (100% online collaboration). */
+  hide_billing_address?: boolean;
 };
 
 export const clientSchema = yup.object().shape({
@@ -82,6 +84,7 @@ export const editClientSchema = yup.object().shape({
   company_comments: yup.string().nullable(),
   terms: yup.string().nullable(),
   contacts: yup.array().nullable().optional(),
+  hide_billing_address: yup.boolean().nullable(),
 });
 
 export const initialData: CompanyFormValues = {
@@ -105,4 +108,5 @@ export const initialData: CompanyFormValues = {
   plan: { start_date: "" },
   image: "",
   terms: "",
+  hide_billing_address: false,
 };
