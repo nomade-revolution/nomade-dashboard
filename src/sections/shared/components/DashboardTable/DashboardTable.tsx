@@ -33,7 +33,7 @@ export const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-const StyledTableRow = styled(TableRow, {
+export const StyledTableRow = styled(TableRow, {
   shouldForwardProp: (prop) => prop !== "$isRead",
 })<{ $isRead?: boolean }>(({ theme, $isRead }) => ({
   "&:nth-of-type(odd)": {

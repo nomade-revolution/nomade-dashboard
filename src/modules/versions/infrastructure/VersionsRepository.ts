@@ -27,9 +27,8 @@ const isSuccess = <T>(
 };
 
 /**
- * Index responses are paginated. Other dashboard repositories read
- * `{ <plural>, pagination }`. This endpoint's feature test reads items from
- * `data.data` (Laravel paginator). Both shapes are normalized here.
+ * The endpoint may return the list as an array, as `{ versions, pagination }`,
+ * or as a paginator with the items in `data`. All three shapes are normalized.
  */
 export const normalizeVersionsPayload = (
   payload: unknown,

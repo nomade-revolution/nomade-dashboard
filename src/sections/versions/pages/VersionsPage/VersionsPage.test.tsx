@@ -1,4 +1,11 @@
-import { render, screen, waitFor, within } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ThemeProvider } from "styled-components";
 import { MemoryRouter } from "react-router-dom";
@@ -6,6 +13,10 @@ import { vi } from "vitest";
 import theme from "assets/styles/theme";
 import { Version } from "modules/versions/domain";
 import { VersionRepository } from "modules/versions/domain/VersionRepository";
+import {
+  AuthContext,
+  ContextState,
+} from "sections/auth/AuthContext/AuthContext";
 import { VersionsContextProvider } from "sections/versions/VersionsContext/VersionsContext";
 import VersionsPage from "./VersionsPage";
 
@@ -50,6 +61,21 @@ const renderPage = (repository: VersionRepository) =>
     </ThemeProvider>,
   );
 
+const renderAsCompany = (repository: VersionRepository) =>
+  render(
+    <ThemeProvider theme={theme}>
+      <MemoryRouter>
+        <AuthContext.Provider
+          value={{ user: { type: "Company" } } as ContextState}
+        >
+          <VersionsContextProvider repository={repository}>
+            <VersionsPage />
+          </VersionsContextProvider>
+        </AuthContext.Provider>
+      </MemoryRouter>
+    </ThemeProvider>,
+  );
+
 const buildRepository = (
   updateVersion: VersionRepository["updateVersion"] = vi.fn(),
 ): VersionRepository => ({
@@ -74,11 +100,6 @@ describe("Given the VersionsPage", () => {
 
       expect(
         await screen.findByRole("heading", { name: "Versiones de la app" }),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText(
-          "Los cambios se aplican en cuanto se guardan a todos los usuarios que tengan esa versión instalada. Las versiones que no aparecen en la lista nunca se bloquean.",
-        ),
       ).toBeInTheDocument();
 
       const table = document.querySelector("table");
@@ -231,6 +252,69 @@ describe("Given the VersionsPage", () => {
       expect(
         screen.queryByText(/Es la última versión registrada/),
       ).not.toBeInTheDocument();
+    });
+  });
+
+  describe("When the user is a Company", () => {
+    test("Then getVersions is not called", async () => {
+      const repository = buildRepository();
+      renderAsCompany(repository);
+
+      await act(async () => {
+        await Promise.resolve();
+      });
+
+      expect(repository.getVersions).not.toHaveBeenCalled();
+      expect(
+        screen.queryByRole("heading", { name: "Versiones de la app" }),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  describe("When a change has been saved", () => {
+    test("Then the success message disappears after 3 seconds", async () => {
+      vi.useFakeTimers();
+      const updateVersion = vi.fn().mockResolvedValue({
+        success: true,
+        message: "ok",
+        data: {
+          ...versions[1],
+          maintenance: true,
+        },
+      });
+
+      try {
+        renderPage(buildRepository(updateVersion));
+
+        await act(async () => {
+          await Promise.resolve();
+        });
+
+        expect(
+          screen.getByRole("heading", { name: "Versiones de la app" }),
+        ).toBeInTheDocument();
+
+        fireEvent.click(flag("Mantenimiento 3.0.0"));
+        fireEvent.click(screen.getByRole("button", { name: "Confirmar" }));
+
+        await act(async () => {
+          await Promise.resolve();
+        });
+
+        expect(screen.getByText("Cambio guardado")).toBeInTheDocument();
+
+        act(() => {
+          vi.advanceTimersByTime(2999);
+        });
+        expect(screen.getByText("Cambio guardado")).toBeInTheDocument();
+
+        act(() => {
+          vi.advanceTimersByTime(1);
+        });
+        expect(screen.queryByText("Cambio guardado")).not.toBeInTheDocument();
+      } finally {
+        vi.useRealTimers();
+      }
     });
   });
 });

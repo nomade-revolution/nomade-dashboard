@@ -5,6 +5,7 @@ import ReusablePageStyled from "assets/styles/ReusablePageStyled";
 import { Version } from "modules/versions/domain";
 import { VersionFlag } from "modules/versions/domain/VersionRepository";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
+import { appPaths } from "sections/shared/utils/appPaths/appPaths";
 import ErrorFeedback from "sections/shared/components/Feedbacks/components/ErrorFeedback/ErrorFeedback";
 import SuccessFeedback from "sections/shared/components/Feedbacks/components/SuccessFeedback/SuccessFeedback";
 import Loader from "sections/shared/components/Loader/Loader";
@@ -24,12 +25,6 @@ const PageHeader = styled.header`
     margin: 0;
     font-size: 1.5rem;
     font-weight: 700;
-  }
-
-  p {
-    margin: 0;
-    max-width: 720px;
-    line-height: 1.4;
   }
 `;
 
@@ -53,11 +48,22 @@ const VersionsPage = (): React.ReactElement => {
   const [pending, setPending] = useState<PendingFlagChange | null>(null);
 
   useEffect(() => {
+    if (user?.type === "Company") {
+      return;
+    }
     getAllVersions();
-  }, [getAllVersions]);
+  }, [getAllVersions, user?.type]);
+
+  useEffect(() => {
+    if (!success) {
+      return;
+    }
+    const timeoutId = setTimeout(() => setSuccess(null), 3000);
+    return () => clearTimeout(timeoutId);
+  }, [success]);
 
   if (user?.type === "Company") {
-    return <Navigate to="/collabs/page/1" replace />;
+    return <Navigate to={appPaths.collabs.replace(":page", "1")} replace />;
   }
 
   const handleToggle = (
@@ -102,11 +108,6 @@ const VersionsPage = (): React.ReactElement => {
     <ReusablePageStyled>
       <PageHeader>
         <h1>Versiones de la app</h1>
-        <p>
-          Los cambios se aplican en cuanto se guardan a todos los usuarios que
-          tengan esa versión instalada. Las versiones que no aparecen en la
-          lista nunca se bloquean.
-        </p>
       </PageHeader>
       {success && <SuccessFeedback text={success} />}
       {error && <ErrorFeedback text={error} />}

@@ -1,13 +1,17 @@
 import Switch from "@mui/material/Switch";
-import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import theme from "assets/styles/theme";
 import { Version } from "modules/versions/domain";
 import { VersionFlag } from "modules/versions/domain/VersionRepository";
-import { StyledTableCell } from "sections/shared/components/DashboardTable/DashboardTable";
+import {
+  StyledTableCell,
+  StyledTableRow,
+} from "sections/shared/components/DashboardTable/DashboardTable";
+import DashboardStyled from "sections/shared/components/DashboardTable/DashboardTableStyled";
 import DashboardCardListMobileStyled from "sections/shared/components/DashboardCardListMobile/DashboardCardListMobileStyles";
 import DashboardCardMobileStyled from "sections/shared/components/DashboardCardMobile/DashboardCardMobileStyles";
 
@@ -50,6 +54,21 @@ const VersionFlagSwitch = ({
       inputProps={{
         "aria-label": `${flagLabel[flag]} ${version.version}`,
       }}
+      sx={(muiTheme) => ({
+        "& .MuiSwitch-switchBase.Mui-checked": {
+          color: theme.colors.mineralGreen,
+        },
+        "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+          backgroundColor: theme.colors.paleLime,
+          opacity: 1,
+        },
+        "& .MuiSwitch-switchBase.Mui-checked.Mui-disabled": {
+          color: muiTheme.palette.action.disabled,
+        },
+        "& .MuiSwitch-switchBase.Mui-disabled + .MuiSwitch-track": {
+          opacity: muiTheme.palette.mode === "light" ? 0.12 : 0.2,
+        },
+      })}
     />
   );
 };
@@ -67,22 +86,44 @@ const VersionsList = ({
           sx={{
             boxShadow: "0px 0px 20px 0.2em rgba(0, 0, 0, 0.1)",
             width: "100%",
-            overflowX: "auto",
           }}
         >
-          <Table aria-label="Versiones de la app">
+          <DashboardStyled
+            className="table"
+            aria-label="Versiones de la app"
+            style={{
+              borderCollapse: "collapse",
+              width: "100%",
+              minWidth: "100%",
+            }}
+          >
             <TableHead>
-              <TableRow>
+              <TableRow
+                className="table__header"
+                sx={{ textTransform: "uppercase" }}
+              >
                 {columns.map((column) => (
-                  <StyledTableCell key={column}>{column}</StyledTableCell>
+                  <StyledTableCell
+                    key={column}
+                    align="center"
+                    className="header__section"
+                  >
+                    <button
+                      className="table__sort-button"
+                      disabled
+                      type="button"
+                    >
+                      {column}
+                    </button>
+                  </StyledTableCell>
                 ))}
               </TableRow>
             </TableHead>
-            <TableBody>
+            <TableBody sx={{ borderCollapse: "collapse" }}>
               {versions.map((version) => {
                 const rowDisabled = updatingId === version.id;
                 return (
-                  <TableRow key={version.id}>
+                  <StyledTableRow key={version.id}>
                     <StyledTableCell>{version.version}</StyledTableCell>
                     <StyledTableCell>
                       <VersionFlagSwitch
@@ -111,11 +152,11 @@ const VersionsList = ({
                     <StyledTableCell>
                       {version.updated_at || "—"}
                     </StyledTableCell>
-                  </TableRow>
+                  </StyledTableRow>
                 );
               })}
             </TableBody>
-          </Table>
+          </DashboardStyled>
         </TableContainer>
       </div>
       <div className="dashboard__mobile">
