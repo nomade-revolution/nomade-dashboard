@@ -20,6 +20,7 @@ export const appPaths = {
   leads: "/leads/page/:page",
   leadsSubmit: "/client/register",
   categories: "/categories",
+  versions: "/versions",
   offerDetail: "/oferta/:id",
   collabsReservations: "/collabs-reservations/:id/page/:page",
   plans: "/planes/page/:page",

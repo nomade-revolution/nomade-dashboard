@@ -12,6 +12,7 @@ import {
   FaChevronRight,
   FaFileLines,
   FaMessage,
+  FaMobileScreen,
 } from "react-icons/fa6";
 import { Tooltip } from "@mui/material";
 import { IoInformation } from "react-icons/io5";
@@ -106,6 +107,14 @@ const SideBar = ({
             pathname: "documentation",
             quantity: 0,
             path: `/documentation`,
+          },
+          {
+            id: 18,
+            icon: <FaMobileScreen />,
+            name: "Versiones app",
+            pathname: "versions",
+            quantity: 0,
+            path: appPaths.versions,
           },
         ];
 

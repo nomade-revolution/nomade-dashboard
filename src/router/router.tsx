@@ -37,6 +37,9 @@ import ContactNomadePage from "sections/contactForm/pages/ContactNomadeForm";
 import TermsConditionsOfflinePage from "sections/shared/pages/TermsConditionsOffline/TermsConditionsOffline";
 import VerifyEmailPage from "sections/auth/pages/VerifyEmailPage/VerifyEmailPage";
 import EmailVerifiedPage from "sections/auth/pages/EmailVerifiedPage/EmailVerifiedPage";
+import VersionsPage from "sections/versions/pages/VersionsPage/VersionsPage";
+import { VersionsContextProvider } from "sections/versions/VersionsContext/VersionsContext";
+import { VersionsRepository } from "modules/versions/infrastructure/VersionsRepository";
 
 const routes: RouteObject[] = [
   {
@@ -123,6 +126,14 @@ const routes: RouteObject[] = [
       {
         path: appPaths.categories,
         element: <CategoriesPage />,
+      },
+      {
+        path: appPaths.versions,
+        element: (
+          <VersionsContextProvider repository={new VersionsRepository()}>
+            <VersionsPage />
+          </VersionsContextProvider>
+        ),
       },
       {
         path: appPaths.documentation,
