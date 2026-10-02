@@ -57,7 +57,9 @@ export class LeadsRepository implements ILeadsRepository<LeadsApiResponse> {
     hash: string,
   ): Promise<HttpResponseInterface<CompanyRegisterStructure>> {
     try {
-      const resp = await this.http.get<Lead>(`${LEADS_BASE}/form/${hash}`);
+      const resp = await this.http.get<Lead>(
+        `${LEADS_BASE}/form/${encodeURIComponent(hash).replace(/%2F/gi, "/")}`,
+      );
       return resp;
     } catch (error) {
       return Promise.reject(error);

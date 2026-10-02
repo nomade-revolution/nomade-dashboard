@@ -15,6 +15,8 @@ const mockContextValue = {
   leads: [],
   lead: {} as CompanyRegisterStructure,
   loading: false,
+  linkStatus: "loading" as const,
+  setLinkStatus: vi.fn(),
   error: null,
   isSuccess: false,
   pagination: {} as PaginationStucture,

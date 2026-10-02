@@ -4,6 +4,8 @@ import { CompanyRegisterStructure } from "modules/user/domain/User";
 import { FullAddress } from "modules/address/domain/Address";
 import { useEffect, useRef, useState } from "react";
 import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
+import { useLeadsContext } from "sections/leads/LeadsContext/useLeadsContext";
+import { registrationLinkCopy } from "sections/leads/utils/registrationLinkCopy";
 import { IoAddCircle } from "react-icons/io5";
 import ReusableModal from "sections/shared/components/ReusableModal/ReusableModal";
 import AddressForm from "sections/shared/components/AddressForm/AddressForm";
@@ -12,6 +14,7 @@ import { FaCheckCircle, FaEdit, FaLink } from "react-icons/fa";
 import ContactForm from "sections/shared/components/ContactForm/ContactForm";
 import { Contact } from "modules/contact/domain/Contact";
 import SuccessFeedback from "sections/shared/components/Feedbacks/components/SuccessFeedback/SuccessFeedback";
+import ErrorFeedback from "sections/shared/components/Feedbacks/components/ErrorFeedback/ErrorFeedback";
 import { Link } from "react-router-dom";
 import CustomCheckbox from "sections/shared/components/CustomCheckbox/CustomCheckbox";
 
@@ -53,11 +56,13 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
   const [isContactModalOpen, setIsContactModalOpen] = useState<boolean>(false);
   const [isGocardlessChecked, setIsGocardlessChecked] = useState(false);
   const [isTermsChecked, setIsTermsChecked] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
   const setFieldValueRef = useRef<
     ((field: string, value: unknown) => void) | null
   >(null);
 
   const { postCompany, isSuccess } = useCompanyContext();
+  const { setLinkStatus } = useLeadsContext();
   const { contact_types, getAllContactTypes } = useContactContext();
 
   const handleIsGocardlessChecked = () => {
@@ -72,8 +77,8 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
     values: CompanyRegisterStructure,
     { setSubmitting, setErrors }: FormikHelpers<CompanyRegisterStructure>,
   ) => {
-    console.log("SUBMIT FIRED");
     setSubmitting(true);
+    setSubmitError(false);
     const formData = new FormData();
 
     Object.keys(values).forEach((key) => {
@@ -112,8 +117,23 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
     formData.append("gocardless", JSON.stringify(isGocardlessChecked));
     formData.append("accept_conditions", JSON.stringify(isTermsChecked));
 
-    await postCompany(formData);
-    setSubmitting(false);
+    try {
+      const response = await postCompany(formData);
+      const errorCode =
+        response && "error_code" in response ? response.error_code : undefined;
+
+      if (errorCode === "LINK_EXPIRED") {
+        setLinkStatus("expired");
+      } else if (errorCode === "LINK_INVALID") {
+        setLinkStatus("invalid");
+      } else if (!response?.success) {
+        setSubmitError(true);
+      }
+    } catch {
+      setSubmitError(true);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleIsAddressModalOpen = () => {
@@ -641,6 +661,9 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
                 </button>
                 {isSuccess && (
                   <SuccessFeedback text="Te has registrado correctamente" />
+                )}
+                {submitError && (
+                  <ErrorFeedback text={registrationLinkCopy.submitError} />
                 )}
               </section>
 

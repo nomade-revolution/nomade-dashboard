@@ -48,7 +48,7 @@ interface ContextState {
   deleteCompanyById: (company_id: number) => void;
   getCompany: (company_id: number) => void;
   fetchCompanyById: (company_id: number) => Promise<Company | null>;
-  postCompany: (company: FormData) => void;
+  postCompany: (company: FormData) => Promise<HttpResponseInterface<Company>>;
   postBaseCompany: (company: FormData) => void;
   getCompaniesStatusBadge: () => void;
   postCompanyCms: (company: FormData) => Promise<unknown>;

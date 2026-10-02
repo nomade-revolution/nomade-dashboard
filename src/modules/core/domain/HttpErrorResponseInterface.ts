@@ -3,4 +3,5 @@ export type HttpErrorResponseInterface = {
   message: string;
   status?: number;
   error?: never[];
+  error_code?: string;
 };

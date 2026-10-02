@@ -17,10 +17,19 @@ import { CreateLeadPayload } from "modules/leads/domain/LeadsRepository";
 import { CompanyRegisterStructure } from "modules/user/domain/User";
 import { OrderItem } from "sections/user/UserContext/UserContext";
 
+export type LeadLinkStatus =
+  | "loading"
+  | "valid"
+  | "expired"
+  | "invalid"
+  | "error";
+
 interface ContextState {
   leads: Lead[];
   lead: CompanyRegisterStructure;
   loading: boolean;
+  linkStatus: LeadLinkStatus;
+  setLinkStatus: (status: LeadLinkStatus) => void;
   error: string | null;
   isSuccess: boolean;
   pagination: PaginationStucture;
@@ -55,6 +64,7 @@ export const LeadsContextProvider = ({
     {} as CompanyRegisterStructure,
   );
   const [loading, setLoading] = useState<boolean>(false);
+  const [linkStatus, setLinkStatus] = useState<LeadLinkStatus>("loading");
   const [error, setError] = useState<string | null>(null);
   const [badgeCount, setBadgeCount] = useState<number>(0);
   const [pagination, setPagination] = useState<PaginationStucture>(
@@ -97,16 +107,34 @@ export const LeadsContextProvider = ({
   const getLeadFromHash = useCallback(
     async (hash: string) => {
       setLoading(true);
-      const response = await getLeadsForm(repository, hash);
-      if (isHttpSuccessResponse(response)) {
-        setLead(response.data);
+      setLinkStatus("loading");
+      try {
+        const response = await getLeadsForm(repository, hash);
+        if (isHttpSuccessResponse(response)) {
+          setLead(response.data);
+          setLinkStatus("valid");
+        } else if (
+          "error_code" in response &&
+          response.error_code === "LINK_EXPIRED"
+        ) {
+          setLinkStatus("expired");
+        } else if (
+          "error_code" in response &&
+          response.error_code === "LINK_INVALID"
+        ) {
+          setLinkStatus("invalid");
+        } else {
+          setLinkStatus("error");
+        }
+        setIsSuccess(response.success);
+        setTimeout(() => setIsSuccess(false), 3000);
+
+        return response;
+      } catch {
+        setLinkStatus("error");
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
-      setIsSuccess(response.success);
-
-      setTimeout(() => setIsSuccess(false), 3000);
-
-      return response;
     },
     [repository],
   );
@@ -156,6 +184,8 @@ export const LeadsContextProvider = ({
         leads,
         lead,
         loading,
+        linkStatus,
+        setLinkStatus,
         error,
         isSuccess,
         pagination,
