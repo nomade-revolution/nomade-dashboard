@@ -31,9 +31,25 @@ const CompanyDetailData = ({ company }: Props): React.ReactElement => {
     });
   };
 
-  const handleNavigateOffers = () => {
-    navigate(`/oferta/${company.offer_id}`);
-  };
+  const offerButtons =
+    company.offers != null ? (
+      company.offers.map((offer) => (
+        <ActionButton
+          key={offer.id}
+          onClick={() => navigate(`/oferta/${offer.id}`)}
+          text={`Ver oferta (${offer.type})`}
+          icon={<FaEye />}
+          color={theme.colors.darkBlue}
+        />
+      ))
+    ) : company.offer_id ? (
+      <ActionButton
+        onClick={() => navigate(`/oferta/${company.offer_id}`)}
+        text="Ver Oferta"
+        icon={<FaEye />}
+        color={theme.colors.darkBlue}
+      />
+    ) : null;
 
   return (
     <CompanyDetailDataStyled>
@@ -99,6 +115,7 @@ const CompanyDetailData = ({ company }: Props): React.ReactElement => {
                 justifyContent: "flex-start",
                 gap: "40px",
                 alignItems: "center",
+                flexWrap: "wrap",
               }}
             >
               <ActionButton
@@ -107,14 +124,7 @@ const CompanyDetailData = ({ company }: Props): React.ReactElement => {
                 icon={<FaRegCommentDots />}
                 onClick={() => setIsDialogOpen(true)}
               />
-              {company.offer_id ? (
-                <ActionButton
-                  onClick={handleNavigateOffers}
-                  text="Ver Oferta"
-                  icon={<FaEye />}
-                  color={theme.colors.darkBlue}
-                />
-              ) : null}
+              {offerButtons}
               <ActionButton
                 onClick={handleNavigate}
                 text="Ver Collabs"

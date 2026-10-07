@@ -300,6 +300,63 @@ const OfferDetailPageStyled = styled.div`
       }
     }
 
+    &__heading-aside {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    &__type-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    &__type-tab {
+      position: relative;
+      background: transparent;
+      border: none;
+      padding: 4px 0;
+      margin: 0 8px;
+      cursor: pointer;
+      opacity: 0.6;
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 2px;
+        background: transparent;
+      }
+
+      &--active {
+        opacity: 1;
+      }
+
+      &--active::after {
+        background: currentColor;
+      }
+    }
+
+    &__empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      width: 100%;
+    }
+
+    &__empty {
+      margin: 0;
+      color: ${(props) => props.theme.colors.outerSpace};
+      font-size: ${(props) => props.theme.fontsSize.__ML};
+      font-weight: 700;
+    }
+
     &__edit-btn {
       display: flex;
       align-items: center;

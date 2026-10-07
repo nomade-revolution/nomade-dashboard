@@ -72,7 +72,7 @@ const Layout = (): React.ReactElement => {
       const filters = {
         filters: { company_id: companyId },
       };
-      getAllOffers(1, 1, filters);
+      getAllOffers(1, 10, filters);
     }
   }, [getAllOffers, user, selectedCompany]);
 

@@ -42,16 +42,25 @@ export const parseCalendar = (calendar: Calendar | Calendar[]) => {
 
 const OfferDetailsPage = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const { user } = useAuthContext();
+  const { user, selectedCompany } = useAuthContext();
   const { id } = useParams();
-  const { offer, loading, getOffer, modifyOffer, offers } = useOffersContext();
+  const {
+    offer,
+    loading,
+    getOffer,
+    modifyOffer,
+    offers,
+    createNewOffer,
+    pagination,
+  } = useOffersContext();
   const { getAllCountries, countries } = useCountryContext();
   const { cities, getAllCities } = useCitiesContext();
   const navigate = useNavigate();
 
+  const isCompany = user.type === UserTypes.company;
+
   useEffect(() => {
     getAllCountries();
-    getOffer(+id!);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -63,21 +72,33 @@ const OfferDetailsPage = () => {
     getAllCities(filters);
   }, [offer, offer.location_parent_id, getAllCities]);
 
-  // override url param id
   useEffect(() => {
-    if (user.type !== UserTypes.company) return;
+    if (!isCompany) return;
     if (!offers[0]?.id) return;
-    if (id !== offers[0]?.id?.toString()) {
-      navigate(`/oferta/${offers[0]?.id}`);
+    const urlMatchesOffer = offers.some((item) => item.id?.toString() === id);
+    if (!urlMatchesOffer) {
+      navigate(`/oferta/${offers[0].id}`);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [offers[0]?.id]);
+  }, [isCompany, offers, id, navigate]);
 
   useEffect(() => {
-    if (id === offer?.id?.toString() || !id) return;
-    getOffer(+id!);
+    if (!id || id === "0" || !user?.type) return;
+    if (isCompany) return;
+    if (id === offer?.id?.toString()) return;
+    getOffer(+id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [id, user?.type, isCompany, getOffer]);
+
+  useEffect(() => {
+    if (!isCompany) return;
+    if (!id || id === "0") return;
+    if (pagination?.current_page == null) return;
+    const allowed = offers.some((item) => item.id?.toString() === id);
+    if (!allowed) return;
+    if (id === offer?.id?.toString()) return;
+    getOffer(+id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isCompany, id, offers, pagination?.current_page, getOffer]);
 
   const handleIsModalOpen = () => {
     setIsModalOpen(true);
@@ -88,6 +109,17 @@ const OfferDetailsPage = () => {
     if (isHttpSuccessResponse(res)) {
       setIsModalOpen(false);
       getOffer(+id!);
+    }
+  };
+
+  const handleCreateNewOffer = async (formData: FormData) => {
+    const res = await createNewOffer(formData);
+    if (isHttpSuccessResponse(res)) {
+      setIsModalOpen(false);
+      const createdId = res.data?.data?.id;
+      if (createdId) {
+        navigate(`/oferta/${createdId}`);
+      }
     }
   };
 
@@ -153,24 +185,80 @@ const OfferDetailsPage = () => {
         ? offer.location_id
         : offer.location_parent_id;
     const country = countries.find((country) => country.id === countryParam);
-    const city = cities.find((city) => city.id === offer.location_id);
+    const city =
+      offer.location_type === "App\\Models\\City"
+        ? cities.find(
+            (city) =>
+              city.id === offer.location_id &&
+              (city.country_id == null ||
+                city.country_id === offer.location_parent_id),
+          )
+        : undefined;
     return { country: country?.name, city: city?.name };
   };
 
-  if (loading) {
+  const companyOffersReady = pagination?.current_page != null;
+  const companyOfferMatchesUrl = offers.some(
+    (item) => item.id?.toString() === id,
+  );
+
+  const companyEmptyOffers = (
+    <OfferDetailPageStyled>
+      <div className="offer-detail__empty-state">
+        <p className="offer-detail__empty">No tienes ninguna oferta activa</p>
+        <CompanySelector />
+      </div>
+    </OfferDetailPageStyled>
+  );
+
+  const waitingForCompanyOffers =
+    isCompany &&
+    !companyOffersReady &&
+    (Boolean(selectedCompany) || (user.companies?.length ?? 0) > 0);
+
+  if (!user?.type || loading || waitingForCompanyOffers) {
+    return <Loader width="20px" height="20px" />;
+  }
+
+  if (isCompany && offers.length === 0) {
+    return companyEmptyOffers;
+  }
+
+  if (isCompany && !companyOfferMatchesUrl) {
+    return <Loader width="20px" height="20px" />;
+  }
+
+  if (isCompany && offer?.id != null && offer.id.toString() !== id) {
     return <Loader width="20px" height="20px" />;
   }
 
   if (!offer) {
+    if (isCompany) {
+      return companyEmptyOffers;
+    }
+
     return (
-      <button
-        onClick={handleIsModalOpen}
-        className="offer-detail__edit-btn"
-        type="button"
-      >
-        <MdOutlineLibraryAdd />
-        Crear oferta
-      </button>
+      <OfferDetailPageStyled>
+        <button
+          onClick={handleIsModalOpen}
+          className="offer-detail__edit-btn"
+          type="button"
+        >
+          <MdOutlineLibraryAdd />
+          Crear oferta
+        </button>
+        <ReusableModal
+          children={
+            <OffersForm
+              onSubmit={handleCreateNewOffer}
+              onCancel={setIsModalOpen}
+            />
+          }
+          openModal={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
+          type="offer"
+        />
+      </OfferDetailPageStyled>
     );
   }
 
@@ -189,7 +277,41 @@ const OfferDetailsPage = () => {
             ({offer.type})
           </span>
         </h3>
-        <CompanySelector />
+        {isCompany &&
+        (offers.length >= 2 || (user.companies?.length ?? 0) >= 2) ? (
+          <div className="offer-detail__heading-aside">
+            {offers.length >= 2 && (
+              <div className="offer-detail__type-tabs" role="tablist">
+                {offers.map((item) => {
+                  const isActive = item.id?.toString() === id;
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      role="tab"
+                      aria-selected={isActive}
+                      className={`${getTypesClassNames(
+                        item,
+                        "offer-detail",
+                      )} offer-detail__type-tab${
+                        isActive ? " offer-detail__type-tab--active" : ""
+                      }`}
+                      onClick={() => {
+                        if (item.id == null || isActive) return;
+                        navigate(`/oferta/${item.id}`);
+                      }}
+                    >
+                      {item.type}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+            <CompanySelector />
+          </div>
+        ) : (
+          <CompanySelector />
+        )}
         {user.type === UserTypes.nomade && (
           <button
             onClick={handleIsModalOpen}

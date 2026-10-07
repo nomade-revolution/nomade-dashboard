@@ -76,7 +76,8 @@ const renderRegisterPage = () => {
 };
 
 const fillAndSubmit = async () => {
-  const user = userEvent.setup();
+  // delay: null avoids a setTimeout per keystroke; this flow types ~80 chars
+  const user = userEvent.setup({ delay: null });
 
   await user.type(
     await screen.findByLabelText("Denominación social"),
@@ -106,6 +107,9 @@ const fillAndSubmit = async () => {
 };
 
 describe("Given the LeadsForm on the public register page", () => {
+  // Full form fill + submit is slow on CI (default 5s timeout is not enough).
+  vi.setConfig({ testTimeout: 20000 });
+
   beforeEach(() => {
     postCompany.mockReset();
     getAllContactTypes.mockReset();

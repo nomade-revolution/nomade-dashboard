@@ -92,7 +92,7 @@ export const getSideBarUpperSections = (
       name: "Oferta",
       pathname: "oferta",
       quantity: 0,
-      path: `/oferta/${offer_id}`,
+      path: `/oferta/${offer_id ?? 0}`,
     },
     {
       id: 9,
