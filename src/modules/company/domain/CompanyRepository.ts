@@ -16,6 +16,12 @@ export interface CompanyRepository<I> {
     per_page: number,
     params: FilterParams,
   ) => Promise<HttpResponseInterface<I>>;
+  getCompanyOptions: (
+    page: number,
+    per_page: number,
+    params: FilterParams,
+    signal?: AbortSignal,
+  ) => Promise<HttpResponseInterface<I>>;
   postNewCompany: (company: FormData) => Promise<HttpResponseInterface<I>>;
   editCompany: (
     company: FormData,

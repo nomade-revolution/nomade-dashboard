@@ -158,6 +158,29 @@ export class CompanyRepository {
     }
   }
 
+  public async getCompanyOptions(
+    page: number,
+    per_page: number,
+    filters: FilterParams,
+    signal?: AbortSignal,
+  ): Promise<HttpResponseInterface<CompaniesApiResponse>> {
+    try {
+      const resp = await this.http.get<CompaniesApiResponse>(
+        COMPANY_BASE,
+        {
+          page,
+          per_page,
+          ...filters,
+        },
+        undefined,
+        signal,
+      );
+      return resp;
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
   public async postNewCompany(
     company: FormData,
   ): Promise<HttpResponseInterface<Company>> {

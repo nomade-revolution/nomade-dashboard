@@ -15,11 +15,12 @@ import {
   postNewCompany,
   editCompany,
   getCompaniesWithPagination,
+  getCompanyOptions,
   registerBaseCompany,
 } from "@company/application/company";
 import { HttpResponseInterface } from "@core";
 import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
-import { Company } from "modules/user/domain/User";
+import { CompaniesApiResponse, Company } from "modules/user/domain/User";
 import { PaginationStucture } from "sections/shared/interfaces/interfaces";
 import { OrderItem } from "sections/user/UserContext/UserContext";
 import {
@@ -45,6 +46,10 @@ interface ContextState {
     per_page: number,
     params?: FilterParams,
   ) => void;
+  fetchCompanyOptions: (
+    search?: string,
+    signal?: AbortSignal,
+  ) => Promise<Company[]>;
   deleteCompanyById: (company_id: number) => void;
   getCompany: (company_id: number) => void;
   fetchCompanyById: (company_id: number) => Promise<Company | null>;
@@ -60,6 +65,11 @@ interface ContextState {
   exportCompanyBillingExcel: (params?: FilterParams) => void;
   setBadgeCount: (count: number) => void;
 }
+
+const readCompanyList = (data: CompaniesApiResponse | Company[]): Company[] => {
+  if (Array.isArray(data)) return data;
+  return Array.isArray(data?.companies) ? data.companies : [];
+};
 
 export const CompanyContext = createContext<ContextState>({} as ContextState);
 
@@ -205,6 +215,36 @@ export const CompanyContextProvider = ({
     [repository],
   );
 
+  const fetchCompanyOptions = useCallback(
+    async (search?: string, signal?: AbortSignal): Promise<Company[]> => {
+      if (signal?.aborted) return [];
+
+      const params: FilterParams = {
+        order: [{ by: "company", dir: "ASC" }],
+      };
+      if (search) {
+        params.filters = { search };
+      }
+
+      try {
+        const response = await getCompanyOptions(
+          repository,
+          1,
+          20,
+          params,
+          signal,
+        );
+        if (signal?.aborted || !isHttpSuccessResponse(response)) {
+          return [];
+        }
+        return readCompanyList(response.data);
+      } catch {
+        return [];
+      }
+    },
+    [repository],
+  );
+
   const getCompaniesPaginated = useCallback(
     async (page: number, per_page: number, filters?: FilterParams) => {
       setLoading(true);
@@ -294,6 +334,7 @@ export const CompanyContextProvider = ({
         setOrderCompanies,
         getCompaniesPaginated,
         getCompaniesWithParams,
+        fetchCompanyOptions,
         getCompany,
         fetchCompanyById,
         deleteCompanyById,

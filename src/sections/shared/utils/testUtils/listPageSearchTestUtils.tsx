@@ -75,6 +75,7 @@ export const mockCompanyContextValue = (
     setOrderCompanies: vi.fn(),
     getCompaniesWithParams: vi.fn(),
     getCompaniesPaginated,
+    fetchCompanyOptions: vi.fn().mockResolvedValue([]),
     deleteCompanyById: vi.fn(),
     getCompany: vi.fn(),
     fetchCompanyById: vi.fn(),

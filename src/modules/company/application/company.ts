@@ -66,6 +66,16 @@ export const getCompaniesWithPagination = (
   return companyRepo.getCompaniesWithPagination(page, per_page, filters);
 };
 
+export const getCompanyOptions = (
+  companyRepo: CompanyRepository<CompaniesApiResponse>,
+  page: number,
+  per_page: number,
+  filters: FilterParams,
+  signal?: AbortSignal,
+) => {
+  return companyRepo.getCompanyOptions(page, per_page, filters, signal);
+};
+
 export const postNewCompany = (
   companyRepo: CompanyRepository<Company>,
   company: FormData,

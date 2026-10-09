@@ -43,6 +43,8 @@ export const AssignExistingCompanyModal = ({
     const term = searchTerm.trim();
     if (term.length >= 2) {
       setHasSearched(true);
+      // TODO(NMD-561): this still writes the global companies list. Move it
+      // to fetchCompanyOptions so the companies page is left untouched.
       getCompaniesWithParams({ filters: { search: term } });
     }
   }, [searchTerm, getCompaniesWithParams]);
