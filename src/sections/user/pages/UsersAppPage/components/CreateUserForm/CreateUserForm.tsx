@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { AuthRegisterNomadeInterface } from "@auth";
 import { ErrorMessage, Field, Formik } from "formik";
 import CreateInfluencerFormStyled from "sections/user/pages/CreateInfluencerPage/CreateInfluencerFormStyled";
@@ -6,9 +6,8 @@ import { registerScheme } from "sections/auth/components/validations/validations
 import Loader from "sections/shared/components/Loader/Loader";
 import { useUserContext } from "sections/user/UserContext/useUserContext";
 import ReusableSelect from "sections/shared/components/ReusableSelect/ReusableSelect";
-import { useCompanyContext } from "sections/company/CompanyContext/useCompanyContext";
 import TypeAhead from "sections/shared/components/TypeAhead/TypeAhead";
-import { OptionsStructure } from "sections/shared/interfaces/interfaces";
+import { useCompanySelectOptions } from "sections/user/hooks/useCompanySelectOptions";
 
 const initialState: AuthRegisterNomadeInterface = {
   name: "",
@@ -34,8 +33,6 @@ const CreateUserForm = ({
   const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const { registerUser, rolesList, getRolesList } = useUserContext();
-  const { getCompaniesWithParams, companies: companyOptions } =
-    useCompanyContext();
   const [loading, setIsLoading] = useState<boolean>(false);
   const [role, setRole] = useState<string>("");
   // When from users-app, always set to true and disable
@@ -47,15 +44,12 @@ const CreateUserForm = ({
   const [companySearchText, setCompanySearchText] = useState<string>("");
   const [companyValidationError, setCompanyValidationError] =
     useState<boolean>(false);
-
-  const searchCompanies = useCallback(
-    (text: string) => {
-      if (text.length > 2) {
-        getCompaniesWithParams({ filters: { search: text } });
-      }
-    },
-    [getCompaniesWithParams],
-  );
+  const {
+    companyOptions,
+    companyLoading,
+    searchCompanies,
+    onCompanySearchChange,
+  } = useCompanySelectOptions(isCompanyTypeUser);
 
   // Load roles list when component mounts
   useEffect(() => {
@@ -261,16 +255,17 @@ const CreateUserForm = ({
                 <TypeAhead
                   value={selectedCompanyId}
                   label="Seleccionar empresa"
-                  options={
-                    companyOptions.map((c) => ({
-                      id: c.id,
-                      name: c.company || c.company_name,
-                      value: c.id,
-                    })) as OptionsStructure[]
-                  }
+                  options={companyOptions.map((c) => ({
+                    id: c.id,
+                    name: c.company || c.company_name || "",
+                    value: c.id,
+                  }))}
                   setValue={setSelectedCompanyId}
                   getFunctions={searchCompanies}
                   searchText={companySearchText}
+                  loading={companyLoading}
+                  serverSideFilter
+                  onSearchChange={onCompanySearchChange}
                 />
                 {companyValidationError && (
                   <span className="login-form__error-message">
