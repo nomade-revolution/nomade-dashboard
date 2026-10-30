@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import * as collabStates from "../../../collabs/utils/collabsStates";
 import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
+import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
 
 import { useLeadsContext } from "sections/leads/LeadsContext/useLeadsContext";
 import { Collab, CollabActionTypes } from "modules/collabs/domain/Collabs";
@@ -28,8 +29,16 @@ const useActions = () => {
   };
 
   const acceptCollab = async (collabId: number, state_id: number) => {
-    await updateCollabState(collabId, state_id);
+    const response = await updateCollabState(collabId, state_id);
+    if (!isHttpSuccessResponse(response)) {
+      return {
+        success: false as const,
+        error:
+          response.message || "No se pudo actualizar el estado de la collab",
+      };
+    }
     setTimeout(() => navigate(0), 1500);
+    return { success: true as const };
   };
 
   const rejectCollab = async (

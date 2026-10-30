@@ -50,7 +50,13 @@ const DashboardTableCellContent = ({
   setAnchorEl,
 }: ReusableTableBodyCellProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [acceptError, setAcceptError] = useState<string | null>(null);
   const { handleAcceptWithNotes } = useCollabsContext();
+
+  const closeDialog = () => {
+    setAcceptError(null);
+    setIsDialogOpen(false);
+  };
 
   // Handler for notes modal when accepting with notes
   const handleOnAcceptWithNotes = async (
@@ -61,20 +67,27 @@ const DashboardTableCellContent = ({
   ) => {
     if (type !== CollabActionTypes.modifyStateWithNotes) return;
 
+    setAcceptError(null);
+
     try {
       const result = await handleAcceptWithNotes(id, notes ?? "");
       if (result.success || result.partialSuccess) {
         // Close modal if state update succeeded (success) or if state was updated but notes failed (partialSuccess)
         // Notes are optional, so partialSuccess is acceptable - state change is the primary action
+        setAcceptError(null);
         setIsDialogOpen(false);
         // Success - modal closes and list updates automatically via context
       } else {
-        // Error - keep modal open for retry
-        // Modal stays open for user to retry
+        setAcceptError(
+          result.error || "No se pudo actualizar el estado de la collab",
+        );
       }
     } catch (error) {
-      // Error - keep modal open for retry
-      // Modal stays open for user to retry
+      setAcceptError(
+        error instanceof Error
+          ? error.message
+          : "No se pudo actualizar el estado de la collab",
+      );
     }
   };
 
@@ -92,8 +105,9 @@ const DashboardTableCellContent = ({
 
       {isDialogOpen && (
         <DialogDeleteConfirm
-          handleClose={() => setIsDialogOpen(false)}
+          handleClose={closeDialog}
           open={isDialogOpen}
+          errorMessage={acceptError}
           sectionId={"id" in section ? section.id! : 1}
           pageName={pageName}
           type={type}

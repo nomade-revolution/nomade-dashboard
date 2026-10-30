@@ -22,7 +22,7 @@ import {
 import { OrderItem } from "sections/user/UserContext/UserContext";
 import { useAuthContext } from "sections/auth/AuthContext/useAuthContext";
 import { UserTypes } from "modules/user/domain/User";
-import { Http } from "@core";
+import { Http, HttpResponseInterface } from "@core";
 import { COLLABS_BASE } from "modules/collabs/application/routes";
 
 interface ContextState {
@@ -41,7 +41,7 @@ interface ContextState {
     state_id: number,
     reject_collab_reason_id?: number,
     reject_collab_reason_text?: string,
-  ) => void;
+  ) => Promise<HttpResponseInterface<FullCollab>>;
   handleAcceptWithNotes: (
     colabId: number,
     notes: string,
@@ -247,7 +247,9 @@ export const CollabsContextProvider = ({
         if (!isHttpSuccessResponse(pushResponse)) {
           return {
             success: false,
-            error: "No se pudo actualizar el estado de la collab",
+            error:
+              pushResponse.message ||
+              "No se pudo actualizar el estado de la collab",
           };
         }
 

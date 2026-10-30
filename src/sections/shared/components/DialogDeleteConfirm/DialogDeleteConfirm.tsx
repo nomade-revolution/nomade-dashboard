@@ -14,8 +14,9 @@ import SuccessFeedback from "../Feedbacks/components/SuccessFeedback/SuccessFeed
 import { CollabActionTypes } from "modules/collabs/domain/Collabs";
 import CollabsRejectedReasons from "sections/collabs/components/CollabsRejectedReasons/CollabsRejectedReasons";
 import { useCollabsContext } from "sections/collabs/CollabsContext/useCollabsContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TextField, Box } from "@mui/material";
+import theme from "assets/styles/theme";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -34,6 +35,7 @@ interface DialogDeleteConfirmProps {
   accept_state_id?: number;
   type?: string;
   successText?: string;
+  errorMessage?: string | null;
   onAccept?: (
     sectionId: number,
     reason?: number,
@@ -50,15 +52,25 @@ export default function DialogDeleteConfirm({
   type,
   accept_state_id,
   successText,
+  errorMessage,
   onAccept,
 }: DialogDeleteConfirmProps) {
   const [reason, setReason] = useState<number | undefined>(undefined);
   const [reasonText, setReasonText] = useState<string>("");
   const [companyNotes, setCompanyNotes] = useState<string>("");
+  const [actionError, setActionError] = useState<string | null>(null);
   const { getFunctionForDialog, isSuccess } = useDialog();
   const { collabRejectedReasons } = useCollabsContext();
+  const shownError = errorMessage || actionError;
 
-  const handleOnAccept = () => {
+  useEffect(() => {
+    if (!open) {
+      setActionError(null);
+    }
+  }, [open]);
+
+  const handleOnAccept = async () => {
+    setActionError(null);
     if (onAccept) {
       onAccept(sectionId, reason, reasonText, companyNotes);
       setReason(undefined);
@@ -66,7 +78,7 @@ export default function DialogDeleteConfirm({
       setCompanyNotes("");
       return;
     }
-    getFunctionForDialog(
+    const result = await getFunctionForDialog(
       sectionId,
       pageName,
       accept_state_id!,
@@ -74,6 +86,17 @@ export default function DialogDeleteConfirm({
       reason!,
       reasonText,
     );
+    if (
+      result &&
+      typeof result === "object" &&
+      "success" in result &&
+      result.success === false &&
+      "error" in result &&
+      typeof result.error === "string" &&
+      result.error
+    ) {
+      setActionError(result.error);
+    }
   };
 
   const handleOnClose = () => {
@@ -81,6 +104,7 @@ export default function DialogDeleteConfirm({
     setReason(undefined);
     setReasonText("");
     setCompanyNotes("");
+    setActionError(null);
   };
 
   return (
@@ -119,6 +143,21 @@ export default function DialogDeleteConfirm({
                 helperText={`${companyNotes.length}/1000 caracteres`}
                 error={companyNotes.length > 1000}
               />
+            </Box>
+          )}
+          {shownError && (
+            <Box
+              component="p"
+              role="alert"
+              sx={{
+                mt: 2,
+                mb: 0,
+                color: theme.fontsColors.error,
+                fontWeight: 700,
+                fontSize: "14px",
+              }}
+            >
+              {shownError}
             </Box>
           )}
         </DialogContent>

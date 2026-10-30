@@ -67,6 +67,7 @@ const CollabDetailPage = (): React.ReactElement => {
   const { id } = useParams();
   const [isOpenEdit, setIsOpenEdit] = useState<boolean>(false);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [acceptError, setAcceptError] = useState<string | null>(null);
   const [isAcceptOrRefuse, setIsAcceptOrRefuse] = useState<string>("");
 
   const handleOpenDialogDelete = () => {
@@ -122,19 +123,27 @@ const CollabDetailPage = (): React.ReactElement => {
       // Debug logging removed for production
     }
 
+    setAcceptError(null);
+
     try {
       const result = await handleAcceptWithNotes(id, notes ?? "");
       if (result.success || result.partialSuccess) {
         // Close modal if state update succeeded (success) or if state was updated but notes failed (partialSuccess)
         // Notes are optional, so partialSuccess is acceptable - state change is the primary action
+        setAcceptError(null);
         setIsDialogOpen(false);
         // Success - modal closes and timeline updates automatically via context
       } else {
-        // Error - keep modal open for retry
-        // Error logging removed for production
+        setAcceptError(
+          result.error || "No se pudo actualizar el estado de la collab",
+        );
       }
     } catch (error) {
-      // Error logging removed for production
+      setAcceptError(
+        error instanceof Error
+          ? error.message
+          : "No se pudo actualizar el estado de la collab",
+      );
     }
   };
 
@@ -355,8 +364,12 @@ const CollabDetailPage = (): React.ReactElement => {
               />
             </ReusableModal>
             <DialogDeleteConfirm
-              handleClose={() => setIsDialogOpen(false)}
+              handleClose={() => {
+                setAcceptError(null);
+                setIsDialogOpen(false);
+              }}
               open={isDialogOpen}
+              errorMessage={acceptError}
               onAccept={
                 isAcceptOrRefuse === CollabActionTypes.modifyStateWithNotes
                   ? handleOnAcceptWithNotes

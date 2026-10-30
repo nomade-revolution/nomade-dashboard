@@ -32,6 +32,7 @@ export default function ReusableStepper({
 }: Props) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [acceptError, setAcceptError] = useState<string | null>(null);
   const [selectedStateToModify, setSelectedStateToModify] = useState<
     number | null
   >(null);
@@ -73,14 +74,18 @@ export default function ReusableStepper({
       selectedStateToModify === collabStates.COLAB_PENDING_COMPANY_STATE &&
       notes !== undefined
     ) {
+      setAcceptError(null);
       const result = await handleAcceptWithNotes(id, notes);
 
       if (result.success || result.partialSuccess) {
         // Close modal if state update succeeded (success) or if state was updated but notes failed (partialSuccess)
         // Notes are optional, so partialSuccess is acceptable - state change is the primary action
+        setAcceptError(null);
         setIsDialogOpen(false);
       } else {
-        // Error - keep modal open for retry
+        setAcceptError(
+          result.error || "No se pudo actualizar el estado de la collab",
+        );
       }
     } else {
       // Regular state update
@@ -141,8 +146,12 @@ export default function ReusableStepper({
       />
 
       <DialogDeleteConfirm
-        handleClose={() => setIsDialogOpen(false)}
+        handleClose={() => {
+          setAcceptError(null);
+          setIsDialogOpen(false);
+        }}
         open={isDialogOpen}
+        errorMessage={acceptError}
         onAccept={handleOnAccept}
         pageName={SectionTypes.collabs}
         sectionId={collab?.id}
