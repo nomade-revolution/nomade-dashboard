@@ -30,9 +30,15 @@ const DashboardCardMobile = ({
 }: DashboardCardMobileProps): React.ReactElement => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [acceptError, setAcceptError] = useState<string | null>(null);
 
   const { handleCollabStateUpdate } = useActions();
   const { handleAcceptWithNotes } = useCollabsContext();
+
+  const closeDialog = () => {
+    setAcceptError(null);
+    setIsDialogOpen(false);
+  };
 
   const handleOnAcceptWithNotes = async (
     id: number,
@@ -42,13 +48,24 @@ const DashboardCardMobile = ({
   ) => {
     if (type !== CollabActionTypes.modifyStateWithNotes) return;
 
+    setAcceptError(null);
+
     try {
       const result = await handleAcceptWithNotes(id, notes ?? "");
       if (result.success || result.partialSuccess) {
+        setAcceptError(null);
         setIsDialogOpen(false);
+      } else {
+        setAcceptError(
+          result.error || "No se pudo actualizar el estado de la collab",
+        );
       }
-    } catch {
-      // Keep modal open on error for retry
+    } catch (error) {
+      setAcceptError(
+        error instanceof Error
+          ? error.message
+          : "No se pudo actualizar el estado de la collab",
+      );
     }
   };
 
@@ -100,8 +117,9 @@ const DashboardCardMobile = ({
       />
 
       <DialogDeleteConfirm
-        handleClose={() => setIsDialogOpen(false)}
+        handleClose={closeDialog}
         open={isDialogOpen}
+        errorMessage={acceptError}
         sectionId={(bodySection as FullCollab).id!}
         pageName={pageName}
         type={type}
