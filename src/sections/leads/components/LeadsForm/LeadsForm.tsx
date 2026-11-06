@@ -92,7 +92,7 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
       mainContactTypeId != null
         ? {
             name: values.name ?? "",
-            surname: values.surname ?? "",
+            surname: values.surname?.trim() ?? "",
             email: values.email,
             phone: values.mobile ?? "",
             type_id: mainContactTypeId,

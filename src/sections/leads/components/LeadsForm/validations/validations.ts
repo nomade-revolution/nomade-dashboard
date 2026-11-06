@@ -3,7 +3,7 @@ import * as yup from "yup";
 export const errorMessages = {
   required: "Este campo es obligatorio",
   invalidEmail: "Debe ser un correo electrónico válido",
-  passwordMin: "La contraseña debe tener al menos 6 caracteres",
+  passwordMin: "La contraseña debe tener al menos 8 caracteres",
   passwordUpper: "Debe incluir al menos una mayúscula",
   passwordNumber: "Debe incluir al menos un número",
   passwordSpecial: "Debe incluir al menos un carácter especial",
@@ -28,7 +28,7 @@ export const leadsScheme = yup.object({
   password: yup
     .string()
     .required(errorMessages.required)
-    .min(6, errorMessages.passwordMin)
+    .min(8, errorMessages.passwordMin)
     .matches(/[A-Z]/, errorMessages.passwordUpper)
     .matches(/[0-9]/, errorMessages.passwordNumber)
     .matches(/[!@#$%^&*(),.?":{}|<>]/, errorMessages.passwordSpecial),
@@ -38,6 +38,7 @@ export const leadsScheme = yup.object({
     .required(errorMessages.required)
     .oneOf([yup.ref("password")], errorMessages.passwordMismatch),
   mobile: yup.string().required(errorMessages.required),
+  surname: yup.string().trim().required(errorMessages.required).max(255),
   contacts: yup.array().optional(),
   address: yup.mixed().required("Debe añadir una dirección"),
 });

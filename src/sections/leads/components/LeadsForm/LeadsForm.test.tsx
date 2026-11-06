@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi } from "vitest";
 import { MemoryRouter } from "react-router-dom";
@@ -75,7 +75,13 @@ const renderRegisterPage = () => {
   );
 };
 
-const fillAndSubmit = async () => {
+const fillAndSubmit = async ({
+  surname = "García",
+  password = "Aa1!aaaa",
+}: {
+  surname?: string;
+  password?: string;
+} = {}) => {
   // delay: null avoids a setTimeout per keystroke; this flow types ~80 chars
   const user = userEvent.setup({ delay: null });
 
@@ -86,10 +92,14 @@ const fillAndSubmit = async () => {
   await user.type(screen.getByLabelText("NIF"), "A12345678");
   await user.type(screen.getByLabelText("Nombre comercial"), "Marca");
   await user.type(screen.getByLabelText("Teléfono"), "600111222");
+  // Empty string is a no-op for userEvent.type and throws; skip it.
+  if (surname) {
+    await user.type(screen.getByLabelText("Apellidos"), surname);
+  }
   await user.type(screen.getByLabelText("Email"), "lead@example.com");
   await user.type(screen.getByLabelText("Móvil"), "600111222");
-  await user.type(screen.getByLabelText("Contraseña"), "Aa1!aaaa");
-  await user.type(screen.getByLabelText("Repite contraseña"), "Aa1!aaaa");
+  await user.type(screen.getByLabelText("Contraseña"), password);
+  await user.type(screen.getByLabelText("Repite contraseña"), password);
 
   await user.click(screen.getByRole("button", { name: "Añadir dirección" }));
   await user.type(screen.getByLabelText("Dirección"), "Carrer Example 1");
@@ -104,6 +114,14 @@ const fillAndSubmit = async () => {
   }
 
   await user.click(screen.getByRole("button", { name: "Enviar" }));
+};
+
+const expectErrorUnder = async (label: string, message: string) => {
+  const section = screen.getByLabelText(label).closest(".form-subsection");
+  expect(section).not.toBeNull();
+  expect(
+    await within(section as HTMLElement).findByText(message),
+  ).toBeInTheDocument();
 };
 
 describe("Given the LeadsForm on the public register page", () => {
@@ -167,6 +185,42 @@ describe("Given the LeadsForm on the public register page", () => {
       expect(
         screen.getByRole("heading", { name: "Alta cliente" }),
       ).toBeInTheDocument();
+      expect(
+        screen.queryByText("La contraseña debe tener al menos 8 caracteres"),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  describe("When Apellidos is left empty", () => {
+    test("Then it should not submit and show the required error under Apellidos", async () => {
+      renderRegisterPage();
+      await fillAndSubmit({ surname: "" });
+
+      await expectErrorUnder("Apellidos", "Este campo es obligatorio");
+      expect(postCompany).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("When Apellidos contains only spaces", () => {
+    test("Then it should not submit and show the required error under Apellidos", async () => {
+      renderRegisterPage();
+      await fillAndSubmit({ surname: "   " });
+
+      await expectErrorUnder("Apellidos", "Este campo es obligatorio");
+      expect(postCompany).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("When the password has 7 characters", () => {
+    test("Then it should not submit and show the minimum length error", async () => {
+      renderRegisterPage();
+      await fillAndSubmit({ password: "Aa1!aaa" });
+
+      await expectErrorUnder(
+        "Contraseña",
+        "La contraseña debe tener al menos 8 caracteres",
+      );
+      expect(postCompany).not.toHaveBeenCalled();
     });
   });
 });
