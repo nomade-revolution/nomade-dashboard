@@ -86,12 +86,13 @@ const LeadsForm = ({ lead, hash }: Props): React.ReactElement => {
       formData.append(key, (values as never)[key as never]);
     });
     formData.set("phone", values.mobile ?? "");
+    formData.set("name", values.name?.trim() ?? "");
 
     const mainContactTypeId = contact_types.find((t) => t.name === "TODO")?.id;
     const mainContact =
       mainContactTypeId != null
         ? {
-            name: values.name ?? "",
+            name: values.name?.trim() ?? "",
             surname: values.surname?.trim() ?? "",
             email: values.email,
             phone: values.mobile ?? "",

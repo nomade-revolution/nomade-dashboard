@@ -76,9 +76,11 @@ const renderRegisterPage = () => {
 };
 
 const fillAndSubmit = async ({
+  name = "Ana",
   surname = "García",
   password = "Aa1!aaaa",
 }: {
+  name?: string;
   surname?: string;
   password?: string;
 } = {}) => {
@@ -93,6 +95,9 @@ const fillAndSubmit = async ({
   await user.type(screen.getByLabelText("Nombre comercial"), "Marca");
   await user.type(screen.getByLabelText("Teléfono"), "600111222");
   // Empty string is a no-op for userEvent.type and throws; skip it.
+  if (name) {
+    await user.type(screen.getByLabelText("Nombre", { exact: true }), name);
+  }
   if (surname) {
     await user.type(screen.getByLabelText("Apellidos"), surname);
   }
@@ -188,6 +193,26 @@ describe("Given the LeadsForm on the public register page", () => {
       expect(
         screen.queryByText("La contraseña debe tener al menos 8 caracteres"),
       ).not.toBeInTheDocument();
+    });
+  });
+
+  describe("When Nombre is left empty", () => {
+    test("Then it should not submit and show the required error under Nombre", async () => {
+      renderRegisterPage();
+      await fillAndSubmit({ name: "" });
+
+      await expectErrorUnder("Nombre", "Este campo es obligatorio");
+      expect(postCompany).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("When Nombre contains only spaces", () => {
+    test("Then it should not submit and show the required error under Nombre", async () => {
+      renderRegisterPage();
+      await fillAndSubmit({ name: "   " });
+
+      await expectErrorUnder("Nombre", "Este campo es obligatorio");
+      expect(postCompany).not.toHaveBeenCalled();
     });
   });
 
