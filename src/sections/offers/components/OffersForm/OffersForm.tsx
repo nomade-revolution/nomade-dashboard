@@ -320,6 +320,25 @@ const OffersForm = ({
     }
   };
 
+  const omitUnlinkedAddress = <T,>(items: T, addressId: number): T => {
+    if (!Array.isArray(items)) return items;
+    return items.filter(
+      (item) =>
+        Number((item as { address_id?: unknown })?.address_id) !== addressId,
+    ) as T;
+  };
+
+  const handleUnlinkAddress = (addressId: number) => {
+    setSchedulingState((prev) => ({
+      ...prev,
+      restaurant: omitUnlinkedAddress(prev.restaurant, addressId),
+      activity: omitUnlinkedAddress(prev.activity, addressId),
+      lodging: omitUnlinkedAddress(prev.lodging, addressId),
+    }));
+    setOfferResume((prev) => omitUnlinkedAddress(prev, addressId));
+    setOfferResumeEdit((prev) => omitUnlinkedAddress(prev, addressId));
+  };
+
   const handleSubmitForm = async (
     values: OfferFormStructure,
     { setSubmitting }: FormikHelpers<OfferFormStructure>,
@@ -415,6 +434,12 @@ const OffersForm = ({
           ).time_slot.some((slot) => !!slot.from_time && !!slot.to_time),
       );
 
+    const listedAddressIds = new Set(
+      addresses.flatMap((item) => [Number(item?.id), Number(item?.value)]),
+    );
+    // Save sends only addresses still listed on the offer. On edit the API
+    // detaches the whole calendar and reattaches this payload, so a removed
+    // address loses its slots.
     const sanitizeOfferables = (
       data: unknown,
       type: OfferTypes | string,
@@ -424,8 +449,11 @@ const OffersForm = ({
       }
 
       const filtered = data.filter((item) => {
-        const addressId = (item as { address_id?: unknown }).address_id;
-        if (!Number.isInteger(addressId) || Number(addressId) <= 0) {
+        const addressId = Number((item as { address_id?: unknown }).address_id);
+        if (!Number.isInteger(addressId) || addressId <= 0) {
+          return false;
+        }
+        if (!listedAddressIds.has(addressId)) {
           return false;
         }
 
@@ -990,6 +1018,8 @@ const OffersForm = ({
                     // @ts-expect-error TODO: fix this
                     week={week}
                     offer={offer!}
+                    fiscalAddressId={company?.address?.id ?? null}
+                    onUnlinkAddress={handleUnlinkAddress}
                   />
                 </section>
               </section>

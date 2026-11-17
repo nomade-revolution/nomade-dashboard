@@ -277,6 +277,8 @@ const CompanyForm = ({
           address_2: registerAddress.address_2 ?? "",
         };
         formData.append("address", JSON.stringify(newAddress));
+      } else if (type === "edit") {
+        formData.delete("address");
       } else {
         const defaultAddress = {
           address: "Default Address",

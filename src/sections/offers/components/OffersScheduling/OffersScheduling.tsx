@@ -35,6 +35,7 @@ import { FullAddress } from "modules/address/domain/Address";
 import { useAddressContext } from "sections/address/AddressContext/useAddressContext";
 import { isHttpSuccessResponse } from "sections/shared/utils/typeGuards/typeGuardsFunctions";
 import { offersTimetable } from "sections/offers/utils/offersTimetable";
+import { HttpResponseInterface } from "@core/domain";
 
 type WeekScheduleSlot = { from_time: string; to_time: string };
 type WeekScheduleDay = Omit<WeekDay, "time_slot"> & {
@@ -94,7 +95,24 @@ interface Props {
   offer: FullOffer;
   addresses: Addresses[];
   setAddresses: Dispatch<SetStateAction<Addresses[]>>;
+  /** Fiscal address of the selected company. Editing it is blocked from the offer. */
+  fiscalAddressId?: number | null;
+  /** Drops that address from the offer schedule so save does not send it back. */
+  onUnlinkAddress?: (addressId: number) => void;
 }
+
+const FISCAL_ADDRESS_EDIT_TITLE =
+  "Es la dirección fiscal del cliente; edítala desde la ficha del cliente.";
+
+const readErrorMessage = (error: unknown, fallback: string): string => {
+  if (typeof error === "string" && error.trim()) return error;
+  if (error instanceof Error && error.message.trim()) return error.message;
+  if (error && typeof error === "object" && "message" in error) {
+    const message = (error as { message?: unknown }).message;
+    if (typeof message === "string" && message.trim()) return message;
+  }
+  return fallback;
+};
 
 const OffersScheduling = ({
   type,
@@ -112,13 +130,14 @@ const OffersScheduling = ({
   offer,
   addresses,
   setAddresses,
+  fiscalAddressId = null,
+  onUnlinkAddress,
 }: Props): React.ReactElement => {
   const { setFieldValue, values } = useFormikContext();
   const {
     createNewAddress,
     updateAddress,
     getAddress,
-    deleteAddress,
     address: contextAddress,
   } = useAddressContext();
   const [isAddressModalOpen, setIsAddressModalOpen] = useState<boolean>(false);
@@ -127,6 +146,7 @@ const OffersScheduling = ({
   const [scheduleError, setScheduleError] = useState<string>("");
   const [scheduleSaved, setScheduleSaved] = useState<boolean>(false);
   const [showScheduleToast, setShowScheduleToast] = useState<boolean>(false);
+  const [addressError, setAddressError] = useState<string>("");
 
   useEffect(() => {
     // Delivery and brand don't use address-based scheduling; skip this effect entirely.
@@ -316,24 +336,38 @@ const OffersScheduling = ({
     setScheduleSaved(false);
   }, [address, week]);
 
-  const handleCreateAddress = async (address: FullAddress) => {
-    if (!address) return;
+  const showAddressError = (message: string) => {
+    setAddressError(message);
+    window.setTimeout(() => {
+      setAddressError("");
+    }, 4000);
+  };
+
+  const handleCreateAddress = async (addressPayload: FullAddress) => {
+    if (!addressPayload) return;
     try {
-      const newAddress = await createNewAddress(address);
-      // @ts-expect-error TODO: fix this
-      if (!newAddress || !newAddress.success) return;
-      // @ts-expect-error TODO: fix this
-      const newId = newAddress.data.id;
+      const created = (await createNewAddress(addressPayload)) as unknown as
+        | HttpResponseInterface<FullAddress>
+        | undefined;
+      if (!created || !isHttpSuccessResponse(created)) {
+        showAddressError(
+          readErrorMessage(created, "No se pudo crear la dirección"),
+        );
+        return;
+      }
+      const newId = created.data.id;
       setAddresses([
         ...addresses,
         {
           id: newId,
-          name: address.address,
+          name: addressPayload.address,
           value: newId,
         },
       ]);
     } catch (error) {
-      // console.log("error", error);
+      showAddressError(
+        readErrorMessage(error, "No se pudo crear la dirección"),
+      );
     }
   };
 
@@ -398,12 +432,22 @@ const OffersScheduling = ({
     }
   };
 
+  const parsedFiscalAddressId = Number(fiscalAddressId);
+  const isFiscalAddress = (addressId: number) =>
+    Number.isInteger(parsedFiscalAddressId) &&
+    parsedFiscalAddressId > 0 &&
+    addressId === parsedFiscalAddressId;
+
   const handleEditAddress = async () => {
     // Convert address string to number for comparison
     const addressId = parseInt(address, 10);
 
     // Check if addressId is valid
     if (isNaN(addressId) || addressId <= 0) {
+      return;
+    }
+
+    if (isFiscalAddress(addressId)) {
       return;
     }
 
@@ -426,54 +470,41 @@ const OffersScheduling = ({
     }
   };
 
-  const handleDeleteAddress = async () => {
-    // Convert address string to number for comparison
+  const handleRemoveAddressFromOffer = () => {
     const addressId = parseInt(address, 10);
 
-    // Check if addressId is valid
     if (isNaN(addressId) || addressId <= 0) {
       return;
     }
 
-    // Don't allow deletion if there's only one address
+    // Keep the address in the database. Only drop it from this offer.
     if (addresses.length <= 1) {
       return;
     }
 
-    // Find the address to delete
-    const addressToDelete = addresses.find(
+    const addressToRemove = addresses.find(
       (addr) => addr.id === addressId || addr.value === addressId,
     );
 
-    if (!addressToDelete) {
+    if (!addressToRemove) {
       return;
     }
 
-    try {
-      const response = await deleteAddress(addressToDelete.id);
+    const updatedAddresses = addresses.filter(
+      (addr) => addr.id !== addressToRemove.id,
+    );
+    setAddresses(updatedAddresses);
 
-      if (isHttpSuccessResponse(response)) {
-        // Remove the address from the addresses array
-        const updatedAddresses = addresses.filter(
-          (addr) => addr.id !== addressToDelete.id,
-        );
-        setAddresses(updatedAddresses);
-
-        // If the deleted address was selected, reset or select the first remaining address
-        if (address === addressId.toString()) {
-          if (updatedAddresses.length > 0) {
-            setAddress(updatedAddresses[0].id.toString(), 0);
-          } else {
-            setAddress("", null);
-          }
-        }
-
-        // Clean any scheduling data tied to the deleted address
-        cleanStaleAddressData();
+    if (address === addressId.toString()) {
+      if (updatedAddresses.length > 0) {
+        setAddress(updatedAddresses[0].id.toString(), 0);
+      } else {
+        setAddress("", null);
       }
-    } catch (error) {
-      // Error deleting address - could show error message here
     }
+
+    cleanStaleAddressData();
+    onUnlinkAddress?.(addressToRemove.id);
   };
 
   const handleModalClose = () => {
@@ -669,6 +700,25 @@ const OffersScheduling = ({
           Horario guardado correctamente
         </div>
       ) : null}
+      {addressError ? (
+        <div
+          role="alert"
+          style={{
+            position: "fixed",
+            top: showScheduleToast ? "72px" : "24px",
+            right: "24px",
+            background: "#E02020",
+            color: "#fff",
+            padding: "10px 14px",
+            borderRadius: "8px",
+            zIndex: 2000,
+            fontWeight: 600,
+            maxWidth: "360px",
+          }}
+        >
+          {addressError}
+        </div>
+      ) : null}
 
       {(type === OfferTypes.restaurant ||
         type === OfferTypes.activity ||
@@ -700,24 +750,41 @@ const OffersScheduling = ({
               <IoAddCircle className="datasheet-form__create--icon" />
               Añadir dirección
             </button>
-            <button
-              type="button"
-              className="datasheet-form__edit-address"
-              onClick={handleEditAddress}
-              disabled={!address || addresses.length === 0}
+            <span
+              title={
+                isFiscalAddress(Number.parseInt(address, 10))
+                  ? FISCAL_ADDRESS_EDIT_TITLE
+                  : undefined
+              }
             >
-              <FaEdit className="datasheet-form__create--icon" />
-              Editar dirección
-            </button>
+              <button
+                type="button"
+                className="datasheet-form__edit-address"
+                onClick={handleEditAddress}
+                disabled={
+                  !address ||
+                  addresses.length === 0 ||
+                  isFiscalAddress(Number.parseInt(address, 10))
+                }
+                title={
+                  isFiscalAddress(Number.parseInt(address, 10))
+                    ? FISCAL_ADDRESS_EDIT_TITLE
+                    : undefined
+                }
+              >
+                <FaEdit className="datasheet-form__create--icon" />
+                Editar dirección
+              </button>
+            </span>
             {addresses.length > 1 && (
               <button
                 type="button"
                 className="datasheet-form__delete-address"
-                onClick={handleDeleteAddress}
+                onClick={handleRemoveAddressFromOffer}
                 disabled={!address || addresses.length === 0}
               >
                 <FaTrashAlt className="datasheet-form__create--icon" />
-                Eliminar dirección
+                Quitar de la oferta
               </button>
             )}
           </div>
