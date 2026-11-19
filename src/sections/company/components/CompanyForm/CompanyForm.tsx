@@ -44,8 +44,14 @@ import { appendContactsToFormData } from "sections/shared/utils/appendContactsTo
 import { appendSocialMediaToFormData } from "sections/shared/utils/appendSocialMediaToFormData";
 import {
   isFormikServerAlertStatus,
+  laravelValidationBagFromResponse,
   splitLaravelErrorsForFormik,
 } from "sections/shared/utils/mapLaravelErrorsForFormik";
+
+const CREATE_SUBMIT_ERROR =
+  "No se ha podido crear el cliente. Inténtalo de nuevo; si sigue fallando, avisa a soporte.";
+const EDIT_SUBMIT_ERROR =
+  "No se ha podido guardar el cliente. Inténtalo de nuevo; si sigue fallando, avisa a soporte.";
 
 function isHideBillingAddressEnabled(value: unknown): boolean {
   return value === true || value === 1 || value === "1";
@@ -198,7 +204,7 @@ const CompanyForm = ({
   const [deleteImageMode, setDeleteImageMode] = useState<boolean>(false);
 
   const { contact_types, getAllContactTypes } = useContactContext();
-  const { isSuccess, isError, loading, editCompanyCms } = useCompanyContext();
+  const { isSuccess, editCompanyCms } = useCompanyContext();
 
   const handleFormStateChange = (field: string, value: string) => {
     setFormState((prevState) => ({ ...prevState, [field]: value }));
@@ -217,11 +223,17 @@ const CompanyForm = ({
   };
   const handleSubmitForm = async (
     values: CompanyFormValues,
-    { setSubmitting, setErrors, setStatus }: FormikHelpers<CompanyFormValues>,
+    {
+      setSubmitting,
+      setErrors,
+      setStatus,
+      setFieldTouched,
+    }: FormikHelpers<CompanyFormValues>,
   ) => {
     setStatus(undefined);
 
     const isCreate = type !== "edit";
+    const failureMessage = isCreate ? CREATE_SUBMIT_ERROR : EDIT_SUBMIT_ERROR;
 
     // Terms acceptance is only required in create mode. In edit mode there is
     // no terms checkbox rendered, so checkedTerms is permanently false and
@@ -420,11 +432,12 @@ const CompanyForm = ({
         planPayload,
       );
 
-      const res = response as {
+      const res = (response ?? null) as {
         success?: boolean;
-        errors?: Record<string, string[] | string>;
+        errors?: unknown;
+        data?: unknown;
         message?: string;
-      };
+      } | null;
 
       if (res?.success) {
         setIsOpen(false);
@@ -432,32 +445,35 @@ const CompanyForm = ({
         setErrors({});
       } else {
         const { fieldErrors, otherLabels } = splitLaravelErrorsForFormik(
-          res.errors,
+          laravelValidationBagFromResponse(res),
         );
-        setErrors(fieldErrors);
-        const hasLines = otherLabels.length > 0;
-        const hasMsg = Boolean(res.message?.trim());
-        if (hasLines || hasMsg) {
-          setStatus({
-            serverTitle:
-              (hasMsg ? res.message : null) ?? "No se pudo guardar el cliente",
-            serverLines: otherLabels,
+        const hasFieldErrors = Object.keys(fieldErrors).length > 0;
+
+        if (hasFieldErrors) {
+          Object.keys(fieldErrors).forEach((key) => {
+            setFieldTouched(key, true, false);
           });
-        } else if (Object.keys(fieldErrors).length > 0) {
+          setErrors(fieldErrors as FormikErrors<CompanyFormValues>);
+        } else {
+          setErrors({});
+        }
+
+        if (hasFieldErrors || otherLabels.length > 0) {
           setStatus({
             serverTitle: "Revisa los campos indicados en el formulario.",
-            serverLines: [],
+            serverLines: otherLabels,
           });
         } else {
           setStatus({
-            serverTitle: "No se pudo guardar el cliente.",
+            serverTitle: failureMessage,
             serverLines: [],
           });
         }
       }
     } catch {
+      setErrors({});
       setStatus({
-        serverTitle: "Error de red o del servidor",
+        serverTitle: failureMessage,
         serverLines: [],
       });
     } finally {
@@ -1364,14 +1380,10 @@ const CompanyForm = ({
               type="submit"
               disabled={isSubmitting}
               className={
-                isSuccess
-                  ? "datasheet-form__success"
-                  : isError
-                    ? "datasheet-form__error"
-                    : "datasheet-form__submit"
+                isSuccess ? "datasheet-form__success" : "datasheet-form__submit"
               }
             >
-              {isSubmitting || loading ? (
+              {isSubmitting ? (
                 <Loader width="20px" height="20px" />
               ) : isSuccess ? (
                 type === "edit" ? (
@@ -1379,8 +1391,6 @@ const CompanyForm = ({
                 ) : (
                   "Cliente creado"
                 )
-              ) : isError ? (
-                "Revisa los datos e intentalo de nuevo"
               ) : type === "edit" ? (
                 "Guardar cambios"
               ) : (
