@@ -267,9 +267,11 @@ export const CompanyContextProvider = ({
     [repository],
   );
 
+  // Create/update must not flip `loading`. CompanyPage and CompanyDetailPage
+  // replace the whole screen with a loader while it is true, which unmounts
+  // CompanyForm and drops what the user typed. The submit button uses Formik's
+  // isSubmitting. List and detail fetches still own `loading`.
   const postCompanyCms = async (company: FormData) => {
-    setLoading(true);
-
     // DEV-only debug logging
     const isDev = import.meta.env.MODE !== "production";
     if (isDev) {
@@ -291,13 +293,10 @@ export const CompanyContextProvider = ({
       setIsSuccess(false);
     }
 
-    setLoading(false);
-
     return response;
   };
 
   const editCompanyCms = async (company: FormData, id?: number) => {
-    setLoading(true);
     const response = await editCompany(repository, company, id!);
 
     if (isHttpSuccessResponse(response)) {
@@ -308,7 +307,6 @@ export const CompanyContextProvider = ({
       setIsSuccess(false);
     }
 
-    setLoading(false);
     setTimeout(() => {
       setIsSuccess(false);
     }, 1500);

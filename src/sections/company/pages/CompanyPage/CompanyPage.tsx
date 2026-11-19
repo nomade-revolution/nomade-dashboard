@@ -24,6 +24,17 @@ import {
   toCleanQueryString,
 } from "sections/shared/utils/queryParams/queryParams";
 
+function isCompanyCreateSuccess(
+  response: unknown,
+): response is { success: true } {
+  return (
+    typeof response === "object" &&
+    response !== null &&
+    "success" in response &&
+    (response as { success?: boolean }).success === true
+  );
+}
+
 const CompaniesPage = (): React.ReactElement => {
   const [searchText, setSearchText] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -97,6 +108,15 @@ const CompaniesPage = (): React.ReactElement => {
     getCompaniesStatusBadge();
   }, [page, gteCompaniesData, getCompaniesStatusBadge, queryKey]);
 
+  const handleCreateCompany = async (companyFormData: FormData) => {
+    const response = await postCompanyCms(companyFormData);
+    if (isCompanyCreateSuccess(response)) {
+      gteCompaniesData();
+      getCompaniesStatusBadge();
+    }
+    return response;
+  };
+
   if (loading) {
     return <Loader width="20px" height="20px" />;
   }
@@ -152,7 +172,10 @@ const CompaniesPage = (): React.ReactElement => {
       />
       <ReusableModal
         children={
-          <CompanyForm onSubmit={postCompanyCms} setIsOpen={setIsModalOpen} />
+          <CompanyForm
+            onSubmit={handleCreateCompany}
+            setIsOpen={setIsModalOpen}
+          />
         }
         openModal={isModalOpen}
         setIsModalOpen={setIsModalOpen}

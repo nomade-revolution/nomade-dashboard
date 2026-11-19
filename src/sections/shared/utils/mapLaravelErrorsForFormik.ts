@@ -21,6 +21,49 @@ export function isFormikServerAlertStatus(
   );
 }
 
+function isLaravelMessageValue(value: unknown): value is string | string[] {
+  if (typeof value === "string") return true;
+  return (
+    Array.isArray(value) && value.every((item) => typeof item === "string")
+  );
+}
+
+function asLaravelValidationBag(
+  value: unknown,
+): LaravelValidationBag | undefined {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return undefined;
+  }
+
+  const entries = Object.entries(value as Record<string, unknown>);
+  if (
+    entries.length === 0 ||
+    !entries.every(([, entry]) => isLaravelMessageValue(entry))
+  ) {
+    return undefined;
+  }
+
+  return value as LaravelValidationBag;
+}
+
+/**
+ * Field errors for cms-register are not on `errors`.
+ * `Http.post` spreads the JSON body of `error.response`, and `sendError`
+ * stores the Laravel bag in `data`:
+ * `{ code, success: false, message, data: { email: ["…"] } }`.
+ * A classic `{ errors }` payload still wins. Anything that is not a bag of
+ * strings (a 500 exception dump, a company resource) is ignored.
+ */
+export function laravelValidationBagFromResponse(
+  response: { errors?: unknown; data?: unknown } | null | undefined,
+): LaravelValidationBag | undefined {
+  if (!response || typeof response !== "object") return undefined;
+  return (
+    asLaravelValidationBag(response.errors) ??
+    asLaravelValidationBag(response.data)
+  );
+}
+
 /** First message per Laravel validation key. */
 export function firstMessagesFromLaravelErrors(
   errors: LaravelValidationBag | undefined,
